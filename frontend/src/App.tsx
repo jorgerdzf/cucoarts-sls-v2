@@ -1,57 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+
+import { createTheme, ThemeProvider } from '@mui/material';
+
+import Landing from './components/landing/Landing';
+import Footer from './components/navigation/Footer';
+import Header from './components/navigation/Header';
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: ['Poppins','sans-serif'].join(','),
+    }
+  },
+  palette: {
+    primary: {
+      main: '#605CFF',
+      light: '#605CFF',
+      dark: '#461499'
+    },
+    secondary: {
+      main: '#99E21D',
+      light: '#D9FF6F',
+      dark: '#48D218'
+    },
+    mode: 'light',
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Header></Header>
+        <Landing></Landing>
+        <Footer></Footer>
+      </div>
+    </ThemeProvider>
   );
 }
 
