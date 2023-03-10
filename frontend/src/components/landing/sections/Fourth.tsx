@@ -10,25 +10,28 @@ import v13_100 from '../assets/images/v13_100.png';
 
 import React from 'react'
 const imgSize = 200;
+const iconSize = 80;
+
 export default function Fourth() {
   return (
     <>
-        <Box>
+        <Box 
+            paddingTop={20} 
+            sx={{ background: 'linear-gradient(0deg, rgba(217,255,111,1) 0%, rgba(217,255,111,1) 30%, rgba(255,255,255,1) 60%)' }}>
             <Grid
                 container
-                direction="row"
                 justifyContent="center"
-                alignItems="center">
-                <Grid item>
+                alignItems="center"
+                >
+                <Grid item xs={8}>
                     <Grid
                     container
-                    direction="row"
                     justifyContent="center"
                     alignItems="center">
-                        <Grid item>
-                            <img src={recordvoice} alt="" />
+                        <Grid item xs={2}>
+                            <img src={recordvoice} alt="" width={iconSize} height={iconSize} />
                         </Grid>
-                        <Grid item sx={{textAlign:'left'}}>
+                        <Grid item xs={10} sx={{textAlign:'left'}}>
                             <Typography variant="h4">
                                 Vox pópuli
                             </Typography>
@@ -38,18 +41,13 @@ export default function Fourth() {
                                 Puedes contarnos algo que tu estés haciendo o que necesites, te interese o estés buscando. <br/><br/>
                                 Tu experiencia es la mejor fuente. La intención es poder ayudarte o ayudar a alguien más con tu información.
                             </Typography>
+                            <br></br>
                         </Grid>
-                    </Grid>
-                    <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    pt={2}>
-                        <Grid item>
-                            <img src={v13_81} alt="" />
+                        
+                        <Grid item xs={2}>
+                            <img src={v13_81} alt=""  width={iconSize} height={iconSize} />
                         </Grid>
-                        <Grid item sx={{textAlign:'left'}}>
+                        <Grid item  xs={10} sx={{textAlign:'left'}}>
                             <Typography variant="h4">
                                 Art Hunting
                             </Typography>
@@ -61,18 +59,13 @@ export default function Fourth() {
 
                                 Es enfocado a ampliar las oportunidades para todo tipo de artistas que tengan la habilidad que buscas.
                             </Typography>
+                            <br></br>
                         </Grid>
-                    </Grid>
-                    <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    >
-                        <Grid item>
-                            <img src={v13_82} alt="" />
+                        
+                        <Grid item xs={2}>
+                            <img src={v13_82} alt="" width={iconSize} height={iconSize}  />
                         </Grid>
-                        <Grid item sx={{textAlign:'left'}}>
+                        <Grid item xs={10} sx={{textAlign:'left'}}>
                             <Typography variant="h4">
                                 Murales
                             </Typography>
@@ -81,39 +74,32 @@ export default function Fourth() {
                                 Nos aliamos a tu equipo para realizar un proyecto exitoso de arte urbano con el fin que tu elijas <br /> 
                                 (comercial o público). Esto implica ver y analizar los espacios, definir un objetivo, presupuestos <br />
                                 y tiempos.  
-
                             </Typography>
+                            <br></br>
                         </Grid>
-                    </Grid>
-                    <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={3}>
-                        <Grid item>
-                            <img src={recordvoice} alt="" />
+                        
+                        <Grid item xs={2}>
+                            <img src={videolibrary} alt="" width={iconSize} height={iconSize}  />
                         </Grid>
-                        <Grid item sx={{textAlign:'left'}}>
+                        <Grid item xs={10} sx={{textAlign:'left'}}>
                             <Typography variant="h4">
-                                Vox pópuli
+                                Producción
                             </Typography>
                             <br></br>
                             <Typography variant="body1">
-                                Simplemente, escríbenos para conocerte o platicar acerca de lo que tu desees: <br/>
-                                Puedes contarnos algo que tu estés haciendo o que necesites, te interese o estés buscando. <br/><br/>
-                                Tu experiencia es la mejor fuente. La intención es poder ayudarte o ayudar a alguien más con tu información.
+                                Creamos todo tipo de contenido con audio y video para redes sociales. <br />
+                                Se incluyen la planeación, producción y edición de materiales. <br />
                             </Typography>
+                            <br></br>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item>
+                <Grid item xs={2}>
                 <Grid
                     container
                     direction="column"
                     justifyContent="center"
                     alignItems="center"
-                    pl={3}
                     >
                         <Grid item>
                             <img src={v13_98} alt="" width={imgSize} height={imgSize}/>
