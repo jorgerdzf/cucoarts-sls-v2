@@ -3,7 +3,7 @@ import group1 from "../assets/images/Group1.png";
 
 import React from "react";
 
-function Main() {
+function First() {
   return (
     <div>
         <Box paddingTop={10} sx={{ background: 'linear-gradient(0deg, rgba(96,92,255,1) 0%, rgba(124,121,255,1) 10%, rgba(255,255,255,1) 30%)'}}>
@@ -31,13 +31,14 @@ function Main() {
                     </Grid>
                     <Grid item textAlign='left'>
                         <br></br>
-                        <Button variant="contained">
+                        <Button variant="contained" href='/takeActions'>
                             <Typography sx={{textTransform: 'none'}}>Quiero descubrirlo</Typography>
                         </Button>
                         <br></br>
                         <br></br>
-                        <Button variant="contained" sx={{backgroundColor:'#fff', color:'#605CFF'}}>
-                        <Typography sx={{textTransform: 'none'}}>Soy Artista</Typography>
+                        <Button variant="contained" sx={{backgroundColor:'#fff', color:'#605CFF'}}
+                            href='/experiences'>
+                            <Typography sx={{textTransform: 'none'}}>Soy Artista</Typography>
                         </Button>
                     </Grid>
                 </Grid>
@@ -51,4 +52,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default First;

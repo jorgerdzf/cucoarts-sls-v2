@@ -1,7 +1,7 @@
 import React from 'react'
 import Fifth from './sections/Fifth'
 import Fourth from './sections/Fourth'
-import Main from './sections/Main'
+import First from './sections/First'
 import Second from './sections/Second'
 import Third from './sections/Third'
 
@@ -9,7 +9,7 @@ export default function Landing() {
 
   return (
     <>
-      <Main></Main>
+      <First></First>
       <Second></Second>
       <Third></Third>
       <Fourth></Fourth>

@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import logo from "../../assets/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 const options = [
   { title: "Tomar accion", to: "takeActions", enabled: true, variant: "outlined" },
   { title: "Ciudades", to: "cities", enabled: true, variant: "text" },
@@ -33,16 +33,20 @@ const useStyles = makeStyles((theme: Theme) =>
     logo: {
       maxWidth: 150,
     },
+    menuButton: {
+      color: "#fff",
+    },
   })
 );
 
 export default function Header() {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
+  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Link href="/">
@@ -56,7 +60,7 @@ export default function Header() {
               <ListItem key={i} disablePadding>
                 <ListItemButton
                   key={item.to}
-                  sx={{ textAlign: "left", color: "#fff" }}
+                  sx={{ textAlign: "left" }}
                   href={item.to}
                 >
                   <ListItemText key={item.title} primary={item.title} />
@@ -67,7 +71,7 @@ export default function Header() {
       </List>
     </Box>
   );
-  
+
   return (
     <>
       <AppBar
@@ -97,23 +101,23 @@ export default function Header() {
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {options.map((option: any, i) => (
               <>
-                {option.enabled ? 
-                (
+                {option.enabled ?
+                  (
                     <Button
-                      sx={{marginLeft:1}}
+                      sx={{ marginLeft: 1 }}
                       key={i}
                       variant={option.variant}
                       href={option.to}
                       size="small"
                       color={option.variant === 'outlined' ? "primary" : "inherit"}
                     >
-                    <Typography variant="body2" sx={{textTransform:'none'}}>
-                      {option.title}
-                    </Typography>
-                  </Button> 
-                ) : (
-                  <></>
-                )}
+                      <Typography key={option.title} variant="body2" sx={{ textTransform: 'none' }}>
+                        {option.title}
+                      </Typography>
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
               </>
             ))}
           </Box>
