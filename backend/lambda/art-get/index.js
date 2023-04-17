@@ -1,3 +1,5 @@
+'use strict';
+
 const AWS = require('aws-sdk');
 AWS.config.update({
   accessKeyId: "AKIAVF62QKEFQHT3I7P2",
@@ -74,11 +76,13 @@ module.exports.getArt = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Images form server',
-        data: images,
-      }
-    ),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({
+      message: 'Images form server',
+      data: images,
+    }),
   };
 };

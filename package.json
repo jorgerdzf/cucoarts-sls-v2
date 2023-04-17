@@ -14,7 +14,6 @@
         "serverless-s3-sync": "^3.0.0"
     },
     "dependencies": {
-        "aws-sdk": "^2.1360.0",
         "serverless-s3-remover": "^0.6.0"
     }
 }

@@ -22,7 +22,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 const drawerWidth = 300;
 const options = [
   { title: "Tomar accion", to: "takeActions", enabled: true, variant: "outlined" },
-  { title: "Ciudades", to: "cities", enabled: true, variant: "text" },
+  { title: "Ciudades", to: "Cities", enabled: true, variant: "text" },
   { title: "Experiencias", to: "experiences", enabled: true, variant: "text" },
   { title: "Contacto", to: "contact", enabled: true, variant: "text" },
   { title: "Aviso de Privacidad", to: "privacyNotice", enabled: true, variant: "text" },
