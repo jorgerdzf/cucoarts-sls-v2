@@ -1,0 +1,84 @@
+const AWS = require('aws-sdk');
+AWS.config.update({
+  accessKeyId: "AKIAVF62QKEFQHT3I7P2",
+  secretAccessKey: "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"
+}); 
+
+const bucketName = process.env.BUCKET;
+const maxDepth = 6; // Maximum number of folder layers to traverse
+const maxResults = 300; // Maximum number of results to return
+
+const s3 = new AWS.S3({ region: "us-east-2" });
+
+function getObjectUrl(objectKey) {
+  return s3.getSignedUrl('getObject', {
+    Bucket: bucketName,
+    Key: objectKey,
+    Expires: 3600 // URL expiration time in seconds
+  });
+}
+
+function listObjects(params, allObjects=[]) {
+  return s3.listObjectsV2(params).promise()
+    .then((data) => {
+      const objects = data.Contents.filter((object) => {
+        return object.Key.match(/\.(jpg|jpeg|png|gif)$/i);
+      }).map((object) => {
+        return {
+          name: object.Key.split('/').pop(),
+          url: getObjectUrl(object.Key)
+        };
+      });
+      allObjects.push(...objects);
+
+      if (data.IsTruncated) {
+        params.ContinuationToken = data.NextContinuationToken;
+        return listObjects(params, allObjects);
+      }
+
+      return allObjects;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
+
+async function listAllObjects(prefix='', depth=0, limit) {
+  if (depth >= maxDepth || (limit && limit <= 0)) {
+    return Promise.resolve([]);
+  }
+
+  const params = {
+    Bucket: bucketName,
+    Prefix: prefix
+  };
+
+  return listObjects(params)
+    .then((objects) => {
+      return objects;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
+
+module.exports.getArt = async (event) => {
+  console.log('Getting art from cuco', {bucketName,maxDepth,maxResults});
+  const images = await listAllObjects('', 0, maxResults)
+  .then((objects) => {
+    const initialPosition = Math.floor(Math.random() * maxResults);
+    const itemsToReturn = objects.slice(initialPosition,initialPosition+20);
+    console.log('images from s3', itemsToReturn.length);
+    return itemsToReturn;
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {
+        message: 'Images form server',
+        data: images,
+      }
+    ),
+  };
+};

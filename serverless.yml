@@ -3,77 +3,110 @@ service: cucoarts-sls-v2
 #app: your-app-name
 #org: your-org-name
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs12.x
   profile: cucoarts
   region: us-east-2
+  memorySize: 128
+  timeout: 20
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'}
+  httpApi:
+    cors: true
+  apiGateway:
+    apiKeys:
+      - ${sls:stage}-cucoarts-apikey
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.vscode/**'
+    - '!frontend/**'
 
 plugins:
   - serverless-s3-sync
+  - serverless-offline
+
+functions:
+  getArt:
+    name: ${sls:stage}-getArt-lambda
+    handler: backend/lambda/art-get/index.getArt
+    events:
+      - http:
+          path: art
+          method: get
+          private: true
+          cors: true
+    environment:
+      BUCKET: ${self:custom.imagesBucketName}
 
 custom:
   bucketName: cucoarts-sls-v2-deploy-assets
+  imagesBucketName: cucoarts-image-assets
   s3Sync:
-      - bucketName: ${self:custom.bucketName}
-        localDir: frontend/build/
+    - bucketName: ${self:custom.bucketName}
+      localDir: frontend/build/
 
 resources:
   Resources:
-      ReactAppBucket:
-          Type: AWS::S3::Bucket
-          Properties:
-              BucketName: ${self:custom.bucketName}
-              AccessControl: PublicRead
-              WebsiteConfiguration:
-                  IndexDocument: index.html
-                  ErrorDocument: index.html
-      S3AccessPolicy:
-          Type: AWS::S3::BucketPolicy
-          Properties:
-              Bucket:
-                  Ref: ReactAppBucket
-              PolicyDocument:
-                  Statement:
-                      - Sid: PublicReadGetObject
-                        Effect: Allow
-                        Principal: '*'
-                        Action:
-                            - s3:GetObject
-                        Resource: arn:aws:s3:::${self:custom.bucketName}/*
-      CloudFrontDistribution:
-          Type: AWS::CloudFront::Distribution
-          Properties:
-              DistributionConfig:
-                  Origins:
-                      - DomainName: ${self:custom.bucketName}.s3.amazonaws.com
-                        Id: ReactApp
-                        CustomOriginConfig:
-                            HTTPPort: 80
-                            HTTPSPort: 443
-                            OriginProtocolPolicy: https-only
-                  Enabled: 'true'
-                  DefaultRootObject: index.html
-                  CustomErrorResponses:
-                      - ErrorCode: 404
-                        ResponseCode: 200
-                        ResponsePagePath: /index.html
-                  DefaultCacheBehavior:
-                      AllowedMethods:
-                          - DELETE
-                          - GET
-                          - HEAD
-                          - OPTIONS
-                          - PATCH
-                          - POST
-                          - PUT
-                      TargetOriginId: ReactApp
-                      ForwardedValues:
-                          QueryString: 'false'
-                          Cookies:
-                              Forward: none
-                      ViewerProtocolPolicy: redirect-to-https
-                  ViewerCertificate:
-                      CloudFrontDefaultCertificate: true
+    ReactAppBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+    S3AccessPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: ReactAppBucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.bucketName}/*
+    CloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Origins:
+            - DomainName: ${self:custom.bucketName}.s3.amazonaws.com
+              Id: ReactApp
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
+          Enabled: "true"
+          DefaultRootObject: index.html
+          CustomErrorResponses:
+            - ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            TargetOriginId: ReactApp
+            ForwardedValues:
+              QueryString: "false"
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: true

@@ -4,16 +4,17 @@
     "description": "",
     "main": "handler.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "Cucoarts Development Team",
     "license": "ISC",
     "devDependencies": {
-      "serverless-s3-sync": "^3.0.0"
+        "serverless-offline": "^12.0.4",
+        "serverless-s3-sync": "^3.0.0"
     },
     "dependencies": {
-      "serverless-s3-remover": "^0.6.0"
+        "aws-sdk": "^2.1360.0",
+        "serverless-s3-remover": "^0.6.0"
     }
-  }
-  
+}
