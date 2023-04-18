@@ -2,8 +2,8 @@
 
 const AWS = require('aws-sdk');
 AWS.config.update({
-  accessKeyId: "AKIAVF62QKEFQHT3I7P2",
-  secretAccessKey: "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"
+  accessKeyId: "accesskey",
+  secretAccessKey: "secretkey"
 }); 
 
 const bucketName = process.env.BUCKET;
@@ -64,7 +64,7 @@ async function listAllObjects(prefix='', depth=0, limit) {
     });
 }
 
-module.exports.getArt = async (event) => {
+module.exports.getArt = async (event,context,callback) => {
   console.log('Getting art from cuco', {bucketName,maxDepth,maxResults});
   const images = await listAllObjects('', 0, maxResults)
   .then((objects) => {
@@ -74,7 +74,7 @@ module.exports.getArt = async (event) => {
     return itemsToReturn;
   });
 
-  return {
+  const response = {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -85,4 +85,6 @@ module.exports.getArt = async (event) => {
       data: images,
     }),
   };
+ 
+  callback(null, response);
 };
