@@ -11,7 +11,8 @@
     "license": "ISC",
     "devDependencies": {
         "serverless-offline": "^12.0.4",
-        "serverless-s3-sync": "^3.0.0"
+        "serverless-s3-sync": "^3.0.0",
+        "serverless-ssm-fetch": "^2.0.0"
     },
     "dependencies": {
         "serverless-s3-remover": "^0.6.0"

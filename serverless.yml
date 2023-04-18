@@ -40,18 +40,11 @@ functions:
           path: art
           method: get
           private: true
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-            allowCredentials: true
+          cors: true
     environment:
       BUCKET: ${self:custom.imagesBucketName}
+      APP_ACCESS_KEY: ${ssm:cucoarts-access-key}
+      APP_SECRET: ${ssm:cucoarts-secret-key}
 
 custom:
   bucketName: cucoarts-sls-v2-deploy-assets

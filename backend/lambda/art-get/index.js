@@ -1,9 +1,10 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+
 AWS.config.update({
-  accessKeyId: "key",
-  secretAccessKey: "key"
+  accessKeyId: process.env.APP_ACCESS_KEY,
+  secretAccessKey: process.env.APP_SECRET,
 }); 
 
 const bucketName = process.env.BUCKET;
@@ -65,13 +66,12 @@ async function listAllObjects(prefix='', depth=0, limit) {
 }
 
 module.exports.getArt = async (event,context,callback) => {
-  console.log('Getting art from cuco', {bucketName,maxDepth,maxResults});
+  console.log('----- EVENT: getArt -----');
+
   const images = await listAllObjects('', 0, maxResults)
   .then((objects) => {
     const initialPosition = Math.floor(Math.random() * maxResults);
-    const itemsToReturn = objects.slice(initialPosition,initialPosition+20);
-    console.log('images from s3', itemsToReturn.length);
-    return itemsToReturn;
+    return objects.slice(initialPosition,initialPosition+20);
   });
 
   const response = {
@@ -85,6 +85,7 @@ module.exports.getArt = async (event,context,callback) => {
       data: images,
     }),
   };
- 
+  console.log('----- END EVENT: getArt -----');
+
   callback(null, response);
 };

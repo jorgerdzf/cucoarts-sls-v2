@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { Routes, Route, Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import './App.css';
-import {apiEndpoint, apiKey} from './constants/settings';
+import { apiKey} from './constants/settings';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 import Landing from './components/landing/Landing';
@@ -14,14 +14,11 @@ import Experiences from './components/experiences/Experiences';
 import Contact from './components/contact/contact';
 import PrivacyNotice from './components/privacyNotice/privacyNotice';
 
-console.log('env vars', {apiEndpoint, apiKey});
-
 axios.interceptors.request.use(
   function (config) {
     config.headers = config.headers ?? {};
       const token = apiKey
       if (token) {
-        console.log('setting up api key', token);
         config.headers["X-Api-Key"] = `${token}`;
       }
     return config;

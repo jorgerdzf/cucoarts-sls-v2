@@ -8,7 +8,7 @@ export const getRandomArt = async () => {
         headers: headers,
       };
     try {
-        const response = await axios.get(url, options);
+        const response = await axios.get(url);
         return response;
     } catch (error) {
         throw error;
