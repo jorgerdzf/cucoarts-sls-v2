@@ -14,8 +14,6 @@ provider:
   timeout: 20
   lambdaHashingVersion: 20201221
   stage: ${opt:stage, 'dev'}
-  httpApi:
-    cors: true
   apiGateway:
     apiKeys:
       - ${sls:stage}-cucoarts-apikey
@@ -42,7 +40,16 @@ functions:
           path: art
           method: get
           private: true
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
     environment:
       BUCKET: ${self:custom.imagesBucketName}
 

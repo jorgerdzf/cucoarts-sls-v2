@@ -26,7 +26,7 @@ export const artSlice = createSlice({
     initialState,
     reducers: {
         getArt(state, action) {
-            state.webImages = action.payload;
+            state.webImages = action.payload.data;
         },
     },
     extraReducers(builder) {
@@ -35,7 +35,7 @@ export const artSlice = createSlice({
         });
         builder.addCase(getRandomArtForWeb.fulfilled, (state, action) => {
             state.status = 'idle';
-            state.webImages = action.payload;
+            state.webImages = action.payload.data;
         });
     },
 });

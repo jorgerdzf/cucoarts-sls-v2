@@ -2,8 +2,8 @@
 
 const AWS = require('aws-sdk');
 AWS.config.update({
-  accessKeyId: "accesskey",
-  secretAccessKey: "secretkey"
+  accessKeyId: "key",
+  secretAccessKey: "key"
 }); 
 
 const bucketName = process.env.BUCKET;

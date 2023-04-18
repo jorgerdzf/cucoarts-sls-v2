@@ -22,7 +22,7 @@ axios.interceptors.request.use(
       const token = apiKey
       if (token) {
         console.log('setting up api key', token);
-        config.headers["x-api-key"] = `${token}`;
+        config.headers["X-Api-Key"] = `${token}`;
       }
     return config;
   },

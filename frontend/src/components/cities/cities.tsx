@@ -86,18 +86,25 @@ export default function Cities() {
                     alignItems="center"
                     mt={-1}
                     >
-                    <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
-                        <img src={rectangle} alt='rectangle' width={artSize} height={artSize}></img>
-                    </Grid>
-                    <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
-                        <img src={rectangle} alt='rectangle' width={artSize} height={artSize}></img>
-                    </Grid>
-                    <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
-                        <img src={rectangle} alt='rectangle' width={artSize} height={artSize}></img>
-                    </Grid>
-                    <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
-                        <img src={rectangle} alt='rectangle' width={artSize} height={artSize}></img>
-                    </Grid>
+                        <>
+                        {imageList && imageList.length && (
+                            <>
+                                <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
+                                    <img src={imageList.length ? imageList[imageList.length-1].url : ''} alt='rectangle' width={artSize} height={artSize}></img>
+                                </Grid>
+                                <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
+                                    <img src={imageList.length ? imageList[imageList.length-2].url : ''} alt='rectangle' width={artSize} height={artSize}></img>
+                                </Grid>
+                                <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
+                                    <img src={imageList.length ? imageList[imageList.length-3].url : ''} alt='rectangle' width={artSize} height={artSize}></img>
+                                </Grid>
+                                <Grid item xs={2} sx={{backgroundColor: '#D9FF6F', padding: 2}}>
+                                    <img src={imageList.length ? imageList[imageList.length-4].url : ''} alt='rectangle' width={artSize} height={artSize}></img>
+                                </Grid>
+                            </>
+                        )}
+                        </>
+                    
                 </Grid>
                 <Grid
                     container
@@ -115,10 +122,10 @@ export default function Cities() {
                     <Grid item>
                         <ImageList sx={{ width: 1000, height: 800, overflow:'scroll' }} cols={4} rowHeight={250}>
                         {imageList.map((item) => (
-                            <ImageListItem key={item.name}>
+                            <ImageListItem key={item.url.split('?').shift()}>
                             <img
-                                src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
-                                srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                src={`${item.url.split('?').shift()}`}
+                                srcSet={`${item.url.split('?').shift()}`}
                                 alt={item.title}
                                 loading="lazy"
                             />
