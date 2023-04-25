@@ -21,7 +21,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const drawerWidth = 300;
 const options = [
-  { title: "Tomar accion", to: "takeActions", enabled: true, variant: "outlined" },
+  { title: "Tomar accion", to: "Connect", enabled: true, variant: "outlined" },
   { title: "Ciudades", to: "Cities", enabled: true, variant: "text" },
   { title: "Experiencias", to: "experiences", enabled: true, variant: "text" },
   { title: "Contacto", to: "contact", enabled: true, variant: "text" },

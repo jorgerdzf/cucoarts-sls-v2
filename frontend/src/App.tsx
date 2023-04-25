@@ -9,10 +9,10 @@ import Landing from './components/landing/Landing';
 import Footer from './components/navigation/Footer';
 import Header from './components/navigation/Header';
 import Cities from './components/cities/Cities';
-import TakeActions from './components/takeActions/TakeActions';
 import Experiences from './components/experiences/Experiences';
 import Contact from './components/contact/contact';
 import PrivacyNotice from './components/privacyNotice/privacyNotice';
+import Connect from './components/connect/Connect';
 
 axios.interceptors.request.use(
   function (config) {
@@ -57,7 +57,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Landing />}/>
           <Route path='/Cities' element={<Cities />}/>
-          <Route path='/takeActions' element={<TakeActions />}/>
+          <Route path='/Connect' element={<Connect />}/>
           <Route path='/experiences' element={<Experiences />}/>
           <Route path='/contact' element={<Contact />}/>
           <Route path='/privateNotice' element={<PrivacyNotice />}/>
