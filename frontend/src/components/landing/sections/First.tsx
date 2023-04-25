@@ -31,7 +31,7 @@ function First() {
                     </Grid>
                     <Grid item textAlign='left'>
                         <br></br>
-                        <Button variant="contained" href='/takeActions'>
+                        <Button variant="contained" href='/Connect'>
                             <Typography sx={{textTransform: 'none'}}>Quiero descubrirlo</Typography>
                         </Button>
                         <br></br>

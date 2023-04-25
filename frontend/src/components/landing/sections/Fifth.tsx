@@ -24,13 +24,13 @@ export default function Fifth() {
                             ¿Hay algo que quieres comenzar a crear o descubrir hoy en Monterrey?
                         </Typography>
                         <br /><br />
-                        <Button variant="contained" sx={{width:220}} href="/cities">
+                        <Button variant="contained" sx={{width:220}} href="/Cities">
                             <Typography>
                                     Si!     
                             </Typography>
                         </Button>
                         <br /><br />
-                        <Button variant="outlined">
+                        <Button variant="outlined" href="/Connect">
                             <Typography>
                                 Estoy en otra ciudad
                             </Typography>

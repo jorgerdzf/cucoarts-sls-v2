@@ -1,9 +1,8 @@
 import { Button, Grid, ImageList, ImageListItem, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import banner from './assets/frame36.png';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
-import rectangle from './assets/rectangle.png';
 import { PictureAsPdfOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getRandomArtForWeb, selectArtImages, selectArtImagesStatus } from '../../redux/art/artSlice';
@@ -58,7 +57,7 @@ export default function Cities() {
                         <Grid item>
                             <Button sx={{padding: 2, marginRight: 2}} variant="contained" startIcon={<ImageSearchIcon/>}>Comprar arte local</Button>
                             <Button sx={{padding: 2, marginRight: 2}} variant="outlined">Pedir más info</Button>
-                            <Button sx={{padding: 2, marginRight: 2}} variant="outlined">Sugerir contenido</Button>
+                            <Button sx={{padding: 2, marginRight: 2}} variant="outlined" href='/Connect'>Sugerir contenido</Button>
                         </Grid>
                 </Grid>
                 <Grid
