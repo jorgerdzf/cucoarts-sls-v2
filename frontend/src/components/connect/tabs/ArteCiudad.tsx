@@ -49,7 +49,7 @@ function ArteCiudad() {
               </Grid>
               <br></br>
               <Grid item>
-                <img src={arteCiudad_placeholder} width={'100%'}></img>
+                <img src={arteCiudad_placeholder} width={'100%'} alt="placeholder"></img>
               </Grid>
             </Grid>
           </Grid>
