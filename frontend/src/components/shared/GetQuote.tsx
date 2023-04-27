@@ -3,7 +3,6 @@ import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 
 function GetQuote(this: any, props:any) {
-    console.log(props);
     const { buttonTitle, buttonHref, description1, description2 } = props.params;
     return (
         <>

@@ -177,7 +177,7 @@ function VoxPopuli() {
                       alignItems="center"
                       sx={{ backgroundColor: '#D9FF6F' }}
                     >
-                      <Box pt={4}>
+                      <Box p={4}>
                         <Typography variant="h5">
                           ¿Estás buscando, o quieres recomendar?
                         </Typography>
