@@ -42,7 +42,7 @@ function Murales() {
               </Box>
             </Grid>
             <Grid item>
-            <Box p={2} sx={{ backgroundColor: '#D9FF6F', borderRadius: '16px' }}>
+              <Box p={2} sx={{ backgroundColor: '#D9FF6F', borderRadius: '16px' }}>
                   <Button variant="contained" href="/Connect">Crear un mural</Button>
                   <br></br>
                   <br></br>
@@ -57,7 +57,7 @@ function Murales() {
                   <Brush></Brush>&nbsp;Producción
                   <br></br>
                   <LocalShipping></LocalShipping>&nbsp;&nbsp;&nbsp;Entrega
-                </Box>
+              </Box>
             </Grid>
         </Grid>
       </Box>
