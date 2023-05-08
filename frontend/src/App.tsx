@@ -10,10 +10,10 @@ import Footer from './components/navigation/Footer';
 import Header from './components/navigation/Header';
 import Cities from './components/cities/Cities';
 import Experiences from './components/experiences/Experiences';
-import Contact from './components/contact/contact';
-import PrivacyNotice from './components/privacyNotice/privacyNotice';
 import Connect from './components/connect/Connect';
 import Services from './components/services/Services';
+import Faq from './components/Faq/Faq';
+import PrivacyNotice from './components/privacyNotice/PrivacyNotice';
 
 axios.interceptors.request.use(
   function (config) {
@@ -63,8 +63,9 @@ function App() {
           <Route path='/Connect' element={<Connect />}/>
           <Route path='/Experiences' element={<Experiences />}/>
           <Route path='/Services' element={<Services activeService={defaultService}/>}/>
-          <Route path='/Contact' element={<Contact />}/>
-          <Route path='/PrivateNotice' element={<PrivacyNotice />}/>
+          <Route path='/Contact' element={<Connect />}/>
+          <Route path='/PrivacyNotice' element={<PrivacyNotice />}/>
+          <Route path='/Faq' element={<Faq />}/>
         </Routes>
         <Footer/>
       </div>

@@ -56,12 +56,6 @@ function Events() {
         </Typography>
         <QuoteDetails services={services}></QuoteDetails>
       </Box>
-      <Box p={1}>
-        <Typography variant='body1'>
-          Encuentra las historias en que hemos participado en su creación en nuestras redes sociales
-        </Typography>
-        <SocialMedia></SocialMedia>
-      </Box>
     </>
   )
 }

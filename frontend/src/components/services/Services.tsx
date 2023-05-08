@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import Productions from './servicesTypes/Productions'
 import Events from './servicesTypes/Events'
 import SocialManagement from './servicesTypes/SocialManagement'
+import SocialMedia from './shared/SocialMedia'
+import Photography from './servicesTypes/Photography'
 
 interface servicesProps {
     activeService: string
@@ -68,7 +70,7 @@ function Services(props: servicesProps) {
             <Box pt={6} sx={{ background: 'linear-gradient(0deg, rgba(102,29,226,1.000) 0%, rgba(102,29,226,1.000) 30%, rgba(255,255,255,1) 60%)' }}>
                 <Grid container>
                     <Grid item xs={2}></Grid>
-                    <Grid item xs={8} pb={25}>
+                    <Grid item xs={8} pb={12}>
                         <Accordion 
                             sx={{backgroundColor: 'transparent'}} 
                             expanded={expanded === 'productions'}
@@ -120,9 +122,35 @@ function Services(props: servicesProps) {
                                 <SocialManagement></SocialManagement>
                             </AccordionDetails>
                         </Accordion>
+                        <Accordion 
+                            sx={{backgroundColor: 'transparent'}} 
+                            expanded={expanded === 'photo'}
+                            onChange={handleChange('photo')}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls="panel2a-content"
+                                id="panel2a-header"
+                            >
+                                <Typography variant='h4'>
+                                    Cotiza producción fotográfica
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Photography></Photography>
+                            </AccordionDetails>
+                        </Accordion>
                     </Grid>
                     <Grid item xs={2}></Grid>
                 </Grid>
+                <Box p={4}>
+                    <Typography variant='body1'>
+                        Encuentra las historias en que hemos participado en su creación en nuestras redes sociales
+                    </Typography>
+                    <br></br>
+                    <SocialMedia></SocialMedia>
+                    <br></br>
+                    <br></br>
+                </Box>
             </Box>
         </>
     )

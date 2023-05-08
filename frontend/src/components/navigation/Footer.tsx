@@ -19,12 +19,14 @@ function Footer() {
             </Grid>
             <Grid item>
               <Typography>
-              hello@cucoarts.com
+                <Link href='mailto:hello@cucoarts.com' sx={{textDecoration:'none', color:'inherit'}}>
+                hello@cucoarts.com
+                </Link>    
               </Typography>    
             </Grid>
             <Grid item>
               <Typography>
-                <Link href='' sx={{textDecoration:'none', color:'inherit'}}>
+                <Link href='/PrivacyNotice' sx={{textDecoration:'none', color:'inherit'}}>
                   Aviso de Privacidad
                 </Link>
               </Typography>

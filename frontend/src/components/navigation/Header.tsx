@@ -26,7 +26,8 @@ const options = [
   { title: "Experiencias", to: "Experiences", enabled: true, variant: "text" },
   { title: "Servicios", to: "Services", enabled: true, variant: "text" },
   { title: "Contacto", to: "Contact", enabled: true, variant: "text" },
-  { title: "Aviso de Privacidad", to: "PrivacyNotice", enabled: true, variant: "text" },
+  { title: "Preguntas Frecuentes", to: "Faq", enabled: true, variant: "text" },
+  { title: "Aviso de Privacidad", to: "PrivacyNotice", enabled: true, variant: "text" }
 ];
 
 const useStyles = makeStyles((theme: Theme) =>
