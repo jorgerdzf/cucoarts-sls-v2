@@ -23,9 +23,10 @@ const drawerWidth = 300;
 const options = [
   { title: "Tomar accion", to: "Connect", enabled: true, variant: "outlined" },
   { title: "Ciudades", to: "Cities", enabled: true, variant: "text" },
-  { title: "Experiencias", to: "experiences", enabled: true, variant: "text" },
-  { title: "Contacto", to: "contact", enabled: true, variant: "text" },
-  { title: "Aviso de Privacidad", to: "privacyNotice", enabled: true, variant: "text" },
+  { title: "Experiencias", to: "Experiences", enabled: true, variant: "text" },
+  { title: "Servicios", to: "Services", enabled: true, variant: "text" },
+  { title: "Contacto", to: "Contact", enabled: true, variant: "text" },
+  { title: "Aviso de Privacidad", to: "PrivacyNotice", enabled: true, variant: "text" },
 ];
 
 const useStyles = makeStyles((theme: Theme) =>

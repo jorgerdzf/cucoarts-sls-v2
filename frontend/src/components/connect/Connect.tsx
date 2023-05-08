@@ -6,8 +6,6 @@ import ArteCiudad from './tabs/ArteCiudad';
 import Murales from './tabs/Murales';
 import Produccion from './tabs/Produccion';
 
-const iconSize = 25;
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -53,6 +51,9 @@ function Connect() {
       }}>
         <Typography variant='h4'>
           <b>Conectando con la ciudad</b>
+        </Typography>
+        <Typography variant='caption'>
+          Participa de verdad con la gente que es tan creativa como tú y vive cerca de ti
         </Typography>
       </Box>
       <Box sx={{pt: 4}}>

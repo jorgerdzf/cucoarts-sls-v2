@@ -13,6 +13,7 @@ import Experiences from './components/experiences/Experiences';
 import Contact from './components/contact/contact';
 import PrivacyNotice from './components/privacyNotice/privacyNotice';
 import Connect from './components/connect/Connect';
+import Services from './components/services/Services';
 
 axios.interceptors.request.use(
   function (config) {
@@ -50,6 +51,8 @@ const theme = createTheme({
 });
 
 function App() {
+  const defaultService = 'productions';
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -58,9 +61,10 @@ function App() {
           <Route path='/' element={<Landing />}/>
           <Route path='/Cities' element={<Cities />}/>
           <Route path='/Connect' element={<Connect />}/>
-          <Route path='/experiences' element={<Experiences />}/>
-          <Route path='/contact' element={<Contact />}/>
-          <Route path='/privateNotice' element={<PrivacyNotice />}/>
+          <Route path='/Experiences' element={<Experiences />}/>
+          <Route path='/Services' element={<Services activeService={defaultService}/>}/>
+          <Route path='/Contact' element={<Contact />}/>
+          <Route path='/PrivateNotice' element={<PrivacyNotice />}/>
         </Routes>
         <Footer/>
       </div>
