@@ -50,11 +50,7 @@ export default function Header() {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Link href="/">
-        <img src={logo} alt="Cuco Arts!" />
-      </Link>
-      <Divider />
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", color:"#fff" }}>
       <List key={"mainMenu"}>
         {options.map(
           (item, i) =>

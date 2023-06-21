@@ -4,16 +4,33 @@ import Fourth from './sections/Fourth'
 import First from './sections/First'
 import Second from './sections/Second'
 import Third from './sections/Third'
+import { Grid } from '@mui/material'
 
 export default function Landing() {
 
   return (
     <>
-      <First></First>
-      <Second></Second>
-      <Third></Third>
-      <Fourth></Fourth>
-      <Fifth></Fifth>
+      <Grid
+        container
+        direction='row'
+        alignItems='center'
+        justifyContent='center'>
+          <Grid item xs={12}>
+            <First></First>
+          </Grid>
+          <Grid item xs={12}>
+            <Second></Second>            
+          </Grid>
+          <Grid item xs={12}>
+            <Third></Third>
+          </Grid>
+          <Grid item xs={12}>
+            <Fourth></Fourth>
+          </Grid>
+          <Grid item xs={12}>
+            <Fifth></Fifth>
+          </Grid>
+      </Grid>
     </>
   )
 }

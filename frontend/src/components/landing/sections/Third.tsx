@@ -104,13 +104,13 @@ export default function Third() {
                                         justifyContent="center"
                                         alignItems="center"
                                         spacing={4}>
-                                        <Grid item>
+                                        <Grid item xs={12} md={4}>
                                             <img src={arthunting} alt="art hunting" ></img>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12} md={4}>
                                             <img src={murales} alt="art hunting"></img>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12} md={4}>
                                             <img src={produccion} alt="art hunting"></img>
                                         </Grid>
                                     </Grid>

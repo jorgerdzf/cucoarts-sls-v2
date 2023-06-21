@@ -98,8 +98,8 @@ function VoxPopuli() {
           container
           pt={4}
         >
-          <Grid item xs={2}></Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} md={2}></Grid>
+          <Grid item xs={12} md={4}>
             <Box>
               <Typography variant='h5'>
                 Explora el valor de tus experiencias
@@ -211,7 +211,7 @@ function VoxPopuli() {
               </div>
             </Box>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Grid container
               direction="column"
               justifyContent="flex-end"
@@ -221,14 +221,14 @@ function VoxPopuli() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}></Grid>
+          <Grid item xs={12} md={2}></Grid>
         </Grid>
       </Box>
     ) : (
       <Box>
         <Grid container pt={4}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={5} pt={8}>
+          <Grid item xs={12} md={2}></Grid>
+          <Grid item xs={12} md={5} pt={8}>
             <Typography variant='h4'>
               ¡Muchas gracias por tus respuestas!
             </Typography>
@@ -242,7 +242,7 @@ function VoxPopuli() {
             Y si lleva a una venta, te toca un porcentaje.
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
           <Grid container
               direction="column"
               justifyContent="flex-end"
@@ -252,7 +252,7 @@ function VoxPopuli() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}></Grid>
+          <Grid item xs={12} md={2}></Grid>
         </Grid>
       </Box>
     )}

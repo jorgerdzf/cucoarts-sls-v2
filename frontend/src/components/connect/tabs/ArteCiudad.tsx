@@ -10,8 +10,8 @@ function ArteCiudad() {
     <>
       <Box>
         <Grid container>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={5}>
+          <Grid item xs={12} md={2}></Grid>
+          <Grid item xs={12} md={5}>
             <Grid
             container
             direction="column"
@@ -28,7 +28,7 @@ function ArteCiudad() {
               <br></br>
               <Grid item pt={2}>
                 <Grid container>
-                  <Grid item xs={5}>
+                  <Grid item xs={12} md={5}>
                     <Box>
                       <img src={arteCiudad_1} width={100} alt="arteCiudad1"></img>
                     </Box>
@@ -36,8 +36,8 @@ function ArteCiudad() {
                       Las obras que verás fueron hechas por profesionales y también por estudiantes
                     </Typography>
                   </Grid>
-                  <Grid item xs={2}></Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={12} md={2}></Grid>
+                  <Grid item xs={12} md={5}>
                     <Box>
                       <img src={arteCiudad_2}width={300} alt="arteCiudad1"></img>
                     </Box>
@@ -53,7 +53,7 @@ function ArteCiudad() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             <Grid
             container
             direction="column"
@@ -115,7 +115,7 @@ function ArteCiudad() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}></Grid>
+          <Grid item xs={12} md={2}></Grid>
         </Grid>
       </Box>
     </>

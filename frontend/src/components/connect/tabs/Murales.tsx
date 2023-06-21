@@ -63,10 +63,10 @@ function Murales() {
       </Box>
       <Box sx={{ background: 'linear-gradient(0deg, rgba(217,255,111,1) 0%, rgba(217,255,111,1) 30%, rgba(255,255,255,1) 60%)' }}>
         <Grid container pt={8}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12} md={2}></Grid>
+          <Grid item xs={12} md={8}>
             <Grid container>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={12}>
                 <Typography variant='h4'>
                   <b>Cada muro es un lienzo para expresar nuestra cultura local.</b>
                 </Typography>
@@ -75,12 +75,12 @@ function Murales() {
                   Sea artístico, público o comercial, cada pared tiene una historia.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
-                <img src={murales_1} width={'80%'} alt="murales"></img>
+              <Grid item xs={12} md={12}>
+                <img src={murales_1} width={200} alt="murales"></img>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}></Grid>
+          <Grid item xs={12} md={2}></Grid>
         </Grid>
         <Grid container
           direction="row"
@@ -94,8 +94,8 @@ function Murales() {
           </Grid>
           <br></br>
           <Grid container>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
+            <Grid item xs={12} md={2}></Grid>
+            <Grid item xs={12} md={8}>
               <Grid
               container
               direction="row"
@@ -138,7 +138,7 @@ function Murales() {
                   </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={12} md={2}></Grid>
           </Grid>
       </Box>
       <Box paddingTop={10} paddingBottom={10} sx={{ backgroundColor: '#D9FF6F' }}>
@@ -146,35 +146,35 @@ function Murales() {
           Una conexión real con la cultula local
         </Typography>
         <Grid container pt={4}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12} md={2}></Grid>
+          <Grid item xs={12} md={8}>
             <Grid container>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <img src={murales_2} width={'80%'} alt="murales"></img>
                 <Typography variant="body2">
                   Define tu propio proyecto de arte urbano.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <img src={murales_3} width={'80%'} alt="murales"></img>
                 <Typography variant="body2">
                   Tu controlas presupuesto, fechas y horarios de trabajo.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
               <img src={murales_4} width={'80%'} alt="murales"></img>
                 <Typography variant="body2">
                   Selecciona el o los artistas que trabajarán en tu creación entre las opciones que tenemos para ti.
                 </Typography>
               </Grid>
-              <Grid item xs={2}></Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={2}></Grid>
+              <Grid item xs={12} md={4}>
               <img src={murales_5} width={'80%'} alt="murales"></img>
                 <Typography variant="body2">
                   Participa o disfruta tu creación mientras trabajan los artistas.
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <img src={murales_6} width={'70%'} alt="murales"></img>
                 <Typography variant="body2">
                   Comparte tu nuevo mural con el mundo como contanido para tus redes sociales.
@@ -182,7 +182,7 @@ function Murales() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={2}></Grid>
+          <Grid item xs={12} md={2}></Grid>
         </Grid>
       </Box>
     </>

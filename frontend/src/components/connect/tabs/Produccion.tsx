@@ -26,19 +26,23 @@ function Produccion() {
   }
   return (
     <>
-      <Grid container>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={8}>
-          <Box sx={{ backgroundColor: '#605CFF', borderRadius: '16px' }}>
+      <Grid 
+        container
+        justifyContent='center'>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ backgroundColor: '#605CFF', borderRadius: '16px' }} p={2}>
             <br></br>
             <Typography variant="h5" sx={{ color: '#fff' }}>
-              Producciones de alto impacto cultural y bajo presupuesto
+              <b>Producciones de alto impacto cultural y bajo presupuesto</b>
             </Typography>
-            <Typography variant='body1' sx={{ color: '#fff' }}>
+            <Typography variant='body2' sx={{ color: '#fff' }}>
               Llevamos más de 3 años creando todo tipo de contenidos e interacciones sociales para promover el talento local
             </Typography>
             <br></br>
-            <Grid container p={2}>
+            <Grid 
+            container
+            justifyContent='center' 
+            p={2}>
               <Grid item>
                 <img src={produccion_placeholder1} width={'90%'} alt='placeholder1'></img>
               </Grid>
@@ -48,7 +52,6 @@ function Produccion() {
             </Grid>
           </Box>
         </Grid>
-        <Grid item xs={2}></Grid>
       </Grid>
       <Grid
         container
@@ -56,10 +59,10 @@ function Produccion() {
         justifyContent='center'
         alignItems='center'
         pt={4}>
-        <Grid item p={2}>
+        <Grid item xs={12} md={3} p={2}>
           <GetQuote params={GetQuoteParams}></GetQuote>
         </Grid>
-        <Grid item p={2}>
+        <Grid item xs={12} md={3} p={2}>
           <Typography variant="h5" sx={{ color: '#99E21D' }}>
             Ayuda a la comunidad
           </Typography>
@@ -84,7 +87,7 @@ function Produccion() {
           direction='row'
           justifyContent='center'
           alignItems='center'>
-          <Grid item p={4}>
+          <Grid item p={4} xs={12} md={3}>
             <Grid
               container
               direction="column"
@@ -154,13 +157,13 @@ function Produccion() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item p={4}>
+          <Grid item p={4} xs={12} md={3}>
             <Grid
               container
               direction="column"
               justifyContent="space-evenly"
               alignItems="center"
-              sx={{ backgroundColor: '#D9FF6F' }} height={800} width={300}>
+              sx={{ backgroundColor: '#D9FF6F' }} height={800}>
               <Grid item>
                 <img src={produccion_2} width={'90%'} alt='produccion1'></img>
               </Grid>
@@ -206,9 +209,12 @@ function Produccion() {
       </Box>
       <Box p={4} sx={{ backgroundColor: '#661DE2' }}>
        
-          <Grid container>
-            <Grid item xs={3}></Grid>
-            <Grid item xs={6}>
+          <Grid 
+          container
+          direction='row'
+          justifyContent='center'
+          alignItems='center'>
+            <Grid item xs={12} md={6}>
               <Box sx={{ backgroundColor: '#48D218' }} p={4}>
                 <Grid container direction='row' alignContent='center' justifyContent='center'>
                   <Grid item p={2}>
@@ -223,7 +229,7 @@ function Produccion() {
                  </Typography>
               </Box>
             </Grid>
-            <Grid item xs={3}></Grid>
+            
           </Grid>
          
        

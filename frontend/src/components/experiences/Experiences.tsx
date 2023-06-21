@@ -1,10 +1,10 @@
-import { Box, Grid, ImageList, ImageListItem, Typography } from '@mui/material'
+import { Box, Grid, ImageList, ImageListItem, Typography, useMediaQuery } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getRandomArtForWeb, selectArtImages, selectArtImagesStatus } from '../../redux/art/artSlice';
 
 function Experiences() {
-
+  const smallScreen = useMediaQuery("(max-width: 768px)");
   const dispatch = useAppDispatch();
   const loadingImagesStatus = useAppSelector(selectArtImagesStatus);
   const imageList: any[] = useAppSelector(selectArtImages);
@@ -31,10 +31,10 @@ function Experiences() {
       </Box>
       <Grid
         container
-        direction='row'
+        direction='column'
         justifyContent='center'
         alignContent='center'>
-        <Grid item>
+        <Grid item xs={12} md={12}>
           <Box p={4} textAlign='center'>
             <Typography variant='body1'>
               Hemos reunido las experiencias que vivieron personas en la comunidad, a través de nuestros servicios
@@ -44,8 +44,8 @@ function Experiences() {
             </Typography>
           </Box>
         </Grid>
-        <Grid item>
-          <ImageList sx={{ width: 1000, height: 800, overflow: 'scroll' }} cols={4} rowHeight={200}>
+        <Grid item xs={12} md={12} p={2}>
+            <ImageList sx={{ width: smallScreen ? 350 : 1000, height: 800, overflow:'scroll' }} cols={smallScreen ? 1 : 4} rowHeight={250}>
             {imageList.map((item) => (
               <ImageListItem key={item.url.split('?').shift()}>
                 <img
