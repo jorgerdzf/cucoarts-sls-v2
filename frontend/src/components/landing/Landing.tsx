@@ -18,13 +18,13 @@ export default function Landing() {
           <Grid item xs={12}>
             <First></First>
           </Grid>
-          <Grid item xs={12}>
-            <Second></Second>            
+          <Grid item xs={12} id="ArtLover">
+            <Second></Second>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} id="Artist">
             <Third></Third>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} id="Business">
             <Fourth></Fourth>
           </Grid>
           <Grid item xs={12}>

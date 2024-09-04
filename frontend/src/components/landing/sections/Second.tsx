@@ -1,89 +1,138 @@
-import { Box, Grid, Typography } from '@mui/material'
-import v9_11 from "../assets/images/v9_11.png";
-import v9_13 from "../assets/images/v9_13.png";
-import v10_24 from "../assets/images/v10_24.png";
-import v10_28 from "../assets/images/v10_28.png";
-
 import React from 'react'
+import { Box, Grid, Typography, Link } from '@mui/material'
+import circle_example from "../assets/images/arthunting.png";
+import { grey } from '@mui/material/colors';
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import RedditIcon from "@mui/icons-material/Reddit";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+
+const primary = grey[900];
+const commonStyles = {
+    bgcolor: 'background.paper',
+    borderColor: 'text.primary',
+    m: 1,
+    border: 1,
+    width: '20rem',
+    height: '20rem',
+};
 const imgSize = 300;
+const iconFontSize = 60;
+const iconColor = '#111';
 
 function Second() {
   return (
     <>
-        <Box sx={{backgroundColor: '#605CFF'}} pt={10}>
+        <Box sx={{
+            backgroundColor: '#605CFF',
+        }} pt={10}
+        >
             <Grid  
             container
-            direction="row"
+            direction="column"
             justifyContent="space-around"
             alignItems="center">
                 <Grid item>
-                    <Box>
-                        <img src={v9_13} alt="second" width={imgSize} height={imgSize}></img>
-                    </Box>
-                    <Typography variant="h4" color="secondary">
-                     <b>Lo que sabes y haces es <br></br> tu GRAN VALOR</b>
+                    <Typography variant="h2" color={primary}>
+                        <b>Art Lover</b>
                     </Typography>
-                    <br/> 
-                    <Typography variant="body1" sx={{color:'#fff'}}>
-                        Tus gustos y pasiones son la base del desarrollo de la vida en la ciudad, <br/> 
-                        pues donde inviertes tiempo o dinero, eso seguirá creciendo. <br/><br/> 
-                        Cada actividad en tu día a día, <br/> 
-                        AGREGA VALOR a la gente a tu alrededor.
+                    <br></br>
+                    <Typography variant="body2" color={primary}>
+                        Aunque no te consideras artista, seguro que puedes ser muy creativ@
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Box>
-                        <img src={v10_24} alt="second" width={imgSize} height={imgSize}></img>
-                    </Box>
-                    <Typography variant="h4" color="secondary">
-                     <b>El futuro es COLECTIVO</b>
-                    </Typography>
-                    <br/> 
-                    <Typography variant="body1" sx={{color:'#fff'}}>
-                        La suma de todo lo que yo puedo ver es lo que le da forma (dentro de mí) <br/> 
-                        a la ciudad que observo. En la medida en la que participo con la gente <br/> <br/> 
-                        que me rodea y descubro su habilidad especial, la ciudad va tomando <br/> 
-                        otros colores. Cada vez más brillosos y esperanzadores.
-                    </Typography>
+                    <Grid 
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                    >
+                        <Grid item padding={10}>
+                            <img 
+                                src={circle_example} 
+                                alt="art hunting"
+                                style={{
+                                    borderRadius: '50%'
+                                }}
+                            ></img>
+                            <Typography variant="body2" color={primary}>
+                                <br></br>
+                                Buscamos arte para tu hogar
+                            </Typography>
+                        </Grid>
+                        <Grid item padding={10}>
+                            <img 
+                                src={circle_example} 
+                                alt="art hunting"
+                                style={{
+                                    borderRadius: '50%'
+                                }}
+                            ></img>
+                            <Typography variant="body2" color={primary}>
+                                <br></br>
+                                Te avisamos de eventos próximos
+                            </Typography>
+                        </Grid>
+                        <Grid item padding={10}>
+                            <img 
+                                src={circle_example} 
+                                alt="art hunting"
+                                style={{
+                                    borderRadius: '50%'
+                                }}
+                            ></img>
+                            <Typography variant="body2" color={primary}>
+                                <br></br>
+                                Conozcamos espacios de arte y cultura
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid  
-            container
-            direction="row"
-            justifyContent="space-around"
-            alignItems="center"
-            pt={4}>
                 <Grid item>
-                    <Box>
-                        <img src={v9_11} alt="second" width={imgSize} height={imgSize}></img>
-                    </Box>
-                    <Typography variant="h4" color="secondary">
-                     <b>El talento necesita ATENCIÓN</b>
-                    </Typography>
-                    <br/> 
-                    <Typography variant="body1" sx={{color:'#fff'}}>
-                    Algo tan bien hecho, necesita que haya quien lo disfrute. <br/> <br/> 
-                    
-                    Hay todo tipo de creaciones y creadores en la ciudad que vale la pena conocer. <br/> 
-                    Existen organizaciones o lugares interesantes en donde desarrollan algo creativo <br/> 
-                    o simplemente inspiran a quien los visita o trabaja ahí.
-                    </Typography>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center">
+                        <Grid item padding={2}>
+                            <Link href="https://www.facebook.com/cucoarts" target="_blank">
+                                <FacebookIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://twitter.com/cucoarts" target="_blank">
+                                <TwitterIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor}/>
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.instagram.com/cucoarts/" target="_blank">
+                                <InstagramIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.tiktok.com/@cucoarts.mx" target="_blank">
+                                <MusicNoteIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.reddit.com/user/cucoarts" target="_blank">
+                                <RedditIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.youtube.com/c/cucoarts" target="_blank">
+                                <YouTubeIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://wa.me/+528120321492" target="_blank">
+                                <WhatsAppIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
                 </Grid>
-                <Grid item>
-                    <Box>
-                        <img src={v10_28} alt="second" width={imgSize} height={imgSize}></img>
-                    </Box>
-                    <Typography variant="h4" color="secondary">
-                     <b>te vas a conocer mejor</b>
-                    </Typography>
-                    <br/> 
-                    <Typography variant="body1" sx={{color:'#fff'}}>
-                        ¿Qué es lo que verdaderamente estoy dispuesto a crear o hacer?  <br/>
-                        ¿Si no soy yo por mí, quién?  <br/> <br/>
-                        
-                        Inspira a más gente a tu alrededor a valorarse a sí mismos. Reconocer y  <br/>
-                        apreciar tu cultura es el primer paso, después el cielo es el límite. 
-                    </Typography>
                 </Grid>
             </Grid>
         </Box>

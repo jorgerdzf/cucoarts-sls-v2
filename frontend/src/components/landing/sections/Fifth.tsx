@@ -1,7 +1,18 @@
-import { Button, Grid, Typography } from '@mui/material'
+import { Button, Grid, Typography, Link } from '@mui/material'
 import { Box } from '@mui/system'
 import group5 from '../assets/images/Group5.png';
+import arthunting from '../assets/images/arthunting.png';
 import React from 'react'
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import RedditIcon from "@mui/icons-material/Reddit";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+
+const iconFontSize = 60;
+const iconColor = '#111';
 
 export default function Fifth() {
   return (
@@ -9,36 +20,75 @@ export default function Fifth() {
         <Box paddingTop={20} sx={{ backgroundColor: '#D9FF6F' }}>
             <Grid 
                 container
-                direction="row"
+                direction="column"
                 justifyContent="center"
                 alignItems="center">
                     <Grid item>
                         <Typography variant="h2">
-                            <b>
-                            Comienza a <br />
-                            disfrutar el talento <br />
-                            de tu ciudad <br />
-                            </b>
+                            <b>CUCO</b>
                         </Typography>
-                        <Typography variant="body1">
-                            ¿Hay algo que quieres comenzar a crear o descubrir hoy en Monterrey?
+                        <Typography variant="h5" color="primary">
+                            El propósito de CUCO es lograr que el amor que hay en obra o
+                            <br></br> manifestación artística llegue al art lover correcto.
                         </Typography>
                         <br /><br />
-                        <Button variant="contained" sx={{width:220}} href="/Cities">
-                            <Typography>
-                                    Si!     
-                            </Typography>
-                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <img src={arthunting} alt="art hunting" ></img>
+                    </Grid>
+                    <Grid item>
                         <br /><br />
-                        <Button variant="outlined" href="/Connect">
-                            <Typography>
-                                Estoy en otra ciudad
-                            </Typography>
-                        </Button>
+                        <Typography variant="body1" color="inherit">
+                        Somos art lovers pero trabajamos y convivimos con artistas de distintas disciplinas y trayectorias para vivir y entender su mundo también. 
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                    <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    paddingTop={4}>
+                        <Grid item padding={2}>
+                            <Link href="https://www.facebook.com/cucoarts" target="_blank">
+                                <FacebookIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://twitter.com/cucoarts" target="_blank">
+                                <TwitterIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor}/>
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.instagram.com/cucoarts/" target="_blank">
+                                <InstagramIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.tiktok.com/@cucoarts.mx" target="_blank">
+                                <MusicNoteIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.reddit.com/user/cucoarts" target="_blank">
+                                <RedditIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://www.youtube.com/c/cucoarts" target="_blank">
+                                <YouTubeIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                        <Grid item padding={2}>
+                            <Link href="https://wa.me/+528120321492" target="_blank">
+                                <WhatsAppIcon sx={{ fontSize: iconFontSize }} htmlColor={iconColor} />
+                            </Link>
+                        </Grid>
+                </Grid>
                     </Grid>
             </Grid>
-            <Box>
-                <img src={group5} alt="group5" width={'80%'}></img>
+            <Box paddingBottom={4}>
+                
             </Box>
         </Box>
     </>
