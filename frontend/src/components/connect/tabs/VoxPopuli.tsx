@@ -47,7 +47,7 @@ function VoxPopuli() {
 
   const onSubmitFull = (data: any) => {
     console.log('errores', errors);
-    if (errors.RedSocial || errors.Email || errors.CiudadResidencia || errors.Descripcion) {
+    if (errors.Nombre || errors.Email || errors.CiudadResidencia || errors.Descripcion) {
       setMessage(
         "Por favor revisa los campos en rojo para poder enviar tus respuestas"
       );
@@ -56,7 +56,7 @@ function VoxPopuli() {
       var templateParams = {
         reply_to: data.Email,
         message: 
-        `${data.RedSocial} de: ${data.CiudadResidencia}
+        `${data.Nombre} de: ${data.CiudadResidencia}
         con Correo: ${data.Email} quiere buscar o recomendar: -> ${data.Descripcion}
         ${data.TiempoResidencia ? 'tiene viviendo ahi: ' + data.TiempoResidencia : ''}
         `,
@@ -99,14 +99,14 @@ function VoxPopuli() {
           pt={4}
         >
           <Grid item xs={12} md={2}></Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={12}>
             <Box>
               <Typography variant='h5'>
-                Explora el valor de tus experiencias
+                Explora el valor que podemos ofrecerte
               </Typography>
               <br></br>
               <Typography variant='body2'>
-                Ayuda a que más personas encuentren a la raza que hace cosas bien chidas en la ciudad
+                Este es tu momento, presentate con nosotros 
               </Typography>
             </Box>
             <Box>
@@ -120,12 +120,12 @@ function VoxPopuli() {
                       alignItems="stretch">
                       <Grid item>
                         <TextField
-                          error={errors.RedSocial ? true : false}
-                          id="RedSocial"
-                          label="Red social favorita"
+                          error={errors.Nombre ? true : false}
+                          id="Nombre"
+                          label="Como te llamas?"
                           variant="outlined"
                           fullWidth
-                          {...register("RedSocial", { required: true, maxLength: 100 })}
+                          {...register("Nombre", { required: true, maxLength: 100 })}
                         />
                       </Grid>
                       <br></br>
@@ -133,7 +133,7 @@ function VoxPopuli() {
                         <TextField
                           error={errors.CiudadResidencia ? true : false}
                           id="CiudadResidencia"
-                          label="Ciudad de residencia"
+                          label="Donde vives?"
                           variant="outlined"
                           fullWidth
                           {...register("CiudadResidencia", {
@@ -147,7 +147,7 @@ function VoxPopuli() {
                         <TextField
                           error={errors.Email ? true : false}
                           id="Email"
-                          label="Correo eléctronico"
+                          label="Cual es tu correo eléctronico"
                           variant="outlined"
                           fullWidth
                           {...register("Email", {
@@ -157,7 +157,7 @@ function VoxPopuli() {
                         />
                       </Grid>
                       <br></br>
-                      <Grid item>
+                      {/* <Grid item>
                         <TextField
                           error={errors.TiempoResidencia ? true : false}
                           id="TiempoResidencia"
@@ -168,7 +168,7 @@ function VoxPopuli() {
                             required: false
                           })}
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                     <br></br>
                     <Grid
@@ -177,9 +177,9 @@ function VoxPopuli() {
                       alignItems="center"
                       sx={{ backgroundColor: '#D9FF6F' }}
                     >
-                      <Box p={4}>
+                      <Box p={4} width={400}>
                         <Typography variant="h5">
-                          ¿Estás buscando, o quieres recomendar?
+                          Cuentanos, ¿Que tienes en mente?
                         </Typography>
                         <br></br>
                         <Grid item>
@@ -204,14 +204,14 @@ function VoxPopuli() {
                   </Box>
                   <Box sx={{ pt: 2 }}>
                     <Button size="large" variant="contained" type="submit">
-                      Enviar Respuestas
+                      Conectar
                     </Button>
                   </Box>
                 </form>
               </div>
             </Box>
           </Grid>
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <Grid container
               direction="column"
               justifyContent="flex-end"
@@ -220,7 +220,7 @@ function VoxPopuli() {
                 <img src={conectandoVoxPopuli} width={'70%'} alt="conectandoVoxPopuli"></img>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={2}></Grid>
         </Grid>
       </Box>

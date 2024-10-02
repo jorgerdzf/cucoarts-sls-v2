@@ -25,7 +25,7 @@ function Services(props: servicesProps) {
                 pt: 8
             }}>
                 <Typography variant='h4'>
-                    <b>Conectando con la ciudad</b>
+                    <b>Que podemos hacer por ti?</b>
                 </Typography>
                 <Typography variant='caption'>
                     Participa de verdad con la gente que es tan creativa como tú y vive cerca de ti
@@ -37,27 +37,9 @@ function Services(props: servicesProps) {
                     direction='row'
                     justifyContent='center'
                     alignContent='center'>
-                    <Grid item sx={{ backgroundColor: '#48D218', borderRadius: '16px' }} p={2}>
-                        <Grid
-                            container
-                            direction='row'
-                            justifyContent='center'
-                            alignContent='center'>
-                            <Grid item p={2}>
-                                <Button variant='outlined' href='/Experiences' sx={{ backgroundColor: '#fff' }}>Experiencias de creativos</Button>
-                            </Grid>
-                            <Grid item p={2}>
-                                <Button variant='outlined' href='https://www.youtube.com/cucoarts' sx={{ backgroundColor: '#fff' }}>Canal de Youtube</Button>
-                            </Grid>
-                        </Grid>
-                        <br></br>
-                        <Typography variant='body2'>
-                            Cada trabajo es hecho con mucho detalle y cuidado de compartir una historia especial
-                        </Typography>
-                    </Grid>
                     <Grid item pl={2}>
                         <Box p={4} sx={{ backgroundColor: '#D9FF6F',borderRadius: '16px'  }}>
-                            <Button variant="contained" href="/Connect">Cotizar una producción</Button>
+                            <Button variant="contained" href="/Connect">Cotizar</Button>
                             <br></br>
                             <br></br>
                             <Typography variant="body2">

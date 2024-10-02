@@ -1,7 +1,9 @@
 import { Button, Grid, Typography, Link } from '@mui/material'
 import { Box } from '@mui/system'
-import group5 from '../assets/images/Group5.png';
-import arthunting from '../assets/images/arthunting.png';
+
+//images
+import i1 from "../assets/images/v2/s5-i1.jpg";
+
 import React from 'react'
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -27,14 +29,19 @@ export default function Fifth() {
                         <Typography variant="h2">
                             <b>CUCO</b>
                         </Typography>
-                        <Typography variant="h5" color="primary">
+                        <Typography variant="h5" color="main">
                             El propósito de CUCO es lograr que el amor que hay en obra o
-                            <br></br> manifestación artística llegue al art lover correcto.
+                            manifestación artística llegue al art lover correcto.
                         </Typography>
                         <br /><br />
                     </Grid>
                     <Grid item>
-                        <img src={arthunting} alt="art hunting" ></img>
+                        <img src={i1} alt="art hunting" style={{
+                                borderRadius: '10%',
+                                width: 600,
+                                height: 400,
+                                objectFit: 'cover'
+                        }}></img>
                     </Grid>
                     <Grid item>
                         <br /><br />

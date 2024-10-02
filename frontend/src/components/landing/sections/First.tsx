@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import group1 from "../assets/images/Group1.png";
-import img_encabezado from "../assets/images/Encabezado.png";
+import img_encabezado from "../assets/images/v2/s1-i1.png";
 
 import React from "react";
 

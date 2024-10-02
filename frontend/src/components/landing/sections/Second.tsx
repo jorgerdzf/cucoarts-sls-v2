@@ -1,6 +1,11 @@
 import React from 'react'
 import { Box, Grid, Typography, Link } from '@mui/material'
-import circle_example from "../assets/images/arthunting.png";
+
+//images
+import i1 from "../assets/images/v2/s2-i1.jpg";
+import i2 from "../assets/images/v2/s2-i2.jpg";
+import i3 from "../assets/images/v2/s2-i3.jpg";
+
 import { grey } from '@mui/material/colors';
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -52,10 +57,13 @@ function Second() {
                     >
                         <Grid item padding={10}>
                             <img 
-                                src={circle_example} 
+                                src={i1} 
                                 alt="art hunting"
                                 style={{
-                                    borderRadius: '50%'
+                                    borderRadius: '50%',
+                                    width: imgSize,
+                                    height: imgSize,
+                                    objectFit: 'cover'
                                 }}
                             ></img>
                             <Typography variant="body2" color={primary}>
@@ -65,10 +73,13 @@ function Second() {
                         </Grid>
                         <Grid item padding={10}>
                             <img 
-                                src={circle_example} 
+                                src={i2} 
                                 alt="art hunting"
                                 style={{
-                                    borderRadius: '50%'
+                                    borderRadius: '50%',
+                                    width: imgSize,
+                                    height: imgSize,
+                                    objectFit: 'cover'
                                 }}
                             ></img>
                             <Typography variant="body2" color={primary}>
@@ -78,10 +89,13 @@ function Second() {
                         </Grid>
                         <Grid item padding={10}>
                             <img 
-                                src={circle_example} 
+                                src={i3} 
                                 alt="art hunting"
                                 style={{
-                                    borderRadius: '50%'
+                                    borderRadius: '50%',
+                                    width: imgSize,
+                                    height: imgSize,
+                                    objectFit: 'cover'
                                 }}
                             ></img>
                             <Typography variant="body2" color={primary}>

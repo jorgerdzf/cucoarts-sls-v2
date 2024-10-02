@@ -72,9 +72,9 @@ function Connect() {
           onChange={handleTabChange}>
 
             <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><RecordVoiceOver sx={{ pr: 2 }} /> Vox pópuli </div>} {...a11yProps(0)} />
-            <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><Palette sx={{ pr: 2 }} /> Arte de la ciudad </div>} {...a11yProps(1)} />
+            {/* <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><Palette sx={{ pr: 2 }} /> Arte de la ciudad </div>} {...a11yProps(1)} />
             <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><Image sx={{ pr: 2 }} /> Murales </div>} {...a11yProps(2)} />
-            <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><RecordVoiceOver sx={{ pr: 2 }} /> Producción </div>} {...a11yProps(3)} />
+            <Tab label={<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}><RecordVoiceOver sx={{ pr: 2 }} /> Producción </div>} {...a11yProps(3)} /> */}
           </Tabs>
         </Grid>
         <Grid item pt={4}>
@@ -86,7 +86,7 @@ function Connect() {
             <TabPanel value={tab} index={0}>
               <VoxPopuli></VoxPopuli>
             </TabPanel>
-            <TabPanel value={tab} index={1}>
+            {/* <TabPanel value={tab} index={1}>
               <ArteCiudad></ArteCiudad>
             </TabPanel>
             <TabPanel value={tab} index={2}>
@@ -94,7 +94,7 @@ function Connect() {
             </TabPanel>
             <TabPanel value={tab} index={3}>
               <Produccion></Produccion>
-            </TabPanel>
+            </TabPanel> */}
           </Grid>
         </Grid>
         <Grid item></Grid>
