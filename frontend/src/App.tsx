@@ -56,7 +56,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Header/>
+        {/* <Header/> */}
         <Routes>
           <Route path='/' element={<Landing />}/>
           <Route path='/Cities' element={<Cities />}/>

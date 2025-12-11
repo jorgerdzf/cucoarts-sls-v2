@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import group1 from "../assets/images/Group1.png";
-import img_encabezado from "../assets/images/v2/s1-i1.png";
+//import img_encabezado from "../assets/images/v2/s1-i1.png";
+import img_encabezado from "../assets/images/v2/banner-PAGINA2.png";
 
 import React from "react";
 
@@ -28,15 +29,15 @@ function First() {
             >
                 <Grid item></Grid>
                 <Grid item textAlign='center'>
-                    <Typography variant="h2" color="white">
+                    {/* <Typography variant="h2" color="white">
                         Si le falta un proposito <br /> <b>NO ES ARTE</b>
-                    </Typography>
+                    </Typography> */}
                 </Grid>
                 <Grid item>
-                    <Typography variant="body2" color="white">
+                    {/* <Typography variant="body2" color="white">
                         El arte debe ser para todos, pero todos somos diferentes 
                         <br/> ¿Qué te identifica mejor?
-                    </Typography>
+                    </Typography> */}
                     <br></br>
                     <Grid
                     container
@@ -44,31 +45,32 @@ function First() {
                     justifyContent="space-between"
                     >
                         <Grid item>
-                            <Button variant="text" href='#ArtLover'>
+                            {/* <Button variant="text" href='#ArtLover'>
                                 <Typography 
                                 sx={{
                                     textTransform: 'none',
                                     color: 'white'
                                 }}>Art Lover</Typography>
-                            </Button>
+                            </Button> */}
                         </Grid>
                         <Grid item>
-                            <Button variant="text" href='#Artist'>
+                            <Button variant="contained" size="large" href='https://store.cucoarts.com'>
                                 <Typography 
                                 sx={{
                                     textTransform: 'none',
-                                    color: 'white'
-                                }}>Artista</Typography>
+                                    color: 'white',
+                                    fontSize: '3rem'
+                                }}>ENTRAR</Typography>
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button variant="text" href='#Business'>
+                            {/* <Button variant="text" href='#Business'>
                                 <Typography 
                                 sx={{
                                     textTransform: 'none',
                                     color: 'white'
                                 }}>Negocio</Typography>
-                            </Button>
+                            </Button> */}
                         </Grid>
                     </Grid>
                 </Grid>    

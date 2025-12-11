@@ -20,14 +20,14 @@ import logo from "../../assets/images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const drawerWidth = 300;
-const options = [
-  { title: "Tomar accion", to: "Connect", enabled: true, variant: "outlined" },
-  { title: "Ciudades", to: "Cities", enabled: true, variant: "text" },
-  { title: "Experiencias", to: "Experiences", enabled: true, variant: "text" },
-  { title: "Servicios", to: "Services", enabled: true, variant: "text" },
-  { title: "Contacto", to: "Contact", enabled: true, variant: "text" },
-  { title: "Preguntas Frecuentes", to: "Faq", enabled: true, variant: "text" },
-  { title: "Aviso de Privacidad", to: "PrivacyNotice", enabled: true, variant: "text" }
+const options: any[] = [
+  // { title: "Tomar accion", to: "Connect", enabled: true, variant: "outlined" },
+  // { title: "Ciudades", to: "Cities", enabled: true, variant: "text" },
+  // { title: "Experiencias", to: "Experiences", enabled: true, variant: "text" },
+  // { title: "Servicios", to: "Services", enabled: true, variant: "text" },
+  // { title: "Contacto", to: "Contact", enabled: true, variant: "text" },
+  // { title: "Preguntas Frecuentes", to: "Faq", enabled: true, variant: "text" },
+  // { title: "Aviso de Privacidad", to: "PrivacyNotice", enabled: true, variant: "text" }
 ];
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,7 +52,7 @@ export default function Header() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", color:"#fff" }}>
       <List key={"mainMenu"}>
-        {options.map(
+        {options.length > 0 ? options.map(
           (item, i) =>
             item.enabled && (
               <ListItem key={i} disablePadding>
@@ -65,7 +65,7 @@ export default function Header() {
                 </ListItemButton>
               </ListItem>
             )
-        )}
+        ) : <></>}
       </List>
     </Box>
   );

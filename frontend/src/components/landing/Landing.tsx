@@ -18,7 +18,7 @@ export default function Landing() {
           <Grid item xs={12}>
             <First></First>
           </Grid>
-          <Grid item xs={12} id="ArtLover">
+          {/* <Grid item xs={12} id="ArtLover">
             <Second></Second>
           </Grid>
           <Grid item xs={12} id="Artist">
@@ -29,8 +29,10 @@ export default function Landing() {
           </Grid>
           <Grid item xs={12}>
             <Fifth></Fifth>
-          </Grid>
+          </Grid> */}
       </Grid>
     </>
   )
+
+  
 }
