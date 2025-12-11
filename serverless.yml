@@ -3,11 +3,9 @@ service: cucoarts-sls-v2
 #app: your-app-name
 #org: your-org-name
 
-frameworkVersion: "3"
-
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs20.x
   profile: cucoarts
   region: us-east-2
   memorySize: 128
