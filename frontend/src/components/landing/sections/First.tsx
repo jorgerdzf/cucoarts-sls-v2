@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import group1 from "../assets/images/Group1.png";
 //import img_encabezado from "../assets/images/v2/s1-i1.png";
-import img_encabezado from "../assets/images/v2/banner-PAGINA2.png";
+import img_encabezado from "../assets/images/v2/Pagina-1.png";
 
 import React from "react";
 
@@ -54,11 +54,13 @@ function First() {
                             </Button> */}
                         </Grid>
                         <Grid item>
-                            <Button variant="contained" size="large" href='https://store.cucoarts.com'>
+                            <Button variant="contained" size="large" href='https://store.cucoarts.com' sx={{
+                                backgroundColor: 'rgba(219, 214, 207, 1)'
+                            }}>
                                 <Typography 
                                 sx={{
                                     textTransform: 'none',
-                                    color: 'white',
+                                    color: '#32332F',
                                     fontSize: '3rem'
                                 }}>ENTRAR</Typography>
                             </Button>
