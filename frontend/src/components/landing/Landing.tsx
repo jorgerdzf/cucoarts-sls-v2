@@ -332,7 +332,7 @@ function SellSection({ c, lang, open, onToggle, sectionRef }: { c: Copy; lang: L
     if (!(v.nombre || '').trim()) er.nombre = c.errors.name;
     if (!emailOk(v.correo || '')) er.correo = c.errors.email;
     if (!(v.ig || '').trim()) er.ig = c.errors.ig;
-    if (!(v.portafolio || '').trim()) er.portafolio = c.errors.portfolio;
+    if (!/^https?:\/\/\S+\.\S+/i.test((v.portafolio || '').trim())) er.portafolio = c.errors.portfolio;
     if (v.consent !== 'on') er.consent = c.errors.consent;
     setErrs(er);
     const keys = Object.keys(er);
@@ -377,7 +377,8 @@ function SellSection({ c, lang, open, onToggle, sectionRef }: { c: Copy; lang: L
                   <label>{x.email} *<input name="correo" type="email" autoComplete="email" required aria-invalid={!!errs.correo} />{fieldErr('correo')}</label>
                   <label>{x.ig} *<input name="ig" placeholder={x.igHint} required aria-invalid={!!errs.ig} />{fieldErr('ig')}</label>
                   <label className="cl-full">{x.portfolio} *
-                    <textarea name="portafolio" rows={3} placeholder={x.portfolioHint} required aria-invalid={!!errs.portafolio} />{fieldErr('portafolio')}
+                    <input name="portafolio" type="url" inputMode="url" autoComplete="off" placeholder={x.portfolioHint} required aria-invalid={!!errs.portafolio} />
+                    <span className="cl-note">{x.portfolioNote}</span>{fieldErr('portafolio')}
                   </label>
                   <fieldset className="cl-radios cl-col cl-full"><legend>{x.option}</legend>
                     {Object.entries(x.opts).map(([k, t]) => (
