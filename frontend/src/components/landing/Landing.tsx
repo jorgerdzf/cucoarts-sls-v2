@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COPY, Copy, Lang } from './copy';
+import { POOL, PoolItem } from './pool';
+import { checkFiles, sendRequest, SendResult } from './api';
 import './assets/styles/landing2.css';
 
-/* Landing de cucoarts.com: tienda, cotizador artístico, registro de artistas para la tienda y eventos (próximamente).
-   Sin backend: las solicitudes se arman como texto y salen por WhatsApp o correo (igual que cucoarts.com/rob). */
+/* Landing de cucoarts.com. Sigue la guía de estilo de la marca: bloques de color plano, titulares en mayúsculas,
+   Courier para los datos, sellos rotados y fotografía de Monterrey. Las solicitudes (cotizador y registro de artistas)
+   se guardan en el servidor (backend/lambda/requests) y llegan por correo; si el servidor falla, la persona puede
+   mandarlas por WhatsApp o correo con el mismo mensaje. */
 
 const LANG_KEY = 'cucoarts-lang';
 const THEME_KEY = 'cucoarts-theme';
@@ -13,6 +17,7 @@ const STORE = 'https://store.cucoarts.com';
 
 type Theme = 'light' | 'dark';
 type Vals = Record<string, string>;
+type Status = 'idle' | 'sending' | 'sent' | 'failed';
 
 const read = (k: string): string | null => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const write = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } };
@@ -56,6 +61,28 @@ function useTheme(): [Theme, () => void] {
   return [theme, toggle];
 }
 
+/* ---------- selección al azar de las imágenes de la portada ---------- */
+const shuffle = <T,>(a: T[]): T[] => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const k = Math.floor(Math.random() * (i + 1)); [b[i], b[k]] = [b[k], b[i]]; } return b; };
+const keyOf = (p: PoolItem) => p.who || p.zone;
+
+/** 4 imágenes distintas: siempre al menos 1 fotografía de las zonas y 1 obra de la tienda; las otras 2 salen de todo el conjunto. */
+function pickFour(): PoolItem[] {
+  const fotos = shuffle(POOL.filter(p => p.kind === 'foto'));
+  const obras = shuffle(POOL.filter(p => p.kind === 'obra'));
+  const chosen: PoolItem[] = [fotos[0], obras[0]];
+  for (const p of shuffle(POOL)) {
+    if (chosen.length === 4) break;
+    if (chosen.some(x => x.id === p.id || keyOf(x) === keyOf(p))) continue;   // sin repetir artista ni fotógrafo
+    chosen.push(p);
+  }
+  return shuffle(chosen);
+}
+const pickEvent = (exclude: PoolItem[]): PoolItem => shuffle(POOL.filter(p => p.kind === 'foto' && !exclude.some(x => x.id === p.id)))[0];
+
+const creditLine = (c: Copy, p: PoolItem) =>
+  p.kind === 'obra' ? `${c.credit.art} ${p.who}` : p.who ? `${c.credit.photo}: ${p.who} · ${p.zone}` : `${c.credit.zone} · ${p.zone}`;
+
+/* ---------- ventana (cotizador) ---------- */
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([type=hidden]):not([disabled]),select,textarea,[tabindex="0"]';
 
 function Modal({ open, onClose, label, closeLabel, children }: { open: boolean; onClose: () => void; label: string; closeLabel: string; children: React.ReactNode }) {
@@ -89,28 +116,17 @@ function Modal({ open, onClose, label, closeLabel, children }: { open: boolean; 
 }
 
 const Icon = {
-  store: <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 18 11 8h26l3 10" /><path d="M8 18c0 3 2 5 5.3 5S18.7 21 18.7 18c0 3 2 5 5.3 5s5.3-2 5.3-5c0 3 2 5 5.4 5S40 21 40 18" /><path d="M10 23v17h28V23" /><rect x="15" y="28" width="8" height="12" /><rect x="27" y="28" width="7" height="6" /></svg>,
-  quote: <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="7" width="30" height="26" /><rect x="14" y="12" width="20" height="16" /><path d="m17 25 5-6 4 4 3-3 3 5" /><circle cx="29.5" cy="16.5" r="1.6" /><path d="M16 33 12 43M32 33l4 10M24 33v6" /></svg>,
-  sell: <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 24V8h16l20 20-16 16z" /><circle cx="15" cy="17" r="2.6" /><path d="M23 30l6 6" /></svg>,
-  events: <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="10" width="34" height="31" rx="2" /><path d="M7 19h34M16 6v8M32 6v8" /><path d="m24 25 2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z" /></svg>,
   globe: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z" /></svg>,
   moon: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" /></svg>,
   sun: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>,
 };
 
-/* Obras de la tira de portada (sin personas), tomadas de la galería de /rob */
-const ART: { id: string; w: number; h: number }[] = [
-  { id: 'karisma-01', w: 601, h: 800 },
-  { id: 'lucha-01', w: 800, h: 800 },
-  { id: 'consultorio-01', w: 600, h: 800 },
-  { id: 'nupec-04', w: 601, h: 800 },
-  { id: 'grill-05', w: 800, h: 600 },
-];
-
 const emailOk = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());
 
 /* ---------- resumen de solicitudes ---------- */
-function quoteSummary(c: Copy, v: Vals): string {
+const fileNames = (files: File[]) => files.map(f => f.name).join(', ');
+
+function quoteSummary(c: Copy, v: Vals, files: File[]): string {
   const q = c.quote, s = c.sumQuote, L: string[] = [s.head, ''];
   const add = (k: string, val?: string) => { if (val && val.trim()) L.push(`${k}: ${val.trim()}`); };
   add(s.tipo, (q.types as Record<string, string>)[v.tipo] || v.tipo);
@@ -122,28 +138,62 @@ function quoteSummary(c: Copy, v: Vals): string {
   add(s.factura, v.factura === 'si' ? q.yes : q.no);
   add(s.nombre, v.nombre); add(s.tel, v.tel); add(s.correo, v.correo);
   add(s.news, v.novedades === 'on' ? q.yes : q.no);
+  if (files.length) add(s.archivos, fileNames(files));
   if (v.idea && v.idea.trim()) { L.push(''); L.push(v.idea.trim()); }
   return L.join('\n');
 }
 
-function sellSummary(c: Copy, v: Vals): string {
+function sellSummary(c: Copy, v: Vals, files: File[]): string {
   const x = c.sell, s = c.sumSell, L: string[] = [s.head, ''];
   const add = (k: string, val?: string) => { if (val && val.trim()) L.push(`${k}: ${val.trim()}`); };
   add(s.nombre, v.nombre); add(s.correo, v.correo); add(s.ig, v.ig); add(s.portafolio, v.portafolio);
   add(s.opcion, (x.opts as Record<string, string>)[v.opcion]);
   if (v.opcion === 'condonacion') add(s.colab, v.colab);
   add(s.extras, v.extras);
+  if (files.length) add(s.archivos, fileNames(files));
   add(s.news, v.novedades === 'on' ? c.quote.yes : c.quote.no);
   return L.join('\n');
 }
 
 const toVals = (fd: FormData): Vals => {
   const o: Vals = {};
-  Array.from(fd.entries()).forEach(([k, val]) => { o[k] = String(val); });
+  Array.from(fd.entries()).forEach(([k, val]) => { if (typeof val === 'string') o[k] = val; });
   return o;
 };
 
-function SummaryPanel({ c, summary, subject, intro, note, onEdit }: { c: Copy; summary: string; subject: string; intro: string; note?: string; onEdit: () => void }) {
+/* ---------- piezas de formulario ---------- */
+function FilePicker({ c, hint, files, onChange }: { c: Copy; hint: string; files: File[]; onChange: (f: File[]) => void }) {
+  const [err, setErr] = useState('');
+  const input = useRef<HTMLInputElement>(null);
+  const pick = (list: FileList | null) => {
+    const next = [...files, ...Array.from(list || [])];
+    const problem = checkFiles(next);
+    if (problem) { setErr(c.files[problem]); } else { setErr(''); onChange(next); }
+    if (input.current) input.current.value = '';
+  };
+  const remove = (i: number) => { setErr(''); onChange(files.filter((_, k) => k !== i)); };
+  return (
+    <div className="cl-full cl-files">
+      <span className="cl-flabel">{c.files.label}</span>
+      <p className="cl-note">{hint}</p>
+      <button type="button" className="cl-btn" onClick={() => input.current?.click()}>{c.files.choose}</button>
+      <input ref={input} type="file" multiple hidden accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.doc,.docx,.zip" onChange={e => pick(e.target.files)} />
+      {err && <p className="cl-ferr" role="alert">{err}</p>}
+      {files.length > 0 && (
+        <ul>{files.map((f, i) => (
+          <li key={f.name + i}><span>{f.name}</span><small>{Math.max(1, Math.round(f.size / 1024))} KB</small>
+            <button type="button" className="cl-linkbtn" onClick={() => remove(i)}>{c.files.remove}</button></li>
+        ))}</ul>
+      )}
+    </div>
+  );
+}
+
+const Honeypot = () => (
+  <div className="cl-hp" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
+);
+
+function Fallback({ c, summary, subject, onEdit }: { c: Copy; summary: string; subject: string; onEdit: () => void }) {
   const [copied, setCopied] = useState(false);
   const wa = `https://wa.me/${WA}?text=${encodeURIComponent(summary)}`;
   const mail = `mailto:${MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary)}`;
@@ -153,9 +203,9 @@ function SummaryPanel({ c, summary, subject, intro, note, onEdit }: { c: Copy; s
   };
   return (
     <div className="cl-done">
-      <p>{intro}</p>
+      <p className="cl-err">{c.status.failed}</p>
       <pre className="cl-sum">{summary}</pre>
-      {note && <p className="cl-note">{note}</p>}
+      <p className="cl-note">{c.status.attachNote}</p>
       <div className="cl-actions">
         <a className="cl-btn cl-primary" href={wa} target="_blank" rel="noopener noreferrer">{c.done.wa}</a>
         <a className="cl-btn" href={mail}>{c.done.mail}</a>
@@ -166,26 +216,56 @@ function SummaryPanel({ c, summary, subject, intro, note, onEdit }: { c: Copy; s
   );
 }
 
+function Sent({ c, result, text, onAgain }: { c: Copy; result: SendResult | null; text: string; onAgain: () => void }) {
+  return (
+    <div className="cl-done cl-sent" role="status">
+      <h4>{c.status.sentTitle}</h4>
+      <p>{text}</p>
+      {result && <p className="cl-note">{c.status.folio}: <b>{result.id}</b></p>}
+      <div className="cl-actions"><button type="button" className="cl-btn" onClick={onAgain}>{c.status.again}</button></div>
+    </div>
+  );
+}
+
+/* Flujo común de envío: manda al servidor y, si falla, deja el mensaje listo para WhatsApp/correo. */
+function useSender(lang: Lang) {
+  const [vals, setVals] = useState<Vals | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [status, setStatus] = useState<Status>('idle');
+  const [result, setResult] = useState<SendResult | null>(null);
+  const send = async (type: 'quote' | 'sell', v: Vals, summary: string) => {
+    setVals(v); setStatus('sending');
+    try { setResult(await sendRequest({ type, lang, values: v, summary, files })); setStatus('sent'); }
+    catch (e) { setStatus('failed'); }
+  };
+  const reset = (full: boolean) => { setVals(null); setStatus('idle'); if (full) { setFiles([]); setResult(null); } };
+  return { vals, files, setFiles, status, result, send, reset };
+}
+
 /* ---------- cotizador artístico (ventana) ---------- */
-function QuoteBody({ c }: { c: Copy }) {
+function QuoteBody({ c, lang }: { c: Copy; lang: Lang }) {
   const q = c.quote;
   const [tipo, setTipo] = useState('mural');
-  const [vals, setVals] = useState<Vals | null>(null);
   const [err, setErr] = useState('');
+  const form = useRef<HTMLFormElement>(null);
+  const s = useSender(lang);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const v = toVals(new FormData(e.currentTarget));
     const tel = (v.tel || '').replace(/\D/g, '');
     if (!(v.nombre || '').trim()) { setErr(q.errName); return; }
     if (tel.length < 10) { setErr(q.errPhone); return; }
-    setErr(''); setVals(v);
+    setErr('');
+    s.send('quote', v, quoteSummary(c, v, s.files));
   };
+  const summary = s.vals ? quoteSummary(c, s.vals, s.files) : '';
   return (
     <>
       <span className="cl-label">{c.nav.quote}</span>
       <h3>{q.title}</h3>
       <p className="cl-sub">{q.intro}</p>
-      <form className="cl-form" onSubmit={submit} noValidate hidden={!!vals}>
+      <form className="cl-form" onSubmit={submit} noValidate hidden={s.status !== 'idle'} ref={form}>
+        <Honeypot />
         <div className="cl-grid">
           <label className="cl-full">{q.type}
             <select name="tipo" value={tipo} onChange={e => setTipo(e.target.value)}>
@@ -209,6 +289,7 @@ function QuoteBody({ c }: { c: Copy }) {
           <label className="cl-full">{q.idea}
             <textarea name="idea" rows={4} placeholder={q.ideaHint} />
           </label>
+          <FilePicker c={c} hint={c.files.hintQuote} files={s.files} onChange={s.setFiles} />
           <label>{q.budget}
             <select name="presupuesto" defaultValue="0">{q.budgets.map((b, i) => <option key={b} value={i}>{b}</option>)}</select>
           </label>
@@ -229,22 +310,24 @@ function QuoteBody({ c }: { c: Copy }) {
         </div>
         <label className="cl-check"><input type="checkbox" name="novedades" /> {q.news}</label>
       </form>
-      {vals && <SummaryPanel c={c} summary={quoteSummary(c, vals)} subject={c.mailSubjQuote} intro={q.intro2} onEdit={() => setVals(null)} />}
+      {s.status === 'sending' && <p className="cl-sending" role="status">{c.status.sending}</p>}
+      {s.status === 'sent' && <Sent c={c} result={s.result} text={c.status.sentQuote} onAgain={() => { form.current?.reset(); s.reset(true); }} />}
+      {s.status === 'failed' && <Fallback c={c} summary={summary} subject={c.mailSubjQuote} onEdit={() => s.reset(false)} />}
     </>
   );
 }
 
-/* ---------- registro de artistas para la tienda ---------- */
-function SellSection({ c }: { c: Copy }) {
+/* ---------- registro de artistas para la tienda (se despliega al pulsar) ---------- */
+function SellSection({ c, lang, open, onToggle, sectionRef }: { c: Copy; lang: Lang; open: boolean; onToggle: () => void; sectionRef: React.RefObject<HTMLElement> }) {
   const x = c.sell;
   const [opt, setOpt] = useState('paquete');
-  const [vals, setVals] = useState<Vals | null>(null);
   const [errs, setErrs] = useState<Record<string, string>>({});
-  const top = useRef<HTMLDivElement>(null);
+  const form = useRef<HTMLFormElement>(null);
+  const s = useSender(lang);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const v = toVals(new FormData(form));
+    const f = e.currentTarget;
+    const v = toVals(new FormData(f));
     const er: Record<string, string> = {};
     if (!(v.nombre || '').trim()) er.nombre = c.errors.name;
     if (!emailOk(v.correo || '')) er.correo = c.errors.email;
@@ -253,54 +336,70 @@ function SellSection({ c }: { c: Copy }) {
     if (v.consent !== 'on') er.consent = c.errors.consent;
     setErrs(er);
     const keys = Object.keys(er);
-    if (keys.length) { (form.elements.namedItem(keys[0]) as HTMLElement | null)?.focus(); return; }
-    setVals(v);
-    window.setTimeout(() => top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+    if (keys.length) { (f.elements.namedItem(keys[0]) as HTMLElement | null)?.focus(); return; }
+    s.send('sell', v, sellSummary(c, v, s.files));
   };
   const fieldErr = (k: string) => (errs[k] ? <span className="cl-ferr" role="alert">{errs[k]}</span> : null);
   const [consentA, consentB] = x.consent.split('{privacy}');
+  const summary = s.vals ? sellSummary(c, s.vals, s.files) : '';
   return (
-    <section id="vende" className="cl-sell" aria-labelledby="vende-h">
-      <div className="cl-sechead">
-        <span className="cl-label">{x.label}</span>
-        <h2 id="vende-h">{x.title}</h2>
-        <p>{x.lede}</p>
-      </div>
-      <div className="cl-sellgrid">
-        <div className="cl-pkg">
-          <span className="cl-label">{x.pkgLabel}</span>
-          <h3>{x.pkgTitle}</h3>
-          <p className="cl-price"><b>{x.price}</b><span>{x.priceNote}</span></p>
-          <ul>{x.items.map(i => <li key={i}>{i}</li>)}</ul>
-          <div className="cl-alt"><b>{x.altTitle}</b><p>{x.altText}</p></div>
-          <div className="cl-alt"><b>{x.ownTitle}</b><p>{x.ownText}</p></div>
+    <section id="vende" className="cl-band cl-sell" aria-labelledby="vende-h" ref={sectionRef}>
+      <div className="cl-in">
+        <div className="cl-sellhead">
+          <div className="cl-sechead">
+            <span className="cl-label">{x.label}</span>
+            <h2 id="vende-h">{x.title}</h2>
+            <p>{x.lede}</p>
+          </div>
+          <button type="button" className="cl-toggle" aria-expanded={open} aria-controls="vende-panel" onClick={onToggle}>
+            <span>{open ? x.close : x.open}</span><i aria-hidden="true">{open ? '–' : '+'}</i>
+          </button>
         </div>
-        <div className="cl-formbox" ref={top}>
-          <h3>{x.formTitle}</h3>
-          <form className="cl-form" onSubmit={submit} noValidate hidden={!!vals}>
-            <div className="cl-grid">
-              <label>{x.name} *<input name="nombre" autoComplete="name" required aria-invalid={!!errs.nombre} />{fieldErr('nombre')}</label>
-              <label>{x.email} *<input name="correo" type="email" autoComplete="email" required aria-invalid={!!errs.correo} />{fieldErr('correo')}</label>
-              <label>{x.ig} *<input name="ig" placeholder={x.igHint} required aria-invalid={!!errs.ig} />{fieldErr('ig')}</label>
-              <label className="cl-full">{x.portfolio} *
-                <textarea name="portafolio" rows={3} placeholder={x.portfolioHint} required aria-invalid={!!errs.portafolio} />{fieldErr('portafolio')}
-              </label>
-              <fieldset className="cl-radios cl-col cl-full"><legend>{x.option}</legend>
-                {Object.entries(x.opts).map(([k, t]) => (
-                  <label key={k}><input type="radio" name="opcion" value={k} checked={opt === k} onChange={() => setOpt(k)} /> {t}</label>
-                ))}
-              </fieldset>
-              {opt === 'condonacion' && (
-                <label className="cl-full">{x.collab}<textarea name="colab" rows={2} placeholder={x.collabHint} /></label>
-              )}
-              <label className="cl-full">{x.extras}<textarea name="extras" rows={3} placeholder={x.extrasHint} /></label>
+        <div id="vende-panel" role="region" aria-labelledby="vende-h" hidden={!open} className="cl-panel">
+          <div className="cl-sellgrid">
+            <div className="cl-pkg">
+              <span className="cl-label">{x.pkgLabel}</span>
+              <h3>{x.pkgTitle}</h3>
+              <div className="cl-price">
+                <b>{x.price}</b><span>{x.priceNote}</span>
+                <em className="cl-stamp cl-stamp-sm" aria-label={x.stamp.join(' ')}>{x.stamp.map(t => <span key={t}>{t}</span>)}</em>
+              </div>
+              <ul>{x.items.map(i => <li key={i}>{i}</li>)}</ul>
+              <div className="cl-alt"><b>{x.altTitle}</b><p>{x.altText}</p></div>
+              <div className="cl-alt"><b>{x.ownTitle}</b><p>{x.ownText}</p></div>
             </div>
-            <label className="cl-check"><input type="checkbox" name="consent" aria-invalid={!!errs.consent} /> <span>{consentA}<a href="/privacidad" target="_blank" rel="noopener noreferrer">{c.privacy}</a>{consentB}</span></label>
-            {fieldErr('consent')}
-            <label className="cl-check"><input type="checkbox" name="novedades" /> {x.news}</label>
-            <div className="cl-actions"><button type="submit" className="cl-btn cl-primary">{x.submit}</button></div>
-          </form>
-          {vals && <SummaryPanel c={c} summary={sellSummary(c, vals)} subject={c.mailSubjSell} intro={x.intro} note={x.attachNote} onEdit={() => setVals(null)} />}
+            <div className="cl-formbox">
+              <h3>{x.formTitle}</h3>
+              <form className="cl-form" onSubmit={submit} noValidate hidden={s.status !== 'idle'} ref={form}>
+                <Honeypot />
+                <div className="cl-grid">
+                  <label>{x.name} *<input name="nombre" autoComplete="name" required aria-invalid={!!errs.nombre} />{fieldErr('nombre')}</label>
+                  <label>{x.email} *<input name="correo" type="email" autoComplete="email" required aria-invalid={!!errs.correo} />{fieldErr('correo')}</label>
+                  <label>{x.ig} *<input name="ig" placeholder={x.igHint} required aria-invalid={!!errs.ig} />{fieldErr('ig')}</label>
+                  <label className="cl-full">{x.portfolio} *
+                    <textarea name="portafolio" rows={3} placeholder={x.portfolioHint} required aria-invalid={!!errs.portafolio} />{fieldErr('portafolio')}
+                  </label>
+                  <fieldset className="cl-radios cl-col cl-full"><legend>{x.option}</legend>
+                    {Object.entries(x.opts).map(([k, t]) => (
+                      <label key={k}><input type="radio" name="opcion" value={k} checked={opt === k} onChange={() => setOpt(k)} /> {t}</label>
+                    ))}
+                  </fieldset>
+                  {opt === 'condonacion' && (
+                    <label className="cl-full">{x.collab}<textarea name="colab" rows={2} placeholder={x.collabHint} /></label>
+                  )}
+                  <label className="cl-full">{x.extras}<textarea name="extras" rows={3} placeholder={x.extrasHint} /></label>
+                  <FilePicker c={c} hint={c.files.hintSell} files={s.files} onChange={s.setFiles} />
+                </div>
+                <label className="cl-check"><input type="checkbox" name="consent" aria-invalid={!!errs.consent} /> <span>{consentA}<a href="/privacidad" target="_blank" rel="noopener noreferrer">{c.privacy}</a>{consentB}</span></label>
+                {fieldErr('consent')}
+                <label className="cl-check"><input type="checkbox" name="novedades" /> {x.news}</label>
+                <div className="cl-actions"><button type="submit" className="cl-btn cl-primary">{x.submit}</button></div>
+              </form>
+              {s.status === 'sending' && <p className="cl-sending" role="status">{c.status.sending}</p>}
+              {s.status === 'sent' && <Sent c={c} result={s.result} text={c.status.sentSell} onAgain={() => { form.current?.reset(); s.reset(true); }} />}
+              {s.status === 'failed' && <Fallback c={c} summary={summary} subject={c.mailSubjSell} onEdit={() => s.reset(false)} />}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -312,6 +411,10 @@ export default function Landing() {
   const [lang, setLang] = useLang();
   const [theme, toggleTheme] = useTheme();
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [sellOpen, setSellOpen] = useState(false);
+  const [hero] = useState<PoolItem[]>(pickFour);          // distintas en cada visita
+  const [teaser] = useState<PoolItem>(() => pickEvent(hero));
+  const sellRef = useRef<HTMLElement>(null);
   const c = COPY[lang];
   const closeQuote = useCallback(() => setQuoteOpen(false), []);
 
@@ -320,80 +423,116 @@ export default function Landing() {
     return () => document.documentElement.removeAttribute('data-page');
   }, []);
 
+  const scrollToSell = useCallback(() => {
+    window.setTimeout(() => sellRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }, []);
+  const goSell = (e: React.MouseEvent) => { e.preventDefault(); setSellOpen(true); scrollToSell(); };
+  useEffect(() => { if (window.location.hash === '#vende') { setSellOpen(true); scrollToSell(); } }, [scrollToSell]);
+
   const dark = theme === 'dark';
+  const alt = (p: PoolItem) => (lang === 'en' ? p.en : p.es);
+  const img = (p: PoolItem, eager?: boolean) => (
+    <img src={`/landing-pool/${p.id}.jpg`} width={p.w} height={p.h} alt={alt(p)} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  );
+  const columns = [[hero[0], hero[2]], [hero[1], hero[3]]];
+
   return (
     <div className="cl">
-      <div className="cl-wrap">
-        <header className="cl-top">
-          <a className="cl-logo" href="/"><span className="cl-sr">CUCO ARTS</span></a>
-          <nav className="cl-nav" aria-label={c.nav.label}>
-            <a href={STORE}>{c.nav.store}</a>
-            <button type="button" onClick={() => setQuoteOpen(true)}>{c.nav.quote}</button>
-            <a href="#vende">{c.nav.sell}</a>
-            <span className="cl-soon" aria-disabled="true">{c.nav.events} · {c.footerSoon.toLowerCase()}</span>
-          </nav>
-          <div className="cl-tools">
-            <button type="button" className="cl-pill" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={c.langBtn.label} title={c.langBtn.label}>
-              {Icon.globe}<span>{c.langBtn.short}</span>
-            </button>
-            <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
-              {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
-            </button>
-          </div>
-        </header>
+      <header className="cl-top cl-in">
+        <a className="cl-logo" href="/"><span className="cl-sr">CUCO ARTS</span></a>
+        <nav className="cl-nav" aria-label={c.nav.label}>
+          <a href={STORE}>{c.nav.store}</a>
+          <button type="button" onClick={() => setQuoteOpen(true)}>{c.nav.quote}</button>
+          <a href="#vende" onClick={goSell}>{c.nav.sell}</a>
+          <span className="cl-soon" aria-disabled="true">{c.nav.events} · {c.events.stampFull.toLowerCase()}</span>
+        </nav>
+        <div className="cl-tools">
+          <button type="button" className="cl-pill" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={c.langBtn.label} title={c.langBtn.label}>
+            {Icon.globe}<span>{c.langBtn.short}</span>
+          </button>
+          <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
+            {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
+          </button>
+        </div>
+      </header>
 
-        <section className="cl-hero">
-          <div className="cl-herotext">
-            <span className="cl-label">{c.hero.label}</span>
-            <h1>{c.hero.title}</h1>
-            <p className="cl-lede">{c.hero.lede}</p>
-            <div className="cl-actions">
-              <a className="cl-btn cl-primary cl-big" href={STORE}>{c.hero.cta}</a>
-              <a className="cl-btn cl-big" href="#acciones">{c.hero.cta2}</a>
-            </div>
-          </div>
-          <div className="cl-mosaic" role="group" aria-label={c.strip}>
-            {[[0, 4], [1, 3]].map((col, ci) => (
-              <div className="cl-mcol" key={ci}>
-                {col.map(i => (
-                  <img key={ART[i].id} src={`/rob-galeria/${ART[i].id}.jpg`} width={ART[i].w} height={ART[i].h} alt={c.imgAlts[i]} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
-                ))}
+      <section className="cl-band cl-heroband">
+        <div className="cl-in">
+          <div className="cl-corners" aria-hidden="true"><span>{c.hero.cornerL}</span><span>{c.hero.cornerR}</span></div>
+          <div className="cl-hero">
+            <div className="cl-herotext">
+              <h1>{c.hero.title}</h1>
+              <p className="cl-lede">{c.hero.lede}</p>
+              <div className="cl-actions">
+                <a className="cl-fun" href={STORE}><span>{c.hero.cta}</span><i aria-hidden="true">→</i></a>
+                <a className="cl-textlink" href="#acciones">{c.hero.cta2} ↓</a>
               </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="acciones" className="cl-actionsec" aria-labelledby="acciones-h">
-          <h2 id="acciones-h">{c.actionsTitle}</h2>
-          <div className="cl-cards">
-            <a className="cl-card" href={STORE}>
-              <span className="cl-icon">{Icon.store}</span>
-              <h3>{c.cards.store.h}</h3><p>{c.cards.store.p}</p>
-              <span className="cl-go">{c.cards.store.cta} <i aria-hidden="true">→</i></span>
-            </a>
-            <button type="button" className="cl-card" onClick={() => setQuoteOpen(true)}>
-              <span className="cl-icon">{Icon.quote}</span>
-              <h3>{c.cards.quote.h}</h3><p>{c.cards.quote.p}</p>
-              <span className="cl-go">{c.cards.quote.cta} <i aria-hidden="true">→</i></span>
-            </button>
-            <a className="cl-card" href="#vende">
-              <span className="cl-icon">{Icon.sell}</span>
-              <h3>{c.cards.sell.h}</h3><p>{c.cards.sell.p}</p>
-              <span className="cl-go">{c.cards.sell.cta} <i aria-hidden="true">→</i></span>
-            </a>
-            <div className="cl-card cl-disabled" aria-disabled="true">
-              <span className="cl-icon">{Icon.events}</span>
-              <h3>{c.cards.events.h}</h3><p>{c.cards.events.p}</p>
-              <span className="cl-go cl-badge">{c.cards.events.cta}</span>
+            </div>
+            <div className="cl-pols" role="group" aria-label={c.hero.galleryLabel}>
+              {columns.map((col, ci) => (
+                <div className="cl-pcol" key={ci}>
+                  {col.map((p, i) => (
+                    <figure className={`cl-pol cl-pol-${ci * 2 + i}`} key={p.id}>
+                      {img(p, ci === 0 && i === 0)}
+                      <figcaption>{creditLine(c, p)}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+              ))}
+              <em className="cl-stamp cl-stamp-hero" aria-hidden="true">{c.hero.stamp.map(t => <span key={t}>{t}</span>)}</em>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <SellSection c={c} />
-      </div>
+      <section id="acciones" className="cl-band cl-actionband" aria-labelledby="acciones-h">
+        <div className="cl-in">
+          <h2 id="acciones-h">{c.actionsTitle}</h2>
+          <ol className="cl-rows">
+            <li><a className="cl-row" href={STORE}>
+              <span className="cl-n">01</span>
+              <span className="cl-rt"><b>{c.cards.store.h}</b><i>{c.cards.store.p}</i></span>
+              <span className="cl-go">{c.cards.store.cta} →</span>
+            </a></li>
+            <li><button type="button" className="cl-row" onClick={() => setQuoteOpen(true)}>
+              <span className="cl-n">02</span>
+              <span className="cl-rt"><b>{c.cards.quote.h}</b><i>{c.cards.quote.p}</i></span>
+              <span className="cl-go">{c.cards.quote.cta} →</span>
+            </button></li>
+            <li><a className="cl-row" href="#vende" onClick={goSell}>
+              <span className="cl-n">03</span>
+              <span className="cl-rt"><b>{c.cards.sell.h}</b><i>{c.cards.sell.p}</i></span>
+              <span className="cl-go">{c.cards.sell.cta} →</span>
+            </a></li>
+            <li><div className="cl-row cl-off" aria-disabled="true">
+              <span className="cl-n">04</span>
+              <span className="cl-rt"><b>{c.cards.events.h}</b><i>{c.cards.events.p}</i></span>
+              <span className="cl-go cl-badge">{c.cards.events.cta}</span>
+            </div></li>
+          </ol>
+        </div>
+      </section>
+
+      <SellSection c={c} lang={lang} open={sellOpen} onToggle={() => setSellOpen(o => !o)} sectionRef={sellRef} />
+
+      <section className="cl-band cl-eventband" aria-labelledby="eventos-h">
+        <div className="cl-in cl-evgrid">
+          <div className="cl-evphoto">
+            {img(teaser)}
+            <em className="cl-stamp cl-stamp-ev" aria-hidden="true">{c.events.stamp.map(t => <span key={t}>{t}</span>)}</em>
+            <small className="cl-credit">{creditLine(c, teaser)}</small>
+          </div>
+          <div className="cl-evpanel">
+            <span className="cl-label">{c.events.label}</span>
+            <h2 id="eventos-h">{c.events.title}</h2>
+            <p>{c.events.text}</p>
+            <span className="cl-badge">{c.events.stampFull}</span>
+          </div>
+        </div>
+      </section>
 
       <Modal open={quoteOpen} onClose={closeQuote} label={c.quote.title} closeLabel={c.done.close}>
-        <QuoteBody c={c} />
+        <QuoteBody c={c} lang={lang} />
       </Modal>
     </div>
   );
