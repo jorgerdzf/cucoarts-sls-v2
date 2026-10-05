@@ -34,7 +34,7 @@ function useLang(): [Lang, (l: Lang) => void] {
     window.addEventListener('storage', on);
     return () => window.removeEventListener('storage', on);
   }, []);
-  const choose = useCallback((l: Lang) => { write(LANG_KEY, l); setLang(l); }, []);
+  const choose = useCallback((l: Lang) => { write(LANG_KEY, l); setLang(l); window.dispatchEvent(new Event('cucoarts-lang')); }, []);
   return [lang, choose];
 }
 

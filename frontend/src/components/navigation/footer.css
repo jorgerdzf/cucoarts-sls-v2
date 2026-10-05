@@ -1,0 +1,23 @@
+/* Pie de página de cucoarts.com: bloque oscuro plano, Neue Montreal + Courier (guía de estilo de la marca). */
+@font-face{font-family:"Neue Montreal";font-weight:400;font-display:swap;src:url(../landing/assets/fonts/neue-montreal-400.otf) format("opentype")}
+@font-face{font-family:"Neue Montreal";font-weight:500;font-display:swap;src:url(../landing/assets/fonts/neue-montreal-500.otf) format("opentype")}
+@font-face{font-family:"Neue Montreal";font-weight:700;font-display:swap;src:url(../landing/assets/fonts/neue-montreal-700.otf) format("opentype")}
+
+.cf{background:#232322;color:#F5F1F1;text-align:left;font:400 16px/1.5 "Neue Montreal","Helvetica Neue",Arial,sans-serif;padding:clamp(40px,6vw,72px) 0 28px;margin-top:0}
+.cf *{box-sizing:border-box}
+.cf-in{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,48px)}
+.cf-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);padding-bottom:clamp(28px,4vw,44px);border-bottom:2px solid rgb(245 241 241 / .85)}
+.cf-brand{display:grid;gap:14px;align-content:start}
+.cf-logo{display:block;width:92px;aspect-ratio:480/248;background:#F5F1F1;-webkit-mask:url(../landing/assets/logo-cuco-mask.png) center/contain no-repeat;mask:url(../landing/assets/logo-cuco-mask.png) center/contain no-repeat}
+.cf-logo:hover{background:#EA663D}
+.cf-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cf-tag{margin:0;font:700 clamp(22px,3vw,32px)/1 "Neue Montreal","Helvetica Neue",Arial,sans-serif;letter-spacing:-.035em;text-transform:uppercase}
+.cf-about{margin:0;max-width:34ch;font-size:15px;color:#E2E0E0}
+.cf-col{display:grid;gap:10px;align-content:start;min-width:0}
+.cf-h{margin:0 0 4px;font:700 12px/1.2 "Courier New",Courier,monospace;letter-spacing:.14em;text-transform:uppercase;color:#F7D649}
+.cf-col a,.cf-col span{font:500 16px/1.35 "Neue Montreal","Helvetica Neue",Arial,sans-serif;color:#F5F1F1;text-decoration:none;overflow-wrap:anywhere}
+.cf-col a:hover{color:#EA663D;text-decoration:underline;text-underline-offset:4px}
+.cf a:focus-visible{outline:3px solid #067DFF;outline-offset:3px}
+.cf-legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;padding-top:20px;font:12px/1.4 "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:#C1C68F}
+@media (max-width:760px){.cf-grid{grid-template-columns:1fr 1fr}.cf-brand{grid-column:1/-1}}
+@media (max-width:480px){.cf-grid{grid-template-columns:1fr}}
