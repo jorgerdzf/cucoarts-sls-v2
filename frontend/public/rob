@@ -86,14 +86,19 @@ h2{font:500 clamp(28px,4.4vw,44px)/1.05 var(--display);letter-spacing:-.02em;mar
 .sec-head{display:grid;gap:10px;max-width:62ch}
 .sec-head p{margin:0;color:var(--ink-2)}
 .sheet{border-top:2px solid var(--ink)}
-.row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) minmax(0,.8fr);gap:12px 28px;padding-block:26px;border-bottom:1px solid var(--sand)}
+.row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.5fr) minmax(230px,.9fr);gap:12px 28px;padding-block:26px;border-bottom:1px solid var(--sand)}
 .row h3{font:500 clamp(21px,2.4vw,26px)/1.15 var(--display);letter-spacing:-.01em;margin:6px 0 0}
 .row .for{font-size:15px;color:var(--ink-2);margin:8px 0 0}
 .row ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
 .row li::marker{color:var(--rec)}
-.price{font-family:var(--mono);text-align:right}
-.price b{display:block;font-size:22px;letter-spacing:-.02em}
-.price span{font-size:13px;color:var(--ink-2)}
+.price{font-family:var(--mono);text-align:right;min-width:0}
+.price .opt+.opt{margin-top:14px}
+.price b{display:block;font-size:22px;letter-spacing:-.02em;white-space:nowrap}
+.price .opt+.opt b{font-size:19px}
+.price b small{font:400 13px var(--mono);color:var(--ink-2);letter-spacing:0;margin-left:.6em}
+.price span{display:block;font-size:13px;line-height:1.4;color:var(--ink-2);text-wrap:balance}
+/* tablet y laptop chica: encabezado y precio arriba, lista de lo que incluye abajo a lo ancho */
+@media (min-width:761px) and (max-width:1020px){.row{grid-template-columns:minmax(0,1fr) minmax(220px,auto);grid-template-areas:"head price" "list list"}.row>div:first-child{grid-area:head}.row>ul{grid-area:list}.row>.price{grid-area:price}}
 .also{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:28px}
 .also h4{font:500 21px/1.2 var(--display);margin:0 0 2px}
 .also p{margin:0;font-size:15px;color:var(--ink-2)}
@@ -176,9 +181,9 @@ h2{font:500 clamp(28px,4.4vw,44px)/1.05 var(--display);letter-spacing:-.02em;mar
 .shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}
 .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgb(20 20 18 / .78),rgb(20 20 18 / 0) 55%);opacity:0;transition:opacity .35s}
 .shot::before{content:"";position:absolute;top:12px;left:12px;width:10px;height:10px;border-radius:50%;background:var(--rec);z-index:2;opacity:0;transform:scale(.4);transition:opacity .3s,transform .3s}
-.cap{position:absolute;left:0;right:0;bottom:0;z-index:2;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:baseline;
+.cap{position:absolute;left:0;right:0;bottom:0;z-index:2;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:end;
   padding:14px 14px 13px;color:#fff;transform:translateY(100%);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
-.cap b{font:500 15px/1.2 var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap b{font:500 15px/1.2 var(--display);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
 .cap .mono{font-size:12px;letter-spacing:.06em;opacity:.85}
 .shot:hover,.shot:focus-visible{transform:translateY(-4px);box-shadow:0 14px 30px -14px rgb(0 0 0 / .45)}
 .shot:hover img,.shot:focus-visible img{transform:scale(1.08);filter:saturate(1.12) contrast(1.04)}
@@ -319,6 +324,16 @@ button.btn{font-family:var(--body);cursor:pointer}
 .qsum{font:14px/1.6 var(--mono);white-space:pre-wrap;background:var(--ground);border-radius:8px;padding:16px;margin:0;max-height:46vh;overflow:auto}
 @media (max-width:600px){.fgrid{grid-template-columns:1fr}.dims{grid-template-columns:1fr auto 1fr}.dims>label:last-child{grid-column:1/-1}}
 
+/* proyectos de obra por encargo: tarjeta con la leyenda siempre visible */
+.shot.proj::after{opacity:1}
+.shot.proj .cap{transform:none}
+.shot.proj::before{display:none}
+.pbadge{position:absolute;top:10px;right:10px;z-index:2;background:rgb(20 20 18 / .78);color:#fff;font-size:11px;letter-spacing:.06em;padding:4px 9px;border-radius:999px}
+/* botón de idioma junto al de tema; en celular los tres botones caben en una sola fila */
+@media (max-width:760px){.topright{flex-wrap:nowrap;gap:8px}.top .theme.lang{width:auto;min-width:40px;padding:0 10px}.theme.lang .i-globe{display:none}}
+[data-only="en"]{display:none}
+html[lang="en"] [data-only="en"]{display:block}
+@media (max-width:560px){.credit{grid-template-columns:minmax(0,1fr)}.credit .tag{order:-1;white-space:normal}}
 .gal-more{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:24px}
 .gal-count{font-size:13px;color:var(--ink-2)}
 @media (max-width:760px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -368,12 +383,13 @@ footer .brand{display:flex;align-items:center;gap:14px}
         <p class="navsub mono">Portafolio y facilitador de conexiones económicas para creadores</p>
         <a href="#servicios" style="--i:0">Servicios</a><a href="#galeria" style="--i:1">Experiencia</a><a href="#proceso" style="--i:2">Proceso creativo</a><a href="#trabajo" style="--i:3">Trabajo</a><a href="#contacto" style="--i:4">Contacto</a>
       </nav>
-      <button class="theme" id="themeBtn" type="button" aria-pressed="false">
+      <button class="theme" id="themeBtn" type="button" aria-pressed="false" data-noi18n>
         <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
         <span id="themeLabel">Modo noche</span>
       </button>
-      <button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+      <button class="theme lang" id="langBtn" type="button" aria-pressed="false" aria-label="Switch to English" data-noi18n><svg class="i-globe" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg><span id="langLabel">EN</span></button>
+      <button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú" data-noi18n><span></span><span></span><span></span></button>
     </div>
   </header>
 
@@ -426,7 +442,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
           <li>Entrevistas y momentos clave (corte de listón, premiación)</li>
           <li>Opcional: todo el material en bruto</li>
         </ul>
-        <div class="price"><b>$5,000</b><span>+ IVA por evento</span>
+        <div class="price"><div class="opt"><b>$5,000<small>+ IVA</small></b><span>por evento</span></div>
           <div class="rowact"><button class="btn sm" type="button" data-portfolio="evento">Ver trabajo</button><button class="btn sm primary" type="button" data-quote="evento">Cotizar</button></div></div>
       </article>
       <article class="row">
@@ -440,7 +456,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
           <li>Dos cámaras sincronizadas, micrófono lavalier e iluminación de tres puntos</li>
           <li>Piezas horizontales y verticales para YouTube, Instagram y TikTok</li>
         </ul>
-        <div class="price"><b>$5,000</b><span>+ IVA por jornada</span>
+        <div class="price"><div class="opt"><b>$5,000<small>+ IVA</small></b><span>por jornada</span></div>
           <div class="rowact"><button class="btn sm" type="button" data-portfolio="contenido">Ver trabajo</button><button class="btn sm primary" type="button" data-quote="contenido">Cotizar</button></div></div>
       </article>
       <article class="row">
@@ -454,7 +470,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
           <li>Cortinillas, lower thirds, subtítulos y llamadas a la acción</li>
           <li>Hasta dos rondas de ajustes menores</li>
         </ul>
-        <div class="price"><b>$1,200</b><span>+ IVA video horizontal (hasta 5 min)</span><br><b style="font-size:18px;margin-top:8px">$600</b><span>+ IVA reel / TikTok</span>
+        <div class="price"><div class="opt"><b>$1,200<small>+ IVA</small></b><span>video horizontal, hasta 5 min</span></div><div class="opt"><b>$600<small>+ IVA</small></b><span>reel / TikTok</span></div>
           <div class="rowact"><button class="btn sm" type="button" data-portfolio="edicion">Ver trabajo</button><button class="btn sm primary" type="button" data-quote="edicion">Cotizar</button></div></div>
       </article>
     </div>
@@ -498,10 +514,10 @@ footer .brand{display:flex;align-items:center;gap:14px}
       <h2 id="galeria-h">Experiencia</h2>
       <p>Eventos, arte, cultura, local e internacional.</p>
     </div>
-    <ul class="gallery" id="gallery" style="margin-top:28px"></ul>
+    <ul class="gallery" id="gallery" style="margin-top:28px" data-noi18n></ul>
     <div class="gal-more">
-      <button class="btn" id="galMore" type="button"></button>
-      <span class="mono gal-count" id="galCount" aria-live="polite"></span>
+      <button class="btn" id="galMore" type="button" data-noi18n></button>
+      <span class="mono gal-count" id="galCount" aria-live="polite" data-noi18n></span>
     </div>
   </section>
 
@@ -516,9 +532,9 @@ footer .brand{display:flex;align-items:center;gap:14px}
             <button type="button" class="lb-btn mclose" data-close aria-label="Cerrar">✕</button>
           </div>
         </div>
-        <div class="chips" id="pfChips" role="group" aria-label="Filtrar por tipo"></div>
+        <div class="chips" id="pfChips" role="group" aria-label="Filtrar por tipo" data-noi18n></div>
       </div>
-      <ul class="gallery" id="pfGrid"></ul>
+      <ul class="gallery" id="pfGrid" data-noi18n></ul>
       <div class="pf-empty" id="pfEmpty" hidden>
         <p id="pfEmptyText"></p>
         <button type="button" class="btn sm primary" id="pfEmptyQuote">Cotizar</button>
@@ -644,14 +660,14 @@ footer .brand{display:flex;align-items:center;gap:14px}
           <label class="full">Cuéntame lo que buscas, con tanto detalle como quieras
             <textarea id="q_desc" name="descripcion" rows="4"></textarea>
           </label>
-          <label><span id="q_fecha_lbl">Fecha</span><input id="q_fecha" name="fecha" type="date"></label>
+          <label><span id="q_fecha_lbl" data-noi18n>Fecha</span><input id="q_fecha" name="fecha" type="date"></label>
           <label>Presupuesto<select id="q_pres" name="presupuesto"><option>No sé aún</option><option>Menos de $5,000</option><option>$5,000 – $10,000</option><option>$10,000 – $25,000</option><option>Más de $25,000</option></select></label>
           <fieldset class="radios full"><legend>¿Necesitas factura?</legend>
             <label><input type="radio" name="factura" value="Sí"> Sí</label>
             <label><input type="radio" name="factura" value="No" checked> No</label>
           </fieldset>
         </div>
-        <p class="ferr" id="q_err" role="alert" hidden></p>
+        <p class="ferr" id="q_err" role="alert" data-noi18n hidden></p>
         <div class="factions">
           <button class="btn primary" type="submit">Revisar mi cotización</button>
           <span class="fnote">Al enviar aceptas el <button type="button" class="linkish" data-privacy>aviso de privacidad</button>.</span>
@@ -662,7 +678,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
       <div class="qdone" id="qDone" hidden>
         <p>Así le llegará tu solicitud a Rob. Envíala por WhatsApp y él te responde con la cotización.</p>
         <pre class="qsum" id="qSum"></pre>
-        <p class="fnote" id="qImgNote" hidden></p>
+        <p class="fnote" id="qImgNote" data-noi18n hidden></p>
         <div class="factions">
           <a class="btn primary" id="qWa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
           <button class="btn" type="button" id="qCopy">Copiar texto</button>
@@ -674,7 +690,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
 
   <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
     <div class="lb-bar">
-      <span class="mono lb-meta" id="lbMeta"></span>
+      <span class="mono lb-meta" id="lbMeta" data-noi18n></span>
       <div class="lb-tools">
         <button type="button" class="lb-btn" id="lbOut" aria-label="Alejar">−</button>
         <span class="mono lb-zoom" id="lbZoom">100%</span>
@@ -685,7 +701,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
     <div class="lb-stage" id="lbStage"><img id="lbImg" alt="" draggable="false"></div>
     <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Foto anterior">‹</button>
     <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Foto siguiente">›</button>
-    <p class="lb-hint mono" id="lbHint">Pellizca o usa la rueda para acercar · arrastra para moverte · doble toque para zoom</p>
+    <p class="lb-hint mono" id="lbHint" data-noi18n>Pellizca o usa la rueda para acercar · arrastra para moverte · doble toque para zoom</p>
   </div>
 
   <section id="trabajo">
@@ -766,9 +782,10 @@ footer .brand{display:flex;align-items:center;gap:14px}
   <div class="modal" id="priv" role="dialog" aria-modal="true" aria-labelledby="privTitle" hidden>
     <div class="modal-box">
       <div class="modal-head">
-        <div><span class="label">Última actualización: 2 de octubre de 2026</span><h3 id="privTitle">Aviso de privacidad</h3></div>
+        <div><span class="label">Última actualización: 5 de octubre de 2026</span><h3 id="privTitle">Aviso de privacidad</h3></div>
         <button type="button" class="lb-btn mclose" data-close aria-label="Cerrar">✕</button>
       </div>
+      <p class="fnote" data-only="en">Courtesy translation; the Spanish version prevails.</p>
       <div class="legal">
         <h4>¿Quién es responsable de tus datos?</h4>
         <p><b>Roberto Escobedo Rodríguez</b> ("Rob"), persona física, con domicilio en Olmeca 215-1, Col. La Fuente, Guadalupe, Nuevo León, C.P. 67154. Para cualquier tema de privacidad escribe a <b>hello@cucoarts.com</b>.</p>
@@ -801,7 +818,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
         <p>En la galería publico fotos de eventos donde pueden aparecer personas. Si apareces en alguna y prefieres que la retire, escríbeme y la quito.</p>
 
         <h4>Cookies y medición</h4>
-        <p>Esta página usa Google Analytics para medir visitas de forma estadística y guarda en tu navegador si prefieres el modo claro o noche. Puedes borrar o bloquear las cookies desde la configuración de tu navegador.</p>
+        <p>Esta página usa Google Analytics para medir visitas de forma estadística y guarda en tu navegador si prefieres el modo claro o noche y tu idioma. Puedes borrar o bloquear las cookies desde la configuración de tu navegador.</p>
 
         <h4>Cambios a este aviso</h4>
         <p>Si este aviso cambia, publicaré la versión nueva en esta misma página con su fecha de actualización. Si crees que tu derecho a la protección de datos fue vulnerado, puedes acudir a la autoridad competente en la materia.</p>
@@ -810,6 +827,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
   </div>
 </div>
 
+<script type="application/json" id="i18n-en">{"Perfil creativo":"Creative profile","Portafolio y facilitador de conexiones económicas para creadores":"Portfolio and connector of economic opportunities for creators","Servicios":"Services","Experiencia":"Experience","Proceso creativo":"Creative process","Trabajo":"Work","Contacto":"Contact","Modo día":"Day mode","Modo noche":"Night mode","Productor audiovisual · Monterrey, N.L.":"Audiovisual producer · Monterrey, N.L., Mexico","Grabo lo que pasa en la":"I film what happens in Monterrey's","escena cultural":"cultural scene","de Monterrey.":".","Cobertura de eventos, contenido para marcas y educación, y postproducción. Soy Roberto Escobedo (Rob), productor y fundador de CUCO ARTS.":"Event coverage, content for brands and education, and post-production. I'm Roberto Escobedo (Rob), producer and founder of CUCO ARTS.","Cotiza tu proyecto":"Get a quote","Ver trabajo":"See work","Producción":"Production","Locación":"Location","Monterrey, N.L.":"Monterrey, N.L.","Formato":"Format","Desglose de servicios":"Service breakdown","Qué hago":"What I do","Precios en pesos mexicanos. A cada pago se suma el IVA del 16%.":"Prices in Mexican pesos. 16% VAT is added to every payment.","Eventos":"Events","Cobertura de eventos culturales":"Cultural event coverage","Inauguraciones, exposiciones, ferias, premiaciones.":"Openings, exhibitions, fairs, award ceremonies.","Hasta 3 horas de grabación":"Up to 3 hours of filming","Video resumen editado de 2 a 10 minutos":"Edited highlight video of 2 to 10 minutes","10 o más fotografías editadas":"10 or more edited photographs","Entrevistas y momentos clave (corte de listón, premiación)":"Interviews and key moments (ribbon cutting, awards)","Opcional: todo el material en bruto":"Optional: all the raw footage","Cotizar":"Get a quote","Contenido para marcas y educación":"Content for brands and education","Series de lecciones, videos de producto, contenido mensual para redes.":"Lesson series, product videos, monthly social media content.","Jornada de hasta 4 horas efectivas de rodaje":"A shoot day of up to 4 effective hours","Dos cámaras sincronizadas, micrófono lavalier e iluminación de tres puntos":"Two synced cameras, lavalier microphone and three-point lighting","Piezas horizontales y verticales para YouTube, Instagram y TikTok":"Horizontal and vertical pieces for YouTube, Instagram and TikTok","Postproducción":"Post-production","Edición de video":"Video editing","Para material que grabo yo o que ya tienes.":"For footage I shoot or that you already have.","Corte multicámara, audio nivelado y corrección de color":"Multicam cut, leveled audio and color correction","Cortinillas, lower thirds, subtítulos y llamadas a la acción":"Transitions, lower thirds, subtitles and calls to action","Hasta dos rondas de ajustes menores":"Up to two rounds of minor revisions","Tiendas en línea para artistas":"Online stores for artists","Monto tu tienda Shopify, cargo tu catálogo de obra y la dejo lista para vender. Se cotiza según el número de obras.":"I set up your Shopify store, upload your catalog of works and leave it ready to sell. Priced by the number of works.","Ver trabajos":"See work","Obra por encargo":"Commissioned art","Te conecto con artistas de CUCO ARTS para una pieza hecha a tu medida, con boceto previo y certificado de autenticidad.":"I connect you with CUCO ARTS artists for a piece made to your measure, with a preliminary sketch and a certificate of authenticity.","Ver obras":"See artworks","Plan de rodaje":"Shooting plan","Cotización":"Quote","Me cuentas el proyecto y te mando una propuesta con alcance, precio y tiempos.":"You tell me about the project and I send you a proposal with scope, price and timing.","Anticipo del 50%":"50% deposit","Con el anticipo queda apartada tu fecha.":"The deposit reserves your date.","Grabación":"Filming","El día del evento o la jornada acordada. El resto se paga ese día o contra entrega.":"On the day of the event or the agreed shoot day. The rest is paid that day or on delivery.","Entrega":"Delivery","Fotos en hasta 10 días hábiles y video en hasta 15, según el proyecto.":"Photos within 10 business days and video within 15, depending on the project.","Eventos, arte, cultura, local e internacional.":"Events, art and culture, local and international.","Portafolio":"Portfolio","Cerrar":"Close","Cotizador":"Quote request","Cuéntame tu proyecto":"Tell me about your project","¿Qué necesitas?":"What do you need?","Cobertura de un evento":"Coverage of an event","Contenido para marca o educación":"Content for a brand or education","Tienda en línea para artistas":"Online store for artists","Otro / colaboración creativa":"Other / creative collaboration","Nombre *":"Name *","WhatsApp *":"WhatsApp *","Correo":"Email","Sobre la obra":"About the artwork","¿Qué tipo de obra?":"What kind of artwork?","Pintura / cuadro":"Painting","Mural (street art)":"Mural (street art)","Ilustración o diseño":"Illustration or design","Escultura u objeto":"Sculpture or object","Otro":"Other","¿Cómo la imaginas?":"How do you imagine it?","Obra original de pedido especial (el artista decide qué incluir)":"Original special-order piece (the artist decides what to include)","Basada en mi idea o en una imagen de referencia":"Based on my idea or a reference image","Medidas aproximadas":"Approximate size","Ancho":"Width","Alto":"Height","Unidad":"Unit","¿Enmarcada?":"Framed?","Sí":"Yes","No":"No","No sé":"Not sure","¿Con qué tipo de artista?":"What kind of artist?","Sólo locales (MTY)":"Local only (MTY)","De cualquier parte de México":"From anywhere in Mexico","Me da igual":"No preference","Ciudad de entrega":"Delivery city","¿Tienes ejemplos o imágenes de muestra?":"Do you have examples or reference images?","Elegir imágenes":"Choose images","Sobre el evento":"About the event","Tipo de evento":"Type of event","Lugar":"Venue","Hora de inicio":"Start time","Duración aproximada":"Approximate duration","Hasta 3 horas":"Up to 3 hours","4 horas":"4 hours","Más de 4 horas":"More than 4 hours","¿Qué te gustaría recibir?":"What would you like to receive?","Video resumen":"Highlight video","Fotos editadas":"Edited photos","Entrevistas":"Interviews","Material en bruto":"Raw footage","Sobre el contenido":"About the content","Tipo de contenido":"Type of content","Serie de lecciones":"Lesson series","Video de producto o marca":"Product or brand video","Contenido mensual para redes":"Monthly social media content","¿Cuántos videos, aprox.?":"How many videos, approx.?","¿Dónde se publicará?":"Where will it be published?","Sitio web":"Website","Sobre la edición":"About the editing","¿Cuántas piezas?":"How many pieces?","Horizontal (hasta 5 min)":"Horizontal (up to 5 min)","Vertical (reel / TikTok)":"Vertical (reel / TikTok)","Ambos":"Both","¿Ya tienes el material grabado?":"Do you already have the footage?","No, también hay que grabar":"No, filming is needed too","Sobre la tienda":"About the store","¿Cuántas obras, aprox.?":"How many artworks, approx.?","¿Ya tienes cuenta de Shopify?":"Do you already have a Shopify account?","¿Tienes dominio propio? (ej. tunombre.com)":"Do you own a domain? (e.g. yourname.com)","Cuéntame lo que buscas, con tanto detalle como quieras":"Tell me what you're looking for, in as much detail as you like","Fecha":"Date","Fecha del evento":"Event date","¿Tienes una fecha límite?":"Do you have a deadline?","Presupuesto":"Budget","No sé aún":"Not sure yet","Menos de $5,000":"Under $5,000","$5,000 – $10,000":"$5,000 – $10,000","$10,000 – $25,000":"$10,000 – $25,000","Más de $25,000":"Over $25,000","¿Necesitas factura?":"Do you need an invoice?","Revisar mi cotización":"Review my request","Al enviar aceptas el":"By submitting you accept the","aviso de privacidad":"privacy notice","Quiero recibir novedades y proyectos de Rob (opcional)":"I'd like to receive news and projects from Rob (optional)","Así le llegará tu solicitud a Rob. Envíala por WhatsApp y él te responde con la cotización.":"This is how your request will reach Rob. Send it by WhatsApp and he'll reply with a quote.","Enviar por WhatsApp":"Send via WhatsApp","Copiar texto":"Copy text","Copiado":"Copied","Texto seleccionado":"Text selected","Editar":"Edit","Pellizca o usa la rueda para acercar · arrastra para moverte · doble toque para zoom":"Pinch or use the wheel to zoom · drag to move · double tap to zoom","Créditos":"Credits","Trabajo reciente":"Recent work","Constelaciones y Derivas · Colección FEMSA en MARCO":"Constelaciones y Derivas · FEMSA Collection at MARCO","Entrevista":"Interview","Qué hay detrás de la exposición, contado desde la curaduría.":"What's behind the exhibition, told from the curatorship.","Ver en YouTube ↗":"Watch on YouTube ↗","El sueño de una vida de creatividad · Mario Goyzueta \"Maragoycha\"":"A dream of a life of creativity · Mario Goyzueta \"Maragoycha\"","Presentación de libro":"Book launch","Registro de la presentación del libro.":"Recording of the book launch.","¿Cómo se pinta un mural en una cancha de basketball?":"How do you paint a mural on a basketball court?","Documental":"Documentary","El proceso del mural en el Parque La Fuente, con Prismacoga.":"The making of the mural at Parque La Fuente, with Prismacoga.","Artistas en CUCO ARTS":"Artists at CUCO ARTS","Serie de entrevistas":"Interview series","Entrevistas individuales a los artistas del catálogo (Summer Update).":"One-on-one interviews with the artists in the catalog (Summer Update).","Ver la playlist ↗":"See the playlist ↗","Cobertura":"Coverage","Recorrimos la feria de arte del noreste y platicamos con artistas y visitantes sobre el presente del arte en México. Producido junto con Tim y con Napoleón, de Gato Negro Galería.":"We walked through the northeast art fair and talked with artists and visitors about the state of art in Mexico today. Produced with Tim and with Napoleón, from Gato Negro Galería.","HUSKY Coffee · Santiago, N.L.":"HUSKY Coffee · Santiago, N.L.","Expo-venta · documental":"Exhibition-sale · documentary","Una exposición con venta de obra dentro de la cafetería, que lleva la tienda en línea de CUCO ARTS a un espacio físico. La expo sigue abierta mientras creamos un documental sobre el proyecto.":"An exhibition with artworks for sale inside the coffee shop, bringing the CUCO ARTS online store into a physical space. The show is still open while we make a documentary about the project.","Ver publicación ↗":"See post ↗","Tikva Electric México":"Tikva Electric México","Contenido mensual":"Monthly content","Contenido episódico para una empresa de soluciones energéticas en la construcción.":"Episodic content for an energy-solutions company in the construction industry.","Abierto a colaborar":"Open to collaborate","Colaboraciones creativas y otras producciones":"Creative collaborations and other productions","También me interesan proyectos fuera de lo comercial: podcasts, series y colaboraciones con otros creativos.":"I'm also interested in non-commercial projects: podcasts, series and collaborations with other creatives.","Ver el canal completo de CUCO ARTS":"See the full CUCO ARTS channel","Sobre mí":"About me","\"Cuco\" para los amigos. Soy ingeniero biomédico. Pasé años en ventas de tecnología médica hasta que el arte me cambió el rumbo. Hoy dirijo CUCO ARTS, una plataforma que conecta a la gente con artistas y barrios de Monterrey.":"\"Cuco\" to my friends. I'm a biomedical engineer. I spent years in medical technology sales until art changed my course. Today I run CUCO ARTS, a platform that connects people with artists and neighborhoods of Monterrey.","Como productor grabo lo que pasa en esa escena: exposiciones, artistas, ferias y proyectos culturales. También trabajo con marcas que quieren contar su historia con la misma cercanía.":"As a producer I film what happens in that scene: exhibitions, artists, fairs and cultural projects. I also work with brands that want to tell their story with the same closeness.","Trabajo como imagino el futuro: proyectos donde el beneficio compartido es el resultado, donde que todos ganen se da por hecho y donde construimos juntos sistemas más ambiciosos para que la creatividad crezca.":"I work the way I imagine the future: projects where shared benefit is the outcome, where everyone winning is a given, and where we build more ambitious systems together so creativity can grow.","CUCO = Cultural Collective":"CUCO = Cultural Collective","CUCO ARTS viene de Cultural Collective ARTS. El nombre resume esa idea: en cada proyecto ganan el cliente, los artistas y los colaboradores.":"CUCO ARTS comes from Cultural Collective ARTS. The name sums up that idea: in every project the client, the artists and the collaborators all win.","Equipo":"Gear","Cámara":"Camera","Sony a7C · graba en 4K a 24 fps":"Sony a7C · shoots 4K at 24 fps","Lentes":"Lenses","Estabilizador":"Gimbal","Grabadora Tascam DR-44WL":"Tascam DR-44WL recorder","Micrófonos inalámbricos DJI":"DJI wireless microphones","Edición":"Editing","¿Tienes un evento o un proyecto?":"Have an event or a project?","Escríbeme por WhatsApp":"Message me on WhatsApp","Roberto Escobedo (Rob) es productor y fundador de CUCO ARTS · cucoarts.com/rob":"Roberto Escobedo (Rob) is a producer and the founder of CUCO ARTS · cucoarts.com/rob","Monterrey, Nuevo León ·":"Monterrey, Nuevo León, Mexico ·","Aviso de privacidad":"Privacy notice","¿Quién es responsable de tus datos?":"Who is responsible for your data?","(\"Rob\"), persona física, con domicilio en Olmeca 215-1, Col. La Fuente, Guadalupe, Nuevo León, C.P. 67154. Para cualquier tema de privacidad escribe a":"(\"Rob\"), an individual, with address at Olmeca 215-1, Col. La Fuente, Guadalupe, Nuevo León, Mexico, 67154. For any privacy matter write to","Este aviso aplica a los servicios que Rob ofrece en cucoarts.com/rob: producción audiovisual, edición, tiendas en línea y gestión de obra por encargo.":"This notice applies to the services Rob offers at cucoarts.com/rob: audiovisual production, editing, online stores and management of commissioned art.","¿Qué datos pido?":"What data do I ask for?","Contacto:":"Contact:","nombre, WhatsApp y correo.":"name, WhatsApp and email.","Tu proyecto:":"Your project:","descripción, fechas, lugar, medidas, presupuesto e imágenes de referencia que quieras compartir.":"description, dates, venue, sizes, budget and any reference images you choose to share.","Facturación":"Invoicing",", solo si la pides: nombre o razón social, RFC, régimen fiscal, código postal y correo.":", only if you ask for it: name or business name, tax ID (RFC), tax regime, postal code and email.","No pido datos sensibles. Por favor no los incluyas en tus mensajes.":"I don't ask for sensitive data. Please don't include any in your messages.","¿Para qué los uso?":"What do I use it for?","Finalidades necesarias":"Necessary purposes","para atenderte: responder tu solicitud, preparar tu cotización, coordinar y realizar el servicio, entregarte el material, facturar y cumplir obligaciones legales y fiscales.":"to serve you: answer your request, prepare your quote, coordinate and carry out the service, deliver the material, invoice and meet legal and tax obligations.","Finalidad opcional:":"Optional purpose:","mandarte novedades, proyectos y promociones. Solo la uso si marcas la casilla en el cotizador. Puedes negarte o cambiar de opinión cuando quieras escribiendo a hello@cucoarts.com; eso no afecta tu cotización ni el servicio.":"sending you news, projects and promotions. I only use it if you tick the box in the quote form. You can refuse or change your mind at any time by writing to hello@cucoarts.com; it doesn't affect your quote or the service.","¿Con quién los comparto?":"Who do I share it with?","No vendo tus datos. Solo los comparto cuando hace falta para tu proyecto:":"I don't sell your data. I only share it when needed for your project:","Con los":"With the","colaboradores y artistas":"collaborators and artists","que participan en él, por ejemplo el artista de una obra por encargo o un camarógrafo de apoyo.":"who take part in it, for example the artist of a commissioned piece or a support camera operator.","Con":"With","proveedores de tecnología":"technology providers","que uso para comunicarme y trabajar: WhatsApp, Google (correo y almacenamiento) y Amazon Web Services (hospedaje de esta página).":"that I use to communicate and work: WhatsApp, Google (email and storage) and Amazon Web Services (hosting of this page).","autoridades":"authorities",", cuando la ley lo exige.":", when the law requires it.","Tus derechos (ARCO)":"Your rights (ARCO)","Puedes pedir":"You can ask to","acceder":"access","a tus datos,":"your data,","corregirlos":"correct it","cancelarlos":"delete it","u":"or","oponerte":"object","a su uso, así como revocar tu consentimiento o limitar su uso. Escribe a hello@cucoarts.com con tu nombre, un medio para responderte, qué derecho quieres ejercer y sobre qué datos, y una identificación. Te respondo en un plazo máximo de 20 días hábiles.":"to its use, as well as withdraw your consent or limit its use. Write to hello@cucoarts.com with your name, a way to reply, which right you want to exercise and over which data, and an ID. I'll reply within 20 business days at most.","Fotos de eventos":"Event photos","En la galería publico fotos de eventos donde pueden aparecer personas. Si apareces en alguna y prefieres que la retire, escríbeme y la quito.":"The gallery shows photos from events where people may appear. If you appear in one and prefer that I remove it, write to me and I'll take it down.","Cookies y medición":"Cookies and analytics","Cambios a este aviso":"Changes to this notice","Si este aviso cambia, publicaré la versión nueva en esta misma página con su fecha de actualización. Si crees que tu derecho a la protección de datos fue vulnerado, puedes acudir a la autoridad competente en la materia.":"If this notice changes, I'll publish the new version on this same page with its update date. If you believe your right to data protection has been violated, you can go to the competent authority on the matter.","Ir a CUCO ARTS":"Go to CUCO ARTS","Secciones":"Sections","Cambiar a modo día":"Switch to day mode","Cambiar a modo noche":"Switch to night mode","Abrir menú":"Open menu","Cerrar menú":"Close menu","Claqueta":"Clapperboard","Filtrar por tipo":"Filter by type","Inauguración, feria, premiación…":"Opening, fair, awards…","Opcional":"Optional","Foto ampliada":"Enlarged photo","Alejar":"Zoom out","Acercar":"Zoom in","Foto anterior":"Previous photo","Foto siguiente":"Next photo","Cambiar idioma":"Change language","Todo":"All","Contenido":"Content","Mostrar menos":"Show less","Pronto subo aquí fotos de rodajes para marcas y series. Mientras, puedes ver los videos en la sección Trabajo reciente.":"Soon I'll upload shoot photos for brands and series here. Meanwhile, you can watch the videos in the Recent work section.","Aún no hay trabajos en esta categoría.":"There's no work in this category yet.","Escribe tu nombre para saber a quién responder.":"Please type your name so I know who to reply to.","Revisa tu WhatsApp: necesito un número de 10 dígitos para responderte.":"Check your WhatsApp: I need a 10-digit number to reply.","Hola Rob, quiero cotizar":"Hi Rob, I'd like a quote for","Nombre":"Name","WhatsApp":"WhatsApp","Tipo de obra":"Type of artwork","Cómo la imagino":"How I imagine it","Medidas":"Size","Enmarcada":"Framed","Artista":"Artist","Imágenes de ejemplo":"Example images","(las mando aquí en el chat)":"(I'll send them here in the chat)","Hora":"Time","Duración":"Duration","Me gustaría recibir":"I'd like to receive","Videos aprox.":"Videos approx.","Plataformas":"Platforms","Piezas":"Pieces","Material ya grabado":"Footage already shot","Obras aprox.":"Artworks approx.","Cuenta de Shopify":"Shopify account","Dominio":"Domain","Fecha límite":"Deadline","Factura":"Invoice","Quiero recibir novedades":"I'd like to receive news","Al abrir WhatsApp, adjunta ahí tus imágenes de ejemplo.":"When WhatsApp opens, attach your example images there.","Revisión":"Review","fotos":"photos","proyectos":"projects","Esta página usa Google Analytics para medir visitas de forma estadística y guarda en tu navegador si prefieres el modo claro o noche y tu idioma. Puedes borrar o bloquear las cookies desde la configuración de tu navegador.":"This page uses Google Analytics to measure visits statistically and stores in your browser whether you prefer day or night mode and your language. You can delete or block cookies from your browser settings.","Última actualización: 5 de octubre de 2026":"Last updated: October 5, 2026","+ IVA":"+ VAT","por evento":"per event","por jornada":"per shoot day","video horizontal, hasta 5 min":"horizontal video, up to 5 min","reel / TikTok":"reel / TikTok","Ampliar foto":"Enlarge photo","Ver proyecto":"View project"}</script>
 <script>
 (()=>{
   const el=document.getElementById("tc"); if(!el) return;
@@ -821,6 +839,49 @@ footer .brand{display:flex;align-items:center;gap:14px}
   tick();
 })();
 
+/* Idioma ES/EN: el HTML está en español y el diccionario inglés (#i18n-en) se aplica encima.
+   Se recuerda en localStorage; sin elección previa se usa el idioma del navegador. */
+(()=>{
+  const KEY="cucoarts-lang", root=document.documentElement;
+  const EN=JSON.parse(document.getElementById("i18n-en").textContent);
+  const norm=s=>s.replace(/\s+/g," ").trim();
+  const read=()=>{try{return localStorage.getItem(KEY)}catch(e){return null}};
+  const save=v=>{try{localStorage.setItem(KEY,v)}catch(e){}};
+  let lang=read();
+  if(lang!=="en"&&lang!=="es") lang=(navigator.language||"es").toLowerCase().startsWith("en")?"en":"es";
+  const t=s=>lang==="en"&&EN[s]!==undefined?EN[s]:s;
+  const META={
+    es:{title:document.title,desc:document.querySelector('meta[name="description"]').content},
+    en:{title:"Roberto Escobedo (Rob) · Audiovisual producer in Monterrey",desc:"Cultural event coverage, content for brands and education, and post-production in Monterrey, Mexico. Roberto Escobedo (Rob), producer and founder of CUCO ARTS."}};
+  const SKIP="script,style,pre,[data-noi18n]";
+  const texts=[]; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  for(let n;n=w.nextNode();){ if(n.nodeValue.trim()&&!n.parentElement.closest(SKIP)){n.__es=n.nodeValue; texts.push(n)} }
+  const attrs=[]; document.querySelectorAll("[aria-label],[placeholder],[title]").forEach(el=>{
+    if(el.closest("[data-noi18n]")) return;
+    ["aria-label","placeholder","title"].forEach(a=>{const v=el.getAttribute(a); if(v) attrs.push([el,a,v])})});
+  function applyAll(){
+    texts.forEach(n=>{
+      const es=n.__es, tr=lang==="en"?EN[norm(es)]:undefined;
+      if(tr===undefined){n.nodeValue=es; return}
+      let lead=/^\s*/.exec(es)[0]; const trail=/\s*$/.exec(es)[0];
+      if(/^[.,;:!?)]/.test(tr)) lead="";
+      n.nodeValue=lead+tr+trail;
+    });
+    attrs.forEach(([el,a,v])=>el.setAttribute(a,lang==="en"&&EN[v]!==undefined?EN[v]:v));
+    root.lang=lang; document.title=META[lang].title;
+    document.querySelector('meta[name="description"]').content=META[lang].desc;
+    const b=document.getElementById("langBtn");
+    if(b){document.getElementById("langLabel").textContent=lang==="en"?"ES":"EN";
+      b.setAttribute("aria-label",lang==="en"?"Cambiar a español":"Switch to English");
+      b.setAttribute("aria-pressed",String(lang==="en")); b.title=b.getAttribute("aria-label")}
+  }
+  function set(l,persist){lang=l; if(persist) save(l); applyAll(); dispatchEvent(new Event("roblang"))}
+  window.robI18n={t,get lang(){return lang},set};
+  document.getElementById("langBtn")?.addEventListener("click",()=>set(lang==="en"?"es":"en",true));
+  addEventListener("storage",e=>{if(e.key===KEY&&(e.newValue==="en"||e.newValue==="es")&&e.newValue!==lang) set(e.newValue,false)});
+  applyAll();
+})();
+
 /* Modo día / noche compartido por todo cucoarts.com: misma llave en localStorage para todas las páginas.
    Respeta el sistema hasta que la persona elige. */
 (()=>{
@@ -830,59 +891,64 @@ footer .brand{display:flex;align-items:center;gap:14px}
   const save=v=>{try{localStorage.setItem(KEY,v)}catch(e){}};
   const current=()=>root.dataset.theme||(sysDark.matches?"dark":"light");
   const paint=()=>{const dark=current()==="dark";
-    btn.setAttribute("aria-pressed",String(dark)); label.textContent=dark?"Modo día":"Modo noche";
-    btn.setAttribute("aria-label",dark?"Cambiar a modo día":"Cambiar a modo noche")};
+    const T=window.robI18n.t; btn.setAttribute("aria-pressed",String(dark)); label.textContent=T(dark?"Modo día":"Modo noche");
+    btn.setAttribute("aria-label",T(dark?"Cambiar a modo día":"Cambiar a modo noche"))};
   const saved=read(); if(saved==="dark"||saved==="light") root.dataset.theme=saved;
   btn.addEventListener("click",()=>{const next=current()==="dark"?"light":"dark"; root.dataset.theme=next; save(next); paint()});
   sysDark.addEventListener?.("change",paint);
   addEventListener("storage",e=>{if(e.key===KEY&&e.newValue){root.dataset.theme=e.newValue; paint()}});
+  addEventListener("roblang",paint);
   paint();
 })();
 
 /* Menú en celular: se despliega con el botón y se cierra al elegir, con Esc o tocando fuera. */
 (()=>{
   const btn=document.getElementById("menuBtn"), nav=document.getElementById("mainNav");
-  const set=open=>{nav.classList.toggle("open",open); btn.setAttribute("aria-expanded",String(open)); btn.setAttribute("aria-label",open?"Cerrar menú":"Abrir menú")};
+  const set=open=>{nav.classList.toggle("open",open); btn.setAttribute("aria-expanded",String(open)); btn.setAttribute("aria-label",window.robI18n.t(open?"Cerrar menú":"Abrir menú"))};
   btn.addEventListener("click",()=>set(!nav.classList.contains("open")));
   nav.addEventListener("click",e=>{if(e.target.closest("a")) set(false)});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&nav.classList.contains("open")){set(false); btn.focus()}});
   document.addEventListener("click",e=>{if(nav.classList.contains("open")&&!e.target.closest(".top")) set(false)});
   matchMedia("(min-width: 761px)").addEventListener?.("change",e=>{if(e.matches) set(false)});
+  addEventListener("roblang",()=>set(nav.classList.contains("open")));
+  set(nav.classList.contains("open"));
 })();
 
-/* Galería: las más recientes primero; muestra 4 y agrega de 4 en 4. */
+/* Galería (Experiencia): eventos y contenido, lo más reciente primero; muestra 4 y agrega de 4 en 4.
+   Cada foto trae título y descripción en español e inglés: t=[es,en], alt=[es,en]. Las de "encargo" pertenecen
+   a un proyecto (p) y solo se ven agrupadas en el portafolio. Sin metadatos ni GPS en los archivos. */
 (()=>{
-  const FOTOS=[
-    {tipo:"evento", src:"rob-galeria/evento-07.jpg", full:"rob-galeria/full/evento-07.jpg", lugar:"CUCO ARTS", fecha:"2020-08-17", alt:"Mesa con obra pequeña y libros junto a una pintura colorida"},
-    {tipo:"evento", src:"rob-galeria/evento-08.jpg", full:"rob-galeria/full/evento-08.jpg", lugar:"CUCO ARTS", fecha:"2020-03-18", alt:"Detalle de una ilustración en blanco, negro y dorado"},
-    {tipo:"evento", src:"rob-galeria/evento-03.jpg", full:"rob-galeria/full/evento-03.jpg", lugar:"Colegio Civil UANL", fecha:"2019-03-17", alt:"Auditorio lleno visto desde el escenario, con balcón y vitrales"},
-    {tipo:"evento", src:"rob-galeria/evento-05.jpg", full:"rob-galeria/full/evento-05.jpg", lugar:"Colegio Civil UANL", fecha:"2019-03-17", alt:"Escenario con instrumentos frente a un vitral, público en primer plano"},
-    {tipo:"evento", src:"rob-galeria/evento-04.jpg", full:"rob-galeria/full/evento-04.jpg", lugar:"Colegio Civil UANL", fecha:"2019-03-17", alt:"Público sentado en el auditorio bajo un vitral"},
-    {tipo:"evento", src:"rob-galeria/evento-06.jpg", full:"rob-galeria/full/evento-06.jpg", lugar:"Monterrey", fecha:"2019-03-10", alt:"Sala oscura con proyecciones de ramas en dos pantallas"},
-    {tipo:"evento", src:"rob-galeria/evento-02.jpg", full:"rob-galeria/full/evento-02.jpg", lugar:"Parque Fundidora", fecha:"2019-02-09", alt:"Muro de exposición con retratos en blanco y negro"},
-    {tipo:"evento", src:"rob-galeria/evento-01.jpg", full:"rob-galeria/full/evento-01.jpg", lugar:"Parque Fundidora", fecha:"2019-02-09", alt:"Instalación de líneas de luz de colores en una sala oscura"}
-  ].sort((a,b)=>b.fecha.localeCompare(a.fecha));
-  const PASO=4, MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  const FOTOS=[{"id":"constelacion-01","tipo":"evento","t":["Constelación · entrada de la feria","Constelación · fair entrance"],"alt":["Dos presentadores con micrófono frente a la entrada de la feria Constelación","Two hosts with microphones in front of the Constelación fair entrance"],"f":"2025-10-17"},{"id":"constelacion-02","tipo":"evento","t":["Constelación · entrevista en sala","Constelación · interview in the hall"],"alt":["Dos personas con micrófono junto a una escultura verde dentro de la feria","Two people with a microphone next to a green sculpture inside the fair"],"f":"2025-10-17"},{"id":"constelacion-03","tipo":"evento","t":["Constelación · obra en sala","Constelación · artwork in the hall"],"alt":["Escultura turquesa con rostro frente a pinturas de colores","Turquoise sculpture with a face in front of colorful paintings"],"f":"2025-10-17"},{"id":"constelacion-04","tipo":"evento","t":["Constelación · grabando una entrevista","Constelación · filming an interview"],"alt":["Camarógrafo con estabilizador graba una entrevista frente a una pared de pinturas","Camera operator with a gimbal films an interview in front of a wall of paintings"],"f":"2025-10-17"},{"id":"constelacion-05","tipo":"evento","t":["Constelación · equipo CUCO ARTS","Constelación · CUCO ARTS team"],"alt":["Selfie del equipo de CUCO ARTS dentro de la feria","Selfie of the CUCO ARTS team inside the fair"],"f":"2025-10-17"},{"id":"fama-01","tipo":"evento","t":["FAMA · entrevista","FAMA · interview"],"alt":["Entrevista con cámara en estabilizador frente a esculturas de cerámica en la pared","Interview with a gimbal camera in front of ceramic sculptures on the wall"],"f":"2025-11-07"},{"id":"fama-02","tipo":"evento","t":["FAMA · entrevista en sala","FAMA · interview in the hall"],"alt":["Entrevista con micrófono naranja en una sala con pinturas","Interview with an orange microphone in a room with paintings"],"f":"2025-11-07"},{"id":"fil-01","tipo":"evento","t":["FIL Monterrey · inauguración","FIL Monterrey · opening"],"alt":["Grupo reunido en una galería durante una inauguración","Group gathered in a gallery during an opening"],"f":"2022-10-10"},{"id":"fil-02","tipo":"evento","t":["FIL Monterrey · presentación","FIL Monterrey · book presentation"],"alt":["Público sentado con libros en las manos durante una presentación","Audience seated holding books during a presentation"],"f":"2022-10-10"},{"id":"fil-03","tipo":"evento","t":["FIL Monterrey · foto de grupo","FIL Monterrey · group photo"],"alt":["Grupo de mujeres con camisas blancas posando en el recinto de la feria","Group of women in white shirts posing at the fair venue"],"f":"2022-10-14"},{"id":"fil-04","tipo":"evento","t":["FIL Monterrey · público","FIL Monterrey · audience"],"alt":["Sala llena de asistentes sentados mirando a la cámara","Full room of attendees seated looking at the camera"],"f":"2023-10-06"},{"id":"naf-01","tipo":"evento","t":["Noreste Art Fair · equipo de grabación","Noreste Art Fair · filming crew"],"alt":["Tres personas con cámara y micrófonos entre los pasillos de la feria","Three people with a camera and microphones in the fair aisles"],"f":"2026-04-18"},{"id":"naf-02","tipo":"evento","t":["Noreste Art Fair · entrevista","Noreste Art Fair · interview"],"alt":["Entrevista con micrófono y cámara a una visitante en la feria","Interview with a microphone and camera of a visitor at the fair"],"f":"2026-04-18"},{"id":"naf-03","tipo":"evento","t":["Noreste Art Fair · con un artista","Noreste Art Fair · with an artist"],"alt":["Dos hombres posan frente a una pared de obras","Two men pose in front of a wall of artworks"],"f":"2026-04-18"},{"id":"prod-0072","tipo":"evento","t":["Entrevista en galería","Gallery interview"],"alt":["Entrevista sentados en una galería con obras en las paredes","Seated interview in a gallery with artworks on the walls"],"f":"2023-11-29"},{"id":"prod-1219","tipo":"evento","t":["Rueda de prensa","Press conference"],"alt":["Cámara en tripié grabando una mesa de rueda de prensa con pantalla","Tripod camera filming a press conference table with a screen"],"f":"2025-09-09"},{"id":"prod-1025","tipo":"evento","t":["Cobertura de prensa","Press coverage"],"alt":["Selfie junto a varias cámaras de prensa en un evento","Selfie next to several press cameras at an event"],"f":"2025-08-14"},{"id":"prod-0927","tipo":"evento","t":["Inauguración de exposición","Exhibition opening"],"alt":["Dos personas posan junto a una pared de dibujos y obra","Two people pose next to a wall of drawings and artwork"],"f":"2025-08-02"},{"id":"prod-carrera","tipo":"evento","t":["Pintura en vivo","Live painting"],"alt":["Artista pintando al aire libre mientras una cámara lo graba","Artist painting outdoors while a camera records"],"f":"2022-05-15"},{"id":"cont-2558","tipo":"contenido","t":["Rodaje en locación","On-location shoot"],"alt":["Hombre frente a una laptop con una cámara en tripié en una cocina industrial","Man in front of a laptop with a tripod camera in an industrial kitchen"],"f":"2026-01-21"},{"id":"cont-3828","tipo":"contenido","t":["Set de entrevista","Interview set"],"alt":["Cámara con monitor frente a un set con dos personas en sillones azules","Camera with monitor in front of a set with two people on blue armchairs"],"f":"2023-10-14"},{"id":"cont-1306","tipo":"contenido","t":["Entrevista con cámara en tripié","Tripod interview"],"alt":["Selfie con una cámara en tripié y una entrevistada sentada al fondo","Selfie with a tripod camera and an interviewee seated in the background"],"f":"2025-09-24"},{"id":"cont-6859","tipo":"contenido","t":["Rodaje en librería","Bookstore shoot"],"alt":["Grupo posando con libros frente a un caballete en una librería","Group posing with books in front of an easel in a bookstore"],"f":"2025-07-29"},{"id":"cont-5297","tipo":"contenido","t":["Entrevista en librería","Bookstore interview"],"alt":["Hombre sentado en una mesa con libros junto a un caballete con obras","Man seated at a table with books next to an easel with artworks"],"f":"2026-07-29"},{"id":"cont-ancestros","tipo":"contenido","t":["Video musical · Ancestros","Music video · Ancestros"],"alt":["Catedral de torres amarillas con una figura vestida de blanco al centro","Yellow-towered cathedral with a figure dressed in white at the center"],"f":"2020-07-04"},{"id":"cont-mujeres","tipo":"contenido","t":["Video musical · ¡Vivan las mujeres!","Music video · ¡Vivan las mujeres!"],"alt":["Retrato de una mujer con tocado de flores azules frente al mar","Portrait of a woman with a blue flower headpiece in front of the sea"],"f":"2020-07-03"},{"id":"cont-tlacuilos","tipo":"contenido","t":["Taller Pequeños Tlacuilos","Pequeños Tlacuilos workshop"],"alt":["Mujer sonriente sostiene una calavera decorada con flores de colores","Smiling woman holding a skull decorated with colorful flowers"],"f":"2020-10-21"},{"id":"est-2715","tipo":"contenido","t":["Entrevista en el estudio de un artista","Interview in an artist's studio"],"alt":["Hombre sentado junto a una pintura de paisaje, con cámara y luces en el estudio","Man seated next to a landscape painting, with camera and lights in the studio"],"f":"2026-02-04"},{"id":"est-4155","tipo":"contenido","t":["Preparando luces en un estudio","Setting up lights in a studio"],"alt":["Hombre con luces y cámara montadas en un estudio de arte","Man with lights and camera set up in an art studio"],"f":"2026-05-23"},{"id":"est-4185","tipo":"contenido","t":["Entrevista en un taller de grabado","Interview in a printmaking workshop"],"alt":["Dos hombres junto a una prensa de grabado y un retrato pintado en la pared","Two men next to a printing press and a painted portrait on the wall"],"f":"2026-05-23"},{"id":"est-4198","tipo":"contenido","t":["Con un artista y su grabado","With an artist and his print"],"alt":["Dos hombres sonrientes sostienen un grabado en espiral","Two smiling men holding a spiral print"],"f":"2026-05-25"},{"id":"est-4205","tipo":"contenido","t":["Entrevista con un artista","Interview with an artist"],"alt":["Hombre de pie junto a una gran pintura de mar en una sala","Man standing next to a large seascape painting in a living room"],"f":"2026-05-26"},{"id":"est-4239","tipo":"contenido","t":["Rodaje en el estudio de un artista","Shoot in an artist's studio"],"alt":["Dos hombres sonriendo en un estudio con una obra de colores y una cámara en tripié","Two men smiling in a studio with a colorful artwork and a tripod camera"],"f":"2026-05-27"},{"id":"est-4248","tipo":"contenido","t":["Rodaje en exteriores","Outdoor shoot"],"alt":["Selfie junto a una cámara en tripié y una mujer de vestido blanco entre árboles","Selfie next to a tripod camera and a woman in a white dress among trees"],"f":"2026-05-28"},{"id":"est-4253","tipo":"contenido","t":["Entrevista en un taller de pintura","Interview in a painting studio"],"alt":["Joven sentado en un banco en un estudio con pinturas en las paredes","Young man seated on a stool in a studio with paintings on the walls"],"f":"2026-05-29"},{"id":"nupec-01","tipo":"encargo","t":["Pintando el contorno","Painting the outline"],"alt":["Artista con respirador pintando con aerosol el ojo de un animal en una cortina metálica","Artist wearing a respirator spray-painting an animal's eye on a metal shutter"],"p":"mural-persiana"},{"id":"nupec-02","tipo":"encargo","t":["Dos artistas en el andamio","Two artists on the scaffold"],"alt":["Dos artistas pintando juntos sobre un andamio frente a la cortina metálica","Two artists painting together on a scaffold in front of the metal shutter"],"p":"mural-persiana"},{"id":"nupec-03","tipo":"encargo","t":["Detalle terminado","Finished detail"],"alt":["Detalle de un gato y un perro pintados con colores brillantes","Detail of a cat and a dog painted in bright colors"],"p":"mural-persiana"},{"id":"nupec-04","tipo":"encargo","t":["Mural terminado","Finished mural"],"alt":["Mural terminado de un gato y un perro en una cortina metálica, con dos artistas a los lados","Finished mural of a cat and a dog on a metal shutter, with two artists at the sides"],"p":"mural-persiana"},{"id":"nupec-05","tipo":"encargo","t":["Los artistas con el mural","The artists with the mural"],"alt":["Dos artistas posan a los lados del mural terminado","Two artists pose on either side of the finished mural"],"p":"mural-persiana"},{"id":"nupec-06","tipo":"encargo","t":["Grabando el proceso","Filming the process"],"alt":["Persona junto a una cámara en tripié y el andamio del mural","Person next to a tripod camera and the mural scaffold"],"p":"mural-persiana"},{"id":"grill-01","tipo":"encargo","t":["La barda antes del mural","The wall before the mural"],"alt":["Barda blanca en un estacionamiento antes de pintar el mural","White wall in a parking lot before the mural was painted"],"p":"mural-amarillo"},{"id":"grill-02","tipo":"encargo","t":["Trazo del dibujo","Drawing the outline"],"alt":["Artista dibujando retratos en línea negra sobre un muro amarillo","Artist drawing portraits in black line on a yellow wall"],"p":"mural-amarillo"},{"id":"grill-03","tipo":"encargo","t":["Personajes en el muro","Characters on the wall"],"alt":["Artista junto a personajes dibujados sobre un muro amarillo","Artist next to characters drawn on a yellow wall"],"p":"mural-amarillo"},{"id":"grill-04","tipo":"encargo","t":["El equipo frente al mural","The team in front of the mural"],"alt":["Tres hombres posan frente a un mural amarillo con retratos","Three men pose in front of a yellow mural with portraits"],"p":"mural-amarillo"},{"id":"grill-05","tipo":"encargo","t":["Fachada con el mural","Facade with the mural"],"alt":["Fachada amarilla con el mural y el logotipo del negocio bajo un cielo azul","Yellow facade with the mural and the business logo under a blue sky"],"p":"mural-amarillo"},{"id":"grill-06","tipo":"encargo","t":["Vista general","Overall view"],"alt":["Vista general del mural amarillo sobre la fachada del negocio","Overall view of the yellow mural on the business facade"],"p":"mural-amarillo"},{"id":"lucha-01","tipo":"encargo","t":["Obra terminada","Finished artwork"],"alt":["Pintura circular de un luchador cargando a otro frente a un volcán","Circular painting of a wrestler lifting another in front of a volcano"],"p":"lucha-libre"},{"id":"lucha-02","tipo":"encargo","t":["Detalle de la pintura","Painting detail"],"alt":["Detalle de la máscara y las botas de un luchador pintado","Detail of a painted wrestler's mask and boots"],"p":"lucha-libre"},{"id":"lucha-03","tipo":"encargo","t":["Detalle del luchador rojo","Detail of the red wrestler"],"alt":["Detalle de un luchador de rojo con máscara, pintado sobre el lienzo","Detail of a masked wrestler in red, painted on the canvas"],"p":"lucha-libre"},{"id":"lucha-04","tipo":"encargo","t":["Entrega en la calle","Handover on the street"],"alt":["Hombre sonriente sostiene la pintura circular en la calle","Smiling man holds the circular painting on the street"],"p":"lucha-libre"},{"id":"lucha-05","tipo":"encargo","t":["Con la obra entregada","With the delivered artwork"],"alt":["Tres hombres posan con la pintura circular junto a un árbol","Three men pose with the circular painting next to a tree"],"p":"lucha-libre"},{"id":"chakras-01","tipo":"encargo","t":["Proceso","In progress"],"alt":["Artista pintando sobre una mesa de trabajo en casa","Artist painting at a worktable at home"],"p":"chakras"},{"id":"chakras-02","tipo":"encargo","t":["Obra terminada","Finished artwork"],"alt":["Ilustración sobre papel de una figura meditando con flores y raíces","Illustration on paper of a meditating figure with flowers and roots"],"p":"chakras"},{"id":"chakras-03","tipo":"encargo","t":["Entrega enmarcada","Framed handover"],"alt":["Mujer sonriente sostiene la obra ya enmarcada","Smiling woman holding the already framed artwork"],"p":"chakras"},{"id":"karisma-01","tipo":"encargo","t":["Tortuga con isla sobre el caparazón","Tortoise with an island on its shell"],"alt":["Pintura de una tortuga gigante con un paisaje sobre el caparazón y una mujer en el agua","Painting of a giant tortoise with a landscape on its shell and a woman in the water"],"p":"karisma"},{"id":"karisma-02","tipo":"encargo","t":["Con la pintura de la tortuga","With the tortoise painting"],"alt":["Mujer posa junto a la pintura de la tortuga en un caballete","Woman poses next to the tortoise painting on an easel"],"p":"karisma"},{"id":"karisma-03","tipo":"encargo","t":["Águila con una flor","Eagle with a flower"],"alt":["Pintura enmarcada de un águila con una flor blanca en el pico","Framed painting of an eagle with a white flower in its beak"],"p":"karisma"},{"id":"karisma-04","tipo":"encargo","t":["Pintando un rayo","Painting a lightning bolt"],"alt":["Artista pintando un rayo sobre nubes en un lienzo oscuro","Artist painting a lightning bolt over clouds on a dark canvas"],"p":"karisma"},{"id":"karisma-05","tipo":"encargo","t":["Obras en casa del cliente","Artworks at the client's home"],"alt":["Madre e hijo junto a dos pinturas enmarcadas de un león y un águila","Mother and son next to two framed paintings of a lion and an eagle"],"p":"karisma"},{"id":"consultorio-01","tipo":"encargo","t":["Rayo sobre el mar","Lightning over the sea"],"alt":["Pintura de un rayo que cae sobre nubes y un mar iluminado","Painting of a lightning bolt striking clouds over a glowing sea"],"p":"consultorio"},{"id":"consultorio-02","tipo":"encargo","t":["Entrega de dos cuadros","Delivery of two paintings"],"alt":["Hombre con uniforme médico sostiene dos pinturas enmarcadas","Man in medical scrubs holding two framed paintings"],"p":"consultorio"},{"id":"consultorio-03","tipo":"encargo","t":["Colgando la obra","Hanging the artwork"],"alt":["Hombre cuelga un cuadro enmarcado en la pared","Man hangs a framed painting on the wall"],"p":"consultorio"},{"id":"consultorio-04","tipo":"encargo","t":["Ángel guardián","Guardian angel"],"alt":["Hombre sostiene una pintura de un ángel con dos niños, junto a un cuadro con un rayo","Man holding a painting of an angel with two children, next to a lightning painting"],"p":"consultorio"},{"id":"consultorio-05","tipo":"encargo","t":["Con la pintura del ángel guardián","With the guardian angel painting"],"alt":["Mujer sonriente sostiene la pintura del ángel guardián","Smiling woman holding the guardian angel painting"],"p":"consultorio"},{"id":"consultorio-06","tipo":"encargo","t":["Obra instalada","Installed artwork"],"alt":["Pintura colorida de un corazón instalada en la pared, con el cliente debajo","Colorful heart painting installed on the wall, with the client below"],"p":"consultorio"},{"id":"consultorio-07","tipo":"encargo","t":["Con la pintura del rayo","With the lightning painting"],"alt":["Mujer sonriente sostiene la pintura del rayo","Smiling woman holding the lightning painting"],"p":"consultorio"},{"id":"entrega-01","tipo":"encargo","t":["Retrato estilo Van Gogh","Van Gogh-style portrait"],"alt":["Dos personas sostienen un retrato enmarcado de estilo Van Gogh","Two people holding a framed Van Gogh-style portrait"],"p":"entregas"},{"id":"entrega-02","tipo":"encargo","t":["Gato de colores enmarcado","Framed colorful cat"],"alt":["Persona con cubrebocas sostiene un cuadro enmarcado de un gato de colores","Person wearing a face mask holding a framed colorful cat painting"],"p":"entregas"},{"id":"entrega-03","tipo":"encargo","t":["Empaque de CUCO ARTS","CUCO ARTS packaging"],"alt":["Mujer sostiene un empaque de papel kraft con el logotipo de CUCO ARTS","Woman holding a kraft-paper package with the CUCO ARTS logo"],"p":"entregas"},{"id":"entrega-04","tipo":"encargo","t":["Paisaje de río y bosque","River and forest landscape"],"alt":["Mujer sonriente frente a una gran pintura de un río en un bosque","Smiling woman in front of a large painting of a river in a forest"],"p":"entregas"},{"id":"entrega-05","tipo":"encargo","t":["Entrega a domicilio","Home delivery"],"alt":["Dos personas sostienen un paquete de papel kraft de CUCO ARTS","Two people holding a CUCO ARTS kraft-paper package"],"p":"entregas"},{"id":"evento-07","tipo":"evento","f":"2020-08-17","t":["CUCO ARTS","CUCO ARTS"],"alt":["Mesa con obra pequeña y libros junto a una pintura colorida","Table with a small artwork and books next to a colorful painting"]},{"id":"evento-08","tipo":"evento","f":"2020-03-18","t":["CUCO ARTS","CUCO ARTS"],"alt":["Detalle de una ilustración en blanco, negro y dorado","Detail of a black, white and gold illustration"]},{"id":"evento-03","tipo":"evento","f":"2019-03-17","t":["Colegio Civil UANL","Colegio Civil UANL"],"alt":["Auditorio lleno visto desde el escenario, con balcón y vitrales","Full auditorium seen from the stage, with a balcony and stained glass"]},{"id":"evento-05","tipo":"evento","f":"2019-03-17","t":["Colegio Civil UANL","Colegio Civil UANL"],"alt":["Escenario con instrumentos frente a un vitral, público en primer plano","Stage with instruments in front of a stained-glass window, audience in the foreground"]},{"id":"evento-04","tipo":"evento","f":"2019-03-17","t":["Colegio Civil UANL","Colegio Civil UANL"],"alt":["Público sentado en el auditorio bajo un vitral","Audience seated in the auditorium under a stained-glass window"]},{"id":"evento-06","tipo":"evento","f":"2019-03-10","t":["Monterrey","Monterrey"],"alt":["Sala oscura con proyecciones de ramas en dos pantallas","Dark room with branch projections on two screens"]},{"id":"evento-02","tipo":"evento","f":"2019-02-09","t":["Parque Fundidora","Parque Fundidora"],"alt":["Muro de exposición con retratos en blanco y negro","Exhibition wall with black-and-white portraits"]},{"id":"evento-01","tipo":"evento","f":"2019-02-09","t":["Parque Fundidora","Parque Fundidora"],"alt":["Instalación de líneas de luz de colores en una sala oscura","Installation of colored light lines in a dark room"]}];
+  const PROY=[{"id":"mural-persiana","t":["Mural en cortina metálica","Mural on a metal shutter"],"d":["Mural a todo color de un gato y un perro sobre la cortina de un local, pintado con aerosol. Incluye el proceso y el resultado final.","A full-color mural of a cat and a dog on a storefront shutter, spray-painted. Includes the process and the final result."],"f":"2021-10","lugar":["San Nicolás de los Garza","San Nicolás de los Garza"]},{"id":"mural-amarillo","t":["Mural en una fachada amarilla","Mural on a yellow facade"],"d":["Retratos y personajes en línea negra sobre una fachada amarilla: de la barda en blanco al resultado final.","Portraits and characters in black line on a yellow facade: from the blank wall to the final result."],"f":"2020-12","lugar":["Monterrey","Monterrey"]},{"id":"chakras","t":["Figura en meditación · Ana Ahedo","Meditating figure · Ana Ahedo"],"d":["Obra por encargo de Ana Ahedo: una figura meditando con flores y raíces, del proceso a la entrega enmarcada.","Commissioned piece by Ana Ahedo: a meditating figure with flowers and roots, from the process to the framed handover."],"f":"2022-07"},{"id":"karisma","t":["Pinturas de Karisma Rdz","Paintings by Karisma Rdz"],"d":["Obras de Karisma Rdz: una tortuga con una isla sobre el caparazón, un águila con una flor y un rayo, del proceso a la obra terminada.","Works by Karisma Rdz: a tortoise with an island on its shell, an eagle with a flower and a lightning bolt, from the process to the finished piece."],"f":"2023-08","fl":["2020–2023","2020–2023"]},{"id":"consultorio","t":["Colección de obras para un cliente","Collection of artworks for a client"],"d":["Entrega e instalación de pinturas por encargo: un rayo sobre el mar, un ángel guardián y un corazón colorido.","Delivery and installation of commissioned paintings: lightning over the sea, a guardian angel and a colorful heart."],"f":"2021-12","fl":["2019–2022","2019–2022"]},{"id":"entregas","t":["Entregas de obra","Artwork deliveries"],"d":["Entregas de obras de artistas de CUCO ARTS a sus compradores, con el empaque de la marca.","Deliveries of CUCO ARTS artists' works to their buyers, in the brand's packaging."],"f":"2020-11","fl":["2020–2021","2020–2021"]},{"id":"lucha-libre","t":["Pintura circular de lucha libre · Guillén","Circular lucha libre painting · Guillén"],"d":["Obra por encargo: una pintura circular de un luchador frente a un volcán, con detalles y entrega al cliente.","Commissioned piece: a circular painting of a wrestler in front of a volcano, with details and handover to the client."]}];
+  FOTOS.forEach(f=>{f.src=`rob-galeria/${f.id}.jpg`; f.full=`rob-galeria/full/${f.id}.jpg`});
+  const I=window.robI18n, L=()=>I.lang==="en"?1:0, tt=o=>o.t[L()], al=f=>f.alt[L()];
+  const MES=[["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"],["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]];
+  const fecha=f=>{if(!f) return ""; const [y,m]=f.split("-"); return `${MES[L()][+m-1]} ${y}`};
+  const proy=id=>PROY.find(p=>p.id===id);
+  const pfecha=p=>p.fl?p.fl[L()]:fecha(p.f);
+  const sortDesc=(a,b)=>(b.f||"").localeCompare(a.f||"");
+  const GAL=FOTOS.filter(f=>f.tipo!=="encargo").sort(sortDesc);
+  const PASO=4;
   const list=document.getElementById("gallery"), more=document.getElementById("galMore"), count=document.getElementById("galCount");
-  const fecha=f=>{const [y,m]=f.split("-");return `${MES[+m-1]} ${y}`};
   let shown=0;
   function add(n){
     const frag=document.createDocumentFragment();
-    FOTOS.slice(shown,shown+n).forEach((f,i)=>{
-      const li=document.createElement("li"); li.className="shot"; li.tabIndex=0; li.style.setProperty("--d",`${i*60}ms`);
-      li.setAttribute("role","button"); li.dataset.i=FOTOS.indexOf(f); li.setAttribute("aria-label",`Ampliar foto: ${f.lugar}, ${fecha(f.fecha)}`);
-      li.innerHTML=`<img src="${f.src}" alt="" width="800" height="800" loading="lazy" decoding="async">
-        <div class="cap"><span class="mono">${String(FOTOS.indexOf(f)+1).padStart(2,"0")}</span><b></b><span class="mono"></span></div>`;
-      li.querySelector("img").alt=f.alt; li.querySelector("b").textContent=f.lugar; li.querySelector(".cap span:last-child").textContent=fecha(f.fecha);
+    GAL.slice(shown,shown+n).forEach((f,i)=>{
+      const k=GAL.indexOf(f), li=document.createElement("li"); li.className="shot"; li.tabIndex=0; li.style.setProperty("--d",`${i*60}ms`);
+      li.setAttribute("role","button"); li.dataset.i=k; li.setAttribute("aria-label",`${I.t("Ampliar foto")}: ${tt(f)}, ${fecha(f.f)}`);
+      li.innerHTML=`<img src="${f.src}" alt="" width="720" height="720" loading="lazy" decoding="async">
+        <div class="cap"><span class="mono">${String(k+1).padStart(2,"0")}</span><b></b><span class="mono"></span></div>`;
+      li.querySelector("img").alt=al(f); li.querySelector("b").textContent=tt(f); li.querySelector(".cap span:last-child").textContent=fecha(f.f);
       frag.appendChild(li);
     });
-    list.appendChild(frag); shown=Math.min(shown+n,FOTOS.length); paint();
+    list.appendChild(frag); shown=Math.min(shown+n,GAL.length); paint();
   }
   function paint(){
-    const left=FOTOS.length-shown;
-    count.textContent=`${shown} de ${FOTOS.length} fotos`;
-    if(left>0){more.textContent=`Ver ${Math.min(PASO,left)} más`; more.dataset.mode="more"}
-    else if(FOTOS.length>PASO){more.textContent="Mostrar menos"; more.dataset.mode="less"}
+    const left=GAL.length-shown, en=L()===1;
+    count.textContent=en?`${shown} of ${GAL.length} photos`:`${shown} de ${GAL.length} fotos`;
+    more.hidden=false;
+    if(left>0){const k=Math.min(PASO,left); more.textContent=en?`Show ${k} more`:`Ver ${k} más`; more.dataset.mode="more"}
+    else if(GAL.length>PASO){more.textContent=en?"Show less":"Mostrar menos"; more.dataset.mode="less"}
     else more.hidden=true;
   }
   more.addEventListener("click",()=>{
@@ -895,7 +961,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
   const $=id=>document.getElementById(id);
   const lb=$("lb"), stage=$("lbStage"), img=$("lbImg"), meta=$("lbMeta"), zoomLbl=$("lbZoom");
   const MIN=1, MAX=5, reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let idx=0, s=1, tx=0, ty=0, lastFocus=null, SET=FOTOS;
+  let idx=0, s=1, tx=0, ty=0, lastFocus=null, SET=GAL;
   const ptrs=new Map(); let pinch=null, drag=null, lastTap={t:0,x:0,y:0};
 
   function apply(smooth){
@@ -915,18 +981,25 @@ footer .brand{display:flex;align-items:center;gap:14px}
     tx=px-(px-tx)*(ns/s); ty=py-(py-ty)*(ns/s); s=ns; clampPan(); apply(smooth);
   }
   const center=()=>{const r=stage.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]};
+  const HINT="Pellizca o usa la rueda para acercar · arrastra para moverte · doble toque para zoom", hintEl=$("lbHint");
+  const metaOf=(f,i,n)=>{const p=f.p&&proy(f.p);
+    return [`${String(i+1).padStart(2,"0")} / ${String(n).padStart(2,"0")}`,tt(f),p&&tt(p),p?pfecha(p):fecha(f.f),p&&p.lugar&&p.lugar[L()]].filter(Boolean).join(" · ")};
+  function refreshText(){
+    const f=SET[idx], p=f.p&&proy(f.p);
+    img.alt=al(f); meta.textContent=metaOf(f,idx,SET.length);
+    hintEl.textContent=p?p.d[L()]:I.t(HINT);
+  }
   function load(){
     const f=SET[idx]; s=1; tx=0; ty=0; apply(false);
-    img.src=f.full; img.alt=f.alt;
-    meta.textContent=`${String(idx+1).padStart(2,"0")} / ${String(SET.length).padStart(2,"0")} · ${f.lugar} · ${fecha(f.fecha)}`;
+    img.src=f.full; refreshText();
     [idx+1,idx-1].forEach(j=>{const n=SET[(j+SET.length)%SET.length]; if(n){const p=new Image(); p.src=n.full}});
   }
-  function open(i,set){SET=set||FOTOS; lastFocus=document.activeElement; idx=i; lb.hidden=false; $("lbPrev").hidden=$("lbNext").hidden=SET.length<2; document.documentElement.style.overflow="hidden"; load(); $("lbClose").focus()}
+  function open(i,set){SET=set||GAL; lastFocus=document.activeElement; idx=i; lb.hidden=false; $("lbPrev").hidden=$("lbNext").hidden=SET.length<2; document.documentElement.style.overflow="hidden"; load(); $("lbClose").focus()}
   function close(){lb.hidden=true; if(!document.querySelector(".modal:not([hidden])")) document.documentElement.style.overflow=""; ptrs.clear(); pinch=drag=null; lastFocus?.focus?.()}
   const go=d=>{idx=(idx+d+SET.length)%SET.length; load()};
 
-  list.addEventListener("click",e=>{const li=e.target.closest(".shot"); if(li) open(+li.dataset.i)});
-  list.addEventListener("keydown",e=>{const li=e.target.closest(".shot"); if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault(); open(+li.dataset.i)}});
+  list.addEventListener("click",e=>{const li=e.target.closest(".shot"); if(li) open(+li.dataset.i,GAL)});
+  list.addEventListener("keydown",e=>{const li=e.target.closest(".shot"); if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault(); open(+li.dataset.i,GAL)}});
   $("lbClose").onclick=close; $("lbPrev").onclick=()=>go(-1); $("lbNext").onclick=()=>go(1);
   $("lbIn").onclick=()=>zoomAt(s*1.5,...center(),true); $("lbOut").onclick=()=>zoomAt(s/1.5,...center(),true);
 
@@ -985,7 +1058,8 @@ footer .brand{display:flex;align-items:center;gap:14px}
     }
   }
   stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
-  window.robGaleria={FOTOS,open,fecha};
+  addEventListener("roblang",()=>{const n=shown; list.innerHTML=""; shown=0; add(Math.max(n,PASO)); if(!lb.hidden) refreshText()});
+  window.robGaleria={FOTOS,PROY,GAL,open,L,tt,al,fecha,pfecha,proy,sortDesc};
 })();
 
 /* Aparición suave de secciones, portafolio general con filtros y cotizador. */
@@ -1019,36 +1093,53 @@ footer .brand{display:flex;align-items:center;gap:14px}
     }
   });
 
-  // Portafolio general: mismas fotos que "Experiencia", filtradas por tipo.
-  const pf=$("pf"), grid=$("pfGrid"), chips=$("pfChips"), empty=$("pfEmpty");
-  const CATS=[{id:"todo",label:"Todo"},{id:"evento",label:"Eventos"},{id:"contenido",label:"Contenido"},{id:"edicion",label:"Edición"},{id:"encargo",label:"Obra por encargo"},{id:"tienda",label:"Tiendas en línea"}];
-  const EMPTY={
-    contenido:"Pronto subo aquí fotos de rodajes para marcas y series. Mientras, puedes ver los videos en la sección Trabajo reciente.",
-    edicion:"Pronto subo aquí ejemplos de edición. Mientras, puedes ver los videos en la sección Trabajo reciente.",
-    encargo:"Aún no publico obras por encargo. La primera puede ser la tuya.",
-    tienda:"Pronto verás aquí las tiendas en línea que he montado para artistas."};
+  // Portafolio: fotos de eventos y contenido, y proyectos de obra por encargo agrupados (se abren como un visor propio).
+  const I=window.robI18n, T=I.t, L=G.L, tt=G.tt, al=G.al, fecha=G.fecha, pfecha=G.pfecha;
+  const pf=$("pf"), grid=$("pfGrid"), chips=$("pfChips");
+  const CATS=[{id:"todo",l:["Todo","All"]},{id:"evento",l:["Eventos","Events"]},{id:"contenido",l:["Contenido","Content"]},{id:"encargo",l:["Obra por encargo","Commissioned art"]}];
   let cat="todo";
+  function itemsFor(c){
+    const fotos=G.FOTOS.filter(f=>f.tipo!=="encargo"&&(c==="todo"||f.tipo===c)).map(f=>({k:"foto",f,d:f.f||""}));
+    const proys=(c==="todo"||c==="encargo")?G.PROY.map(p=>({k:"proy",p,d:p.f||""})):[];
+    return [...fotos,...proys].sort((a,b)=>b.d.localeCompare(a.d));
+  }
   function renderPf(){
     chips.innerHTML="";
-    CATS.forEach(c=>{const n=c.id==="todo"?G.FOTOS.length:G.FOTOS.filter(f=>f.tipo===c.id).length;
+    CATS.forEach(c=>{const n=itemsFor(c.id).length; if(!n) return;
       const b=document.createElement("button"); b.type="button"; b.setAttribute("aria-pressed",String(c.id===cat));
-      b.textContent=c.label; const s=document.createElement("span"); s.textContent=n; b.appendChild(s);
+      b.textContent=c.l[L()]; const s=document.createElement("span"); s.textContent=n; b.appendChild(s);
       b.onclick=()=>{cat=c.id; renderPf()}; chips.appendChild(b)});
-    const set=cat==="todo"?G.FOTOS:G.FOTOS.filter(f=>f.tipo===cat);
-    grid.innerHTML=""; empty.hidden=set.length>0; grid.hidden=!set.length;
-    if(!set.length){$("pfEmptyText").textContent=EMPTY[cat]||"Aún no hay trabajos en esta categoría."; $("pfEmptyQuote").dataset.svc=cat; return}
-    set.forEach((f,i)=>{
+    const items=itemsFor(cat), fotos=items.filter(x=>x.k==="foto").map(x=>x.f);
+    grid.innerHTML=""; grid.hidden=!items.length;
+    items.forEach((it,i)=>{
       const li=document.createElement("li"); li.className="shot"; li.tabIndex=0; li.setAttribute("role","button"); li.style.setProperty("--d",`${Math.min(i,8)*50}ms`);
-      li.innerHTML=`<img src="${f.src}" alt="" width="800" height="800" loading="lazy" decoding="async"><div class="cap"><span class="mono"></span><b></b><span class="mono"></span></div>`;
-      li.querySelector("img").alt=f.alt; li.querySelector("b").textContent=f.lugar;
-      li.querySelector(".cap span").textContent=String(i+1).padStart(2,"0"); li.querySelector(".cap span:last-child").textContent=G.fecha(f.fecha);
-      li.setAttribute("aria-label",`Ampliar foto: ${f.lugar}, ${G.fecha(f.fecha)}`);
-      const go=()=>G.open(i,set); li.onclick=go; li.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault(); go()}};
+      let go;
+      if(it.k==="foto"){
+        const f=it.f, n=fotos.indexOf(f);
+        li.innerHTML=`<img src="${f.src}" alt="" width="720" height="720" loading="lazy" decoding="async"><div class="cap"><span class="mono"></span><b></b><span class="mono"></span></div>`;
+        li.querySelector("img").alt=al(f); li.querySelector("b").textContent=tt(f);
+        li.querySelector(".cap span").textContent=String(i+1).padStart(2,"0"); li.querySelector(".cap span:last-child").textContent=fecha(f.f);
+        li.setAttribute("aria-label",`${T("Ampliar foto")}: ${tt(f)}, ${fecha(f.f)}`);
+        go=()=>G.open(n,fotos);
+      } else {
+        const p=it.p, ph=G.FOTOS.filter(f=>f.p===p.id), en=L()===1;
+        li.classList.add("proj");
+        li.innerHTML=`<img src="${ph[0].src}" alt="" width="720" height="720" loading="lazy" decoding="async"><span class="pbadge mono"></span><div class="cap"><span class="mono">▣</span><b></b><span class="mono"></span></div>`;
+        li.querySelector("img").alt=al(ph[0]); li.querySelector("b").textContent=tt(p); li.querySelector(".cap span:last-child").textContent=pfecha(p);
+        li.querySelector(".pbadge").textContent=`${ph.length} ${en?"photos":"fotos"}`;
+        li.setAttribute("aria-label",`${T("Ver proyecto")}: ${tt(p)}, ${ph.length} ${en?"photos":"fotos"}`);
+        go=()=>G.open(0,ph);
+      }
+      li.onclick=go; li.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault(); go()}};
       grid.appendChild(li);
     });
   }
-  function openPortfolio(c){cat=c||"todo"; renderPf(); openModal(pf)}
-  $("pfEmptyQuote").onclick=e=>{closeModal(pf); openQuote(e.currentTarget.dataset.svc)};
+  function openPortfolio(c){
+    c=c||"todo";
+    // categorías sin fotos todavía (edición, tiendas): llevan a los videos de "Trabajo reciente"
+    if(c!=="todo"&&!itemsFor(c).length){document.getElementById("trabajo").scrollIntoView({behavior:reduce?"auto":"smooth"}); return}
+    cat=c; renderPf(); openModal(pf);
+  }
   $("pfQuote").onclick=()=>{closeModal(pf); openQuote(cat==="todo"?"":cat)};
 
   // Cotizador
@@ -1058,31 +1149,33 @@ footer .brand{display:flex;align-items:center;gap:14px}
   function syncSvc(){
     const v=sel.value;
     form.querySelectorAll(".svc").forEach(fs=>{fs.hidden=fs.dataset.svc!==v; fs.disabled=fs.dataset.svc!==v});
-    $("q_fecha_lbl").textContent=v==="evento"?"Fecha del evento":"¿Tienes una fecha límite?";
+    $("q_fecha_lbl").textContent=T(v==="evento"?"Fecha del evento":"¿Tienes una fecha límite?");
   }
   sel.addEventListener("change",syncSvc);
   $("q_presets").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return;
     $("q_ancho").value=b.dataset.w; $("q_alto").value=b.dataset.h; $("q_unidad").value="cm";
     $("q_presets").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
   ["q_ancho","q_alto"].forEach(id=>$(id).addEventListener("input",()=>$("q_presets").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"))));
+  const dropLabel=()=>{const n=files.length, en=L()===1, el=form.querySelector(".drop span");
+    el.textContent=n?(en?`${n} image${n>1?"s":""} chosen · change`:`${n} imagen${n>1?"es":""} elegida${n>1?"s":""} · cambiar`):T("Elegir imágenes")};
   $("q_imgs").addEventListener("change",e=>{
     files=[...e.target.files].filter(f=>f.type.startsWith("image/")).slice(0,8);
     const ul=$("q_thumbs"); ul.innerHTML="";
     files.forEach(f=>{const li=document.createElement("li"); const im=document.createElement("img"); im.alt=f.name; im.src=URL.createObjectURL(f); li.appendChild(im); ul.appendChild(li)});
-    form.querySelector(".drop span").textContent=files.length?`${files.length} imagen${files.length>1?"es":""} elegida${files.length>1?"s":""} · cambiar`:"Elegir imágenes";
+    dropLabel();
   });
 
   function resumen(){
-    const v=sel.value, L=[`Hola Rob, quiero cotizar: ${NOMBRES[v]}`,""];
-    const add=(k,val)=>{if(val&&String(val).trim()) L.push(`${k}: ${String(val).trim()}`)};
+    const v=sel.value, L2=[`${T("Hola Rob, quiero cotizar")}: ${T(NOMBRES[v])}`,""];
+    const add=(k,val)=>{if(val&&String(val).trim()) L2.push(`${T(k)}: ${T(String(val).trim())}`)};
     const radio=n=>form.querySelector(`input[name="${n}"]:checked`)?.value;
-    const checks=n=>[...form.querySelectorAll(`input[name="${n}"]:checked`)].map(x=>x.value).join(", ");
+    const checks=n=>[...form.querySelectorAll(`input[name="${n}"]:checked`)].map(x=>T(x.value)).join(", ");
     add("Nombre",$("q_nombre").value); add("WhatsApp",$("q_tel").value); add("Correo",$("q_correo").value);
     if(v==="encargo"){
       add("Tipo de obra",$("q_obra").value); add("Cómo la imagino",$("q_obra_modo").value);
       if($("q_ancho").value&&$("q_alto").value) add("Medidas",`${$("q_ancho").value} × ${$("q_alto").value} ${$("q_unidad").value}`);
       add("Enmarcada",radio("marco")); add("Artista",$("q_artista").value); add("Ciudad de entrega",$("q_ciudad").value);
-      if(files.length) add("Imágenes de ejemplo",`${files.length} (las mando aquí en el chat)`);
+      if(files.length) add("Imágenes de ejemplo",`${files.length} ${T("(las mando aquí en el chat)")}`);
     } else if(v==="evento"){
       add("Tipo de evento",$("q_evtipo").value); add("Lugar",$("q_lugar").value); add("Hora",$("q_hora").value); add("Duración",$("q_dur").value); add("Me gustaría recibir",checks("entregable"));
     } else if(v==="contenido"){
@@ -1095,28 +1188,30 @@ footer .brand{display:flex;align-items:center;gap:14px}
     if($("q_fecha").value){const [y,m,d]=$("q_fecha").value.split("-"); add(v==="evento"?"Fecha del evento":"Fecha límite",`${+d}/${+m}/${y}`)}
     add("Presupuesto",$("q_pres").value); add("Factura",radio("factura"));
     add("Quiero recibir novedades",$("q_novedades").checked?"Sí":"No");
-    if($("q_desc").value.trim()){L.push(""); L.push($("q_desc").value.trim())}
-    return L.join("\n");
+    if($("q_desc").value.trim()){L2.push(""); L2.push($("q_desc").value.trim())}
+    return L2.join("\n");
+  }
+  function renderDone(){
+    const txt=resumen(); $("qSum").textContent=txt;
+    $("qWa").href="https://wa.me/528120321492?text="+encodeURIComponent(txt);
+    const note=$("qImgNote"), n=files.length; note.hidden=!n||sel.value!=="encargo";
+    note.textContent=L()===1?`When WhatsApp opens, attach your ${n} example image${n>1?"s":""} there.`:`Al abrir WhatsApp, adjunta ahí tus ${n} imagen${n>1?"es":""} de ejemplo.`;
   }
   form.addEventListener("submit",e=>{
     e.preventDefault();
     const err=$("q_err"), tel=$("q_tel").value.replace(/\D/g,"");
     let msg="";
-    if(!$("q_nombre").value.trim()) msg="Escribe tu nombre para saber a quién responder.";
-    else if(tel.length<10) msg="Revisa tu WhatsApp: necesito un número de 10 dígitos para responderte.";
-    err.hidden=!msg; err.textContent=msg; if(msg){(msg.includes("nombre")?$("q_nombre"):$("q_tel")).focus(); return}
-    const txt=resumen(); $("qSum").textContent=txt;
-    $("qWa").href="https://wa.me/528120321492?text="+encodeURIComponent(txt);
-    const note=$("qImgNote"); note.hidden=!files.length||sel.value!=="encargo";
-    note.textContent=`Al abrir WhatsApp, adjunta ahí tus ${files.length} imagen${files.length>1?"es":""} de ejemplo.`;
-    form.hidden=true; done.hidden=false; $("qWa").focus();
+    if(!$("q_nombre").value.trim()) msg=T("Escribe tu nombre para saber a quién responder.");
+    else if(tel.length<10) msg=T("Revisa tu WhatsApp: necesito un número de 10 dígitos para responderte.");
+    err.hidden=!msg; err.textContent=msg; if(msg){($("q_nombre").value.trim()?$("q_tel"):$("q_nombre")).focus(); return}
+    renderDone(); form.hidden=true; done.hidden=false; $("qWa").focus();
   });
   $("qEdit").onclick=()=>{done.hidden=true; form.hidden=false; sel.focus()};
   $("qCopy").onclick=async e=>{
     const b=e.currentTarget, t=$("qSum").textContent;
-    try{await navigator.clipboard.writeText(t); b.textContent="Copiado"}
-    catch{const r=document.createRange(); r.selectNodeContents($("qSum")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent="Texto seleccionado"}
-    setTimeout(()=>b.textContent="Copiar texto",2000);
+    try{await navigator.clipboard.writeText(t); b.textContent=T("Copiado")}
+    catch{const r=document.createRange(); r.selectNodeContents($("qSum")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent=T("Texto seleccionado")}
+    setTimeout(()=>b.textContent=T("Copiar texto"),2000);
   };
   function openQuote(svc){
     if(svc&&NOMBRES[svc]) sel.value=svc; syncSvc();
@@ -1124,6 +1219,14 @@ footer .brand{display:flex;align-items:center;gap:14px}
     openModal(qt,sel);
   }
   syncSvc();
+
+  // al cambiar de idioma se repintan las partes generadas por código
+  addEventListener("roblang",()=>{
+    syncSvc(); dropLabel();
+    if(!pf.hidden) renderPf();
+    if(!done.hidden) renderDone();
+    if(!$("q_err").hidden){$("q_err").hidden=true}
+  });
 
   document.addEventListener("click",e=>{
     const q=e.target.closest("[data-quote]"), p=e.target.closest("[data-portfolio]"), pv=e.target.closest("[data-privacy]");
