@@ -968,7 +968,8 @@ footer .brand{display:flex;align-items:center;gap:14px}
   const proy=id=>PROY.find(p=>p.id===id);
   const pfecha=p=>p.fl?p.fl[L()]:fecha(p.f);
   const sortDesc=(a,b)=>(b.f||"").localeCompare(a.f||"");
-  const GAL=FOTOS.filter(f=>!f.p).sort(sortDesc);
+  // orden al azar en cada visita (Fisher-Yates); el portafolio sí va por fecha
+  const GAL=FOTOS.filter(f=>!f.p); for(let i=GAL.length-1;i>0;i--){const k=Math.floor(Math.random()*(i+1)); [GAL[i],GAL[k]]=[GAL[k],GAL[i]]}
   const PASO=4;
   /* Columnas tipo mosaico: cada foto conserva su proporción (nada se recorta) y se acomoda en la columna más baja,
      así que al agregar más fotos las anteriores no se mueven. 4 columnas en escritorio, 2 en celular. */
