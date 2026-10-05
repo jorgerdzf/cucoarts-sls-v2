@@ -50,6 +50,12 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.bucketName}
       localDir: frontend/build/
+      # Pages without extension (cucoarts.com/rob) must be served as HTML, not as a download.
+      defaultContentType: text/html; charset=utf-8
+      params:
+        - rob:
+            ContentType: text/html; charset=utf-8
+            CacheControl: max-age=300
 
 resources:
   Resources:

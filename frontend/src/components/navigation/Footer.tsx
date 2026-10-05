@@ -26,7 +26,7 @@ function Footer() {
             </Grid>
             <Grid item xs={12} md={4} pt={2}>
               <Typography>
-                <Link href='/PrivacyNotice' sx={{textDecoration:'none', color:'inherit'}}>
+                <Link href='/privacidad' sx={{textDecoration:'none', color:'inherit'}}>
                   Aviso de Privacidad
                 </Link>
               </Typography>

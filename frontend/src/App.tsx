@@ -65,6 +65,8 @@ function App() {
           <Route path='/Services' element={<Services activeService={defaultService}/>}/>
           <Route path='/Contact' element={<Connect />}/>
           <Route path='/PrivacyNotice' element={<PrivacyNotice />}/>
+          <Route path='/privacidad' element={<PrivacyNotice />}/>
+          <Route path='/privacy' element={<PrivacyNotice />}/>
           <Route path='/Faq' element={<Faq />}/>
         </Routes>
         <Footer/>
