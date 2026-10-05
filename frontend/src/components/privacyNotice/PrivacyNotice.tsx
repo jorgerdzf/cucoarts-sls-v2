@@ -1,5 +1,5 @@
-import { Grid, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
+import './privacy.css'
 
 // Aviso de privacidad de CUCO ARTS (persona moral). Actualizado el 5 de octubre de 2026.
 // El texto vive en SECCIONES para que sea fácil de mantener; revisar con un abogado antes de publicar cambios.
@@ -98,37 +98,48 @@ const SECCIONES: Seccion[] = [
   },
 ]
 
+const FECHA_ALTA = '31 de marzo de 2023'
+const FECHA_ACT = '5 de octubre de 2026'
+
+// El modo día / noche comparte la llave "cucoarts-theme" con la landing y /rob.
+function usePageTheme() {
+  useEffect(() => {
+    const root = document.documentElement
+    root.setAttribute('data-page', 'privacy')
+    try {
+      const t = localStorage.getItem('cucoarts-theme')
+      if (t === 'dark' || t === 'light') root.dataset.theme = t
+    } catch (e) { /* sin almacenamiento */ }
+    return () => { root.removeAttribute('data-page'); delete root.dataset.theme }
+  }, [])
+}
+
 export default function PrivacyNotice() {
+  usePageTheme()
   return (
-    <Grid container justifyContent='center'>
-      <Grid item xs={11} md={8} pt={4} pb={6} textAlign='left'>
-        <Typography variant='h3' component='h1'>
-          <b>Aviso de Privacidad</b>
-        </Typography>
-        <Typography variant='caption' display='block' mt={1}>
-          Fecha de alta en el sitio: 31 de marzo de 2023 · Última actualización: 5 de octubre de 2026
-        </Typography>
-        {SECCIONES.map((s) => (
-          <section key={s.titulo}>
-            <Typography variant='h6' component='h2' mt={4} mb={1}>
-              <b>{s.titulo}</b>
-            </Typography>
-            {s.parrafos?.map((p) => (
-              <Typography variant='body2' paragraph key={p}>{p}</Typography>
-            ))}
-            {s.lista && (
-              <ul style={{ margin: '0 0 16px', paddingLeft: '1.2em' }}>
-                {s.lista.map((item) => (
-                  <li key={item}><Typography variant='body2'>{item}</Typography></li>
-                ))}
-              </ul>
-            )}
-            {s.cierre?.map((p) => (
-              <Typography variant='body2' paragraph key={p}>{p}</Typography>
-            ))}
-          </section>
-        ))}
-      </Grid>
-    </Grid>
+    <main className='pv'>
+      <header className='pv-hero'>
+        <div className='pv-in'>
+          <div className='pv-corners' aria-hidden='true'><span>CUCOARTS</span><a href='/'>Volver al inicio</a></div>
+          <h1>Aviso de privacidad</h1>
+          <p className='pv-dates'>Fecha de alta en el sitio: {FECHA_ALTA} · Última actualización: {FECHA_ACT}</p>
+        </div>
+      </header>
+      <div className='pv-in pv-body'>
+        {SECCIONES.map((sec) => {
+          const m = /^(\d+)\.\s*(.*)$/.exec(sec.titulo)
+          return (
+            <section className='pv-sec' key={sec.titulo}>
+              <h2><span className='pv-n'>{m ? m[1].padStart(2, '0') : ''}</span>{m ? m[2] : sec.titulo}</h2>
+              <div className='pv-text'>
+                {sec.parrafos?.map((p) => <p key={p}>{p}</p>)}
+                {sec.lista && <ul>{sec.lista.map((item) => <li key={item}>{item}</li>)}</ul>}
+                {sec.cierre?.map((p) => <p key={p}>{p}</p>)}
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    </main>
   )
 }
