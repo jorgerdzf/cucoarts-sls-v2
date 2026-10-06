@@ -20,7 +20,7 @@ const es = {
   actionsTitle: '¿Qué quieres hacer hoy?',
   cards: {
     store: { h: 'Explora la tienda', p: 'Obra original de artistas locales de Monterrey.', cta: 'Ir a store.cucoarts.com' },
-    quote: { h: 'Cotizador artístico', p: 'Murales y artes plásticas hechos a tu medida, con artistas de CUCO ARTS.', cta: 'Cotizar una obra' },
+    quote: { h: 'Cotizador artístico', p: 'Murales y artes plásticas hechos a tu medida, con artistas de CUCO ARTS y la comunidad local.', cta: 'Cotizar una obra' },
     sell: { h: '¿Quieres vender tu obra en store.cucoarts.com?', p: 'Envíanos tu catálogo y tus datos para contactarte.', cta: 'Ver cómo entrar' },
     events: { h: 'Eventos y cultura viva en MTY', p: 'Estamos preparando una agenda de eventos y cultura viva de Monterrey.', cta: 'Próximamente' },
   },
@@ -70,7 +70,7 @@ const es = {
   },
   quote: {
     title: 'Cotizador artístico',
-    intro: 'Cuéntanos qué tienes en mente. Te conectamos con artistas de CUCO ARTS y te respondemos con una propuesta.',
+    intro: 'Cuéntanos qué tienes en mente. Te conectamos con artistas de CUCO ARTS y la comunidad local, y te respondemos con una propuesta.',
     type: '¿Qué necesitas?',
     types: { mural: 'Mural', pintura: 'Pintura / cuadro', ilustracion: 'Ilustración o diseño', escultura: 'Escultura u objeto', otro: 'Otro' },
     place: '¿Dónde va?',
@@ -161,7 +161,7 @@ const en: Copy = {
   actionsTitle: 'What would you like to do today?',
   cards: {
     store: { h: 'Explore the store', p: 'Original art by local artists from Monterrey.', cta: 'Go to store.cucoarts.com' },
-    quote: { h: 'Art quote', p: 'Murals and fine art made to your measure, with CUCO ARTS artists.', cta: 'Get a quote' },
+    quote: { h: 'Art quote', p: 'Murals and fine art made to your measure, with CUCO ARTS artists and the local community.', cta: 'Get a quote' },
     sell: { h: 'Want to sell your art at store.cucoarts.com?', p: 'Send us your catalog and your details so we can contact you.', cta: 'See how to join' },
     events: { h: 'Events and living culture in MTY', p: "We're preparing an agenda of events and living culture from Monterrey.", cta: 'Coming soon' },
   },
@@ -211,7 +211,7 @@ const en: Copy = {
   },
   quote: {
     title: 'Art quote',
-    intro: 'Tell us what you have in mind. We connect you with CUCO ARTS artists and reply with a proposal.',
+    intro: 'Tell us what you have in mind. We connect you with CUCO ARTS artists and the local community, and reply with a proposal.',
     type: 'What do you need?',
     types: { mural: 'Mural', pintura: 'Painting', ilustracion: 'Illustration or design', escultura: 'Sculpture or object', otro: 'Other' },
     place: 'Where will it go?',

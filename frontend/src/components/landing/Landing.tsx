@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COPY, Copy, Lang } from './copy';
 import { POOL, PoolItem } from './pool';
-import { checkFiles, sendRequest, SendResult } from './api';
+import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared';
+import MuralWizard from './MuralWizard';
 import './assets/styles/landing2.css';
 
 /* Landing de cucoarts.com. Sigue la guía de estilo de la marca: bloques de color plano, titulares en mayúsculas,
@@ -11,13 +12,9 @@ import './assets/styles/landing2.css';
 
 const LANG_KEY = 'cucoarts-lang';
 const THEME_KEY = 'cucoarts-theme';
-const WA = '528120321492';
-const MAIL = 'hello@cucoarts.com';
 const STORE = 'https://store.cucoarts.com';
 
 type Theme = 'light' | 'dark';
-type Vals = Record<string, string>;
-type Status = 'idle' | 'sending' | 'sent' | 'failed';
 
 const read = (k: string): string | null => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const write = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } };
@@ -85,7 +82,7 @@ const creditLine = (c: Copy, p: PoolItem) =>
 /* ---------- ventana (cotizador) ---------- */
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([type=hidden]):not([disabled]),select,textarea,[tabindex="0"]';
 
-function Modal({ open, onClose, label, closeLabel, children }: { open: boolean; onClose: () => void; label: string; closeLabel: string; children: React.ReactNode }) {
+function Modal({ open, onClose, label, closeLabel, wide, children }: { open: boolean; onClose: () => void; label: string; closeLabel: string; wide?: boolean; children: React.ReactNode }) {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -107,7 +104,7 @@ function Modal({ open, onClose, label, closeLabel, children }: { open: boolean; 
   if (!open) return null;
   return (
     <div className="cl-modal" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="cl-modal-box" role="dialog" aria-modal="true" aria-label={label} ref={box}>
+      <div className={`cl-modal-box${wide ? ' wide' : ''}`} role="dialog" aria-modal="true" aria-label={label} ref={box}>
         <button type="button" className="cl-x" onClick={onClose} aria-label={closeLabel}>✕</button>
         {children}
       </div>
@@ -161,94 +158,15 @@ const toVals = (fd: FormData): Vals => {
   return o;
 };
 
-/* ---------- piezas de formulario ---------- */
-function FilePicker({ c, hint, files, onChange }: { c: Copy; hint: string; files: File[]; onChange: (f: File[]) => void }) {
-  const [err, setErr] = useState('');
-  const input = useRef<HTMLInputElement>(null);
-  const pick = (list: FileList | null) => {
-    const next = [...files, ...Array.from(list || [])];
-    const problem = checkFiles(next);
-    if (problem) { setErr(c.files[problem]); } else { setErr(''); onChange(next); }
-    if (input.current) input.current.value = '';
-  };
-  const remove = (i: number) => { setErr(''); onChange(files.filter((_, k) => k !== i)); };
-  return (
-    <div className="cl-full cl-files">
-      <span className="cl-flabel">{c.files.label}</span>
-      <p className="cl-note">{hint}</p>
-      <button type="button" className="cl-btn" onClick={() => input.current?.click()}>{c.files.choose}</button>
-      <input ref={input} type="file" multiple hidden accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.doc,.docx,.zip" onChange={e => pick(e.target.files)} />
-      {err && <p className="cl-ferr" role="alert">{err}</p>}
-      {files.length > 0 && (
-        <ul>{files.map((f, i) => (
-          <li key={f.name + i}><span>{f.name}</span><small>{Math.max(1, Math.round(f.size / 1024))} KB</small>
-            <button type="button" className="cl-linkbtn" onClick={() => remove(i)}>{c.files.remove}</button></li>
-        ))}</ul>
-      )}
-    </div>
-  );
-}
-
-const Honeypot = () => (
-  <div className="cl-hp" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-);
-
-function Fallback({ c, summary, subject, onEdit }: { c: Copy; summary: string; subject: string; onEdit: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const wa = `https://wa.me/${WA}?text=${encodeURIComponent(summary)}`;
-  const mail = `mailto:${MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary)}`;
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(summary); } catch (e) { /* sin portapapeles */ }
-    setCopied(true); window.setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <div className="cl-done">
-      <p className="cl-err">{c.status.failed}</p>
-      <pre className="cl-sum">{summary}</pre>
-      <p className="cl-note">{c.status.attachNote}</p>
-      <div className="cl-actions">
-        <a className="cl-btn cl-primary" href={wa} target="_blank" rel="noopener noreferrer">{c.done.wa}</a>
-        <a className="cl-btn" href={mail}>{c.done.mail}</a>
-        <button type="button" className="cl-btn" onClick={copy}>{copied ? c.done.copied : c.done.copy}</button>
-        <button type="button" className="cl-btn cl-ghost" onClick={onEdit}>{c.done.edit}</button>
-      </div>
-    </div>
-  );
-}
-
-function Sent({ c, result, text, onAgain }: { c: Copy; result: SendResult | null; text: string; onAgain: () => void }) {
-  return (
-    <div className="cl-done cl-sent" role="status">
-      <h4>{c.status.sentTitle}</h4>
-      <p>{text}</p>
-      {result && <p className="cl-note">{c.status.folio}: <b>{result.id}</b></p>}
-      <div className="cl-actions"><button type="button" className="cl-btn" onClick={onAgain}>{c.status.again}</button></div>
-    </div>
-  );
-}
-
-/* Flujo común de envío: manda al servidor y, si falla, deja el mensaje listo para WhatsApp/correo. */
-function useSender(lang: Lang) {
-  const [vals, setVals] = useState<Vals | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
-  const [status, setStatus] = useState<Status>('idle');
-  const [result, setResult] = useState<SendResult | null>(null);
-  const send = async (type: 'quote' | 'sell', v: Vals, summary: string) => {
-    setVals(v); setStatus('sending');
-    try { setResult(await sendRequest({ type, lang, values: v, summary, files })); setStatus('sent'); }
-    catch (e) { setStatus('failed'); }
-  };
-  const reset = (full: boolean) => { setVals(null); setStatus('idle'); if (full) { setFiles([]); setResult(null); } };
-  return { vals, files, setFiles, status, result, send, reset };
-}
-
 /* ---------- cotizador artístico (ventana) ---------- */
-function QuoteBody({ c, lang }: { c: Copy; lang: Lang }) {
+/* Con "Mural" se muestra el asistente por pasos (MuralWizard); con las demás opciones, el formulario corto. */
+function QuoteBody({ c, lang, onWide }: { c: Copy; lang: Lang; onWide: (w: boolean) => void }) {
   const q = c.quote;
   const [tipo, setTipo] = useState('mural');
   const [err, setErr] = useState('');
   const form = useRef<HTMLFormElement>(null);
   const s = useSender(lang);
+  useEffect(() => { onWide(tipo === 'mural'); return () => onWide(false); }, [tipo, onWide]);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const v = toVals(new FormData(e.currentTarget));
@@ -264,55 +182,55 @@ function QuoteBody({ c, lang }: { c: Copy; lang: Lang }) {
       <span className="cl-label">{c.nav.quote}</span>
       <h3>{q.title}</h3>
       <p className="cl-sub">{q.intro}</p>
-      <form className="cl-form" onSubmit={submit} noValidate hidden={s.status !== 'idle'} ref={form}>
-        <Honeypot />
-        <div className="cl-grid">
-          <label className="cl-full">{q.type}
-            <select name="tipo" value={tipo} onChange={e => setTipo(e.target.value)}>
-              {Object.entries(q.types).map(([k, t]) => <option key={k} value={k}>{t}</option>)}
-            </select>
-          </label>
-          {tipo === 'mural' && (
-            <fieldset className="cl-radios cl-full"><legend>{q.place}</legend>
-              {Object.entries(q.places).map(([k, t], i) => <label key={k}><input type="radio" name="lugar" value={k} defaultChecked={i === 0} /> {t}</label>)}
-            </fieldset>
-          )}
-          <div className="cl-full">
-            <span className="cl-flabel">{q.size}</span>
-            <div className="cl-dims">
-              <label>{q.width}<input name="ancho" type="number" min="1" inputMode="decimal" /></label>
-              <span aria-hidden="true">×</span>
-              <label>{q.height}<input name="alto" type="number" min="1" inputMode="decimal" /></label>
-              <label>{q.unit}<select name="unidad" defaultValue="m"><option value="cm">cm</option><option value="m">m</option></select></label>
+      <label className="cl-typesel">{q.type}
+        <select value={tipo} onChange={e => setTipo(e.target.value)}>
+          {Object.entries(q.types).map(([k, t]) => <option key={k} value={k}>{t}</option>)}
+        </select>
+      </label>
+      {tipo === 'mural' ? <MuralWizard c={c} lang={lang} /> : (
+        <>
+          <form className="cl-form" onSubmit={submit} noValidate hidden={s.status !== 'idle'} ref={form}>
+            <Honeypot />
+            <input type="hidden" name="tipo" value={tipo} />
+            <div className="cl-grid">
+              <div className="cl-full">
+                <span className="cl-flabel">{q.size}</span>
+                <div className="cl-dims">
+                  <label>{q.width}<input name="ancho" type="number" min="1" inputMode="decimal" /></label>
+                  <span aria-hidden="true">×</span>
+                  <label>{q.height}<input name="alto" type="number" min="1" inputMode="decimal" /></label>
+                  <label>{q.unit}<select name="unidad" defaultValue="cm"><option value="cm">cm</option><option value="m">m</option></select></label>
+                </div>
+              </div>
+              <label className="cl-full">{q.idea}
+                <textarea name="idea" rows={4} placeholder={q.ideaHint} />
+              </label>
+              <FilePicker c={c} hint={c.files.hintQuote} files={s.files} onChange={s.setFiles} />
+              <label>{q.budget}
+                <select name="presupuesto" defaultValue="0">{q.budgets.map((b, i) => <option key={b} value={i}>{b}</option>)}</select>
+              </label>
+              <label>{q.city}<input name="ciudad" placeholder="Monterrey" /></label>
+              <label>{q.date}<input name="fecha" type="date" /></label>
+              <fieldset className="cl-radios"><legend>{q.invoice}</legend>
+                <label><input type="radio" name="factura" value="si" /> {q.yes}</label>
+                <label><input type="radio" name="factura" value="no" defaultChecked /> {q.no}</label>
+              </fieldset>
+              <label>{q.name} *<input name="nombre" autoComplete="name" required /></label>
+              <label>{q.phone} *<input name="tel" type="tel" autoComplete="tel" inputMode="tel" placeholder="81 1234 5678" required /></label>
+              <label className="cl-full">{q.email}<input name="correo" type="email" autoComplete="email" /></label>
             </div>
-          </div>
-          <label className="cl-full">{q.idea}
-            <textarea name="idea" rows={4} placeholder={q.ideaHint} />
-          </label>
-          <FilePicker c={c} hint={c.files.hintQuote} files={s.files} onChange={s.setFiles} />
-          <label>{q.budget}
-            <select name="presupuesto" defaultValue="0">{q.budgets.map((b, i) => <option key={b} value={i}>{b}</option>)}</select>
-          </label>
-          <label>{q.city}<input name="ciudad" placeholder="Monterrey" /></label>
-          <label>{q.date}<input name="fecha" type="date" /></label>
-          <fieldset className="cl-radios"><legend>{q.invoice}</legend>
-            <label><input type="radio" name="factura" value="si" /> {q.yes}</label>
-            <label><input type="radio" name="factura" value="no" defaultChecked /> {q.no}</label>
-          </fieldset>
-          <label>{q.name} *<input name="nombre" autoComplete="name" required /></label>
-          <label>{q.phone} *<input name="tel" type="tel" autoComplete="tel" inputMode="tel" placeholder="81 1234 5678" required /></label>
-          <label className="cl-full">{q.email}<input name="correo" type="email" autoComplete="email" /></label>
-        </div>
-        {err && <p className="cl-err" role="alert">{err}</p>}
-        <div className="cl-actions">
-          <button type="submit" className="cl-btn cl-primary">{q.submit}</button>
-          <span className="cl-note">{q.consentPre} <a href="/privacidad" target="_blank" rel="noopener noreferrer">{c.privacy}</a>.</span>
-        </div>
-        <label className="cl-check"><input type="checkbox" name="novedades" /> {q.news}</label>
-      </form>
-      {s.status === 'sending' && <p className="cl-sending" role="status">{c.status.sending}</p>}
-      {s.status === 'sent' && <Sent c={c} result={s.result} text={c.status.sentQuote} onAgain={() => { form.current?.reset(); s.reset(true); }} />}
-      {s.status === 'failed' && <Fallback c={c} summary={summary} subject={c.mailSubjQuote} onEdit={() => s.reset(false)} />}
+            {err && <p className="cl-err" role="alert">{err}</p>}
+            <div className="cl-actions">
+              <button type="submit" className="cl-btn cl-primary">{q.submit}</button>
+              <span className="cl-note">{q.consentPre} <a href="/privacidad" target="_blank" rel="noopener noreferrer">{c.privacy}</a>.</span>
+            </div>
+            <label className="cl-check"><input type="checkbox" name="novedades" /> {q.news}</label>
+          </form>
+          {s.status === 'sending' && <p className="cl-sending" role="status">{c.status.sending}</p>}
+          {s.status === 'sent' && <Sent c={c} result={s.result} text={c.status.sentQuote} onAgain={() => { form.current?.reset(); s.reset(true); }} />}
+          {s.status === 'failed' && <Fallback c={c} summary={summary} subject={c.mailSubjQuote} onEdit={() => s.reset(false)} />}
+        </>
+      )}
     </>
   );
 }
@@ -413,6 +331,7 @@ export default function Landing() {
   const [theme, toggleTheme] = useTheme();
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
+  const [quoteWide, setQuoteWide] = useState(true);
   const [hero] = useState<PoolItem[]>(pickFour);          // distintas en cada visita
   const [teaser] = useState<PoolItem>(() => pickEvent(hero));
   const sellRef = useRef<HTMLElement>(null);
@@ -532,8 +451,8 @@ export default function Landing() {
         </div>
       </section>
 
-      <Modal open={quoteOpen} onClose={closeQuote} label={c.quote.title} closeLabel={c.done.close}>
-        <QuoteBody c={c} lang={lang} />
+      <Modal open={quoteOpen} onClose={closeQuote} label={c.quote.title} closeLabel={c.done.close} wide={quoteWide}>
+        <QuoteBody c={c} lang={lang} onWide={setQuoteWide} />
       </Modal>
     </div>
   );
