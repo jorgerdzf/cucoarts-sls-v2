@@ -15,6 +15,31 @@ provider:
   apiGateway:
     apiKeys:
       - ${sls:stage}-cucoarts-apikey
+    # límite de uso: el formulario del sitio es público, así que se acota el abuso
+    usagePlan:
+      quota:
+        limit: 5000
+        period: DAY
+      throttle:
+        burstLimit: 20
+        rateLimit: 10
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+          Resource: !GetAtt RequestsTable.Arn
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+          Resource: !Sub "${UploadsBucket.Arn}/*"
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: "*"
 
 package:
   individually: true
@@ -44,9 +69,43 @@ functions:
       APP_ACCESS_KEY: ${ssm:cucoarts-access-key}
       APP_SECRET: ${ssm:cucoarts-secret-key}
 
+  requestsUploadUrl:
+    name: ${sls:stage}-requestsUploadUrl-lambda
+    handler: backend/lambda/requests/index.uploadUrl
+    memorySize: 256
+    events:
+      - http:
+          path: requests/upload-url
+          method: post
+          private: true
+          cors: true
+    environment:
+      UPLOADS_BUCKET: ${self:custom.uploadsBucketName}
+
+  requestsSubmit:
+    name: ${sls:stage}-requestsSubmit-lambda
+    handler: backend/lambda/requests/index.submit
+    memorySize: 256
+    timeout: 25
+    events:
+      - http:
+          path: requests
+          method: post
+          private: true
+          cors: true
+    environment:
+      REQUESTS_TABLE: ${self:custom.requestsTableName}
+      UPLOADS_BUCKET: ${self:custom.uploadsBucketName}
+      NOTIFY_TO: ${self:custom.notifyEmail}
+      NOTIFY_FROM: ${self:custom.notifyEmail}
+
 custom:
   bucketName: cucoarts-sls-v2-deploy-assets
   imagesBucketName: cucoarts-image-assets
+  # solicitudes del sitio (cotizador artístico y registro de artistas)
+  uploadsBucketName: cucoarts-sls-v2-request-uploads-${sls:stage}
+  requestsTableName: ${sls:stage}-cucoarts-requests
+  notifyEmail: roberto@cucoarts.com
   s3Sync:
     - bucketName: ${self:custom.bucketName}
       localDir: frontend/build/
@@ -59,6 +118,58 @@ custom:
 
 resources:
   Resources:
+    RequestsTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:
+        TableName: ${self:custom.requestsTableName}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+    UploadsBucket:
+      Type: AWS::S3::Bucket
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:
+        BucketName: ${self:custom.uploadsBucketName}
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        LifecycleConfiguration:
+          Rules:
+            - Id: expire-uploads
+              Status: Enabled
+              Prefix: uploads/
+              ExpirationInDays: 180
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - https://cucoarts.com
+                - https://www.cucoarts.com
+                - http://localhost:3000
+              AllowedMethods:
+                - PUT
+              AllowedHeaders:
+                - "*"
+              MaxAge: 3000
+    # Correo desde el que el sitio avisa de nuevas solicitudes; AWS manda un enlace de verificación a esta dirección.
+    NotifyEmailIdentity:
+      Type: AWS::SES::EmailIdentity
+      Properties:
+        EmailIdentity: ${self:custom.notifyEmail}
     ReactAppBucket:
       Type: AWS::S3::Bucket
       Properties:
