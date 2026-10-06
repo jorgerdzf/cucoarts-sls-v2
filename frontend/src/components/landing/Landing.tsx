@@ -3,6 +3,9 @@ import { COPY, Copy, Lang } from './copy';
 import { POOL, PoolItem } from './pool';
 import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared';
 import MuralWizard from './MuralWizard';
+import { applySeo } from './seo';
+import { useLang, lp } from './lang';
+import { FAQ } from './faqData';
 import './assets/styles/landing2.css';
 
 /* Landing de cucoarts.com. Sigue la guía de estilo de la marca: bloques de color plano, titulares en mayúsculas,
@@ -10,33 +13,16 @@ import './assets/styles/landing2.css';
    se guardan en el servidor (backend/lambda/requests) y llegan por correo; si el servidor falla, la persona puede
    mandarlas por WhatsApp o correo con el mismo mensaje. */
 
-const LANG_KEY = 'cucoarts-lang';
 const THEME_KEY = 'cucoarts-theme';
-const STORE = 'https://store.cucoarts.com';
+export const STORE = 'https://store.cucoarts.com';
 
-type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark';
 
 const read = (k: string): string | null => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const write = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch (e) { /* sin almacenamiento */ } };
 
-function useLang(): [Lang, (l: Lang) => void] {
-  const [lang, setLang] = useState<Lang>(() => {
-    const s = read(LANG_KEY);
-    if (s === 'es' || s === 'en') return s;
-    return (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
-  });
-  useEffect(() => { document.documentElement.lang = lang; document.title = COPY[lang].htmlTitle; }, [lang]);
-  useEffect(() => {
-    const on = (e: StorageEvent) => { if (e.key === LANG_KEY && (e.newValue === 'es' || e.newValue === 'en')) setLang(e.newValue); };
-    window.addEventListener('storage', on);
-    return () => window.removeEventListener('storage', on);
-  }, []);
-  const choose = useCallback((l: Lang) => { write(LANG_KEY, l); setLang(l); window.dispatchEvent(new Event('cucoarts-lang')); }, []);
-  return [lang, choose];
-}
-
 /* Modo día / noche compartido con /rob: misma llave, sigue al sistema hasta que la persona elige. */
-function useTheme(): [Theme, () => void] {
+export function useTheme(): [Theme, () => void] {
   const mq = useMemo(() => window.matchMedia('(prefers-color-scheme: dark)'), []);
   const [choice, setChoice] = useState<Theme | null>(() => {
     const s = read(THEME_KEY) || read('rob-theme');
@@ -112,7 +98,7 @@ function Modal({ open, onClose, label, closeLabel, wide, children }: { open: boo
   );
 }
 
-const Icon = {
+export const Icon = {
   globe: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z" /></svg>,
   moon: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" /></svg>,
   sun: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>,
@@ -342,6 +328,8 @@ export default function Landing() {
     document.documentElement.setAttribute('data-page', 'landing');
     return () => document.documentElement.removeAttribute('data-page');
   }, []);
+  // SEO de la página (título, descripción, canónica, Open Graph y datos estructurados)
+  useEffect(() => applySeo('home', lang), [lang]);
 
   const scrollToSell = useCallback(() => {
     window.setTimeout(() => sellRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
@@ -359,11 +347,12 @@ export default function Landing() {
   return (
     <div className="cl">
       <header className="cl-top cl-in">
-        <a className="cl-logo" href="/"><span className="cl-sr">CUCO ARTS</span></a>
+        <a className="cl-logo" href={lp(lang, '/')}><span className="cl-sr">CUCO ARTS</span></a>
         <nav className="cl-nav" aria-label={c.nav.label}>
           <a href={STORE}>{c.nav.store}</a>
           <button type="button" onClick={() => setQuoteOpen(true)}>{c.nav.quote}</button>
           <a href="#vende" onClick={goSell}>{c.nav.sell}</a>
+          <a className="cl-navexpo" href={lp(lang, '/husky')}>{c.nav.expo} <span className="cl-live">{c.nav.live}</span></a>
           <span className="cl-soon" aria-disabled="true">{c.nav.events} · {c.events.stampFull.toLowerCase()}</span>
         </nav>
         <div className="cl-tools">
@@ -387,6 +376,7 @@ export default function Landing() {
                 <a className="cl-fun" href={STORE}><span>{c.hero.cta}</span><i aria-hidden="true">→</i></a>
                 <a className="cl-textlink" href="#acciones">{c.hero.cta2} ↓</a>
               </div>
+              <a className="cl-expopill" href={lp(lang, '/husky')}><i className="cl-dot" aria-hidden="true" /><span>{c.hero.expo}</span><b aria-hidden="true">→</b></a>
             </div>
             <div className="cl-pols" role="group" aria-label={c.hero.galleryLabel}>
               {columns.map((col, ci) => (
@@ -424,12 +414,34 @@ export default function Landing() {
               <span className="cl-rt"><b>{c.cards.sell.h}</b><i>{c.cards.sell.p}</i></span>
               <span className="cl-go">{c.cards.sell.cta} →</span>
             </a></li>
-            <li><div className="cl-row cl-off" aria-disabled="true">
+            <li><a className="cl-row" href={lp(lang, '/husky')}>
               <span className="cl-n">04</span>
+              <span className="cl-rt"><b>{c.cards.expo.h} <span className="cl-live">{c.nav.live}</span></b><i>{c.cards.expo.p}</i></span>
+              <span className="cl-go">{c.cards.expo.cta} →</span>
+            </a></li>
+            <li><div className="cl-row cl-off" aria-disabled="true">
+              <span className="cl-n">05</span>
               <span className="cl-rt"><b>{c.cards.events.h}</b><i>{c.cards.events.p}</i></span>
               <span className="cl-go cl-badge">{c.cards.events.cta}</span>
             </div></li>
           </ol>
+        </div>
+      </section>
+
+      <section id="sobre" className="cl-band cl-about" aria-labelledby="sobre-h">
+        <div className="cl-in cl-aboutgrid">
+          <div className="cl-sechead">
+            <span className="cl-label">{c.about.label}</span>
+            <h2 id="sobre-h">{c.about.title}</h2>
+          </div>
+          <div className="cl-abouttext">
+            <p>{c.about.text}</p>
+            <div className="cl-zones" role="list" aria-label={c.about.zonesLabel}>
+              <span className="cl-label">{c.about.zonesLabel}</span>
+              {c.about.zones.map(z => <span role="listitem" className="cl-zone" key={z}>{z}</span>)}
+              <span className="cl-badge">{c.about.soon}</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -447,6 +459,20 @@ export default function Landing() {
             <h2 id="eventos-h">{c.events.title}</h2>
             <p>{c.events.text}</p>
             <span className="cl-badge">{c.events.stampFull}</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" className="cl-band cl-faq" aria-labelledby="faq-h">
+        <div className="cl-in">
+          <h2 id="faq-h">{FAQ[lang].title}</h2>
+          <div className="cl-faqlist">
+            {FAQ[lang].items.map(i => (
+              <details key={i.q}>
+                <summary><span>{i.q}</span><i aria-hidden="true">+</i></summary>
+                <p>{i.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

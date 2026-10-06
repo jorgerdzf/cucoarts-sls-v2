@@ -1,0 +1,106 @@
+/* cucoarts.com/husky — complementa landing2.css (mismas variables y clases cl-*). Colores planos de la paleta, sin degradados. */
+html[data-page="landing"]{--mint:#CDE8D8}
+
+/* los sellos y polaroids rotados sobresalen unos píxeles en pantallas angostas: se recortan sin crear scroll horizontal */
+.hk{overflow-x:clip}
+
+/* portada en verde menta (el color del cartel y de las fichas de la exposición) */
+.cl-heroband.hk-hero{background:var(--mint)}
+.hk-hero .cl-pols{align-items:flex-start}
+
+/* concepto */
+.hk-concept{background:var(--band-action)}
+.hk-conceptgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(28px,5vw,72px);align-items:start}
+.hk-text{display:grid;gap:18px;max-width:64ch}
+.hk-text h2{margin-bottom:6px}
+.hk-text p{font:500 clamp(17px,1.7vw,19px)/1.5 var(--display)}
+.hk-text .hk-lead{font:500 clamp(20px,2.4vw,28px)/1.25 var(--display);letter-spacing:-.015em}
+.hk-data{background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:4px;padding:clamp(20px,2.6vw,32px);display:grid;gap:18px;box-shadow:8px 8px 0 var(--ink)}
+.hk-data dl{margin:0;display:grid;gap:14px}
+.hk-data dl>div{display:grid;gap:3px;border-bottom:1px dashed var(--ink-2);padding-bottom:12px}
+.hk-data dt{font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.hk-data dd{margin:0;font:700 16px/1.35 var(--mono)}
+.hk-data .cl-btn{justify-self:start}
+
+/* el lugar: logotipo de HUSKY recortado (PNG transparente) como pegatina */
+.hk-place{background:var(--mint);color:#232322}
+.hk-place .cl-label{color:#232322}
+.hk-place .cl-btn{border-color:#232322;color:#232322}
+.hk-place .cl-btn:hover{box-shadow:4px 4px 0 var(--orange)}
+.hk-placegrid{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(28px,5vw,72px);align-items:center}
+.hk-logo{display:grid;place-items:center}
+.hk-logo img{display:block;width:min(100%,clamp(200px,30vw,360px));height:auto;rotate:-6deg;filter:drop-shadow(9px 9px 0 #232322)}
+
+/* artistas */
+.hk-art{margin:0;display:grid;gap:6px}
+.hk-art img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:var(--soft);border:2px solid var(--ink);border-radius:3px}
+.hk-art figcaption{font:700 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.hk-artists .cl-sechead{margin-bottom:clamp(24px,4vw,44px)}
+.hk-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;align-items:start}
+.hk-card{display:grid;gap:12px;align-content:start;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-top:14px solid var(--c);border-radius:4px;padding:18px 18px 16px;transition:transform .15s,box-shadow .15s}
+.hk-card:hover{transform:translate(-2px,-3px);box-shadow:5px 6px 0 var(--ink)}
+.hk-card h3{font:700 clamp(21px,2.3vw,27px)/1 var(--display);letter-spacing:-.035em;text-transform:uppercase}
+.hk-card details summary{cursor:pointer;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--rec-ink);list-style:none;display:inline-flex;align-items:center;gap:8px}
+.hk-card details summary::-webkit-details-marker{display:none}
+.hk-card details summary::before{content:"+";font-size:16px;line-height:1}
+.hk-card details[open] summary::before{content:"–"}
+.hk-card details p{margin-top:10px;font:500 15px/1.5 var(--display);color:var(--ink)}
+.hk-more{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-underline-offset:4px}
+.hk-more:hover{color:var(--rec-ink)}
+
+/* obra expuesta en la tienda (bloque oscuro, tarjetas crema) */
+.hk-works .cl-sechead{margin-bottom:clamp(24px,4vw,44px)}
+.hk-workgrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:clamp(16px,2vw,28px)}
+.hk-work{background:var(--cream);color:#232322;border-radius:4px;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.hk-work figure{background:#fff;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.hk-work img{display:block;width:100%;height:100%;object-fit:contain}
+.hk-work.is-sold img{filter:saturate(.55)}
+.hk-wbody{display:grid;gap:8px;padding:clamp(16px,2vw,22px);align-content:start}
+.hk-wartist{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.hk-work h3{font:700 clamp(22px,2.4vw,28px)/1 var(--display);letter-spacing:-.035em;text-transform:uppercase}
+.hk-tech{font:13px/1.4 var(--mono)}
+.hk-buy{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;margin-top:6px}
+.hk-buy b{font:700 clamp(24px,2.6vw,30px)/1 var(--display);letter-spacing:-.04em}
+.hk-status{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;border:2px solid #232322;border-radius:999px;padding:5px 11px}
+.hk-status.ok{background:var(--lime)}
+.hk-status.off{background:var(--yellow);rotate:-2deg}
+.hk-work .hk-wlink{border-color:#232322;color:#232322;justify-self:start;margin-top:6px}
+.hk-work .hk-wlink:hover{box-shadow:4px 4px 0 var(--orange)}
+.hk-note{margin-top:clamp(20px,3vw,32px);max-width:78ch;font:13px/1.5 var(--mono);letter-spacing:.02em;opacity:.85}
+
+/* dinámicas culturales (azul cielo de la paleta) */
+.hk-dynamics{background:var(--sky);color:#232322}
+.hk-dynamics .cl-label{color:#232322}
+.hk-dynamics .cl-sechead{margin-bottom:clamp(24px,4vw,40px)}
+.hk-dyn{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px)}
+.hk-dyn li{background:#fff;border:3px solid #232322;border-radius:4px;padding:clamp(20px,2.6vw,32px);display:grid;gap:12px;align-content:start;box-shadow:7px 7px 0 #232322}
+.hk-dyn h3{font:700 clamp(26px,3.4vw,42px)/.95 var(--display);letter-spacing:-.04em;text-transform:uppercase}
+.hk-dyn p{font:500 17px/1.45 var(--display)}
+.hk-pw{margin-top:clamp(28px,4vw,48px);display:grid;gap:16px}
+.hk-pw ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.8vw,22px);align-items:start}
+.hk-pw .cl-pol{margin:0;color:#232322}
+.hk-pol-0{rotate:-2deg}.hk-pol-1{rotate:1.5deg}.hk-pol-2{rotate:-1deg}.hk-pol-3{rotate:2deg}
+.hk-pwnote{font:13px/1.4 var(--mono);letter-spacing:.02em}
+.hk-people{margin-top:clamp(28px,4vw,48px);display:grid;gap:14px}
+.hk-people ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.hk-people a{display:inline-grid;gap:1px;text-decoration:none;color:#232322;background:var(--cream);border:2px solid #232322;border-radius:999px;padding:9px 18px;transition:transform .15s,box-shadow .15s}
+.hk-people a:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 #232322;background:var(--yellow)}
+.hk-people b{font:700 15px/1.1 var(--display);letter-spacing:-.01em;text-transform:uppercase}
+.hk-people span{font:700 12px var(--mono);letter-spacing:.04em}
+
+/* documental: reutiliza el bloque azul de eventos de la landing */
+.hk-doc .cl-evpanel{gap:14px}
+.hk-doc .cl-badge{font-size:13px;margin-top:6px}
+.hk-doc .cl-evphoto img{aspect-ratio:1;object-fit:cover}
+
+/* cierre */
+.hk-cta{background:var(--orange)}
+.hk-ctain{display:grid;gap:clamp(18px,3vw,28px);justify-items:start}
+.hk-ctain h2{font-size:clamp(34px,6.4vw,84px);line-height:.9;letter-spacing:-.05em;max-width:14ch}
+
+@media (max-width:900px){
+  .hk-conceptgrid,.hk-dyn,.hk-placegrid{grid-template-columns:1fr}
+  .hk-pw ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hk-logo{justify-items:start}
+}
+@media (prefers-reduced-motion:reduce){.hk-card,.hk-people a{transition:none}.hk-card:hover,.hk-people a:hover{transform:none}}

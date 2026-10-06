@@ -24,7 +24,7 @@ html[data-page="landing"][data-theme="dark"]{
 @media (prefers-reduced-motion:reduce){html[data-page="landing"]{scroll-behavior:auto}}
 html[data-page="landing"] body{background:var(--paper);color:var(--ink)}
 
-.cl{text-align:left;background:var(--paper);color:var(--ink);font:17px/1.55 var(--display)}
+.cl{text-align:left;background:var(--paper);color:var(--ink);font:17px/1.55 var(--display);overflow-x:clip}
 .cl *{box-sizing:border-box}
 .cl a:where(:not([class])){color:inherit}
 .cl :focus-visible{outline:3px solid var(--blue);outline-offset:3px}
@@ -75,6 +75,43 @@ html[data-page="landing"] body{background:var(--paper);color:var(--ink)}
 @keyframes funColor{0%,100%{background:var(--yellow)}25%{background:var(--lime)}50%{background:var(--sky)}75%{background:var(--cream)}}
 @keyframes funBounce{0%,70%,100%{translate:0 0}80%{translate:0 -9px}90%{translate:0 0}95%{translate:0 -4px}}
 @keyframes funWiggle{0%,100%{rotate:-3deg}50%{rotate:3deg}}
+
+/* enlace a la expo activa (/husky): etiqueta "Activa" con punto vivo, botón en la portada y fila en la lista */
+.cl-live{display:inline-flex;align-items:center;gap:6px;font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;vertical-align:middle;
+  background:var(--yellow);color:#232322;border:2px solid #232322;border-radius:999px;padding:3px 8px 3px 7px;margin-left:6px;rotate:-3deg}
+.cl-live::before,.cl-dot{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.cl-rt b .cl-live{font-size:11px;margin-left:12px;translate:0 -.2em}
+.cl-navexpo:hover .cl-live{background:var(--lime)}
+.cl-expopill{justify-self:start;display:inline-flex;align-items:center;gap:12px;font:700 13px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#232322;
+  background:var(--paper);border:2px solid #232322;border-radius:999px;padding:10px 18px;box-shadow:4px 4px 0 #232322;transition:translate .15s,box-shadow .15s}
+.cl-expopill b{font:700 16px var(--display)}
+.cl-expopill:hover{translate:-2px -2px;box-shadow:6px 6px 0 #232322;background:var(--cream)}
+.cl-dot{flex:none;box-shadow:0 0 0 0 rgb(234 102 61 / .6)}
+@media (prefers-reduced-motion:no-preference){.cl-expopill .cl-dot,.cl-live::before{animation:livePulse 1.8s ease-out infinite}}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgb(234 102 61 / .65)}70%,100%{box-shadow:0 0 0 8px rgb(234 102 61 / 0)}}
+
+/* sobre CUCO ARTS: párrafo editorial (texto con las palabras que busca la gente) y zonas culturales */
+.cl-about{background:var(--paper)}
+.cl-aboutgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,72px);align-items:start}
+.cl-abouttext{display:grid;gap:clamp(18px,2.4vw,28px)}
+.cl-abouttext p{font:500 clamp(18px,1.9vw,22px)/1.45 var(--display);max-width:60ch}
+.cl-zones{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.cl-zones .cl-label{flex-basis:100%;color:var(--ink-2)}
+.cl-zone{font:700 13px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);border-radius:999px;padding:9px 16px}
+@media (max-width:900px){.cl-aboutgrid{grid-template-columns:1fr}}
+
+/* preguntas frecuentes: lista editorial con bordes gruesos, como "¿Qué quieres hacer hoy?" */
+.cl-faq{background:var(--paper)}
+.cl-faq h2{margin-bottom:clamp(24px,4vw,44px)}
+.cl-faqlist{border-top:3px solid var(--ink)}
+.cl-faqlist details{border-bottom:3px solid var(--ink)}
+.cl-faqlist summary{display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:pointer;list-style:none;padding:clamp(16px,2.4vw,26px) clamp(4px,1.4vw,18px);
+  font:700 clamp(18px,2.4vw,28px)/1.1 var(--display);letter-spacing:-.03em;text-transform:uppercase;transition:background .2s}
+.cl-faqlist summary::-webkit-details-marker{display:none}
+.cl-faqlist summary i{font:700 clamp(22px,3vw,34px)/1 var(--display);font-style:normal;flex:none}
+.cl-faqlist details[open] summary i{rotate:45deg}
+.cl-faqlist summary:hover{background:var(--orange);color:#232322}
+.cl-faqlist details p{max-width:70ch;padding:0 clamp(4px,1.4vw,18px) clamp(18px,2.6vw,30px);font:500 clamp(16px,1.7vw,19px)/1.5 var(--display)}
 
 /* polaroids con crédito en Courier, como las láminas de obra de los posts */
 .cl-pols{position:relative;display:flex;gap:clamp(10px,1.6vw,18px);align-items:flex-start}
