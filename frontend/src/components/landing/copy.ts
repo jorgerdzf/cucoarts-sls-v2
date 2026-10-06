@@ -3,7 +3,7 @@ export type Lang = 'es' | 'en';
 
 const es = {
   htmlTitle: 'CUCO ARTS · Arte y cultura de Monterrey',
-  nav: { store: 'Tienda', quote: 'Cotizador', sell: 'Vende tu obra', events: 'Eventos', label: 'Secciones' },
+  nav: { store: 'Tienda', quote: 'Cotizador', sell: 'Vende tu obra', expo: 'Expo en Santiago', live: 'Activa', events: 'Eventos', label: 'Secciones' },
   theme: { toDark: 'Modo noche', toLight: 'Modo día' },
   langBtn: { label: 'Switch to English', short: 'EN' },
   hero: {
@@ -13,15 +13,25 @@ const es = {
     lede: 'Compra obra original de artistas locales, encarga una pieza a tu medida o vende tu obra con nosotros.',
     cta: 'Visitar la tienda',
     cta2: 'Qué puedes hacer aquí',
+    expo: 'Expo activa en Santiago',
     stamp: ['DEL NORTE', 'CON AMOR'],
     galleryLabel: 'Obra y fotografía de Monterrey',
   },
   credit: { art: 'Obra de', photo: 'Foto', zone: 'Zona cultural' },
   actionsTitle: '¿Qué quieres hacer hoy?',
+  about: {
+    label: 'Sobre CUCO ARTS',
+    title: 'Arte y cultura de Monterrey, en un solo lugar',
+    text: 'CUCO ARTS es la plataforma para descubrir el arte y la cultura de Monterrey. En nuestra tienda en línea puedes comprar obra original de artistas locales —pintura, grabado, ilustración y escultura— con envíos internacionales. También organizamos exposiciones como CUCO ARTS × HUSKY en Santiago, N.L., y cotizamos murales y obras a tu medida. Además, estamos construyendo un mapa para ubicar a los artistas visuales de cada zona cultural de Monterrey.',
+    zonesLabel: 'Zonas culturales',
+    zones: ['Norte', 'Sur', 'Oriente', 'Centro', 'Poniente'],
+    soon: 'Mapa próximamente',
+  },
   cards: {
     store: { h: 'Explora la tienda', p: 'Obra original de artistas locales de Monterrey.', cta: 'Ir a store.cucoarts.com' },
     quote: { h: 'Cotizador artístico', p: 'Murales y artes plásticas hechos a tu medida, con artistas de CUCO ARTS y la comunidad local.', cta: 'Cotizar una obra' },
     sell: { h: '¿Quieres vender tu obra en store.cucoarts.com?', p: 'Envíanos tu catálogo y tus datos para contactarte.', cta: 'Ver cómo entrar' },
+    expo: { h: 'Expo activa en Santiago', p: 'CUCO ARTS × HUSKY Coffee Shop: una exposición temporal de arte local. Conoce el proyecto, a los artistas y la obra que puedes llevarte.', cta: 'Ver la expo' },
     events: { h: 'Eventos y cultura viva en MTY', p: 'Estamos preparando una agenda de eventos y cultura viva de Monterrey.', cta: 'Próximamente' },
   },
   sell: {
@@ -144,7 +154,7 @@ type Copy = typeof es;
 
 const en: Copy = {
   htmlTitle: 'CUCO ARTS · Art and culture from Monterrey',
-  nav: { store: 'Store', quote: 'Quote', sell: 'Sell your art', events: 'Events', label: 'Sections' },
+  nav: { store: 'Store', quote: 'Quote', sell: 'Sell your art', expo: 'Expo in Santiago', live: 'Live', events: 'Events', label: 'Sections' },
   theme: { toDark: 'Night mode', toLight: 'Day mode' },
   langBtn: { label: 'Cambiar a español', short: 'ES' },
   hero: {
@@ -154,15 +164,25 @@ const en: Copy = {
     lede: 'Buy original art by local artists, commission a piece made to your measure, or sell your art with us.',
     cta: 'Visit the store',
     cta2: 'What you can do here',
+    expo: 'Live expo in Santiago',
     stamp: ['FROM THE NORTH', 'WITH LOVE'],
     galleryLabel: 'Art and photography from Monterrey',
   },
   credit: { art: 'Artwork by', photo: 'Photo', zone: 'Cultural zone' },
   actionsTitle: 'What would you like to do today?',
+  about: {
+    label: 'About CUCO ARTS',
+    title: 'Art and culture from Monterrey, in one place',
+    text: 'CUCO ARTS is the platform for discovering the art and culture of Monterrey. In our online store you can buy original work by local artists —painting, printmaking, illustration, and sculpture— with international shipping. We also curate exhibitions such as CUCO ARTS × HUSKY in Santiago, N.L., and quote murals and custom artworks. And we are building a map to locate the visual artists of each of Monterrey’s cultural zones.',
+    zonesLabel: 'Cultural zones',
+    zones: ['North', 'South', 'East', 'Downtown', 'West'],
+    soon: 'Map coming soon',
+  },
   cards: {
     store: { h: 'Explore the store', p: 'Original art by local artists from Monterrey.', cta: 'Go to store.cucoarts.com' },
     quote: { h: 'Art quote', p: 'Murals and fine art made to your measure, with CUCO ARTS artists and the local community.', cta: 'Get a quote' },
     sell: { h: 'Want to sell your art at store.cucoarts.com?', p: 'Send us your catalog and your details so we can contact you.', cta: 'See how to join' },
+    expo: { h: 'Live expo in Santiago', p: 'CUCO ARTS × HUSKY Coffee Shop: a temporary exhibition of local art. Discover the project, the artists, and the work you can take home.', cta: 'See the expo' },
     events: { h: 'Events and living culture in MTY', p: "We're preparing an agenda of events and living culture from Monterrey.", cta: 'Coming soon' },
   },
   sell: {

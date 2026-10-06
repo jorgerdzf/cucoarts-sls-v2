@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { applySeo } from '../landing/seo'
 import './privacy.css'
 
 // Aviso de privacidad de CUCO ARTS (persona moral). Actualizado el 5 de octubre de 2026.
@@ -116,6 +117,7 @@ function usePageTheme() {
 
 export default function PrivacyNotice() {
   usePageTheme()
+  useEffect(() => applySeo('privacy', 'es'), [])
   return (
     <main className='pv'>
       <header className='pv-hero'>
