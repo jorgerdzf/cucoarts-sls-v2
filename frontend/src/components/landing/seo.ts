@@ -31,7 +31,8 @@ export function applySeo(page: PageKey, lang: Lang): () => void {
   document.title = s.title;
   setMeta('name', 'description', s.description);
 
-  document.head.querySelectorAll('link[data-seo]').forEach(n => n.remove());
+  // quita también la canónica y los alternos que ya trae el HTML prerenderizado, para que quede una sola de cada una
+  document.head.querySelectorAll('link[rel="canonical"], link[rel="alternate"][hreflang]').forEach(n => n.remove());
   const added: HTMLElement[] = [];
   const link = (rel: string, href: string, hreflang?: string) => {
     const l = document.createElement('link');
