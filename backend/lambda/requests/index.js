@@ -109,6 +109,11 @@ function validate(type, v) {
     if (!['paquete', 'condonacion', 'propio'].includes(v.opcion)) errs.push('opcion'); else out.opcion = v.opcion;
     opt('colab', 1500, true); opt('extras', 3000, true);
     if (v.consent !== 'on') errs.push('consent'); else out.consent = 'on';
+  } else if (type === 'rob') {
+    [need('nombre', 120), need('tel', 40, 'tel', (s) => s.replace(/\D/g, '').length >= 10)].forEach((e) => e && errs.push(e));
+    if (!Object.keys(ROB_SERVICIOS).includes(v.servicio)) errs.push('servicio'); else out.servicio = v.servicio;
+    opt('correo', 200); if (out.correo && !emailOk(out.correo)) errs.push('correo');
+    opt('fecha', 20); opt('presupuesto', 60); opt('factura', 5); opt('idea', 3000, true);
   } else {
     [need('nombre', 120), need('tel', 40, 'tel', (s) => s.replace(/\D/g, '').length >= 10)].forEach((e) => e && errs.push(e));
     opt('correo', 200); if (out.correo && !emailOk(out.correo)) errs.push('correo');
@@ -141,18 +146,28 @@ function buildRaw({ subject, text, replyTo, attachments }) {
   return Buffer.from(head + '\r\n\r\n' + parts.join(''), 'utf8');
 }
 
+const ROB_SERVICIOS = {
+  evento: 'Cobertura de un evento', contenido: 'Contenido para marca o educación', edicion: 'Edición de video',
+  tienda: 'Tienda en línea para artistas', encargo: 'Obra por encargo', otro: 'Otro / colaboración creativa',
+};
+
 const LABELS = {
   sell: { nombre: 'Nombre', correo: 'Correo', ig: 'Instagram', portafolio: 'Portafolio con precios', opcion: 'Opción', colab: 'Puede ofrecer', extras: 'Extras' },
+  rob: { servicio: 'Servicio', nombre: 'Nombre', tel: 'WhatsApp', correo: 'Correo', fecha: 'Fecha', presupuesto: 'Presupuesto', factura: 'Factura', idea: 'Descripción' },
   quote: { tipo: 'Tipo', lugar: 'Dónde va', ancho: 'Ancho', alto: 'Alto', unidad: 'Unidad', presupuesto: 'Presupuesto (opción)', ciudad: 'Ciudad', fecha: 'Fecha límite', factura: 'Factura', nombre: 'Nombre', tel: 'WhatsApp', correo: 'Correo', idea: 'Idea' },
 };
 const OPCIONES = { paquete: 'Paquete de registro ($1,500 IVA incluido)', condonacion: 'Solicita condonación o colaboración equivalente', propio: 'Ya tiene fotos y entrevista (solo comisión y acuerdo)' };
 
 function emailText({ id, type, lang, values, summary, files, notAttached }) {
   const L = [];
-  L.push(type === 'sell' ? 'NUEVA SOLICITUD: artista que quiere vender en la tienda' : 'NUEVA SOLICITUD: cotización artística', `Folio: ${id}`, `Idioma de la persona: ${lang}`, '');
+  const titulo = type === 'sell' ? 'NUEVA SOLICITUD: artista que quiere vender en la tienda'
+    : type === 'rob' ? `NUEVA SOLICITUD (cucoarts.com/rob): ${ROB_SERVICIOS[values.servicio] || 'cotización'}`
+    : 'NUEVA SOLICITUD: cotización artística';
+  L.push(titulo, `Folio: ${id}`, `Idioma de la persona: ${lang}`, '');
   Object.entries(LABELS[type]).forEach(([k, label]) => {
     let val = values[k]; if (!val) return;
     if (k === 'opcion') val = OPCIONES[val] || val;
+    if (k === 'servicio') val = ROB_SERVICIOS[val] || val;
     L.push(`${label}: ${val}`);
   });
   L.push(`Quiere recibir noticias: ${values.novedades ? 'Sí' : 'No'}`);
@@ -166,7 +181,7 @@ async function submit(event) {
   const body = parse(event);
   if (!body) return reply(400, { ok: false, error: 'json' });
   if (body.website) return reply(200, { ok: true, id: 'ok' });                  // trampa para bots: se ignora en silencio
-  const type = body.type === 'sell' ? 'sell' : body.type === 'quote' ? 'quote' : null;
+  const type = ['sell', 'quote', 'rob'].includes(body.type) ? body.type : null;
   if (!type) return reply(400, { ok: false, error: 'type' });
   const { errs, out } = validate(type, body.values || {});
   if (errs.length) return reply(400, { ok: false, error: 'validation', fields: errs });
@@ -208,7 +223,9 @@ async function submit(event) {
         attachments.push({ name: f.name, type: f.type, data: Buffer.concat(chunks) });
       } catch (e) { notAttached.push(f.key); }
     }
-    const subject = type === 'sell' ? `Tienda: quiere vender su obra — ${out.nombre}` : `Cotización artística — ${out.nombre}`;
+    const subject = type === 'sell' ? `Tienda: quiere vender su obra — ${out.nombre}`
+      : type === 'rob' ? `Rob: ${ROB_SERVICIOS[out.servicio]} — ${out.nombre}`
+      : `Cotización artística — ${out.nombre}`;
     const raw = buildRaw({ subject, text: emailText({ id, type, lang, values: out, summary, files, notAttached }), replyTo: out.correo || null, attachments });
     await ses.send(new SendEmailCommand({ FromEmailAddress: NOTIFY_FROM, Destination: { ToAddresses: [NOTIFY_TO] }, Content: { Raw: { Data: raw } } }));
     emailed = true;

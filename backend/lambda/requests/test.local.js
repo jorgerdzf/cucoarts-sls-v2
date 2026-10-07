@@ -63,6 +63,16 @@ const ev = (b) => ({ body: JSON.stringify(b) });
   r = await m.submit(ev({ type: 'quote', lang: 'en', summary: 'x', values: { nombre: 'Luis', tel: '81 1234 5678', tipo: 'mural', idea: 'gato' } }));
   assert.strictEqual(JSON.parse(r.body).ok, true);
   r = await m.submit(ev({ type: 'quote', values: { nombre: 'Luis', tel: '123' } })); assert.deepStrictEqual(JSON.parse(r.body).fields, ['tel']);
+  // cotización de /rob
+  r = await m.submit(ev({ type: 'rob', values: { nombre: 'Marca', tel: '81 1234 5678', servicio: 'inexistente' } })); assert.deepStrictEqual(JSON.parse(r.body).fields, ['servicio']);
+  const antes = sent.ses.length;
+  r = await m.submit(ev({ type: 'rob', lang: 'es', summary: 'Hola Rob, quiero cotizar: Cobertura de un evento\nLugar: MARCO', values: { servicio: 'evento', nombre: 'Marca MX', tel: '81 1234 5678', correo: 'hola@marca.mx', fecha: '2026-11-20', presupuesto: '$5,000 – $10,000', factura: 'Sí', idea: 'Inauguración', novedades: 'on' } }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200, r.body); assert.strictEqual(b.emailed, true); assert.strictEqual(sent.ses.length, antes + 1);
+  const rawRob = sent.ses[antes].Content.Raw.Data.toString('utf8');
+  assert(rawRob.includes('Reply-To: hola@marca.mx'));
+  const subj = Buffer.from(rawRob.match(/Subject: =\?UTF-8\?B\?([^?]+)\?=/)[1], 'base64').toString('utf8'); assert.strictEqual(subj, 'Rob: Cobertura de un evento — Marca MX');
+  const textRob = Buffer.from(rawRob.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0].replace(/\r\n/g, ''), 'base64').toString('utf8');
+  assert(/Servicio: Cobertura de un evento/.test(textRob) && /cucoarts\.com\/rob/.test(textRob) && /Quiere recibir noticias: Sí/.test(textRob), textRob);
   r = await m.submit({ body: 'no es json' }); assert.strictEqual(r.statusCode, 400);
   console.log('OK: todas las pruebas pasaron');
 })().catch((e) => { console.error('FALLÓ:', e.message); process.exit(1); });
