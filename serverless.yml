@@ -115,20 +115,21 @@ custom:
         - rob:
             ContentType: text/html; charset=utf-8
             CacheControl: max-age=300
-        # Images: 7 days in the browser so returning visitors don't download them again. Only folders of images
-        # (never the pages or the JS/CSS bundles); if an image is replaced under the same name, visitors who already
-        # have it keep the old one for up to a week, so prefer new file names for new images.
-        - landing-pool/**:
+        # Images: 7 days in the browser so returning visitors don't download them again. ONLY image files inside these
+        # folders (never pages such as murales/index.html or husky/index.html, nor the JS/CSS bundles); if an image is
+        # replaced under the same name, visitors who already have it keep the old one for up to a week, so prefer new
+        # file names for new images.
+        - landing-pool/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
-        - obra/**:
+        - obra/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
-        - murales/**:
+        - murales/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
-        - husky/**:
+        - husky/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
-        - rob-galeria/**:
+        - rob-galeria/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
-        - rob-media/**:
+        - rob-media/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
 
 resources:
