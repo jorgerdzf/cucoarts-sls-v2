@@ -115,6 +115,21 @@ custom:
         - rob:
             ContentType: text/html; charset=utf-8
             CacheControl: max-age=300
+        # Images: 7 days in the browser so returning visitors don't download them again. Only folders of images
+        # (never the pages or the JS/CSS bundles); if an image is replaced under the same name, visitors who already
+        # have it keep the old one for up to a week, so prefer new file names for new images.
+        - landing-pool/**:
+            CacheControl: public, max-age=604800
+        - obra/**:
+            CacheControl: public, max-age=604800
+        - murales/**:
+            CacheControl: public, max-age=604800
+        - husky/**:
+            CacheControl: public, max-age=604800
+        - rob-galeria/**:
+            CacheControl: public, max-age=604800
+        - rob-media/**:
+            CacheControl: public, max-age=604800
 
 resources:
   Resources:

@@ -254,12 +254,12 @@ export const WORKS: Work[] = [
 /* Artistas que terminaron exponiendo (confirmado por Roberto el 6-oct-2026). `vendor` = nombre en Shopify. */
 export type HArtist = { id: string; name: string; vendor: string; bio?: string; art: { src: string; w: number; h: number; title?: string; es: string; en: string } };
 export const ARTISTS: HArtist[] = [
-  { id: 'ana', name: 'Ana Ahedo', vendor: 'Ana Ahedo', bio: 'ana', art: { src: '/landing-pool/ana-ahedo-1.jpg', w: 1000, h: 1000, es: 'Retrato de un león', en: 'Portrait of a lion' } },
+  { id: 'ana', name: 'Ana Ahedo', vendor: 'Ana Ahedo', bio: 'ana', art: { src: '/landing-pool/ahedo-76.jpg', w: 1000, h: 1000, es: 'Mujer de rojo y un león subiendo una escalinata hacia torres de roca', en: 'Woman in red and a lion climbing a staircase toward rock towers' } },
   { id: 'chema', name: 'Chema Chapa', vendor: 'Chema Chapa', bio: 'chema', art: { src: '/husky/obra-013.jpg', w: 900, h: 676, title: 'Ártico', es: 'Paisaje de montañas nevadas y un lago bajo un cielo turquesa y gris', en: 'Landscape of snowy mountains and a lake under a turquoise and gray sky' } },
   { id: 'correoppola', name: 'Correoppola', vendor: 'Correoppola', bio: 'correoppola', art: { src: '/landing-pool/correoppola-1.jpg', w: 751, h: 1000, es: 'Ilustración amarilla con un personaje y rayos negros', en: 'Yellow illustration with a character and black rays' } },
   { id: 'dario', name: 'Darío Diario', vendor: 'Dario Diario', bio: 'dario', art: { src: '/landing-pool/dario-diario-2.jpg', w: 1000, h: 1000, es: 'Grabado de un rostro con casco dorado', en: 'Print of a face with a golden helmet' } },
   { id: 'eliezer', name: 'Eliezer Blanco', vendor: 'Eliezer Blanco', bio: 'eliezer', art: { src: '/landing-pool/eliezer-blanco-3.jpg', w: 1000, h: 1000, es: 'Calavera de colores sobre fondo amarillo y rosa', en: 'Colorful skull on a yellow and pink background' } },
-  { id: 'greometria', name: 'Greometría', vendor: 'Greometria', bio: 'greometria', art: { src: '/landing-pool/greometria-1.jpg', w: 1000, h: 1000, es: 'Cuadrícula de rostros de colores', en: 'Grid of colorful faces' } },
+  { id: 'greometria', name: 'Greometría', vendor: 'Greometria', bio: 'greometria', art: { src: '/landing-pool/gre2-64.jpg', w: 1000, h: 1000, es: 'Pintura circular de una figura y peces con puntos sobre fondo turquesa', en: 'Circular painting of a figure and fish with dots on a turquoise background' } },
   { id: 'jhosh', name: 'Jhosh Mata', vendor: 'Jhoseph Mata', bio: 'jhosh', art: { src: '/landing-pool/jhoseph-mata-3.jpg', w: 1000, h: 1000, es: 'Pintura de un pavorreal', en: 'Painting of a peacock' } },
   { id: 'mizael', name: 'Mizael Valero', vendor: 'Mizael Valero', bio: 'mizael', art: { src: '/landing-pool/mizael-valero-2.jpg', w: 1000, h: 1000, es: 'Mariposa naranja sobre fondo azul', en: 'Orange butterfly on a blue background' } },
   { id: 'porras', name: 'Porras Visual', vendor: 'Porras Visual', bio: 'porras', art: { src: '/landing-pool/porras-visual-1.jpg', w: 1000, h: 1000, es: 'Araña metálica con ojos azules sobre fondo naranja', en: 'Metallic spider with blue eyes on an orange background' } },
@@ -271,7 +271,6 @@ export const ARTISTS: HArtist[] = [
 /* Participantes del photowalk y las entrevistas. Instagram tomado del "Registro de Participación - CuCo Arts" (sin teléfonos). */
 export const PEOPLE: { name: string; ig: string }[] = [
   { name: 'Melisa Garza', ig: 'mg.jamesson' },
-  { name: 'Magnolia Rodríguez', ig: 'magnoliacoronado' },
   { name: 'Abner Fabian', ig: 'byabnerfabian' },
   { name: 'Melanie Gil', ig: 'melaniegilq_' },
   { name: 'Faty Reyes', ig: 'fatyreyez' },

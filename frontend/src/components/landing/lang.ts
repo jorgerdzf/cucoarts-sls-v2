@@ -10,13 +10,19 @@ const LANG_KEY = 'cucoarts-lang';
 
 export const langOf = (pathname: string): Lang => (pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es');
 
-/** Dirección de una ruta en un idioma: lp('en', '/husky') → '/en/husky'; lp('es', '/husky') → '/husky'. */
-export const lp = (lang: Lang, path: string): string => (lang === 'en' ? (path === '/' ? '/en' : '/en' + path) : path);
+/* Páginas cuyo nombre cambia de idioma: /murales (español) ↔ /en/murals (inglés). */
+const EN_SLUG: Record<string, string> = { '/murales': '/murals', '/arte-por-encargo': '/custom-art' };
+const ES_SLUG: Record<string, string> = { '/murals': '/murales', '/custom-art': '/arte-por-encargo' };
+
+/** Dirección de una ruta en un idioma: lp('en', '/husky') → '/en/husky'; lp('es', '/husky') → '/husky'.
+ *  Siempre se parte de la ruta en español: lp('en', '/murales') → '/en/murals'. */
+export const lp = (lang: Lang, path: string): string => (lang === 'en' ? (path === '/' ? '/en' : '/en' + (EN_SLUG[path] || path)) : path);
 
 /** La misma página en el otro idioma. */
 export const switchPath = (pathname: string, to: Lang): string => {
-  const base = pathname === '/en' ? '/' : pathname.startsWith('/en/') ? pathname.slice(3) : pathname;
-  return lp(to, base);
+  const p = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;   // tolera la diagonal final (/murales/)
+  const raw = p === '/en' ? '/' : p.startsWith('/en/') ? p.slice(3) : p;
+  return lp(to, ES_SLUG[raw] || raw);   // primero vuelve a la ruta en español y luego la lleva al idioma pedido
 };
 
 export function useLang(): [Lang, (l: Lang) => void] {

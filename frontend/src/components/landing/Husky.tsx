@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { COPY } from './copy';
-import { HK, BIOS, WORKS, ARTISTS, PEOPLE, PW_PHOTOS, PwPhoto } from './huskyCopy';
+import { HK, BIOS, WORKS, ARTISTS, PEOPLE, PW_PHOTOS, PwPhoto, HArtist } from './huskyCopy';
+import { POOL } from './pool';
+import { Cycler } from './Cycler';
 import { Icon, STORE, useTheme } from './Landing';
 import { useLang, lp } from './lang';
 import { applySeo } from './seo';
+import SiteMenu, { buildMenu } from './SiteMenu';
 import './assets/styles/landing2.css';
 import './assets/styles/husky.css';
 
@@ -25,10 +28,26 @@ function pickPhotos(): PwPhoto[] {
   return shuffle(Object.values(by)).slice(0, 4).map(g => shuffle(g)[0]);
 }
 
+/** Obras que rotan en la tarjeta de cada artista: la que se expone (primero) y las demás de su catálogo en la reserva de imágenes. */
+const norm = (t: string) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+type ArtShot = { src: string; w: number; h: number; title?: string; es: string; en: string };
+const artShots = (a: HArtist): ArtShot[] => [
+  a.art,
+  ...POOL.filter(p => p.kind === 'obra' && norm(p.who) === norm(a.vendor) && !a.art.src.endsWith('/' + p.id + '.jpg'))
+    .map(p => ({ src: `/landing-pool/${p.id}.jpg`, w: p.w, h: p.h, es: p.es, en: p.en })),
+];
+
+/** Fotografías que rotan en cada polaroid del photowalk: de la misma orientación para no mover el diseño. */
+function pwLists(first: PwPhoto[]): PwPhoto[][] {
+  const cls = (p: PwPhoto) => (p.w / p.h < 0.85 ? 0 : p.w / p.h < 1.2 ? 1 : 2);
+  return first.map(f => [f, ...shuffle(PW_PHOTOS.filter(p => cls(p) === cls(f) && !first.some(x => x.id === p.id))).slice(0, 5)]);
+}
+
 export default function Husky() {
   const [lang, setLang] = useLang();
   const [theme, toggleTheme] = useTheme();
   const [pw] = useState<PwPhoto[]>(pickPhotos);
+  const [pwL] = useState<PwPhoto[][]>(() => pwLists(pw));
   const c = COPY[lang];
   const h = HK[lang];
   const dark = theme === 'dark';
@@ -48,10 +67,6 @@ export default function Husky() {
     <div className="cl hk">
       <header className="cl-top cl-in">
         <a className="cl-logo" href={lp(lang, '/')}><span className="cl-sr">CUCO ARTS</span></a>
-        <nav className="cl-nav" aria-label={h.nav.label}>
-          <a href={lp(lang, '/')}>{h.nav.home}</a>
-          <a href={STORE}>{h.nav.store}</a>
-        </nav>
         <div className="cl-tools">
           <button type="button" className="cl-pill" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={c.langBtn.label} title={c.langBtn.label}>
             {Icon.globe}<span>{c.langBtn.short}</span>
@@ -59,6 +74,7 @@ export default function Husky() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'husky')} />
         </div>
       </header>
 
@@ -135,8 +151,13 @@ export default function Husky() {
             {ARTISTS.map((a, i) => (
               <li key={a.id} className="hk-card" style={{ '--c': COLORS[i % COLORS.length] } as React.CSSProperties}>
                 <figure className="hk-art">
-                  <img src={a.art.src} width={a.art.w} height={a.art.h} alt={a.art[lang]} loading="lazy" decoding="async" />
-                  {a.art.title && <figcaption>{a.art.title}</figcaption>}
+                  <Cycler items={artShots(a)} offset={(i % 6) * 900} ms={5400} src={q => q.src}
+                    render={q => (
+                      <>
+                        <img src={q.src} width={q.w} height={q.h} alt={q[lang]} loading="lazy" decoding="async" />
+                        <figcaption>{q.title || ' '}</figcaption>
+                      </>
+                    )} />
                 </figure>
                 <h3>{a.name}</h3>
                 {a.bio && (
@@ -204,8 +225,13 @@ export default function Husky() {
               {pw.map((p, i) => (
                 <li key={p.id}>
                   <figure className={`cl-pol hk-pol-${i}`}>
-                    <img src={`/husky/pw/${p.id}.jpg`} width={p.w} height={p.h} alt={p[lang]} loading="lazy" decoding="async" />
-                    <figcaption>{h.dynamics.photoBy}: {p.who} · @{p.ig}</figcaption>
+                    <Cycler items={pwL[i]} group="pw" keyOf={q => q.ig} offset={i * 1300} ms={6000} src={q => `/husky/pw/${q.id}.jpg`}
+                      render={q => (
+                        <>
+                          <img src={`/husky/pw/${q.id}.jpg`} width={q.w} height={q.h} alt={q[lang]} loading="lazy" decoding="async" style={{ aspectRatio: `${p.w} / ${p.h}`, objectFit: 'cover' }} />
+                          <figcaption>{h.dynamics.photoBy}: {q.who} · @{q.ig}</figcaption>
+                        </>
+                      )} />
                   </figure>
                 </li>
               ))}

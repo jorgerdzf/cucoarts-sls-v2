@@ -1,0 +1,33 @@
+/* /arte-por-encargo — "Tu obra, a tu manera". Se apoya en landing2.css y murales.css; lo propio lleva el prefijo ap-. */
+
+/* qué puedes encargar: una tarjeta por técnica con una obra de muestra completa (sin recortar) */
+.ap-types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.ap-type{display:grid;gap:8px;align-content:start;border:2px solid var(--ink);border-top:12px solid var(--c);border-radius:4px;padding:14px 16px 18px;background:var(--paper)}
+.ap-typeimg{position:relative;aspect-ratio:1;background:var(--soft);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.ap-typeimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
+.ap-type b{font:700 clamp(19px,2.2vw,24px)/1.05 var(--display);letter-spacing:-.03em;text-transform:uppercase}
+.ap-type span:last-child{font-size:16px;line-height:1.45;color:var(--ink-2)}
+
+/* artistas de la tienda: cuadrícula de obras completas con enlace a su colección */
+.ap-artists{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.ap-artists a{display:grid;gap:6px;text-decoration:none;color:inherit;border:2px solid var(--ink);border-radius:4px;padding:10px 10px 14px;background:var(--paper);transition:translate .15s,box-shadow .15s}
+.ap-artists a:hover{translate:-2px -3px;box-shadow:5px 6px 0 var(--ink)}
+.ap-aimg{position:relative;display:block;aspect-ratio:1;background:var(--soft);border-radius:2px;overflow:hidden}
+.ap-aimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
+.ap-artists b{font:700 clamp(16px,1.8vw,20px)/1.1 var(--display);letter-spacing:-.02em;text-transform:uppercase}
+.ap-artists i{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;font-style:normal;color:var(--rec-ink)}
+.ap-murals{margin-top:clamp(20px,3vw,32px);font:500 clamp(17px,1.8vw,20px)/1.4 var(--display)}
+.ap-murals a{font-weight:700}
+
+/* galería del asistente: la obra se ve COMPLETA (contain) sobre fondo neutro y en proporción 4:5 */
+.mw-art .mw-sty-pick{aspect-ratio:4/5;background:var(--soft,#E2E0E0)}
+.mw-art .mw-sty-pick img{object-fit:contain;padding:6px}
+
+@media (max-width:900px){.ap-types,.ap-artists{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.ap-types,.ap-artists{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.ap-artists a{transition:none}}
+
+/* con rotación de imágenes las capas del Cycler llenan el cuadro y la obra siempre se ve completa y centrada */
+.ap-typeimg .cy,.ap-aimg .cy{position:absolute;inset:0}
+.ap-typeimg .cy-base,.ap-aimg .cy-base,.ap-typeimg .cy-top,.ap-aimg .cy-top{position:absolute;inset:0}
+.ap-typeimg .cy-top,.ap-aimg .cy-top{--cy-bg:var(--soft)}

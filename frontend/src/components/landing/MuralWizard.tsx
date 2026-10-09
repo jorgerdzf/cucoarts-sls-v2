@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Copy, Lang } from './copy';
-import { MURAL, MuralCopy } from './muralCopy';
-import { AMBIENTE, CUANDO, LUGAR, Mural, MURALS, Opt, PRESUPUESTO, PROPOSITO, TAMANO } from './muralData';
+import { MURAL } from './muralCopy';
+import { AMBIENTE, CUANDO, LUGAR, Mural, MURALS, MURAL_ROUNDS, muralByN, Opt, PRESUPUESTO, PROPOSITO, TAMANO } from './muralData';
 import { FilePicker, Fallback, Sent, useSender } from './shared';
 
 /* "Crea tu mural": asistente por pasos del cotizador artístico (se muestra cuando se elige "Mural").
@@ -20,11 +20,14 @@ const EMPTY: Answers = {
   factura: false, nombre: '', tel: '', correo: '', zona: '', novedades: false, website: '',
 };
 
-const fill = (t: string, vars: Record<string, string | number>) => t.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
-const colorVar = (o: Opt) => ({ ['--c' as string]: `var(--c-${o.color})` } as React.CSSProperties);
+export const fill = (t: string, vars: Record<string, string | number>) => t.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
+/** Enlace de correo para pedir crédito, asignar autoría o contactarnos sobre una obra de la galería (ref = número visible solo para nosotros). */
+export const creditHref = (e: { creditSubj: string; creditRef: string; creditBody: string }, ref: string) =>
+  `mailto:hello@cucoarts.com?subject=${encodeURIComponent(e.creditSubj + ' · ' + ref)}&body=${encodeURIComponent(e.creditBody + '\n\n' + e.creditRef + ': ' + ref)}`;
+export const colorVar = (o: Opt) => ({ ['--c' as string]: `var(--c-${o.color})` } as React.CSSProperties);
 
 /* chispas de colores al elegir (se omiten si la persona pidió menos movimiento) */
-function splash(e: React.MouseEvent) {
+export function splash(e: React.MouseEvent) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cols = ['#EA663D', '#F7D649', '#C7F74E', '#067DFF', '#644DEF'];
   const x = e.clientX || 0, y = e.clientY || 0;
@@ -36,7 +39,7 @@ function splash(e: React.MouseEvent) {
   }
 }
 
-function OptGrid({ items, texts, value, onPick }: { items: Opt[]; texts: Record<string, { t: string; s?: string }>; value: string; onPick: (id: string, e: React.MouseEvent) => void }) {
+export function OptGrid({ items, texts, value, onPick }: { items: Opt[]; texts: Record<string, { t: string; s?: string }>; value: string; onPick: (id: string, e: React.MouseEvent) => void }) {
   return (
     <div className="mw-opts">
       {items.map(o => (
@@ -51,7 +54,7 @@ function OptGrid({ items, texts, value, onPick }: { items: Opt[]; texts: Record<
 }
 
 /* ---------- visor con zoom (rueda, pellizco, doble toque) ---------- */
-function Lightbox({ m, mc, onClose }: { m: Mural; mc: MuralCopy; onClose: () => void }) {
+export function ZoomView({ label, src, alt, onClose, credit }: { label: string; src: string; alt: string; onClose: () => void; credit?: { href: string; text: string } }) {
   const stage = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
   const view = useRef({ s: 1, x: 0, y: 0 });
@@ -59,7 +62,6 @@ function Lightbox({ m, mc, onClose }: { m: Mural; mc: MuralCopy; onClose: () => 
   const pinch = useRef<{ d: number } | null>(null);
   const drag = useRef<{ x: number; y: number; sx: number; sy: number } | null>(null);
   const tap = useRef(0);
-  const label = m.cuco ? `${m.cuco} · ${mc.estilos.tagCuco}` : `${mc.estilos.tagLocal} · ${String(m.n).padStart(2, '0')}`;
 
   const apply = () => { if (img.current) img.current.style.transform = `translate(${view.current.x}px,${view.current.y}px) scale(${view.current.s})`; };
   const zoomAt = (ns: number, cx: number, cy: number) => {
@@ -111,9 +113,9 @@ function Lightbox({ m, mc, onClose }: { m: Mural; mc: MuralCopy; onClose: () => 
 
   return (
     <div className="mw-lb" role="dialog" aria-modal="true" aria-label={label}>
-      <div className="mw-lb-bar"><span>{label}</span><button type="button" className="mw-lb-x" onClick={onClose} aria-label="✕" autoFocus>✕</button></div>
+      <div className="mw-lb-bar"><span>{label}</span>{credit && <a className="mw-lb-credit" href={credit.href}>{credit.text}</a>}<button type="button" className="mw-lb-x" onClick={onClose} aria-label="✕" autoFocus>✕</button></div>
       <div className="mw-lb-stage" ref={stage} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}>
-        <img ref={img} src={`/murales/full/${m.id}.jpg`} alt={m.cuco ? fill(mc.estilos.cucoLabel, { a: m.cuco }) : mc.estilos.localLabel} draggable={false} />
+        <img ref={img} src={src} alt={alt} draggable={false} />
       </div>
     </div>
   );
@@ -126,11 +128,12 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
   const [step, setStep] = useState(0);
   const [err, setErr] = useState('');
   const [zoom, setZoom] = useState<Mural | null>(null);
+  const [rounds, setRounds] = useState(1);   // rondas de la galería de estilos que ya se muestran
   const top = useRef<HTMLDivElement>(null);
   const s = useSender(lang);
   const set = <K extends keyof Answers>(k: K, v: Answers[K]) => setA(prev => ({ ...prev, [k]: v }));
   const toggle = <T,>(list: T[], v: T) => (list.includes(v) ? list.filter(x => x !== v) : [...list, v]);
-  const go = (i: number) => { setStep(i); setErr(''); window.setTimeout(() => top.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 30); };
+  const go = (i: number) => { setStep(i); setErr(''); window.setTimeout(() => { const el = top.current; if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30); };   // solo sube si el inicio del asistente quedó fuera de pantalla: así la botonera no se mueve
   const cur: Step = STEPS[step];
 
   const buildSummary = (): string => {
@@ -141,7 +144,7 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
     add(m.donde, a.lugar && mc.espacio.lugar[a.lugar]?.t);
     add(m.tamano, a.tamano && `${mc.espacio.tamano[a.tamano].t} (${mc.espacio.tamano[a.tamano].s})`);
     if (a.ancho && a.alto) add(m.medidas, `${a.ancho} × ${a.alto} m`);
-    const est = [...a.estilos].sort((x, y) => x - y).map(n => { const mu = MURALS[n - 1]; return mu.cuco ? `${mu.cuco} ${m.cucoSuffix}` : `${m.local} ${String(n).padStart(2, '0')}`; });
+    const est = [...a.estilos].sort((x, y) => x - y).map(n => { const mu = muralByN(n); return mu && mu.cuco ? `${mu.cuco} ${m.cucoSuffix}` : `${m.local} ${String(n).padStart(2, '0')}`; });
     add(m.estilos, est.join(', '));
     add(m.ambiente, a.ambiente.map(id => mc.ambiente.o[id].t).join(', '));
     add(m.presupuesto, a.presupuesto && mc.presupuesto.o[a.presupuesto].t);
@@ -190,10 +193,15 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
 
   return (
     <div className="mw" ref={top}>
-      <div className="mw-progress">
-        <div className="mw-bar"><i style={{ width: `${pct}%` }} /></div>
-        <span className="mw-stepn">{cur === 'intro' ? mc.before : fill(mc.stepOf, { n: idx, t: COUNTED })}</span>
+      <div className="mw-top">
+        <button type="button" className="cl-btn" onClick={() => go(Math.max(0, step - 1))} style={{ visibility: step === 0 ? 'hidden' : 'visible' }}>{mc.nav.back}</button>
+        <div className="mw-progress">
+          <div className="mw-bar"><i style={{ width: `${pct}%` }} /></div>
+          <span className="mw-stepn">{cur === 'intro' ? mc.before : fill(mc.stepOf, { n: idx, t: COUNTED })}</span>
+        </div>
+        <button type="button" className="cl-btn cl-primary" onClick={next}>{cur === 'intro' ? mc.nav.start : cur === 'contacto' ? mc.nav.send : mc.nav.next}</button>
       </div>
+      {err && <p className="cl-err" role="alert">{err}</p>}
 
       {cur === 'intro' && (
         <section className="mw-step">
@@ -238,7 +246,7 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
             <span className="mw-count">{a.estilos.length ? fill(mc.estilos.count, { n: a.estilos.length }) : ''}</span>
           </div>
           <div className="mw-styles">
-            {MURALS.map(m => {
+            {MURALS.filter(m => m.r < rounds).map(m => {
               const on = a.estilos.includes(m.n);
               const label = m.cuco ? fill(mc.estilos.cucoLabel, { a: m.cuco }) : `${mc.estilos.localLabel} ${String(m.n).padStart(2, '0')}`;
               return (
@@ -253,6 +261,14 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
               );
             })}
           </div>
+          <p className="mw-credit">{mc.estilos.credit} <a href={creditHref(mc.estilos, 'galería')}>{mc.estilos.creditCta}</a></p>
+          {rounds < MURAL_ROUNDS && (
+            <div className="mw-morewrap">
+              <button type="button" className="cl-btn" onClick={() => setRounds(r => r + 1)}>
+                {mc.estilos.more} (+{MURALS.filter(m => m.r === rounds).length})
+              </button>
+            </div>
+          )}
         </section>
       )}
 
@@ -302,12 +318,15 @@ export default function MuralWizard({ c, lang }: { c: Copy; lang: Lang }) {
         </section>
       )}
 
-      {err && <p className="cl-err" role="alert">{err}</p>}
-      <div className="mw-nav">
-        <button type="button" className="cl-btn" onClick={() => go(Math.max(0, step - 1))} style={{ visibility: step === 0 ? 'hidden' : 'visible' }}>{mc.nav.back}</button>
-        <button type="button" className="cl-btn cl-primary" onClick={next}>{cur === 'intro' ? mc.nav.start : cur === 'contacto' ? mc.nav.send : mc.nav.next}</button>
-      </div>
-      {zoom && <Lightbox m={zoom} mc={mc} onClose={() => setZoom(null)} />}
+      {zoom && (
+        <ZoomView
+          label={zoom.cuco ? `${zoom.cuco} · ${mc.estilos.tagCuco}` : `${mc.estilos.tagLocal} · ${String(zoom.n).padStart(2, '0')}`}
+          src={`/murales/full/${zoom.id}.jpg`}
+          alt={zoom.cuco ? fill(mc.estilos.cucoLabel, { a: zoom.cuco }) : mc.estilos.localLabel}
+          credit={zoom.cuco ? undefined : { href: creditHref(mc.estilos, `${mc.estilos.tagLocal} · ${String(zoom.n).padStart(2, '0')}`), text: mc.estilos.creditCta }}
+          onClose={() => setZoom(null)}
+        />
+      )}
     </div>
   );
 }
