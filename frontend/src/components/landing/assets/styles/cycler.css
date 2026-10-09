@@ -1,0 +1,17 @@
+/* Rotación de imágenes (Cycler.tsx): la siguiente entra con un fundido sobre la actual. */
+.cy{position:relative;width:100%;height:100%}
+.cy-base{width:100%;height:100%}
+.cy-top{position:absolute;inset:0;background:var(--cy-bg,transparent);animation:cyIn .95s ease both}
+@keyframes cyIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.cy-top{animation:none}}
+
+/* polaroids de la portada: la leyenda siempre ocupa 2 líneas para que al rotar no cambie el alto */
+.cl-pol .cy-top{--cy-bg:#fff}
+.cl-pol figcaption{min-height:calc(3.75em + 17px);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.cl-mupic .cy-top{--cy-bg:#fff}
+
+/* Husky: tarjetas de artistas (cuadro fijo, obra completa) y polaroids del photowalk */
+.hk-art .cy,.hk-art .cy-base{height:auto}
+.hk-art .cy-top{--cy-bg:var(--paper)}
+.hk-art figcaption{min-height:1.4em}
+.hk-pw .cy-top{--cy-bg:#fff}

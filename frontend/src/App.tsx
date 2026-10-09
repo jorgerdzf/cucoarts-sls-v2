@@ -4,6 +4,8 @@ import './App.css';
 
 import Landing from './components/landing/Landing';
 import Husky from './components/landing/Husky';
+import Murales from './components/landing/Murales';
+import ArtePorEncargo from './components/landing/ArtePorEncargo';
 import NotFound from './components/landing/NotFound';
 import Footer from './components/navigation/Footer';
 import PrivacyNotice from './components/privacyNotice/PrivacyNotice';
@@ -20,6 +22,10 @@ function App() {
         <Route path='/en' element={<Landing />}/>
         <Route path='/husky' element={<Husky />}/>
         <Route path='/en/husky' element={<Husky />}/>
+        <Route path='/murales' element={<Murales />}/>
+        <Route path='/en/murals' element={<Murales />}/>
+        <Route path='/arte-por-encargo' element={<ArtePorEncargo />}/>
+        <Route path='/en/custom-art' element={<ArtePorEncargo />}/>
         <Route path='/privacidad' element={<PrivacyNotice />}/>
         <Route path='*' element={<NotFound />}/>
       </Routes>

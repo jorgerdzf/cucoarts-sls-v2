@@ -3,9 +3,15 @@ import { COPY, Copy, Lang } from './copy';
 import { POOL, PoolItem } from './pool';
 import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared';
 import MuralWizard from './MuralWizard';
+import ObraWizard from './ObraWizard';
 import { applySeo } from './seo';
+import SiteMenu, { buildMenu } from './SiteMenu';
+import { Cycler } from './Cycler';
 import { useLang, lp } from './lang';
 import { FAQ } from './faqData';
+import { PHOTOS, COVER, Photo } from './muralesPhotos';
+import { thumbSrc } from './MuralGallery';
+import { OBRAS, Obra } from './obraData';
 import './assets/styles/landing2.css';
 
 /* Landing de cucoarts.com. Sigue la guía de estilo de la marca: bloques de color plano, titulares en mayúsculas,
@@ -15,6 +21,15 @@ import './assets/styles/landing2.css';
 
 const THEME_KEY = 'cucoarts-theme';
 export const STORE = 'https://store.cucoarts.com';
+
+/* Las respuestas de las preguntas frecuentes son texto plano (también alimentan los datos estructurados de Google);
+   al mostrarlas se convierten en enlace las direcciones conocidas: la tienda y la página de HUSKY. */
+const FAQ_LINK = /(store\.cucoarts\.com|cucoarts\.com\/(?:en\/)?husky)/;
+const faqText = (a: string): React.ReactNode[] => a.split(FAQ_LINK).map((part, i) => {
+  if (i % 2 === 0) return part;
+  const external = part.startsWith('store.');
+  return <a key={i} href={external ? STORE : part.replace('cucoarts.com', '')} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{part}</a>;
+});
 
 export type Theme = 'light' | 'dark';
 
@@ -145,14 +160,15 @@ const toVals = (fd: FormData): Vals => {
 };
 
 /* ---------- cotizador artístico (ventana) ---------- */
-/* Con "Mural" se muestra el asistente por pasos (MuralWizard); con las demás opciones, el formulario corto. */
+/* Con "Mural" se muestra el asistente por pasos (MuralWizard); con "Pintura, dibujo o ilustración", el mismo asistente de /arte-por-encargo (ObraWizard);
+   con las demás opciones, el formulario corto. */
 function QuoteBody({ c, lang, onWide }: { c: Copy; lang: Lang; onWide: (w: boolean) => void }) {
   const q = c.quote;
   const [tipo, setTipo] = useState('mural');
   const [err, setErr] = useState('');
   const form = useRef<HTMLFormElement>(null);
   const s = useSender(lang);
-  useEffect(() => { onWide(tipo === 'mural'); return () => onWide(false); }, [tipo, onWide]);
+  useEffect(() => { onWide(tipo === 'mural' || tipo === 'arte'); return () => onWide(false); }, [tipo, onWide]);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const v = toVals(new FormData(e.currentTarget));
@@ -173,7 +189,7 @@ function QuoteBody({ c, lang, onWide }: { c: Copy; lang: Lang; onWide: (w: boole
           {Object.entries(q.types).map(([k, t]) => <option key={k} value={k}>{t}</option>)}
         </select>
       </label>
-      {tipo === 'mural' ? <MuralWizard c={c} lang={lang} /> : (
+      {tipo === 'mural' ? <MuralWizard c={c} lang={lang} /> : tipo === 'arte' ? <ObraWizard c={c} lang={lang} /> : (
         <>
           <form className="cl-form" onSubmit={submit} noValidate hidden={s.status !== 'idle'} ref={form}>
             <Honeypot />
@@ -311,6 +327,21 @@ function SellSection({ c, lang, open, onToggle, sectionRef }: { c: Copy; lang: L
   );
 }
 
+/* portadas de la sección de murales: tres proyectos reales (fotos editadas por Roberto) */
+/* cada polaroid rota entre fotos de los proyectos (portada primero, sin carteles ni fotos del "antes") */
+const muralSlots = (): Photo[][] => {
+  const first = ['servimascota', 'citadel', 'via-cordillera'].map(id => PHOTOS[id][COVER[id] ?? 0]);
+  const rest = shuffle(Object.values(PHOTOS).flat().filter(p => !p.tags.includes('antes') && !p.tags.includes('cartel') && !first.includes(p)));
+  return first.map((f, k) => [f, ...rest.filter((_, j) => j % 3 === k).slice(0, 5)]);
+};
+
+/* portadas de la sección de arte por encargo: tres obras completas (ids de obraData) */
+const artSlots = (): Obra[][] => {
+  const first = ['c005', 'l024', 'l112'].map(id => OBRAS.find(o => o.id === id)).filter((o): o is Obra => !!o);
+  const rest = shuffle(OBRAS.filter(o => !first.includes(o)));
+  return first.map((f, k) => [f, ...rest.filter((_, j) => j % 3 === k).slice(0, 5)]);
+};
+
 /* ---------- página ---------- */
 export default function Landing() {
   const [lang, setLang] = useLang();
@@ -320,6 +351,13 @@ export default function Landing() {
   const [quoteWide, setQuoteWide] = useState(true);
   const [hero] = useState<PoolItem[]>(pickFour);          // distintas en cada visita
   const [teaser] = useState<PoolItem>(() => pickEvent(hero));
+  // cada polaroid de la portada rota entre imágenes de su misma orientación (para que no se mueva el diseño)
+  const [heroLists] = useState<PoolItem[][]>(() => {
+    const cls = (p: PoolItem) => { const r = p.w / p.h; return r < 0.85 ? 0 : r < 1.2 ? 1 : 2; };
+    return hero.map(h => [h, ...shuffle(POOL.filter(p => cls(p) === cls(h) && !hero.some(x => x.id === p.id))).slice(0, 4)]);
+  });
+  const [muSlots] = useState<Photo[][]>(muralSlots);
+  const [arSlots] = useState<Obra[][]>(artSlots);
   const sellRef = useRef<HTMLElement>(null);
   const c = COPY[lang];
   const closeQuote = useCallback(() => setQuoteOpen(false), []);
@@ -342,19 +380,12 @@ export default function Landing() {
   const img = (p: PoolItem, eager?: boolean) => (
     <img src={`/landing-pool/${p.id}.jpg`} width={p.w} height={p.h} alt={alt(p)} loading={eager ? 'eager' : 'lazy'} decoding="async" />
   );
-  const columns = [[hero[0], hero[2]], [hero[1], hero[3]]];
+  const columns = [[0, 2], [1, 3]];
 
   return (
     <div className="cl">
       <header className="cl-top cl-in">
         <a className="cl-logo" href={lp(lang, '/')}><span className="cl-sr">CUCO ARTS</span></a>
-        <nav className="cl-nav" aria-label={c.nav.label}>
-          <a href={STORE}>{c.nav.store}</a>
-          <button type="button" onClick={() => setQuoteOpen(true)}>{c.nav.quote}</button>
-          <a href="#vende" onClick={goSell}>{c.nav.sell}</a>
-          <a className="cl-navexpo" href={lp(lang, '/husky')}>{c.nav.expo} <span className="cl-live">{c.nav.live}</span></a>
-          <span className="cl-soon" aria-disabled="true">{c.nav.events} · {c.events.stampFull.toLowerCase()}</span>
-        </nav>
         <div className="cl-tools">
           <button type="button" className="cl-pill" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={c.langBtn.label} title={c.langBtn.label}>
             {Icon.globe}<span>{c.langBtn.short}</span>
@@ -362,6 +393,7 @@ export default function Landing() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'home', { onQuote: () => setQuoteOpen(true), onSell: () => { setSellOpen(true); scrollToSell(); } })} />
         </div>
       </header>
 
@@ -381,10 +413,16 @@ export default function Landing() {
             <div className="cl-pols" role="group" aria-label={c.hero.galleryLabel}>
               {columns.map((col, ci) => (
                 <div className="cl-pcol" key={ci}>
-                  {col.map((p, i) => (
-                    <figure className={`cl-pol cl-pol-${ci * 2 + i}`} key={p.id}>
-                      {img(p, ci === 0 && i === 0)}
-                      <figcaption>{creditLine(c, p)}</figcaption>
+                  {col.map((k, i) => (
+                    <figure className={`cl-pol cl-pol-${ci * 2 + i}`} key={hero[k].id}>
+                      <Cycler items={heroLists[k]} group="hero" keyOf={keyOf} offset={k * 1300} ms={6200} src={q => `/landing-pool/${q.id}.jpg`}
+                        render={q => (
+                          <>
+                            <img src={`/landing-pool/${q.id}.jpg`} width={q.w} height={q.h} alt={alt(q)} loading={ci === 0 && i === 0 && q === hero[k] ? 'eager' : 'lazy'} decoding="async"
+                              style={{ aspectRatio: `${hero[k].w} / ${hero[k].h}`, objectFit: 'cover' }} />
+                            <figcaption>{creditLine(c, q)}</figcaption>
+                          </>
+                        )} />
                     </figure>
                   ))}
                 </div>
@@ -428,6 +466,52 @@ export default function Landing() {
         </div>
       </section>
 
+      <section id="murales" className="cl-band cl-muralband" aria-labelledby="murales-h">
+        <div className="cl-in cl-mugrid">
+          <div className="cl-mupanel">
+            <span className="cl-label">{c.murals.label}</span>
+            <h2 id="murales-h">{c.murals.title}</h2>
+            <p>{c.murals.text}</p>
+            <div className="cl-actions">
+              <a className="cl-mubtn" href={lp(lang, '/murales')}><span>{c.murals.cta}</span><i aria-hidden="true">→</i></a>
+              <a className="cl-textlink" href={lp(lang, '/murales') + '#asistente'}>{c.murals.cta2} →</a>
+            </div>
+          </div>
+          <a className="cl-mupics" href={lp(lang, '/murales')} aria-label={c.murals.cta}>
+            {muSlots.map((list, i) => (
+              <figure className={`cl-mupic cl-mupic-${i}`} key={list[0].dir + list[0].n}>
+                <Cycler items={list} group="murales" keyOf={p => p.dir} offset={i * 1500} src={thumbSrc}
+                  render={p => <img src={thumbSrc(p)} width={p.w} height={p.h} alt={c.murals.alt} loading="lazy" decoding="async" />} />
+              </figure>
+            ))}
+            <em className="cl-stamp cl-stamp-mu" aria-hidden="true">{c.murals.stamp.map(t => <span key={t}>{t}</span>)}</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="arte" className="cl-band cl-muralband cl-artband" aria-labelledby="arte-h">
+        <div className="cl-in cl-mugrid">
+          <div className="cl-mupanel">
+            <span className="cl-label">{c.art.label}</span>
+            <h2 id="arte-h">{c.art.title}</h2>
+            <p>{c.art.text}</p>
+            <div className="cl-actions">
+              <a className="cl-mubtn" href={lp(lang, '/arte-por-encargo')}><span>{c.art.cta}</span><i aria-hidden="true">→</i></a>
+              <a className="cl-textlink" href={lp(lang, '/arte-por-encargo') + '#como'}>{c.art.cta2} →</a>
+            </div>
+          </div>
+          <a className="cl-mupics" href={lp(lang, '/arte-por-encargo')} aria-label={c.art.cta}>
+            {arSlots.map((list, i) => (
+              <figure className={`cl-mupic cl-mupic-${i}`} key={list[0].id}>
+                <Cycler items={list} group="arte" keyOf={o => o.cuco || o.g} offset={i * 1500} src={o => `/obra/${o.id}.jpg`}
+                  render={o => <img src={`/obra/${o.id}.jpg`} width={o.w} height={o.h} alt={c.art.alt} loading="lazy" decoding="async" />} />
+              </figure>
+            ))}
+            <em className="cl-stamp cl-stamp-mu" aria-hidden="true">{c.art.stamp.map(t => <span key={t}>{t}</span>)}</em>
+          </a>
+        </div>
+      </section>
+
       <section id="sobre" className="cl-band cl-about" aria-labelledby="sobre-h">
         <div className="cl-in cl-aboutgrid">
           <div className="cl-sechead">
@@ -435,10 +519,17 @@ export default function Landing() {
             <h2 id="sobre-h">{c.about.title}</h2>
           </div>
           <div className="cl-abouttext">
-            <p>{c.about.text}</p>
+            {c.about.text.map(p => <p key={p}>{p}</p>)}
+          </div>
+        </div>
+        <div className="cl-in">
+          <div className="cl-zonebox">
+            <div className="cl-zonecopy">
+              <h3>{c.about.zonesTitle}</h3>
+              <p>{c.about.zonesText}</p>
+            </div>
             <div className="cl-zones" role="list" aria-label={c.about.zonesLabel}>
-              <span className="cl-label">{c.about.zonesLabel}</span>
-              {c.about.zones.map(z => <span role="listitem" className="cl-zone" key={z}>{z}</span>)}
+              {c.about.zones.map((z, i) => <span role="listitem" className={`cl-zone cl-zone-${i}`} key={z}>{z}</span>)}
               <span className="cl-badge">{c.about.soon}</span>
             </div>
           </div>
@@ -470,7 +561,7 @@ export default function Landing() {
             {FAQ[lang].items.map(i => (
               <details key={i.q}>
                 <summary><span>{i.q}</span><i aria-hidden="true">+</i></summary>
-                <p>{i.a}</p>
+                <p>{faqText(i.a)}</p>
               </details>
             ))}
           </div>

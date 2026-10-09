@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const BUILD = path.join(__dirname, '..', 'build');
-const files = ['index.html', 'en/index.html', 'husky/index.html', 'en/husky/index.html', 'privacidad/index.html', '404.html'];
+const files = ['index.html', 'en/index.html', 'husky/index.html', 'en/husky/index.html', 'murales/index.html', 'en/murals/index.html', 'arte-por-encargo/index.html', 'en/custom-art/index.html', 'privacidad/index.html', '404.html'];
 let bad = 0;
 for (const f of files) {
   const h = fs.readFileSync(path.join(BUILD, f), 'utf8');

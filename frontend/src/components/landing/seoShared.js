@@ -60,6 +60,46 @@ const PAGES = {
       en: '<h1>The city beyond the stadiums · CUCO ARTS × HUSKY</h1><p>A temporary local art exhibition at HUSKY Coffee Shop, Morelos 302, Santiago, N.L.: Monterrey artists, original art for sale, a photowalk with local photographers, and a documentary. Please enable JavaScript to view this page.</p><ul><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/en">CUCO ARTS</a></li><li><a href="' + SITE + '/husky">Versión en español</a></li></ul>',
     },
   },
+  murales: {
+    paths: { es: '/murales', en: '/en/murals' },
+    image: '/og-cucoarts.png',
+    es: {
+      title: 'Crea tu mural en Monterrey · CUCO ARTS',
+      description: 'Cuéntanos tu idea en unos pasos y te conectamos con artistas locales para tu mural. Nosotros administramos boceto, tiempos, materiales y entrega.',
+      ogDescription: 'Cuéntanos tu idea y te conectamos con el artista local ideal para tu mural.',
+      imageAlt: 'CUCO ARTS: crea tu mural con artistas locales de Monterrey',
+    },
+    en: {
+      title: 'Create your mural in Monterrey · CUCO ARTS',
+      description: 'Tell us your idea in a few steps and we connect you with local artists for your mural. We manage the sketch, timing, materials and delivery.',
+      ogDescription: 'Tell us your idea and we connect you with the right local artist for your mural.',
+      imageAlt: 'CUCO ARTS: create your mural with local artists from Monterrey',
+    },
+    noscript: {
+      es: '<h1>Crea tu mural · CUCO ARTS</h1><p>Cuéntanos tu idea y te conectamos con artistas locales de Monterrey para tu mural; nosotros administramos boceto, tiempos, materiales y entrega. Para usar el asistente activa JavaScript o escríbenos a hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/">CUCO ARTS</a></li><li><a href="' + STORE + '">Tienda en línea</a></li><li><a href="' + SITE + '/en/murals">English version</a></li></ul>',
+      en: '<h1>Create your mural · CUCO ARTS</h1><p>Tell us your idea and we connect you with local artists from Monterrey for your mural; we manage the sketch, timing, materials and delivery. To use the assistant please enable JavaScript or write to hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/en">CUCO ARTS</a></li><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/murales">Versión en español</a></li></ul>',
+    },
+  },
+  arte: {
+    paths: { es: '/arte-por-encargo', en: '/en/custom-art' },
+    image: '/og-cucoarts.png',
+    es: {
+      title: 'Arte por encargo en Monterrey · CUCO ARTS',
+      description: 'Encarga una pintura, dibujo o ilustración a artistas de Monterrey. Cuéntanos tu idea y te conectamos con el artista ideal; nosotros administramos el proyecto hasta la entrega.',
+      ogDescription: 'Tu obra, a tu manera: pintura, dibujo e ilustración por encargo con artistas de Monterrey.',
+      imageAlt: 'CUCO ARTS: arte por encargo con artistas locales de Monterrey',
+    },
+    en: {
+      title: 'Custom artwork in Monterrey · CUCO ARTS',
+      description: 'Commission a painting, drawing or illustration from artists in Monterrey. Tell us your idea and we connect you with the right artist; we manage the project through delivery.',
+      ogDescription: 'Art, made for you: custom paintings, drawings and illustrations by Monterrey artists.',
+      imageAlt: 'CUCO ARTS: custom artwork by local artists from Monterrey',
+    },
+    noscript: {
+      es: '<h1>Arte por encargo · CUCO ARTS</h1><p>Encarga una pintura, dibujo o ilustración a artistas de Monterrey: cuéntanos tu idea y te conectamos con el artista ideal; nosotros administramos el proyecto hasta la entrega. Para usar el asistente activa JavaScript o escríbenos a hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/">CUCO ARTS</a></li><li><a href="' + STORE + '">Tienda en línea</a></li><li><a href="' + SITE + '/en/custom-art">English version</a></li></ul>',
+      en: '<h1>Custom artwork · CUCO ARTS</h1><p>Commission a painting, drawing or illustration from artists in Monterrey: tell us your idea and we connect you with the right artist; we manage the project through delivery. To use the assistant please enable JavaScript or write to hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/en">CUCO ARTS</a></li><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/arte-por-encargo">Versión en español</a></li></ul>',
+    },
+  },
   privacy: {
     paths: { es: '/privacidad', en: '/privacidad' },
     image: '/og-cucoarts.png',
@@ -139,6 +179,38 @@ function ld(page, lang) {
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'CUCO ARTS', item: url(PAGES.home.paths[lang]) },
             { '@type': 'ListItem', position: 2, name: 'HUSKY', item: here },
+          ],
+        },
+      ],
+    };
+  }
+  if (page === 'murales') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        ORG,
+        { '@type': 'WebPage', '@id': here + '#page', url: here, name: P[lang].title, description: P[lang].description, inLanguage, isPartOf: { '@id': SITE + '/#site' } },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'CUCO ARTS', item: url(PAGES.home.paths[lang]) },
+            { '@type': 'ListItem', position: 2, name: lang === 'en' ? 'Create your mural' : 'Crea tu mural', item: here },
+          ],
+        },
+      ],
+    };
+  }
+  if (page === 'arte') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        ORG,
+        { '@type': 'WebPage', '@id': here + '#page', url: here, name: P[lang].title, description: P[lang].description, inLanguage, isPartOf: { '@id': SITE + '/#site' } },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'CUCO ARTS', item: url(PAGES.home.paths[lang]) },
+            { '@type': 'ListItem', position: 2, name: lang === 'en' ? 'Custom artwork' : 'Arte por encargo', item: here },
           ],
         },
       ],

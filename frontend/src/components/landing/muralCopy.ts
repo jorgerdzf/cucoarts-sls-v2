@@ -31,9 +31,11 @@ const es = {
     width: 'Ancho (m)', height: 'Alto (m)', optional: 'Opcional',
   },
   estilos: {
-    q: '¿Qué estilos te gustan?', hint: 'Toca todos los que te llamen la atención. Usa el botón + para verlos en grande.',
+    q: '¿Qué estilos te gustan?', hint: 'Toca todos los que te llamen la atención; el nombre del artista aparece al elegirlos. Usa el botón + para verlos en grande.',
     legendCuco: 'Artistas de la tienda CUCO ARTS', legendLocal: 'Artistas locales de Monterrey',
     count: '{n} elegido(s)', tagCuco: 'Artista CUCO ARTS', tagLocal: 'Artista local MTY', zoom: 'Ver en grande', cucoLabel: 'Mural de {a}, artista de la tienda CUCO ARTS', localLabel: 'Mural de artista local de Monterrey',
+    more: 'Ver más murales',
+    credit: '¿Ves una mural tuya?', creditCta: 'Pide crédito, asigna autoría o contáctanos', creditSubj: 'Crédito de autoría en la galería', creditRef: 'Referencia', creditBody: 'Hola CUCO ARTS, creo que esta mural de su galería es mía.\n\nMi nombre:\nMi usuario de Instagram:\nQuisiera: (escribe una opción) que se me dé crédito / que la retiren / que me contacten',
   },
   ambiente: {
     q: '¿Qué ambiente quieres crear?', hint: 'Elige las palabras que van con tu idea.',
@@ -94,9 +96,11 @@ const en: MuralCopy = {
     width: 'Width (m)', height: 'Height (m)', optional: 'Optional',
   },
   estilos: {
-    q: 'Which styles do you like?', hint: 'Tap every one that catches your eye. Use the + button to see them larger.',
+    q: 'Which styles do you like?', hint: 'Tap every one that catches your eye; the artist’s name shows once you pick it. Use the + button to see them larger.',
     legendCuco: 'CUCO ARTS store artists', legendLocal: 'Local artists from Monterrey',
     count: '{n} chosen', tagCuco: 'CUCO ARTS artist', tagLocal: 'Local artist MTY', zoom: 'View larger', cucoLabel: 'Mural by {a}, CUCO ARTS store artist', localLabel: 'Mural by a local artist from Monterrey',
+    more: 'See more murals',
+    credit: 'See your own mural?', creditCta: 'Ask for credit, assign authorship or contact us', creditSubj: 'Authorship credit in the gallery', creditRef: 'Reference', creditBody: 'Hi CUCO ARTS, I believe this mural in your gallery is mine.\n\nMy name:\nMy Instagram handle:\nI would like: (type one) to be credited / to have it removed / to be contacted',
   },
   ambiente: {
     q: 'What mood do you want to create?', hint: 'Choose the words that go with your idea.',

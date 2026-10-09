@@ -6,7 +6,7 @@ import { PAGES, ld, url } from './seoShared';
    Los mismos datos (seoShared.js) los usa scripts/prerender.js para dejar el <head> correcto en el HTML de cada ruta,
    que es lo que leen los rastreadores que no ejecutan JavaScript (WhatsApp, Facebook, etc.). */
 
-export type PageKey = 'home' | 'husky' | 'privacy' | 'notfound';
+export type PageKey = 'home' | 'husky' | 'murales' | 'arte' | 'privacy' | 'notfound';
 type Txt = { title: string; description: string; ogDescription?: string; imageAlt: string };
 type PageDef = { paths: Record<Lang, string>; image: string; noindex?: boolean; single?: boolean; es: Txt; en: Txt };
 const PAGE = PAGES as unknown as Record<PageKey, PageDef>;

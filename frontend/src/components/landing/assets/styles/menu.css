@@ -1,0 +1,98 @@
+/* Menú del sitio (SiteMenu.tsx): botón "Menú" + capa a pantalla completa. Colores planos de la paleta, tipografía de la marca. */
+
+/* botón: pastilla rellena que se distingue de los botones de idioma y modo noche */
+.cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--ink);
+  border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 var(--orange)}
+.cl-menubtn:hover{translate:-1px -2px;box-shadow:5px 5px 0 var(--orange)}
+.cl-menubtn:active{translate:2px 2px;box-shadow:1px 1px 0 var(--orange)}
+.cl-menubtn.is-open{background:var(--yellow);color:#232322;border-color:#232322;box-shadow:3px 3px 0 #232322}
+.cl-menutxt{min-width:5.2ch;text-align:left}
+@media (max-width:420px){.cl-menutxt{display:none}.cl-menubtn{padding:9px 11px}}
+
+/* icono: tres barras que se vuelven ✕ */
+.cl-menuicon{position:relative;width:18px;height:14px;display:block}
+.cl-menuicon i{position:absolute;left:0;width:100%;height:2.5px;background:currentColor;border-radius:2px;transition:transform .35s cubic-bezier(.7,0,.2,1),opacity .2s,top .35s cubic-bezier(.7,0,.2,1)}
+.cl-menuicon i:nth-child(1){top:0}
+.cl-menuicon i:nth-child(2){top:5.75px;width:70%}
+.cl-menuicon i:nth-child(3){top:11.5px}
+.cl-menubtn:hover .cl-menuicon i:nth-child(2){width:100%}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(1){top:5.75px;transform:rotate(45deg)}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(2){opacity:0;transform:translateX(-8px)}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(3){top:5.75px;transform:rotate(-45deg)}
+
+/* capa: se abre como un círculo que crece desde el botón */
+.cl-menu:focus{outline:none}
+.cl-menu:not(.is-ready) .cl-menu-list{pointer-events:none}
+.cl-menu{position:fixed;overflow-x:hidden;inset:0;z-index:2150;background:#232322;color:#FFE7CF;overflow-y:auto;overscroll-behavior:contain;
+  clip-path:circle(0 at var(--ox,calc(100% - 60px)) var(--oy,40px));visibility:hidden;
+  transition:clip-path .65s cubic-bezier(.7,0,.2,1),visibility 0s .65s}
+.cl-menu.is-open{clip-path:circle(160% at var(--ox,calc(100% - 60px)) var(--oy,40px));visibility:visible;transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s}
+html[data-theme="dark"] .cl-menu,html[data-page="landing"]:not([data-theme="light"]) .cl-menu{background:#111110}
+.cl-menu-in{max-width:1180px;margin:0 auto;min-height:100%;padding:18px clamp(16px,4vw,48px) clamp(20px,4vh,40px);display:grid;grid-template-rows:auto 1fr auto;gap:clamp(8px,2vh,24px)}
+.cl-menu-top{display:flex;align-items:center;justify-content:space-between;padding-right:0}
+.cl-menu-logo{width:76px;aspect-ratio:480/248;background:#FFE7CF;-webkit-mask:url(../logo-cuco-mask.png) center/contain no-repeat;mask:url(../logo-cuco-mask.png) center/contain no-repeat}
+.cl-menu-x{width:46px;height:46px;border-radius:50%;border:2px solid #FFE7CF;background:transparent;color:#FFE7CF;font-size:18px;cursor:pointer;display:grid;place-items:center;transition:rotate .35s,background .2s,color .2s}
+.cl-menu-x:hover{background:var(--orange);border-color:var(--orange);color:#232322;rotate:90deg}
+
+/* enlaces: filas numeradas como en "¿Qué quieres hacer hoy?"; entran uno por uno */
+.cl-menu-list{list-style:none;margin:0;padding:0;align-self:center;border-top:2px solid rgb(255 231 207 / .28)}
+.cl-menu-list li{border-bottom:2px solid rgb(255 231 207 / .28);overflow:hidden}
+.cl-mi{display:flex;align-items:center;gap:clamp(10px,2.4vw,28px);padding:clamp(6px,1.3vh,18px) clamp(4px,1.2vw,14px);color:inherit;text-decoration:none;
+  font:inherit;transition:background .2s,color .2s,padding .3s cubic-bezier(.2,.8,.2,1);
+  opacity:0;transform:translateY(60%)}
+.cl-menu.is-open .cl-mi{opacity:1;transform:none;transition:opacity .45s ease calc(.22s + var(--i) * 65ms),transform .6s cubic-bezier(.2,.8,.2,1) calc(.22s + var(--i) * 65ms),background .2s,color .2s,padding .3s cubic-bezier(.2,.8,.2,1)}
+.cl-menu-list li{--i:0}
+.cl-mi-n{font:700 clamp(12px,1.6vw,16px) var(--mono);letter-spacing:.08em;opacity:.7}
+.cl-mi-t{flex:1;min-width:0;font:700 clamp(28px,min(5.6vw,6.4vh),72px)/.95 var(--display);letter-spacing:-.045em;text-transform:uppercase}
+.cl-mi-n{min-width:2.4ch}
+.cl-mi-go{font:700 clamp(20px,3vw,34px) var(--display);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.cl-mi-b{margin:0;rotate:-3deg}
+.cl-mi-b.is-soon::before{display:none}
+.cl-mi-b.is-soon{background:transparent;color:#FFE7CF;border-color:#FFE7CF}
+.cl-mi-here{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);border-bottom:2px dashed currentColor}
+a.cl-mi:hover,a.cl-mi:focus-visible{background:var(--orange);color:#232322;padding-left:clamp(14px,3vw,40px)}
+a.cl-mi:hover .cl-mi-go,a.cl-mi:focus-visible .cl-mi-go{transform:translateX(8px)}
+a.cl-mi:focus-visible{outline:3px solid var(--yellow);outline-offset:-3px}
+a.cl-mi.is-current .cl-mi-t,a.cl-mi.is-current .cl-mi-n{color:var(--yellow)}
+a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n{color:#232322}
+a.cl-mi.is-current:hover .cl-mi-t,a.cl-mi.is-current:focus-visible .cl-mi-t{color:#232322}
+a.cl-mi.is-current:hover .cl-mi-here{color:#232322}
+.cl-mi.is-off{opacity:.55 !important}
+.cl-menu.is-open .cl-mi.is-off{opacity:.55}
+
+/* pie: contacto */
+.cl-menu-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;opacity:0}
+.cl-menu.is-open .cl-menu-foot{opacity:1;transition:opacity .5s ease .75s}
+.cl-menu-foot span{opacity:.65}
+.cl-menu-foot a{color:#FFE7CF;text-underline-offset:4px}
+.cl-menu-foot a:hover{color:var(--yellow)}
+
+/* menos movimiento: sin círculo ni entradas escalonadas, solo aparece */
+@media (prefers-reduced-motion:reduce){
+  .cl-menu{clip-path:none;opacity:0;transition:opacity .2s,visibility 0s .2s}
+  .cl-menu.is-open{opacity:1;transition:opacity .2s,visibility 0s}
+  .cl-mi,.cl-menu-foot{opacity:1;transform:none;transition:none}
+  .cl-menuicon i,.cl-menubtn,.cl-menu-x{transition:none}
+}
+@media (max-width:520px){.cl-mi{display:grid;grid-template-columns:auto minmax(0,1fr);row-gap:6px;padding-block:clamp(8px,1.7vh,18px)}.cl-mi-go{display:none}.cl-mi-b,.cl-mi-here{grid-column:2;justify-self:start}.cl-mi-t{font-size:clamp(28px,9vw,44px)}}
+
+/* botón flotante "Arriba": siempre a la mano al bajar; sube con rebote suave y vuelve al menú superior */
+.cl-fab{position:fixed;right:clamp(12px,2.4vw,28px);bottom:clamp(12px,2.4vw,28px);z-index:1800;display:inline-flex;align-items:center;gap:8px;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:#232322;background:var(--yellow);border:2px solid #232322;border-radius:999px;padding:11px 16px 11px 13px;box-shadow:4px 4px 0 #232322;cursor:pointer;
+  opacity:0;transform:translateY(24px) scale(.85);pointer-events:none;visibility:hidden;transition:opacity .25s,transform .45s cubic-bezier(.34,1.56,.64,1),visibility 0s .45s,box-shadow .15s,background .2s}
+.cl-fab.is-on{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .25s,transform .45s cubic-bezier(.34,1.56,.64,1),visibility 0s,box-shadow .15s,background .2s}
+.cl-fab span{display:inline-block;font:700 18px/1 var(--display);transition:transform .25s}
+.cl-fab:hover{background:var(--lime);box-shadow:6px 6px 0 #232322;transform:translateY(-3px)}
+.cl-fab:hover span{transform:translateY(-3px)}
+.cl-fab:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #232322}
+.cl-fab:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+@media (max-width:420px){.cl-fab b{display:none}.cl-fab{padding:12px}}
+@media (prefers-reduced-motion:reduce){.cl-fab,.cl-fab.is-on,.cl-fab span{transition:none}}
+
+/* crédito y autoría en las galerías de obra de artistas locales */
+.mw-credit{margin:14px 0 0;font:500 14px/1.4 var(--display);color:var(--ink-2)}
+.mw-credit a{font-weight:700;color:var(--ink);text-underline-offset:4px}
+.mw-credit a:hover{color:var(--rec-ink)}
+.mw-lb-credit{margin-left:auto;margin-right:12px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#111110;background:var(--yellow);border-radius:999px;padding:8px 14px;text-decoration:none;white-space:nowrap}
+.mw-lb-credit:hover{background:var(--lime)}
+@media (max-width:520px){.mw-lb-credit{font-size:11px;padding:7px 10px;white-space:normal;text-align:center;max-width:46vw;line-height:1.2}}

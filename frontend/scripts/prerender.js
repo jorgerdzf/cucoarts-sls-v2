@@ -83,6 +83,10 @@ const jobs = [
   ['home', 'en', 'en/index.html'],
   ['husky', 'es', 'husky/index.html'],
   ['husky', 'en', 'en/husky/index.html'],
+  ['murales', 'es', 'murales/index.html'],
+  ['murales', 'en', 'en/murals/index.html'],
+  ['arte', 'es', 'arte-por-encargo/index.html'],
+  ['arte', 'en', 'en/custom-art/index.html'],
   ['privacy', 'es', 'privacidad/index.html'],
   ['notfound', 'es', '404.html'],
 ];
@@ -92,7 +96,7 @@ console.log('prerender  index.html (español)');
 
 /* sitemap.xml con idiomas alternos */
 const lastmod = new Date().toISOString().slice(0, 10);
-const entries = ['home', 'husky'].flatMap((key) => {
+const entries = ['home', 'husky', 'murales', 'arte'].flatMap((key) => {
   const P = PAGES[key];
   return ['es', 'en'].map((lang) => {
     const alts = [

@@ -98,6 +98,15 @@ html[data-page="landing"] body{background:var(--paper);color:var(--ink)}
 .cl-zones{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .cl-zones .cl-label{flex-basis:100%;color:var(--ink-2)}
 .cl-zone{font:700 13px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);border-radius:999px;padding:9px 16px}
+/* Zonas culturales: recuadro propio debajo del texto, con una pastilla de color plano por zona */
+.cl-zonebox{margin-top:clamp(32px,5vw,64px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(20px,4vw,56px);align-items:center;border:3px solid var(--ink);border-radius:6px;padding:clamp(20px,3.2vw,40px)}
+.cl-zonecopy h3{margin:0 0 10px;font:700 clamp(24px,3.2vw,38px)/.95 var(--display);letter-spacing:-.04em;text-transform:uppercase;text-wrap:balance}
+.cl-zonecopy p{margin:0;max-width:44ch;font:500 clamp(16px,1.6vw,19px)/1.45 var(--display);color:var(--ink-2)}
+.cl-zonebox .cl-zones{gap:12px}
+.cl-zonebox .cl-zone{font-size:clamp(13px,1.5vw,16px);padding:12px 22px;border-color:#232322;color:#232322}
+.cl-zone-0{background:var(--c-orange,#EA663D)}.cl-zone-1{background:var(--c-sky,#ABCFDD)}.cl-zone-2{background:var(--c-yellow,#F7D649)}.cl-zone-3{background:var(--c-lime,#C7F74E)}.cl-zone-4{background:var(--c-mint,#CDE8D8)}
+.cl-zonebox .cl-badge{margin-left:6px}
+@media (max-width:900px){.cl-zonebox{grid-template-columns:1fr}}
 @media (max-width:900px){.cl-aboutgrid{grid-template-columns:1fr}}
 
 /* preguntas frecuentes: lista editorial con bordes gruesos, como "¿Qué quieres hacer hoy?" */
@@ -111,6 +120,8 @@ html[data-page="landing"] body{background:var(--paper);color:var(--ink)}
 .cl-faqlist summary i{font:700 clamp(22px,3vw,34px)/1 var(--display);font-style:normal;flex:none}
 .cl-faqlist details[open] summary i{rotate:45deg}
 .cl-faqlist summary:hover{background:var(--orange);color:#232322}
+.cl-faqlist details p a{font-weight:700;color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.cl-faqlist details p a:hover{color:var(--rec-ink)}
 .cl-faqlist details p{max-width:70ch;padding:0 clamp(4px,1.4vw,18px) clamp(18px,2.6vw,30px);font:500 clamp(16px,1.7vw,19px)/1.5 var(--display)}
 
 /* polaroids con crédito en Courier, como las láminas de obra de los posts */
@@ -272,6 +283,11 @@ html[data-page="landing"]{--c-yellow:#F7D649;--c-orange:#EA663D;--c-blue:#067DFF
 .cl-typesel{display:grid;gap:6px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);max-width:420px}
 .cl-typesel select{font:16px/1.4 var(--display);text-transform:none;letter-spacing:0;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:4px;padding:10px 12px;width:100%}
 .mw{display:grid;gap:18px;margin-top:6px}
+/* Franja fija arriba: Atrás · progreso · Siguiente. Queda pegada al borde superior mientras se baja, y no cambia de lugar entre pasos. */
+.mw-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;padding:10px 0;background:var(--paper);border-bottom:2px solid var(--ink)}
+.mw-top .cl-btn{flex:none}
+.mw-top .mw-progress{flex:1;min-width:0}
+@media (max-width:640px){.mw-top{flex-wrap:wrap;gap:8px 10px}.mw-top .mw-progress{order:-1;flex:1 1 100%}.mw-top .cl-btn{flex:1}}
 .mw-progress{display:flex;align-items:center;gap:14px}
 .mw-bar{flex:1;height:10px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;background:var(--paper)}
 .mw-bar i{display:block;height:100%;width:0;background:var(--orange);transition:width .45s cubic-bezier(.2,.7,.2,1)}
@@ -348,3 +364,49 @@ html[data-page="landing"]{--c-yellow:#F7D649;--c-orange:#EA663D;--c-blue:#067DFF
   .mw-fields{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.mw-step{animation:none}.mw-opt,.mw-chip,.mw-sty-pick,.mw-bar i{transition:none}}
+
+/* galería de estilos: el nombre del artista no se muestra de entrada; aparece al pasar el cursor, al enfocar con teclado o al elegir el mural
+   (en pantallas táctiles sin cursor, solo al elegirlo). Los de la tienda CUCO ARTS conservan su contorno amarillo. */
+.mw-sty-pick .mw-tag{opacity:0;transform:translateY(100%);transition:opacity .2s,transform .2s;pointer-events:none}
+.mw-sty-pick:hover .mw-tag,.mw-sty-pick:focus-visible .mw-tag,.mw-sty-pick[aria-pressed="true"] .mw-tag{opacity:1;transform:none}
+@media (hover:none){.mw-sty-pick:hover .mw-tag{opacity:0;transform:translateY(100%)}.mw-sty-pick[aria-pressed="true"] .mw-tag{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.mw-sty-pick .mw-tag{transition:none}}
+.mw-morewrap{display:flex;justify-content:center;margin-top:8px}
+
+/* murales: banda amarilla plana con tres fotos reales tipo polaroid y botón propio (negocio emergente, después de las acciones principales) */
+.cl-muralband{background:var(--yellow);color:#232322;overflow:hidden}
+.cl-mugrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.cl-mupanel{display:grid;gap:clamp(16px,2vw,24px);justify-items:start}
+.cl-mupanel .cl-label{color:#232322}
+.cl-mupanel p{font:500 clamp(18px,1.9vw,22px)/1.4 var(--display);max-width:44ch}
+.cl-mubtn{display:inline-flex;align-items:center;gap:14px;font:700 clamp(16px,1.8vw,21px)/1 var(--display);letter-spacing:-.01em;text-transform:uppercase;text-decoration:none;
+  color:#FFE7CF;background:#232322;border:3px solid #232322;border-radius:999px;padding:clamp(14px,1.6vw,18px) clamp(22px,2.4vw,30px);box-shadow:5px 5px 0 var(--orange);transition:translate .15s,box-shadow .15s}
+.cl-mubtn i{font-style:normal;transition:transform .25s}
+.cl-mubtn:hover{translate:-2px -3px;box-shadow:8px 8px 0 var(--orange)}
+.cl-mubtn:hover i{transform:translateX(6px)}
+.cl-mubtn:active{translate:4px 4px;box-shadow:1px 1px 0 var(--orange)}
+.cl-muralband .cl-textlink{color:#232322}
+.cl-mupics{position:relative;display:block;aspect-ratio:1.15;text-decoration:none}
+.cl-mupic{position:absolute;margin:0;width:46%;background:#fff;padding:clamp(6px,.9vw,11px);box-shadow:5px 5px 0 #232322;transition:rotate .25s,translate .25s}
+.cl-mupic img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
+.cl-mupic-0{left:0;top:8%;rotate:-5deg;z-index:1}
+.cl-mupic-1{left:27%;top:0;rotate:3deg;z-index:2}
+.cl-mupic-2{right:0;top:14%;rotate:-2deg;z-index:3}
+.cl-mupics:hover .cl-mupic-0{rotate:-8deg;translate:-6px 0}
+.cl-mupics:hover .cl-mupic-1{rotate:5deg;translate:0 -8px}
+.cl-mupics:hover .cl-mupic-2{rotate:1deg;translate:6px 0}
+.cl-stamp-mu{position:absolute;left:-2%;bottom:-4%;width:clamp(96px,12vw,136px);background:var(--orange);color:#232322;border-color:#232322;z-index:4}
+.cl-fresh{margin-left:4px;vertical-align:baseline}
+.cl-fresh::before{display:none}
+@media (max-width:900px){.cl-mugrid{grid-template-columns:1fr}.cl-mupics{max-width:520px;width:100%;margin-inline:auto}}
+@media (prefers-reduced-motion:reduce){.cl-mupic,.cl-mubtn,.cl-mubtn i{transition:none}}
+
+/* arte por encargo en la portada: misma composición que murales, en celeste, con las obras completas (sin recortar) y las fotos a la izquierda */
+.cl-artband{background:var(--sky)}
+.cl-artband .cl-mupics{order:-1}
+.cl-artband .cl-mupic img{aspect-ratio:1;object-fit:contain;background:#fff}
+.cl-artband .cl-mupic-0{left:0;top:10%;rotate:4deg}
+.cl-artband .cl-mupic-1{left:27%;top:0;rotate:-3deg}
+.cl-artband .cl-mupic-2{right:0;top:16%;rotate:2deg}
+.cl-artband .cl-stamp-mu{left:auto;right:-2%;background:var(--yellow)}
+@media (max-width:900px){.cl-artband .cl-mupics{order:0}}
