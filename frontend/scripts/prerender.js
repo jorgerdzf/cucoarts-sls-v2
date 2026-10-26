@@ -108,6 +108,13 @@ const entries = ['home', 'husky', 'murales', 'arte'].flatMap((key) => {
     return `  <url>\n    <loc>${url(P.paths[lang])}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prio}</priority>\n    ${alts}\n  </url>`;
   });
 });
+/* /mty: página estática (frontend/public/mty), bilingüe dentro de la misma página; se actualiza a diario */
+entries.push(`  <url>
+    <loc>${url('/mty')}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`);
 fs.writeFileSync(path.join(BUILD, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join('\n')}\n</urlset>\n`);
 console.log('prerender  sitemap.xml (' + entries.length + ' URLs)');

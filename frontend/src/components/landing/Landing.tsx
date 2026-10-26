@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { COPY, Copy, Lang } from './copy';
+import { COPY, Copy, Lang, REFS } from './copy';
 import { POOL, PoolItem } from './pool';
 import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared';
 import MuralWizard from './MuralWizard';
@@ -457,11 +457,11 @@ export default function Landing() {
               <span className="cl-rt"><b>{c.cards.expo.h} <span className="cl-live">{c.nav.live}</span></b><i>{c.cards.expo.p}</i></span>
               <span className="cl-go">{c.cards.expo.cta} →</span>
             </a></li>
-            <li><div className="cl-row cl-off" aria-disabled="true">
+            <li><a className="cl-row" href="/mty">
               <span className="cl-n">05</span>
-              <span className="cl-rt"><b>{c.cards.events.h}</b><i>{c.cards.events.p}</i></span>
-              <span className="cl-go cl-badge">{c.cards.events.cta}</span>
-            </div></li>
+              <span className="cl-rt"><b>{c.cards.events.h} <span className="cl-live">{c.nav.fresh}</span></b><i>{c.cards.events.p}</i></span>
+              <span className="cl-go">{c.cards.events.cta} →</span>
+            </a></li>
           </ol>
         </div>
       </section>
@@ -525,12 +525,10 @@ export default function Landing() {
         <div className="cl-in">
           <div className="cl-zonebox">
             <div className="cl-zonecopy">
-              <h3>{c.about.zonesTitle}</h3>
-              <p>{c.about.zonesText}</p>
+              <a className="cl-btn cl-primary" href="/mty#mapa">{c.about.mapCta} →</a>
             </div>
             <div className="cl-zones" role="list" aria-label={c.about.zonesLabel}>
               {c.about.zones.map((z, i) => <span role="listitem" className={`cl-zone cl-zone-${i}`} key={z}>{z}</span>)}
-              <span className="cl-badge">{c.about.soon}</span>
             </div>
           </div>
         </div>
@@ -549,8 +547,25 @@ export default function Landing() {
             <span className="cl-label">{c.events.label}</span>
             <h2 id="eventos-h">{c.events.title}</h2>
             <p>{c.events.text}</p>
-            <span className="cl-badge">{c.events.stampFull}</span>
+            <a className="cl-btn cl-primary" href="/mty">{c.events.stampFull} →</a>
           </div>
+        </div>
+      </section>
+
+      <section id="referencias" className="cl-band cl-refs" aria-labelledby="refs-h">
+        <div className="cl-in">
+          <span className="cl-label">{c.refs.label}</span>
+          <h2 id="refs-h">{c.refs.title}</h2>
+          <p className="cl-refs-p">{c.refs.text}</p>
+          <ul className="cl-refs-list">
+            {REFS.map((r, i) => (
+              <li key={r.handle}>
+                <a className={`cl-zone cl-zone-${i % 5} cl-ref`} href={`https://www.instagram.com/${r.handle}/`} target="_blank" rel="noopener noreferrer" aria-label={`${c.refs.open} ${r.name}`}>
+                  <span>{r.name}</span><small>@{r.handle}</small>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

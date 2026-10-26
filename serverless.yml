@@ -127,6 +127,8 @@ custom:
             CacheControl: public, max-age=604800
         - husky/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
+        - mty/img/*.jpg:
+            CacheControl: public, max-age=604800
         - rob-galeria/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
         - rob-media/**/*.{jpg,jpeg,png,webp}:
