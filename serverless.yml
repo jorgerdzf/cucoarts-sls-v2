@@ -238,6 +238,15 @@ resources:
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true
     # Alerta de gasto de toda la cuenta: avisa por correo a la mitad, al 80 % y al pasar de ${self:custom.budgetUsd} USD en el mes.
+    # Desde oct-2025 una URL de función pública necesita, además del permiso InvokeFunctionUrl que crea Serverless,
+    # este permiso InvokeFunction (solo cuando la llamada llega por la URL). Sin él la URL responde 403.
+    MtyModerateInvokeViaUrl:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName: !Ref MtyModerateLambdaFunction
+        Action: lambda:InvokeFunction
+        Principal: '*'
+        InvokedViaFunctionUrl: true
     MonthlyBudget:
       Type: AWS::Budgets::Budget
       Properties:
