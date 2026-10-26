@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script>window.MTY_RO=true</script>
+<script>window.MTY_RO=true;window.MTY_API={"base":"https://7q2ymxv5k8.execute-api.us-east-2.amazonaws.com/dev","key":"rRMCj4FK1k6nOXjxSPPRE2G1OtouQDIFaLjbmSVD"};</script>
 <style>
 
 @font-face{font-family:"Neue Montreal";src:local("Neue Montreal"),local("NeueMontreal-Regular");font-weight:400}
@@ -452,6 +452,10 @@ footer{border-top:2px solid var(--ink);margin-top:40px;padding:22px 0 50px;color
 .cucobox .btn:hover{background:#F7D649;color:#232322}
 @media (max-width:640px){.cucogrid{grid-template-columns:1fr}.cucogrid img{aspect-ratio:4/3}}
 
+.sendmsg{color:#B3170A;font-weight:700;font-size:14px;margin:8px 0 0}
+.sendmsg[hidden]{display:none}
+.send[disabled]{opacity:.6;cursor:wait}
+
 /* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
 .cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
   border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 #EA663D}
@@ -595,6 +599,8 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
           <label class="consent" style="text-transform:none;letter-spacing:0;font-weight:400"><input type="checkbox" id="consent"><span><span data-i18n="ci_consent"></span> <a href="/privacidad" target="_blank" rel="noopener" data-i18n="ci_privacy"></a></span></label>
           <div class="err" data-i18n="ci_err_consent"></div>
         </div>
+        <input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="sendmsg" id="ciSendErr" role="alert" hidden></div>
         <button class="send" type="submit" data-i18n="ci_send"></button>
       </form>
     </div>
@@ -643,6 +649,7 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
           <label for="sContacto"><span data-i18n="sug_contact"></span> <span class="opt" data-i18n="sug_contact_opt"></span></label>
           <input type="text" id="sContacto" autocomplete="off">
         </div>
+        <div class="sendmsg" id="sSendErr" role="alert" hidden></div>
         <button class="send" type="submit" style="background:var(--blue)" data-i18n="sug_send"></button>
       </form>
     </div>
@@ -668,6 +675,12 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
         <div class="field"><label for="rZone"><span data-i18n="rec_zone"></span> <span class="opt" data-i18n="rec_zone_opt"></span></label><select id="rZone"></select></div>
         <div class="field" id="rfWhy"><label for="rWhy" data-i18n="rec_why"></label><textarea id="rWhy" maxlength="500"></textarea><div class="err" data-i18n="rec_err_why"></div></div>
         <div class="field"><label for="rAlias"><span data-i18n="rec_alias"></span> <span class="opt" data-i18n="opt"></span></label><input type="text" id="rAlias" maxlength="30" autocomplete="nickname" data-i18n-ph="ci_ph_alias"></div>
+        <div class="field" id="rfConsent">
+          <label class="consent" style="text-transform:none;letter-spacing:0;font-weight:400"><input type="checkbox" id="rConsent"><span><span data-i18n="rec_consent"></span> <a href="/privacidad" target="_blank" rel="noopener" data-i18n="ci_privacy"></a></span></label>
+          <div class="err" data-i18n="ci_err_consent"></div>
+        </div>
+        <input type="text" id="rHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="sendmsg" id="rSendErr" role="alert" hidden></div>
         <button class="send" type="submit" style="background:var(--violet)" data-i18n="rec_send"></button>
       </form>
     </div>
@@ -985,13 +998,13 @@ es:{
  space_one:'espacio', space_many:'espacios', all_zones:'← Todas las zonas', what_covers:'Qué abarca', read_more:'Leer más', read_less:'Leer menos', icons:'Íconos',
  zone_artists:'Artistas de CUCO ARTS en esta zona', zone_no_artists:'Aún sin artistas de la tienda registrados en esta zona.', support:'Apóyalos en la tienda',
  zone_no_places:'Aún no hemos cargado espacios en esta zona. ¿Conoces alguno?', tell_us:'Cuéntanos', see_events:'Ver eventos de esta zona ↓', event_one:'evento', event_many:'eventos',
- ev_h:'Eventos', ev_h_zone:'Eventos en {0}', filters:'Filtros', f_when:'Cuándo', f_cat:'Categoría', f_all:'Todos', f_all_f:'Todas', f_today:'Hoy', f_tomorrow:'Mañana', f_week:'Esta semana', f_curso:'En curso', f_month:'Este mes', f_mes_h:'Mes', f_archive:'Archivo', g_archive:'Archivo: lo que ya pasó', place_video:'Video de este espacio', cuco_tag:'Un evento de CUCO ARTS', soon_h:'Muy pronto', soon_p:'Estamos preparando los check-ins, las calificaciones y las recomendaciones de la comunidad. Mientras tanto, mira qué hay y planea tu visita.', suggest_mail:'Sugerir una edición', suggest_subj:'Sugerencia para /mty', play:'Reproducir video', watch_yt:'Ver en YouTube ↗', photo_maps:'Foto: perfil de Google Maps (por sus colaboradores)', ex_month_h:'O elige un mes', f_year:'Año', f_zone:'Zona: {0}', remove_filter:'Quitar filtro',
+ ev_h:'Eventos', ev_h_zone:'Eventos en {0}', filters:'Filtros', f_when:'Cuándo', f_cat:'Categoría', f_all:'Todos', f_all_f:'Todas', f_today:'Hoy', f_tomorrow:'Mañana', f_week:'Esta semana', f_curso:'En curso', f_month:'Este mes', f_mes_h:'Mes', f_archive:'Archivo', g_archive:'Archivo: lo que ya pasó', place_video:'Video de este espacio', send_err:'No pudimos enviarlo ahora. Revisa tu conexión e inténtalo de nuevo.', dup_err:'Ya registraste tu experiencia en este evento o lugar. ¡Gracias!', rec_dup:'Esta recomendación ya fue enviada. ¡Gracias!', sending:'Enviando…', rec_consent:'Acepto que CUCO ARTS guarde mi recomendación y, después de revisarla, la publique con mi alias.', cuco_tag:'Un evento de CUCO ARTS', soon_h:'Muy pronto', soon_p:'Estamos preparando los check-ins, las calificaciones y las recomendaciones de la comunidad. Mientras tanto, mira qué hay y planea tu visita.', suggest_mail:'Sugerir una edición', suggest_subj:'Sugerencia para /mty', play:'Reproducir video', watch_yt:'Ver en YouTube ↗', photo_maps:'Foto: perfil de Google Maps (por sus colaboradores)', ex_month_h:'O elige un mes', f_year:'Año', f_zone:'Zona: {0}', remove_filter:'Quitar filtro',
  g_today:'Hoy', g_tomorrow:'Mañana', g_week:'Esta semana', g_curso:'En curso ahora', g_month:'Este mes', g_year:'Más adelante', none_filter:'No hay eventos con estos filtros.', free:'Entrada libre',
  b_hoy:'HOY', b_manana:'Mañana', b_semana:'Esta semana', b_mes:'Este mes', b_ano:'Este año', b_mas:'Más adelante', b_curso:'En curso', b_archivo:'Archivo',
  back:'Volver', share:'Compartir', share_copy:'Copiar enlace', copied:'¡Copiado!', share_more:'Más…', share_note:'El enlace funcionará cuando /mty esté publicado.', share_thanks:'Cuéntale a alguien',
  cal_add:'Agregar a Google Calendar', directions:'Cómo llegar', src_post:'Ver publicación original ↗', src_org:'Instagram del organizador ↗',
  place_label:'Lugar', address:'Dirección', dates:'Fechas', to_confirm:'Por confirmar', to_add:'Por agregar', until:'hasta', close_unknown:'cierre sin confirmar', source:'Fuente', confirm_hours:'Confirma horarios con el organizador.',
- suggest:'✎ Sugerir edición', enlarge:'Ampliar', gal_img:'Imagen {0} de {1}', credit_note:'Imagen de prototipo: pedir permiso al organizador antes de publicarla.',
+ suggest:'✎ Sugerir edición', enlarge:'Ampliar', gal_img:'Imagen {0} de {1}', credit_note:'Imagen del organizador o del espacio, mostrada con su crédito. Si prefieres que la retiremos, escríbenos a hello@cucoarts.com.',
  video_ph_t:'Video de CUCO ARTS', video_ph_p:'Cuando visitemos este espacio, el video aparece aquí.',
  rating:'Calificación', rating_init:'Aún sin calificaciones. Sé el primero en contar tu experiencia.', rating_avg:'Promedio de {0}.', be_first_short:'Sé el primero', ci_cta:'Cuenta tu experiencia',
  ex_date_h:'Busca por fecha', ex_date_sub:'Toca para elegir cuándo quieres salir.', ex_zone_h:'Busca por zona', ex_zone_sub:'Toca para elegir una zona y ver sus lugares.', ex_all:'Ver todos', ex_n:'{0} eventos', ex_n1:'1 evento', src_web:'Sitio oficial ↗', see_event:'Ver evento →', map_sec_h:'Mapa de zonas culturales',
@@ -1016,7 +1029,7 @@ es:{
  sug_thanks_h:'¡Gracias por ayudarnos!', sug_thanks_p:'Revisamos cada sugerencia antes de cambiar la información.',
  lb_prev:'Anterior', lb_next:'Siguiente', lb_first:'Volver a la primera', lb_close:'Cerrar',
  vis_h:'Planea tu visita', vis_sub:'Elige lo que te gusta y te mostramos dónde ir. Pensado para quien viene de fuera y para quien quiere redescubrir su ciudad.', vis_free:'Gratis', vis_results:'Lugares para ti', vis_none:'Elige al menos un interés para ver recomendaciones.', vis_ev_n:'{0} para ti', vis_see_place:'Ver lugar', vis_on_map:'Ver en el mapa', vis_no_match:'Por ahora no hay lugares con esa combinación. Prueba con otro interés.',
- com_h:'Comunidad', com_sub:'Esto lo construimos entre todos: calificamos lugares, compartimos experiencias y recomendamos a quienes hacen arte en Monterrey.', com_rec_btn:'Recomienda un artista o colectivo', com_list_h:'Recomendados por la comunidad', com_empty:'Todavía no hay recomendaciones. Sé la primera persona.', com_note:'En el prototipo solo tú ves lo que envías. En producción se publica tras una revisión.',
+ com_h:'Comunidad', com_sub:'Esto lo construimos entre todos: calificamos lugares, compartimos experiencias y recomendamos a quienes hacen arte en Monterrey.', com_rec_btn:'Recomienda un artista o colectivo', com_list_h:'Recomendados por la comunidad', com_empty:'Todavía no hay recomendaciones. Sé la primera persona.', com_note:'Lo que envíes se revisa antes de publicarse.',
  rec_stamp:'RECOMIENDA ✱', rec_title:'Recomienda un artista o colectivo', rec_name:'Nombre del artista o colectivo', rec_what:'¿Qué hace?', rec_choose:'Elige una disciplina', rec_link:'Instagram o enlace', rec_zone:'Zona', rec_zone_opt:'(opcional)', rec_why:'¿Por qué lo recomiendas?', rec_alias:'¿Cómo quieres aparecer?', rec_send:'Enviar recomendación', rec_thanks_h:'¡Gracias por recomendar!', rec_thanks_p:'Lo revisaremos antes de publicarlo.',
  rec_err_name:'Escribe su nombre.', rec_err_what:'Elige una disciplina.', rec_err_link:'Escribe un enlace o @usuario de Instagram.', rec_err_why:'Cuéntanos por qué (mínimo 10 caracteres).',
  foot_1:'Descubre y apoya el arte local de Monterrey. Cada obra en {0} sostiene la carrera de un artista de aquí.', foot_2:'Los datos y carteles de cada evento vienen de la cuenta u organizador que se indica. Confirma horario y cambios con ellos antes de ir. ¿Falta un evento?',
@@ -1031,13 +1044,13 @@ en:{
  space_one:'space', space_many:'spaces', all_zones:'← All zones', what_covers:'What it covers', read_more:'Read more', read_less:'Read less', icons:'Icons',
  zone_artists:'CUCO ARTS artists in this zone', zone_no_artists:'No store artists registered in this zone yet.', support:'Support them in the store',
  zone_no_places:"We haven't loaded places in this zone yet. Know one?", tell_us:'Tell us', see_events:'See events in this zone ↓', event_one:'event', event_many:'events',
- ev_h:'Events', ev_h_zone:'Events in {0}', filters:'Filters', f_when:'When', f_cat:'Category', f_all:'All', f_all_f:'All', f_today:'Today', f_tomorrow:'Tomorrow', f_week:'This week', f_curso:'Ongoing', f_month:'This month', f_mes_h:'Month', f_archive:'Archive', g_archive:'Archive: what already happened', place_video:'Video from this space', cuco_tag:'A CUCO ARTS event', soon_h:'Coming soon', soon_p:'We are preparing community check-ins, ratings and recommendations. In the meantime, see what is on and plan your visit.', suggest_mail:'Suggest an edit', suggest_subj:'Suggestion for /mty', play:'Play video', watch_yt:'Watch on YouTube ↗', photo_maps:'Photo: Google Maps listing (by its contributors)', ex_month_h:'Or pick a month', f_year:'Year', f_zone:'Zone: {0}', remove_filter:'Remove filter',
+ ev_h:'Events', ev_h_zone:'Events in {0}', filters:'Filters', f_when:'When', f_cat:'Category', f_all:'All', f_all_f:'All', f_today:'Today', f_tomorrow:'Tomorrow', f_week:'This week', f_curso:'Ongoing', f_month:'This month', f_mes_h:'Month', f_archive:'Archive', g_archive:'Archive: what already happened', place_video:'Video from this space', send_err:"We couldn't send it right now. Check your connection and try again.", dup_err:'You already shared your experience for this event or place. Thank you!', rec_dup:'This recommendation was already sent. Thank you!', sending:'Sending…', rec_consent:'I agree that CUCO ARTS stores my recommendation and, after reviewing it, publishes it with my nickname.', cuco_tag:'A CUCO ARTS event', soon_h:'Coming soon', soon_p:'We are preparing community check-ins, ratings and recommendations. In the meantime, see what is on and plan your visit.', suggest_mail:'Suggest an edit', suggest_subj:'Suggestion for /mty', play:'Play video', watch_yt:'Watch on YouTube ↗', photo_maps:'Photo: Google Maps listing (by its contributors)', ex_month_h:'Or pick a month', f_year:'Year', f_zone:'Zone: {0}', remove_filter:'Remove filter',
  g_today:'Today', g_tomorrow:'Tomorrow', g_week:'This week', g_curso:'Ongoing now', g_month:'This month', g_year:'Later on', none_filter:'No events match these filters.', free:'Free entry',
  b_hoy:'TODAY', b_manana:'Tomorrow', b_semana:'This week', b_mes:'This month', b_ano:'This year', b_mas:'Later on', b_curso:'Ongoing', b_archivo:'Archive',
  back:'Back', share:'Share', share_copy:'Copy link', copied:'Copied!', share_more:'More…', share_note:'The link will work once /mty is published.', share_thanks:'Tell someone',
  cal_add:'Add to Google Calendar', directions:'Get directions', src_post:'View original post ↗', src_org:"Organizer's Instagram ↗",
  place_label:'Place', address:'Address', dates:'Dates', to_confirm:'To be confirmed', to_add:'To be added', until:'until', close_unknown:'closing date unconfirmed', source:'Source', confirm_hours:'Confirm times with the organizer.',
- suggest:'✎ Suggest an edit', enlarge:'Enlarge', gal_img:'Image {0} of {1}', credit_note:'Prototype image: ask the organizer for permission before publishing it.',
+ suggest:'✎ Suggest an edit', enlarge:'Enlarge', gal_img:'Image {0} of {1}', credit_note:'Image from the organizer or the venue, shown with credit. If you would rather we remove it, write to hello@cucoarts.com.',
  video_ph_t:'CUCO ARTS video', video_ph_p:'When we visit this space, the video will appear here.',
  rating:'Rating', rating_init:'No ratings yet. Be the first to share your experience.', rating_avg:'Average of {0}.', be_first_short:'Be the first', ci_cta:'Share your experience',
  ex_date_h:'Search by date', ex_date_sub:'Tap to pick when you want to go out.', ex_zone_h:'Search by zone', ex_zone_sub:'Tap to pick a zone and see its places.', ex_all:'See all', ex_n:'{0} events', ex_n1:'1 event', src_web:'Official website ↗', see_event:'View event →', map_sec_h:'Cultural zones map',
@@ -1062,7 +1075,7 @@ en:{
  sug_thanks_h:'Thanks for helping!', sug_thanks_p:'We review every suggestion before changing the information.',
  lb_prev:'Previous', lb_next:'Next', lb_first:'Back to the first', lb_close:'Close',
  vis_h:'Plan your visit', vis_sub:'Pick what you like and we show you where to go. Made for visitors and for locals rediscovering their city.', vis_free:'Free', vis_results:'Places for you', vis_none:'Pick at least one interest to see recommendations.', vis_ev_n:'{0} for you', vis_see_place:'View place', vis_on_map:'See on the map', vis_no_match:'No places match that combination yet. Try another interest.',
- com_h:'Community', com_sub:'We build this together: we rate places, share experiences and recommend the people making art in Monterrey.', com_rec_btn:'Recommend an artist or collective', com_list_h:'Recommended by the community', com_empty:'No recommendations yet. Be the first.', com_note:'In this prototype only you see what you send. In production, entries are published after review.',
+ com_h:'Community', com_sub:'We build this together: we rate places, share experiences and recommend the people making art in Monterrey.', com_rec_btn:'Recommend an artist or collective', com_list_h:'Recommended by the community', com_empty:'No recommendations yet. Be the first.', com_note:'What you send is reviewed before it is published.',
  rec_stamp:'RECOMMEND ✱', rec_title:'Recommend an artist or collective', rec_name:'Name of the artist or collective', rec_what:'What do they do?', rec_choose:'Choose a discipline', rec_link:'Instagram or link', rec_zone:'Zone', rec_zone_opt:'(optional)', rec_why:'Why do you recommend them?', rec_alias:'How do you want to appear?', rec_send:'Send recommendation', rec_thanks_h:'Thanks for recommending!', rec_thanks_p:"We'll review it before publishing.",
  rec_err_name:'Enter their name.', rec_err_what:'Choose a discipline.', rec_err_link:'Enter a link or an Instagram @handle.', rec_err_why:'Tell us why (at least 10 characters).',
  foot_1:'Discover and support the local art of Monterrey. Every piece in {0} sustains the career of an artist from here.', foot_2:'Event data and posters come from the account or organizer shown. Confirm times and changes with them before you go. Missing an event?',
@@ -1088,8 +1101,22 @@ const DAY=86400000;
 function parse(d){const [y,m,dd]=d.split('-').map(Number);return new Date(y,m-1,dd)}
 function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 /* Modo solo lectura (página pública): sin check-ins, calificaciones ni recomendaciones hasta que exista el servidor. */
-const RO=!!window.MTY_RO;
-if(RO)document.documentElement.classList.add('ro');
+const API=window.MTY_API||null;          /* {base, key}: página pública conectada al servidor */
+const PUB=!!window.MTY_RO;               /* página pública (sin barra de demo) */
+const RO=PUB&&!API;                      /* solo lectura: sin servidor no hay check-ins ni calificaciones */
+if(PUB)document.documentElement.classList.add('ro');
+const AGG={}, CACHE={};                  /* promedios y comentarios aprobados que devuelve el servidor */
+async function apiCall(method,path,body){
+  const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),9000);
+  try{
+    const r=await fetch(API.base+path,{method,signal:ctl.signal,headers:Object.assign({'x-api-key':API.key},body?{'Content-Type':'application/json'}:{}),body:body?JSON.stringify(body):undefined});
+    let j=null; try{j=await r.json()}catch(e){}
+    return {status:r.status,json:j};
+  } finally {clearTimeout(to)}
+}
+async function loadAgg(){try{const r=await apiCall('GET','/mty/public');if(r.status===200&&r.json&&r.json.agg){Object.keys(AGG).forEach(k=>delete AGG[k]);Object.assign(AGG,r.json.agg)}}catch(e){}}
+async function loadRef(ref){try{const r=await apiCall('GET','/mty/public?ref='+encodeURIComponent(ref));if(r.status===200&&r.json&&r.json.items){CACHE[ref]=r.json.items;return true}}catch(e){}return false}
+async function apiSubmit(p){p.lang=LANG;try{const r=await apiCall('POST','/mty/submit',p);return {ok:r.status===200&&!!(r.json&&r.json.ok),status:r.status}}catch(e){return {ok:false,status:0}}}
 const webHref=w=>/^https?:\/\//i.test(w)?w:'https://'+w;
 let todayStr = iso(new Date());
 function today(){return parse(todayStr)}
@@ -1145,6 +1172,7 @@ const socialUrl=v=>{v=(v||'').trim();if(!v)return '';if(/^https?:\/\//i.test(v))
 const socialLabel=v=>{v=(v||'').trim();if(/^@?[\w.]{2,30}$/.test(v))return '@'+v.replace(/^@/,'');return v.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'').slice(0,34)};
 /* Sin calificaciones se muestra el símbolo de asterisco sobre 5; con la primera, el promedio es el de las calificaciones reales. */
 function rating(kind,id){
+  if(API){const ref=kind+':'+id,a=AGG[ref]||{n:0,sum:0},n=a.n||0;return {n,prom:n?a.sum/n:null,cis:(CACHE[ref]||[]).map(x=>Object.assign({},x,{estrellas:x.estrellas|0}))}}
   const cis=loadCI().filter(c=>c.tipo===kind&&c.ref===id&&okPub(c));
   const n=cis.length, suma=cis.reduce((a,c)=>a+c.estrellas,0);
   return {n,prom:n?suma/n:null,cis};
@@ -1367,11 +1395,22 @@ function sugBtn(label,ref){
 /* Evento propio de CUCO ARTS en la ficha de un lugar (ej. la expo en HUSKY): sección especial con liga a su página. */
 function cucoEventBox(p){
   const e=p.cucoEvento; if(!e)return '';
-  const href=(RO?'':'https://cucoarts.com')+(LANG==='en'?e.href_en:e.href);
+  const href=(PUB?'':'https://cucoarts.com')+(LANG==='en'?e.href_en:e.href);
   return `<section class="cucobox"><span class="ctag">${esc(t('cuco_tag'))}</span>
     <div class="cucogrid"><img src="${esc(e.img)}" alt="${esc(L(e,'titulo'))}" loading="lazy">
       <div><h2>${esc(L(e,'titulo'))}</h2><p>${esc(L(e,'texto'))}</p><p class="note">${esc(L(e,'credito'))}</p>
-      <a class="btn big" href="${esc(href)}"${RO?'':' target="_blank" rel="noopener"'}>${esc(L(e,'cta'))} →</a></div></div></section>`;
+      <a class="btn big" href="${esc(href)}"${PUB?'':' target="_blank" rel="noopener"'}>${esc(L(e,'cta'))} →</a></div></div></section>`;
+}
+/* Trae del servidor lo aprobado de un evento/lugar y repinta solo su lista de comentarios. */
+function refreshRef(ref){
+  if(!API)return;
+  loadRef(ref).then(ok=>{
+    if(!ok)return;
+    const [kind,id]=ref.split(':'); if(current.indexOf('#/'+kind+'/'+id)!==0)return;
+    const r=rating(kind,id);
+    const c=kind==='evento'?document.getElementById('comments'):document.querySelector('.revlist');
+    if(c)c.innerHTML=r.cis.length?r.cis.slice().reverse().map(commentHTML).join(''):`<div class="empty">${esc(t(kind==='evento'?'no_comments':'no_place_reviews'))}</div>`;
+  });
 }
 function excerpt(s,n){return s.length>n?s.slice(0,n-1).replace(/\s+\S*$/,'')+'…':s}
 function eventCard(ev,wide){
@@ -1541,7 +1580,8 @@ function renderVisit(){
 function renderCommunity(){
   const el=$('#comunidad'); if(!el)return;
   if(RO){el.innerHTML=`<h2 class="sec">${esc(t('com_h'))}</h2><p class="sub">${esc(t('com_sub'))}</p>${soonBox()}`;return}
-  const recs=loadK('mty-reco').filter(okPub).slice().reverse();
+  const recs=API?(CACHE.reco||[]).map(r=>Object.assign({},r,{link:socialUrl(r.link)||r.link})):loadK('mty-reco').filter(okPub).slice().reverse();
+  if(API&&!CACHE.reco&&!window._recAsked){window._recAsked=true;loadRef('reco').then(ok=>{if(ok)renderCommunity()})}
   el.innerHTML=`<h2 class="sec">${esc(t('com_h'))}</h2><p class="sub">${esc(t('com_sub'))}</p>
     <div class="actions"><button class="btn big" type="button" id="recBtn" style="animation:none">${esc(t('com_rec_btn'))}</button></div>
     <p class="note">${esc(t('com_note'))}</p>
@@ -1607,6 +1647,7 @@ function viewPlace(id){
   </div>`;
   $('#backBtn').onclick=goBack;
   const rb=$('#rateBtn'); if(rb)rb.onclick=()=>openModal('lugar',id);
+  refreshRef('lugar:'+id);
 }
 
 /* ---- Evento ---- */
@@ -1669,6 +1710,7 @@ function viewEvent(id){
   </div>`;
   $('#backBtn').onclick=goBack;
   const b=$('#ciBtn'); if(b)b.onclick=()=>openModal('evento',id);
+  refreshRef('evento:'+id);
   const sb=$('#shareBtn'); if(sb)sb.onclick=e=>{e.stopPropagation();const m=$('#shareMenu');m.hidden=!m.hidden;sb.setAttribute('aria-expanded',!m.hidden)};
   const gm=$('#galMain'); if(gm)gm.onclick=()=>openLB(ev,galIdx);
   $$('#galThumbs button',app).forEach(bt=>bt.onclick=()=>{galIdx=+bt.dataset.i;$('#galImg').src=ev.imgs[galIdx];$$('#galThumbs button').forEach(x=>x.setAttribute('aria-current',x===bt))});
@@ -1724,17 +1766,26 @@ $('#ciForm').addEventListener('submit',e=>{
   let first=null;
   checks.forEach(([s,ok])=>{$(s).classList.toggle('bad',!ok);if(!ok&&!first)first=s});
   if(first){const el=$(first+' input,'+first+' textarea');if(el)el.focus();return;}
+  if(API){
+    const btn=$('#ciForm .send'), err=$('#ciSendErr'), lbl=btn.textContent; btn.disabled=true; btn.textContent=t('sending'); err.hidden=true;
+    apiSubmit({tipo:'checkin',ref:tgt.kind+':'+tgt.id,titulo:tgtTitle(),estrellas:stars,comentario:com,alias,via,contacto:val,social,link,consent:'on',website:$('#hp').value})
+      .then(res=>{btn.disabled=false;btn.textContent=lbl;if(res.ok)showCiThanks(via);else{err.textContent=t(res.status===409?'dup_err':'send_err');err.hidden=false}});
+    return;
+  }
   const all=loadCI();
   all.push({tipo:tgt.kind,ref:tgt.id,via,contacto:val,comentario:com,estrellas:stars,alias,link,social,estado:'pendiente',fecha:todayStr,creado:new Date().toISOString()});
   saveCI(all); modCount();
+  showCiThanks(via);
+});
+function showCiThanks(via){
   $('#formView').style.display='none';
   $('#thanksMsg').textContent=t('ci_thanks_msg',stars,tgtTitle(),t(via==='correo'?'ci_via_mail':'ci_via_wa'));
   const ev=tgt.kind==='evento'?EVENTS.find(x=>x.id===tgt.id):null;
   $('#thanksShare').innerHTML=ev?shareInline(ev):''; $('#thanksShare').previousElementSibling.hidden=!ev;
   $('#thanksView').classList.add('show');
   confetti();
-  if(current.indexOf('#/evento/')===0||current.indexOf('#/lugar/')===0)route();
-});
+  if(!API&&(current.indexOf('#/evento/')===0||current.indexOf('#/lugar/')===0))route();
+}
 function confetti(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   const cols=['#FA2713','#F7D649','#067DFF','#644DEF','#C7F74E','#FF4B1F'];
@@ -1759,6 +1810,12 @@ $('#sugForm').addEventListener('submit',e=>{
   const checks=[['#sfTipo',!!tipo],['#sfTexto',texto.length>=5],['#sfLink',!link||/^https?:\/\/\S+\.\S+/.test(link)]];
   let first=null; checks.forEach(([s,ok])=>{$(s).classList.toggle('bad',!ok);if(!ok&&!first)first=s});
   if(first){const el=$(first+' select,'+first+' textarea,'+first+' input');if(el)el.focus();return;}
+  if(API){
+    const btn=$('#sugForm .send'), err=$('#sSendErr'), lbl=btn.textContent; btn.disabled=true; btn.textContent=t('sending'); err.hidden=true;
+    apiSubmit({tipo:'sug',ref:sugRef.titulo,titulo:sugRef.titulo,motivo:['fecha','direccion','categoria','imagen','enlace','cancelado','otra'][(+tipo||7)-1],texto,link,contacto:$('#sContacto').value.trim()})
+      .then(res=>{btn.disabled=false;btn.textContent=lbl;if(res.ok){$('#sForm').style.display='none';$('#sThanks').classList.add('show')}else{err.textContent=t('send_err');err.hidden=false}});
+    return;
+  }
   const a=loadK('mty-sugerencias');
   a.push({sobre:sugRef.titulo,ref:sugRef.ref,tipo:sel.options[sel.selectedIndex].textContent,texto,link,contacto:$('#sContacto').value.trim(),creado:new Date().toISOString()});
   saveK('mty-sugerencias',a);
@@ -1783,9 +1840,15 @@ $('#recForm').addEventListener('submit',e=>{
   e.preventDefault();
   const nombre=$('#rName').value.trim(), what=$('#rWhat').value, link=$('#rLink').value.trim(), why=$('#rWhy').value.trim();
   const okLink=/^@?[\w.]{2,}$/.test(link)||/^https?:\/\/\S+\.\S+/.test(link)||/instagram\.com\//i.test(link);
-  const checks=[['#rfName',nombre.length>=2],['#rfWhat',!!what],['#rfLink',okLink],['#rfWhy',why.length>=10]];
+  const checks=[['#rfName',nombre.length>=2],['#rfWhat',!!what],['#rfLink',okLink],['#rfWhy',why.length>=10],['#rfConsent',$('#rConsent').checked]];
   let first=null; checks.forEach(([s,ok])=>{$(s).classList.toggle('bad',!ok);if(!ok&&!first)first=s});
   if(first){const el=$(first+' input,'+first+' select,'+first+' textarea');if(el)el.focus();return;}
+  if(API){
+    const btn=$('#recForm .send'), err=$('#rSendErr'), lbl=btn.textContent; btn.disabled=true; btn.textContent=t('sending'); err.hidden=true;
+    apiSubmit({tipo:'reco',nombre,disciplina:what,link,zona:$('#rZone').value,porque:why,alias:$('#rAlias').value.trim().slice(0,30),consent:'on',website:$('#rHp').value})
+      .then(res=>{btn.disabled=false;btn.textContent=lbl;if(res.ok){$('#rForm').style.display='none';$('#rThanks').classList.add('show')}else{err.textContent=t(res.status===409?'rec_dup':'send_err');err.hidden=false}});
+    return;
+  }
   const url=/^@?[\w.]{2,}$/.test(link)?'https://www.instagram.com/'+link.replace(/^@/,'')+'/':link;
   const a=loadK('mty-reco'); a.push({nombre,disciplina:what,link:url,zona:$('#rZone').value,porque:why,alias:$('#rAlias').value.trim().slice(0,30),estado:'pendiente',creado:new Date().toISOString()});
   saveK('mty-reco',a); modCount();
@@ -1981,7 +2044,7 @@ function route(){
   else notFound();
 }
 refreshStatic();
-route();
+(API?Promise.race([loadAgg(),new Promise(r=>setTimeout(r,1500))]):Promise.resolve()).then(route);
 
 /* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
 /* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
