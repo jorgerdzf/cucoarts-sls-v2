@@ -15,10 +15,11 @@ provider:
   apiGateway:
     apiKeys:
       - ${sls:stage}-cucoarts-apikey
+      - ${sls:stage}-cucoarts-mty-apikey   # llave de /mty: la cuota del plan se cuenta por llave, así no compite con los formularios
     # límite de uso: el formulario del sitio es público, así que se acota el abuso
     usagePlan:
       quota:
-        limit: 5000
+        limit: 20000
         period: DAY
       throttle:
         burstLimit: 20
@@ -40,6 +41,18 @@ provider:
             - ses:SendEmail
             - ses:SendRawEmail
           Resource: "*"
+        # agenda /mty: solo su tabla y solo su secreto de firma
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+          Resource: !GetAtt MtyTable.Arn
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.mtySecretParam}"
 
 package:
   individually: true
@@ -99,6 +112,53 @@ functions:
       NOTIFY_TO: ${self:custom.notifyEmail}
       NOTIFY_FROM: ${self:custom.notifyEmail}
 
+  # ---- agenda cucoarts.com/mty: check-ins, calificaciones y recomendaciones con moderación por correo ----
+  mtySubmit:
+    name: ${sls:stage}-mtySubmit-lambda
+    handler: backend/lambda/mty/index.submit
+    memorySize: 256
+    timeout: 15
+    events:
+      - http:
+          path: mty/submit
+          method: post
+          private: true
+          cors: true
+    environment:
+      MTY_TABLE: ${self:custom.mtyTableName}
+      MTY_SECRET_PARAM: ${self:custom.mtySecretParam}
+      NOTIFY_TO: ${self:custom.notifyEmail}
+      NOTIFY_FROM: ${self:custom.notifyEmail}
+      MAX_MAIL_DAY: '30'
+      MOD_BASE: !GetAtt MtyModerateLambdaFunctionUrl.FunctionUrl
+
+  mtyPublic:
+    name: ${sls:stage}-mtyPublic-lambda
+    handler: backend/lambda/mty/index.publicList
+    memorySize: 256
+    timeout: 10
+    events:
+      - http:
+          path: mty/public
+          method: get
+          private: true
+          cors: true
+    environment:
+      MTY_TABLE: ${self:custom.mtyTableName}
+
+  # Los enlaces del correo no pueden llevar llave de API, así que la moderación vive en una URL de función propia (sin API Gateway,
+  # sin costo por llamada). La protegen la firma (HMAC) y que abrirla no cambia nada; `reservedConcurrency: 1` limita el ritmo
+  # y sirve de freno: ponerla en 0 apaga la moderación al instante si hiciera falta.
+  mtyModerate:
+    name: ${sls:stage}-mtyModerate-lambda
+    handler: backend/lambda/mty/index.moderate
+    timeout: 10
+    reservedConcurrency: 1
+    url: true
+    environment:
+      MTY_TABLE: ${self:custom.mtyTableName}
+      MTY_SECRET_PARAM: ${self:custom.mtySecretParam}
+
 custom:
   bucketName: cucoarts-sls-v2-deploy-assets
   imagesBucketName: cucoarts-image-assets
@@ -106,6 +166,10 @@ custom:
   uploadsBucketName: cucoarts-sls-v2-request-uploads-${sls:stage}
   requestsTableName: ${sls:stage}-cucoarts-requests
   notifyEmail: roberto@cucoarts.com
+  # agenda /mty (el secreto de firma es un parámetro SecureString creado a mano; no vive en el repo)
+  mtyTableName: ${sls:stage}-cucoarts-mty
+  mtySecretParam: cucoarts-mty-secret
+  budgetUsd: 5
   s3Sync:
     - bucketName: ${self:custom.bucketName}
       localDir: frontend/build/
@@ -126,6 +190,8 @@ custom:
         - murales/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
         - husky/**/*.{jpg,jpeg,png,webp}:
+            CacheControl: public, max-age=604800
+        - mty/img/*.jpg:
             CacheControl: public, max-age=604800
         - rob-galeria/**/*.{jpg,jpeg,png,webp}:
             CacheControl: public, max-age=604800
@@ -149,6 +215,73 @@ resources:
             KeyType: HASH
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true
+    MtyTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
+      Properties:
+        TableName: ${self:custom.mtyTableName}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: expira
+          Enabled: true
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+    # Alerta de gasto de toda la cuenta: avisa por correo a la mitad, al 80 % y al pasar de ${self:custom.budgetUsd} USD en el mes.
+    # Desde oct-2025 una URL de función pública necesita, además del permiso InvokeFunctionUrl que crea Serverless,
+    # este permiso InvokeFunction (solo cuando la llamada llega por la URL). Sin él la URL responde 403.
+    MtyModerateInvokeViaUrl:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName: !Ref MtyModerateLambdaFunction
+        Action: lambda:InvokeFunction
+        Principal: '*'
+        InvokedViaFunctionUrl: true
+    MonthlyBudget:
+      Type: AWS::Budgets::Budget
+      Properties:
+        Budget:
+          BudgetName: cucoarts-mensual-${sls:stage}
+          BudgetType: COST
+          TimeUnit: MONTHLY
+          BudgetLimit:
+            Amount: ${self:custom.budgetUsd}
+            Unit: USD
+        NotificationsWithSubscribers:
+          - Notification:
+              NotificationType: ACTUAL
+              ComparisonOperator: GREATER_THAN
+              Threshold: 50
+              ThresholdType: PERCENTAGE
+            Subscribers:
+              - SubscriptionType: EMAIL
+                Address: ${self:custom.notifyEmail}
+          - Notification:
+              NotificationType: ACTUAL
+              ComparisonOperator: GREATER_THAN
+              Threshold: 80
+              ThresholdType: PERCENTAGE
+            Subscribers:
+              - SubscriptionType: EMAIL
+                Address: ${self:custom.notifyEmail}
+          - Notification:
+              NotificationType: ACTUAL
+              ComparisonOperator: GREATER_THAN
+              Threshold: 100
+              ThresholdType: PERCENTAGE
+            Subscribers:
+              - SubscriptionType: EMAIL
+                Address: ${self:custom.notifyEmail}
     UploadsBucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Retain

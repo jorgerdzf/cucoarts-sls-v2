@@ -27,7 +27,7 @@ export function buildMenu(lang: Lang, c: Copy, page: MenuPage, h?: { onQuote?: (
   items.push({ id: 'arte', label: c.nav.art, href: lp(lang, '/arte-por-encargo'), badge: c.nav.fresh, current: page === 'arte' });
   items.push(h?.onSell ? { id: 'sell', label: c.nav.sell, href: '#vende', onClick: h.onSell } : { id: 'sell', label: c.nav.sell, href: lp(lang, '/') + '#vende' });
   items.push({ id: 'husky', label: c.nav.expo, href: lp(lang, '/husky'), badge: c.nav.live, current: page === 'husky' });
-  items.push({ id: 'events', label: c.nav.events, disabled: true, badge: t.soon });
+  items.push({ id: 'events', label: c.nav.events, href: '/mty', badge: c.nav.fresh });
   return items;
 }
 

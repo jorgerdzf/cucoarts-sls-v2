@@ -2,7 +2,7 @@
 // Hace cuatro cosas, en este orden:
 //   1. www.cucoarts.com  → 301 a https://cucoarts.com (una sola dirección por página, sin contenido duplicado).
 //   2. Páginas retiradas (/Cities, /Services, /Faq…) → 301 a la portada (o a /privacidad).
-//   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad) → sirve el HTML prerenderizado de esa ruta
+//   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad, /mty) → sirve el HTML prerenderizado de esa ruta
 //      (build/<ruta>/index.html, generado por frontend/scripts/prerender.js). Mayúsculas o barra final → 301 a la forma canónica.
 //   4. Todo lo demás pasa tal cual: archivos con extensión (js, css, imágenes…), /rob (archivo sin extensión en el bucket) y la
 //      raíz. Una dirección que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real.
@@ -18,7 +18,8 @@ var KNOWN = {
   '/en/murals': '/en/murals/index.html',
   '/arte-por-encargo': '/arte-por-encargo/index.html',
   '/en/custom-art': '/en/custom-art/index.html',
-  '/privacidad': '/privacidad/index.html'
+  '/privacidad': '/privacidad/index.html',
+  '/mty': '/mty/index.html'
 };
 
 var LEGACY = {
