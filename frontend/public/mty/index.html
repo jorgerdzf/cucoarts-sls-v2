@@ -1052,6 +1052,19 @@ body.mapfull{overflow:hidden}
 .maphint{font-size:11px;font-weight:400}
 .mapnote{font-family:var(--sans);font-weight:700}
 
+/* ===== QR para impresos ===== */
+.qrm{max-width:520px}
+.qrlab{display:block;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 4px}
+#qrCamp{width:100%;border:2.5px solid var(--ink);border-radius:12px;padding:11px 12px;font:inherit;font-size:16px;background:var(--surface);color:var(--ink)}
+.qrprev{display:flex;justify-content:center;margin:14px 0 6px}
+#qrCanvas{width:min(100%,300px);height:auto;aspect-ratio:1;background:#fff;border:3px solid var(--ink);border-radius:10px;image-rendering:pixelated}
+.qrurl{word-break:break-all;font-family:var(--mono);font-size:11.5px;opacity:.8}
+
+.qrsw{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px}
+.qrdot{width:36px;height:36px;border-radius:50%;border:2.5px solid var(--ink);cursor:pointer;padding:0}
+.qrdot.on{box-shadow:0 0 0 3px var(--surface),0 0 0 6px var(--ink)}
+#qrCanvas{aspect-ratio:2000/2600;width:min(100%,260px);image-rendering:auto}
+
 /* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
 .cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
   border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 #EA663D}
@@ -1262,10 +1275,32 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
       <button class="btn alt" type="button" id="storyDl" data-i18n="story_dl"></button>
       <button class="btn alt" type="button" id="storyCopy" data-i18n="story_copy"></button>
       <button class="btn alt" type="button" id="storyShuffle" data-i18n="ag_shuffle" hidden></button>
+      <button class="btn alt" type="button" id="storyQR" data-i18n="qr_btn"></button>
     </div>
     <button class="btn alt storyhow" type="button" id="storyHow" aria-expanded="false"></button>
     <p class="note" id="storyMsg" style="margin:8px 0 0;min-height:1.2em;font-weight:700"></p>
     <p class="note" data-i18n="story_hint"></p>
+  </div>
+</div>
+
+<div class="overlay" id="qrOverlay" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="modal qrm" id="qrModal">
+    <button class="x" type="button" id="qrClose" data-i18n-title="close">×</button>
+    <h2 id="qrTitle" data-i18n="qr_title"></h2>
+    <label class="qrlab" for="qrCamp" data-i18n="qr_camp"></label>
+    <input id="qrCamp" type="text" maxlength="40" autocomplete="off" data-i18n-ph="qr_camp_ph">
+    <span class="qrlab" data-i18n="qr_color"></span>
+    <div class="qrsw" id="qrSw" role="radiogroup" data-i18n-label="qr_color"></div>
+    <div class="qrprev"><canvas id="qrCanvas" aria-label="QR"></canvas></div>
+    <p class="note qrurl" id="qrUrl"></p>
+    <div class="story-actions">
+      <button class="btn big" type="button" id="qrDl" style="animation:none" data-i18n="qr_dl"></button>
+      <button class="btn alt" type="button" id="qrDlF" data-i18n="qr_dlf"></button>
+      <button class="btn alt" type="button" id="qrCopy" data-i18n="qr_copy"></button>
+    </div>
+    <p class="note" id="qrMsg" style="margin:8px 0 0;min-height:1.2em;font-weight:700"></p>
+    <p class="note" data-i18n="qr_hint"></p>
+    <p class="note" data-i18n="qr_size"></p>
   </div>
 </div>
 
@@ -1368,6 +1403,2304 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
 </div>
 
 <script>
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
 /* ============ ZONAS (las 5 de "Zonas Culturales"; Santiago, N.L. va dentro del Sur, con asterisco) ============ */
 /* "abarca" lo definió Roberto el 26-oct-2026. "poetico" e "iconos" vienen del documento de Drive "Zonas Culturales" (jun 2026). */
 const ZONES = {
@@ -1495,6 +3828,7 @@ const PLACES = {
   galeriacontagio_centrika:{desc:'La otra galería de Contagiemos ARTE, dentro de Patio Céntrika (Vicente Guerrero 2500, col. Del Prado). Aquí inauguró “Latido Mexicano” el 5 de septiembre de 2026, en colaboración con Rotary Monterrey La Silla.',desc_en:'Contagiemos ARTE’s other gallery, inside Patio Céntrika (Vicente Guerrero 2500, Del Prado). “Latido Mexicano” opened here on 5 September 2026, in collaboration with Rotary Monterrey La Silla.',descf:'Google Maps e Instagram @contagiemosarte',nombre:'Galería del Contagio · Patio Céntrika',nombre_en:'Galería del Contagio · Patio Céntrika',corto:'Galería del Contagio Céntrika',tipo:'Galería de arte (Contagiemos ARTE)',tipo_en:'Art gallery (Contagiemos ARTE)',zona:'centro',pin:[318,222],dir:'Dentro de Patio Céntrika, Vicente Guerrero 2500, Col. Del Prado, 64550 Monterrey, N.L.',ig:'contagiemosarte',fuente:'Google Maps (28-oct-2026; aparece como “Museo”) e Instagram @contagiemosarte. Zona Centro por ubicación; por confirmar.',fuente_en:'Google Maps (28 Oct 2026; listed as “Museum”) and Instagram @contagiemosarte. Downtown zone by location; to be confirmed.'},
   akadem:{desc:'Centro educativo en la zona Tampiquito de San Pedro Garza García (Río Suchiate 722), con 4.8 estrellas en Google Maps y una Galería Abierta donde presenta exposiciones. Aquí se inaugura “Naturaleza eterna”, de Roberta Sada A, el 4 de noviembre.',desc_en:'Educational center in the Tampiquito area of San Pedro Garza García (Río Suchiate 722), with 4.8 stars on Google Maps and an Open Gallery where it presents exhibitions. “Naturaleza eterna”, by Roberta Sada A, opens here on 4 November.',descf:'Google Maps e Instagram @akadem.mx',nombre:'Akadem · Galería Abierta',nombre_en:'Akadem · Galería Abierta',corto:'Akadem',tipo:'Centro educativo con galería abierta',tipo_en:'Educational center with an open gallery',zona:'poniente',pin:[64,238],dir:'Río Suchiate 722, Zona Tampiquito, Lomas del Valle, 66256 San Pedro Garza García, N.L.',ig:'akadem.mx',web:'akadem.mx',fuente:'Google Maps (28-oct-2026) e Instagram @akadem.mx',fuente_en:'Google Maps (28 Oct 2026) and Instagram @akadem.mx'},
   ucafarq:{desc:'Espacio cultural de la Facultad de Arquitectura de la UANL en el Barrio Antiguo (Abasolo 907, esquina con Diego de Montemayor), con 4.6 estrellas en Google Maps. Aquí se presenta “Escultores en Nuevo León, 1945–1995”, parte de los 80 años de la Facultad.',desc_en:'Cultural space of the UANL Faculty of Architecture in the Barrio Antiguo (Abasolo 907, corner of Diego de Montemayor), with 4.6 stars on Google Maps. It presents “Escultores en Nuevo León, 1945–1995”, part of the Faculty’s 80th anniversary.',descf:'Google Maps, Instagram @ucafarq y cartel de la exposición',nombre:'Unidad Cultural de Arquitectura (FARQ UANL)',nombre_en:'Unidad Cultural de Arquitectura (FARQ UANL)',corto:'Unidad Cultural FARQ',tipo:'Espacio cultural universitario',tipo_en:'University cultural space',zona:'centro',pin:[312,280],dir:'José Mariano Abasolo 907, esq. Diego de Montemayor, Barrio Antiguo, Centro, 64000 Monterrey, N.L.',ig:'ucafarq',fuente:'Google Maps (28-oct-2026), Instagram @ucafarq y cartel de “Escultores en Nuevo León”',fuente_en:'Google Maps (28 Oct 2026), Instagram @ucafarq and the “Escultores en Nuevo León” poster'},
+  nngaleria:{desc:'Galería de arte en San Pedro Garza García (Río Danubio 125, col. Del Valle). Según su Instagram, tiene sedes en Oaxaca, San Pedro y Cancún, y se presenta con el lema “Arte sin límites”. Tiene 4.5 estrellas en Google Maps (2 reseñas). Aún no tenemos eventos suyos cargados.',desc_en:'Art gallery in San Pedro Garza García (Río Danubio 125, Del Valle). According to its Instagram it has locations in Oaxaca, San Pedro and Cancún, under the motto “Arte sin límites” (art without limits). It has 4.5 stars on Google Maps (2 reviews). We have not loaded any of its events yet.',descf:'Instagram @nn.galeria y Google Maps',nombre:'NN Galería Monterrey',nombre_en:'NN Galería Monterrey',corto:'NN Galería',tipo:'Galería de arte',tipo_en:'Art gallery',zona:'poniente',pin:[118,272],dir:'Río Danubio 125, Del Valle, 66279 San Pedro Garza García, N.L.',ig:'nn.galeria',web:'galeriann.com',fuente:'Instagram @nn.galeria y Google Maps (28-oct-2026)',fuente_en:'Instagram @nn.galeria and Google Maps (28 Oct 2026)'},
   perg:{desc:'Casa de la Cultura de San Nicolás dentro del Parque La Pérgola, con 4.7 estrellas en Google Maps (97 reseñas). Es sede del Instituto Municipal para el Desarrollo Cultural (IMDEC), que organiza eventos culturales, exposiciones de arte y arte urbano; aquí se presenta “Retratos”, de Jaime Flores, hasta el 20 de noviembre de 2026.',desc_en:'San Nicolás’ Casa de la Cultura inside Parque La Pérgola, with 4.7 stars on Google Maps (97 reviews). It is a venue of the Instituto Municipal para el Desarrollo Cultural (IMDEC), which organizes cultural events, art exhibitions and urban art; it hosts “Retratos”, by Jaime Flores, until 20 November 2026.',descf:'Google Maps e Instagram @cultura.sn (IMDEC)',foto:'/mty/img/p-perg.jpg',nombre:'Casa de la Cultura de San Nicolás "La Pérgola"',nombre_en:'San Nicolás Casa de la Cultura "La Pérgola"',corto:'La Pérgola',tipo:'Casa de cultura',tipo_en:'Cultural house',zona:'norte',pin:[340,94],dir:'Salvador Rueda 201, Anáhuac, 66450 San Nicolás de los Garza, N.L.',tel:'81 8332 2104',web:'sanicolas.gob.mx',ig:'cultura.sn',fuente:'Google Maps (enlace de Roberto, 26-oct-2026)',fuente_en:'Google Maps (link from Roberto, 26 Oct 2026)'},
   biblioraul:{desc:'Biblioteca de la UANL en la avenida Alfonso Reyes, diseñada por Ricardo Legorreta. Abrió el 25 de septiembre de 1995 como Biblioteca Magna Solidaridad y desde 1997 lleva el nombre de Raúl Rangel Frías.',desc_en:'UANL library on Avenida Alfonso Reyes, designed by Ricardo Legorreta. It opened on 25 September 1995 as the Biblioteca Magna Solidaridad and has carried the name of Raúl Rangel Frías since 1997.',descf:'boletín Biblios de la Dirección de Bibliotecas de la UANL',foto:'/mty/img/p-biblioraul.jpg',nombre:'Biblioteca Universitaria Raúl Rangel Frías',nombre_en:'Raúl Rangel Frías University Library',corto:'Biblioteca Raúl Rangel',corto_en:'Raúl Rangel Library',tipo:'Biblioteca universitaria',tipo_en:'University library',zona:'norte',pin:[316,120],dir:'Av. Alfonso Reyes 4000, Niños Héroes, Regina, 64290 Monterrey, N.L.',tel:'81 8329 4000',web:'dgb.uanl.mx',ig:null,fuente:'Google Maps (enlace de Roberto, 26-oct-2026)',fuente_en:'Google Maps (link from Roberto, 26 Oct 2026)'},
   barragan:{desc:'Centro cultural de San Nicolás de los Garza (colonia El Roble) con 4.6 estrellas en Google Maps (136 reseñas): quienes lo visitan destacan lo accesible del espacio, la atención y la variedad de libros. Presenta exposiciones del IMDEC, como “Florar en la Aridez” (30 de octubre al 23 de noviembre de 2026).',desc_en:'Cultural center in San Nicolás de los Garza (El Roble neighborhood) with 4.6 stars on Google Maps (136 reviews): visitors highlight how accessible it is, the service and the variety of books. It presents IMDEC exhibitions such as “Florar en la Aridez” (30 October to 23 November 2026).',descf:'Google Maps e Instagram @cultura.sn (IMDEC)',foto:'/mty/img/p-barragan.jpg',nombre:'Centro Cultural Manuel L. Barragán',nombre_en:'Manuel L. Barragán Cultural Center',corto:'Centro Cultural Barragán',corto_en:'Barragán Cultural Center',tipo:'Centro cultural',tipo_en:'Cultural center',zona:'norte',pin:[330,68],dir:'Esq. 8 de Diciembre y Fray Bartolomé de las Casas s/n, El Roble, 66450 San Nicolás de los Garza, N.L.',tel:'81 8376 1651',web:'sanicolas.gob.mx',ig:'cultura.sn',fuente:'Google Maps (enlace de Roberto, 26-oct-2026). La ficha dice "Monterrey, N.L." pero el CP 66450 corresponde a San Nicolás.',fuente_en:'Google Maps (link from Roberto, 26 Oct 2026). The listing says "Monterrey, N.L." but postal code 66450 is San Nicolás.'},
@@ -1719,6 +4053,20 @@ const EVENTS = [
    detalle_en:'Second edition of PESADILLA COLECTIVA, an independent music and art festival organized by Groovies Club x Cuando el Arte Ataque x Hypnotic, at El Colectivo Regio 818 (Av. Colón 3179, Nueva Madero). Friday 6 November 2026; doors at 5:00 pm. The poster announces costumes, music, an exhibition, short films and performance, with a prize for best costume. Tickets: presale $150, phase 1 $200 and at the door $300 (sold by direct message to @grooviesclub). Poster art: @raromcqueen. The band and exhibition-artist lineups have not been published yet [UNKNOWN].',
    fuente:'Instagram @grooviesclub (publicaciones del 13 y 27-oct-2026) y cartel del evento',fuente_en:'Instagram @grooviesclub (posts of 13 and 27 Oct 2026) and the event poster',
    post:'https://www.instagram.com/p/DecsU4gPd9y/',org:'grooviesclub',credito:'Cartel: @raromcqueen / Groovies Club',credito_en:'Poster: @raromcqueen / Groovies Club',youtube:null},
+  {id:'maquinas-sensibles',artistas:['sofia-algarra','ale-ramirez'],titulo:'Máquinas Sensibles',titulo_en:'Sensitive Machines',artista:'Sofía Algarra y Ale Ramírez',artista_en:'Sofía Algarra and Ale Ramírez',lugar:'radical',inicio:'2026-11-07',hora:'6:00 pm – 10:00 pm',hora_en:'6:00 pm – 10:00 pm',fin:null,
+   formato:'Exposición colectiva',formato_en:'Group exhibition',cat:'grafica',catInf:true,gratis:null,imgs:['/mty/img/maquinas-sensibles.jpg'],cal:{"h":"18:00","min":240},
+   resumen:'Dos investigaciones sobre cómo las imágenes que nos rodean forman nuestra identidad y fabrican recuerdos, en serigrafía y risografía.',resumen_en:'Two research projects on how the images around us shape our identity and make memories, in screen print and risograph.',
+   detalle:'Exposición colectiva “Máquinas Sensibles”: reúne dos investigaciones individuales, Glass Skin de Sofía Algarra y Desdoblando Memorias de Ale Ramírez. Exploran la imagen como lenguaje, código y archivo, desde la sobreestimulación de las redes sociales y los símbolos de la cultura digital hasta la nostalgia y la necesidad de conservar lo que ya no está, con serigrafía, risografía y procesos de trabajo creativo casero y manualidades heredadas. Sábado 7 de noviembre de 2026, de 6:00 a 10:00 pm, en Radical Espacio Cultural (Calle Gral. Carlos Salazar Ote. 1345, Centro). La categoría es gráfica por los medios que menciona la publicación [INFERIDO]. Costo: no indicado en la publicación.',
+   detalle_en:'Group exhibition “Máquinas Sensibles” (“Sensitive Machines”): it brings together two individual research projects, Glass Skin by Sofía Algarra and Desdoblando Memorias by Ale Ramírez. They explore the image as language, code and archive, from the overstimulation of social media and the symbols of digital culture to nostalgia and the need to keep what is no longer there, using screen print, risograph and home-based creative processes and inherited crafts. Saturday 7 November 2026, 6:00 to 10:00 pm, at Radical Espacio Cultural (Calle Gral. Carlos Salazar Ote. 1345, Centro). The category is graphic arts based on the media named in the post [INFERRED]. Cost: not stated in the post.',
+   fuente:'Instagram @ale4104 (publicación del 27-oct-2026)',fuente_en:'Instagram @ale4104 (post of 27 Oct 2026)',
+   post:'https://www.instagram.com/p/DfAlG7BK1Ab/',org:'ale4104',credito:'Cartel: @ale4104',credito_en:'Poster: @ale4104',youtube:null},
+  {id:'homenaje-porfirio-tamez',titulo:'Exposición colectiva en homenaje al Dr. Porfirio Tamez Solís',titulo_en:'Group exhibition in tribute to Dr. Porfirio Tamez Solís',artista:'UANL, Asociación Plástica San Pedro, Asociación Plástica de Monterrey y Asociación de Arte Nicolaita',artista_en:'UANL, Asociación Plástica San Pedro, Asociación Plástica de Monterrey and Asociación de Arte Nicolaita',lugar:'biblioraul',inicio:'2026-11-04',hora:'4:00 pm (inauguración)',hora_en:'4:00 pm (opening)',fin:null,
+   formato:'Exposición colectiva',formato_en:'Group exhibition',cat:'multi',catInf:true,gratis:true,imgs:['/mty/img/homenaje-tamez.jpg'],cal:{"h":"16:00","min":120},
+   resumen:'Muestra colectiva en reconocimiento a la trayectoria del Dr. Porfirio Tamez Solís, con asociaciones de artistas plásticos y la UANL.',resumen_en:'Group show honoring the career of Dr. Porfirio Tamez Solís, with visual-artist associations and UANL.',
+   detalle:'La Universidad Autónoma de Nuevo León, en colaboración con la Asociación Plástica San Pedro, la Asociación Plástica de Monterrey y la Asociación de Arte Nicolaita, invita a la inauguración de la exposición colectiva en homenaje al Dr. Porfirio Tamez Solís, en reconocimiento a su trayectoria: una muestra que celebra el valor de la palabra, el conocimiento y el arte como semillas que trascienden y dejan huella. Miércoles 4 de noviembre de 2026, 16:00 h, en el área social de la Biblioteca Universitaria “Raúl Rangel Frías”. Entrada libre. La publicación no indica la lista de artistas ni la fecha de cierre [DESCONOCIDO]; la categoría es multidisciplinar por no indicar técnica [INFERIDO].',
+   detalle_en:'The Universidad Autónoma de Nuevo León, together with the Asociación Plástica San Pedro, the Asociación Plástica de Monterrey and the Asociación de Arte Nicolaita, invites you to the opening of the group exhibition in tribute to Dr. Porfirio Tamez Solís, recognizing his career: a show that celebrates the value of the word, knowledge and art as seeds that endure and leave a mark. Wednesday 4 November 2026, 4:00 pm, in the social area of the “Raúl Rangel Frías” University Library. Free admission. The post does not list the artists or the closing date [UNKNOWN]; the category is multidisciplinary because no technique is stated [INFERRED].',
+   fuente:'Instagram @asociaciondelaplasticasp (publicación del 28-oct-2026)',fuente_en:'Instagram @asociaciondelaplasticasp (post of 28 Oct 2026)',
+   post:'https://www.instagram.com/p/DfC00H1RJR_/',org:'asociaciondelaplasticasp',credito:'Cartel: @asociaciondelaplasticasp',credito_en:'Poster: @asociaciondelaplasticasp',youtube:null},
   {id:'cumbres-de-monterrey',titulo:'Cumbres de Monterrey, Cumbres de Vida',titulo_en:'Cumbres de Monterrey, Cumbres de Vida',artista:'Exposición fotográfica colectiva',artista_en:'Group photography exhibition',lugar:'mtcaballero',inicio:'2026-10-21',hora:'11:00 am (inauguración)',hora_en:'11:00 am (opening)',fin:null,finIncierto:true,
    formato:'Exposición',formato_en:'Exhibition',cat:'foto',catInf:false,gratis:null,imgs:['/mty/img/cumbres.jpg','/mty/img/cumbres-2.jpg'],cal:{h:'11:00',min:60,todoDia:true},
    resumen:'Fotografías de paisajes, flora, fauna y amenazas del Parque Nacional Cumbres de Monterrey.',resumen_en:'Photographs of landscapes, flora, fauna and threats in Cumbres de Monterrey National Park.',
@@ -2107,7 +4455,9 @@ const ARTISTAS={
   'daniel-serna':{nombre:'Daniel Serna',alias:['Daniel Serna'],ig:'dsgescultor',seg:null,segFecha:'2026-10-28',verif:'alta',rol:'artista',bio:'Artista destacado de Contagiemos ARTE · Performance 28.',bio_en:'Featured artist of Contagiemos ARTE · Performance 28.'},
   'mar-botello':{nombre:'Mar Botello',alias:['Mar Botello'],ig:'marbotello.art',seg:null,segFecha:'2026-10-28',verif:'alta',rol:'organizador',bio:'Creadora del movimiento artístico Contagiemos ARTE.',bio_en:'Creator of the Contagiemos ARTE art movement.'},
   'roberta-sada':{nombre:'Roberta Sada A',alias:['Roberta Sada A'],ig:null,seg:null,segFecha:'2026-10-28',verif:'pendiente',rol:'artista',bio:'Autora de la exposición “Naturaleza eterna” en Akadem.',bio_en:'Author of the exhibition “Naturaleza eterna” at Akadem.'},
-  'brenda-gamez':{nombre:'Brenda Gamez',alias:['Brenda Gamez'],ig:null,seg:null,segFecha:'2026-10-28',verif:'pendiente',rol:'colaboradora',bio:'Colabora con la comunidad Arquitectas.mx en “HA BI TAR”, dentro de FAMA.',bio_en:'Collaborates with the Arquitectas.mx community on “HA BI TAR”, inside FAMA.'}
+  'brenda-gamez':{nombre:'Brenda Gamez',alias:['Brenda Gamez'],ig:null,seg:null,segFecha:'2026-10-28',verif:'pendiente',rol:'colaboradora',bio:'Colabora con la comunidad Arquitectas.mx en “HA BI TAR”, dentro de FAMA.',bio_en:'Collaborates with the Arquitectas.mx community on “HA BI TAR”, inside FAMA.'},
+  'sofia-algarra':{nombre:'Sofía Algarra',alias:['Sofía Algarra'],ig:null,seg:null,segFecha:'2026-10-28',verif:'pendiente',rol:'artista',bio:'Autora de la investigación “Glass Skin”, en la exposición “Máquinas Sensibles”.',bio_en:'Author of the research project “Glass Skin”, in the exhibition “Máquinas Sensibles”.'},
+  'ale-ramirez':{nombre:'Ale Ramírez',alias:['Ale Ramírez'],ig:'ale4104',seg:null,segFecha:'2026-10-28',verif:'media',rol:'artista',bio:'Autora de “Desdoblando Memorias”, en la exposición “Máquinas Sensibles”.',bio_en:'Author of “Desdoblando Memorias”, in the exhibition “Máquinas Sensibles”.'}
 };
 
 /* ============ IDIOMA (español / English) ============ */
@@ -2133,7 +4483,7 @@ es:{
  rating:'Calificación', rating_init:'Aún sin calificaciones. Sé el primero en contar tu experiencia.', rating_avg:'Promedio de {0}.', be_first_short:'Sé el primero', ci_cta:'Cuenta tu experiencia',
  ex_date_h:'Busca por fecha', ex_date_sub:'Toca para elegir cuándo quieres salir.', ex_zone_h:'Busca por zona', ex_zone_sub:'Toca para elegir una zona y ver sus lugares.', ex_all:'Ver todos', ex_n:'{0} eventos', ex_n1:'1 evento', src_web:'Sitio oficial ↗', see_event:'Ver evento →', map_sec_h:'Mapa de zonas culturales',
  checkin:'Check in ✱', checkin_opens:'El check-in se abre cuando empieza el evento ({0}).',
- story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_title_agenda:'Comparte la agenda', ag_btn:'📲 Comparte la agenda', ag_shuffle:'🔀 Otro diseño', ag_invite_h:'Invita a tu comunidad', ag_invite_p:'Si eres artista, organizas o vas a ir: comparte la agenda en tu historia. Cada imagen sale distinta, con fotos de las zonas culturales de Monterrey.', story_share:'📲 Compartir', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', f_today2:'Hoy', f_week2:'Esta semana', f_nextweek:'Próxima semana', f_month_btn:'Mes', f_all2:'Todo', where_h:'Dónde', map_btn:'Mapa', ctrl_h:'Buscar por fecha y zona', f_cat_btn:'Categoría', hint_abierto:'Lo que empieza hoy y lo que sigue abierto.', hint_sem:'Lo que empieza en los próximos 7 días.', hint_sem2:'Lo que empieza dentro de 8 a 14 días.', hint_todos:'Todo lo vigente: hoy, lo que sigue abierto y lo que viene.', hint_archivo:'Eventos que ya terminaron.', hint_mes:'Lo que está activo en {0}.', more_n:'Ver {0} más', less_ev:'Ver menos', vis_short:'Elige tus intereses y te decimos a dónde ir', com_short:'Recomienda artistas y cuenta tu experiencia', bar_search:'Buscar', bar_date:'Fecha', bar_zone:'Zona', bar_art:'Arte', bar_map:'Mapa', pop_close:'Cerrar', pop_done:'Listo', pop_clear:'Limpiar', pop_srch_h:'Buscar', pop_when_h:'¿Cuándo?', pop_where_h:'¿En qué zona? (puedes elegir varias)', pop_cat_h:'¿Qué tipo de arte? (puedes elegir varios)', pop_month_h:'Por mes', where_all:'Todas las zonas', pop_map:'Ver en el mapa', act_h:'Filtros activos', act_remove:'Quitar este filtro', clear_all:'Limpiar todo', zone_art_h:'Nuestros artistas en esta zona', view_work:'Ver su colección en la tienda', view_coll:'Ver colección', zart_alt:'Detalle de una obra de {0}', zone_spaces_h:'Espacios ({0})', n_zones:'zonas', n_arts:'tipos', multi_hint:'Puedes elegir varias', view_h:'Vista', view_grid:'Cuadrícula', view_list:'Lista', skip:'Ir al contenido', fer_home_h:'Ferias y festivales', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas →', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias y festivales', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
+ story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_title_agenda:'Comparte la agenda', qr_btn:'▦ QR para impresos', qr_color:'Color del marco', qr_cn:['Amarillo','Lima','Celeste','Menta','Naranja','Azul','Violeta','Gris'], qr_title:'Código QR para impresos', qr_camp:'Nombre de la campaña', qr_camp_ph:'ej. cartel expo noviembre', qr_hint:'Cada escaneo se registra en Google Analytics como campaña con ese nombre (fuente “qr”, medio “print”). Usa un nombre distinto para cada impreso.', qr_size:'Para imprimir: mínimo 2.5 cm por lado y deja el margen blanco alrededor.', qr_dl:'⬇ PNG sin marco (alta calidad)', qr_dlf:'⬇ PNG con marco CUCO ARTS', qr_copy:'🔗 Copiar liga con medición', qr_copied:'Liga copiada.', qr_saved:'Imagen guardada.', qr_scan_agenda:'ESCANEA · AGENDA VIVA DE ARTES VISUALES', qr_scan_event:'ESCANEA PARA VER EL EVENTO', ag_btn:'📲 Comparte la agenda', ag_shuffle:'🔀 Otro diseño', ag_invite_h:'Invita a tu comunidad', ag_invite_p:'Si eres artista, organizas o vas a ir: comparte la agenda en tu historia. Cada imagen sale distinta, con fotos de las zonas culturales de Monterrey.', story_share:'📲 Compartir', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', f_today2:'Hoy', f_week2:'Esta semana', f_nextweek:'Próxima semana', f_month_btn:'Mes', f_all2:'Todo', where_h:'Dónde', map_btn:'Mapa', ctrl_h:'Buscar por fecha y zona', f_cat_btn:'Categoría', hint_abierto:'Lo que empieza hoy y lo que sigue abierto.', hint_sem:'Lo que empieza en los próximos 7 días.', hint_sem2:'Lo que empieza dentro de 8 a 14 días.', hint_todos:'Todo lo vigente: hoy, lo que sigue abierto y lo que viene.', hint_archivo:'Eventos que ya terminaron.', hint_mes:'Lo que está activo en {0}.', more_n:'Ver {0} más', less_ev:'Ver menos', vis_short:'Elige tus intereses y te decimos a dónde ir', com_short:'Recomienda artistas y cuenta tu experiencia', bar_search:'Buscar', bar_date:'Fecha', bar_zone:'Zona', bar_art:'Arte', bar_map:'Mapa', pop_close:'Cerrar', pop_done:'Listo', pop_clear:'Limpiar', pop_srch_h:'Buscar', pop_when_h:'¿Cuándo?', pop_where_h:'¿En qué zona? (puedes elegir varias)', pop_cat_h:'¿Qué tipo de arte? (puedes elegir varios)', pop_month_h:'Por mes', where_all:'Todas las zonas', pop_map:'Ver en el mapa', act_h:'Filtros activos', act_remove:'Quitar este filtro', clear_all:'Limpiar todo', zone_art_h:'Nuestros artistas en esta zona', view_work:'Ver su colección en la tienda', view_coll:'Ver colección', zart_alt:'Detalle de una obra de {0}', zone_spaces_h:'Espacios ({0})', n_zones:'zonas', n_arts:'tipos', multi_hint:'Puedes elegir varias', view_h:'Vista', view_grid:'Cuadrícula', view_list:'Lista', skip:'Ir al contenido', fer_home_h:'Ferias y festivales', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas →', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias y festivales', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
  visitor:'Visitante', see_post:'Ver su publicación ↗', initial:'inicial', ci_one:'check-in', ci_many:'check-ins', rec_one:'recomendación', rec_many:'recomendaciones',
  place_events:'Eventos en este espacio', place_events_sub:'Ordenados por fecha, con lo más cercano primero.', none_place_events:'Aún no hemos cargado eventos de este espacio.',
  place_data:'Datos del espacio', phone:'Teléfono', website:'Sitio web', instagram:'Instagram', zone:'Zona', addr_source:'Fuente de la dirección', santiago_note:'* Santiago, N.L. está incluido dentro de la zona Sur.', pin_note:'El pin del mapa es aproximado.',
@@ -2180,7 +4530,7 @@ en:{
  rating:'Rating', rating_init:'No ratings yet. Be the first to share your experience.', rating_avg:'Average of {0}.', be_first_short:'Be the first', ci_cta:'Share your experience',
  ex_date_h:'Search by date', ex_date_sub:'Tap to pick when you want to go out.', ex_zone_h:'Search by zone', ex_zone_sub:'Tap to pick a zone and see its places.', ex_all:'See all', ex_n:'{0} events', ex_n1:'1 event', src_web:'Official website ↗', see_event:'View event →', map_sec_h:'Cultural zones map',
  checkin:'Check in ✱', checkin_opens:'Check-in opens when the event starts ({0}).',
- story_ig:'Instagram story', story_title:'Share it in your story', story_title_agenda:'Share the agenda', ag_btn:'📲 Share the agenda', ag_shuffle:'🔀 Another design', ag_invite_h:'Invite your community', ag_invite_p:'Whether you are an artist, an organizer or going: share the agenda in your story. Each image comes out different, with photos from Monterrey’s cultural zones.', story_share:'📲 Share', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', f_today2:'Today', f_week2:'This week', f_nextweek:'Next week', f_month_btn:'Month', f_all2:'All', where_h:'Where', map_btn:'Map', ctrl_h:'Browse by date and zone', f_cat_btn:'Category', hint_abierto:'What starts today and what is still open.', hint_sem:'What starts in the next 7 days.', hint_sem2:'What starts in 8 to 14 days.', hint_todos:'Everything current: today, still open and upcoming.', hint_archivo:'Events that have ended.', hint_mes:'What is active in {0}.', more_n:'See {0} more', less_ev:'See less', vis_short:'Pick your interests and we show you where to go', com_short:'Recommend artists and share your experience', bar_search:'Search', bar_date:'Date', bar_zone:'Zone', bar_art:'Art', bar_map:'Map', pop_close:'Close', pop_done:'Done', pop_clear:'Clear', pop_srch_h:'Search', pop_when_h:'When?', pop_where_h:'Which zone? (pick several)', pop_cat_h:'What kind of art? (pick several)', pop_month_h:'By month', where_all:'All zones', pop_map:'See on the map', act_h:'Active filters', act_remove:'Remove this filter', clear_all:'Clear all', zone_art_h:'Our artists in this zone', view_work:'See their collection in the store', view_coll:'See collection', zart_alt:'Close-up of a work by {0}', zone_spaces_h:'Spaces ({0})', n_zones:'zones', n_arts:'kinds', multi_hint:'You can pick several', view_h:'View', view_grid:'Grid', view_list:'List', skip:'Skip to content', fer_home_h:'Fairs and festivals', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions →', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs and festivals', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
+ story_ig:'Instagram story', story_title:'Share it in your story', story_title_agenda:'Share the agenda', qr_btn:'▦ QR for print', qr_color:'Frame color', qr_cn:['Yellow','Lime','Sky blue','Mint','Orange','Blue','Violet','Grey'], qr_title:'QR code for print', qr_camp:'Campaign name', qr_camp_ph:'e.g. november expo poster', qr_hint:'Every scan is recorded in Google Analytics as a campaign with that name (source “qr”, medium “print”). Use a different name for each printed piece.', qr_size:'For printing: at least 2.5 cm per side and keep the white margin around it.', qr_dl:'⬇ PNG without frame (high quality)', qr_dlf:'⬇ PNG with CUCO ARTS frame', qr_copy:'🔗 Copy tracked link', qr_copied:'Link copied.', qr_saved:'Image saved.', qr_scan_agenda:'SCAN · LIVE VISUAL ARTS AGENDA', qr_scan_event:'SCAN TO SEE THE EVENT', ag_btn:'📲 Share the agenda', ag_shuffle:'🔀 Another design', ag_invite_h:'Invite your community', ag_invite_p:'Whether you are an artist, an organizer or going: share the agenda in your story. Each image comes out different, with photos from Monterrey’s cultural zones.', story_share:'📲 Share', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', f_today2:'Today', f_week2:'This week', f_nextweek:'Next week', f_month_btn:'Month', f_all2:'All', where_h:'Where', map_btn:'Map', ctrl_h:'Browse by date and zone', f_cat_btn:'Category', hint_abierto:'What starts today and what is still open.', hint_sem:'What starts in the next 7 days.', hint_sem2:'What starts in 8 to 14 days.', hint_todos:'Everything current: today, still open and upcoming.', hint_archivo:'Events that have ended.', hint_mes:'What is active in {0}.', more_n:'See {0} more', less_ev:'See less', vis_short:'Pick your interests and we show you where to go', com_short:'Recommend artists and share your experience', bar_search:'Search', bar_date:'Date', bar_zone:'Zone', bar_art:'Art', bar_map:'Map', pop_close:'Close', pop_done:'Done', pop_clear:'Clear', pop_srch_h:'Search', pop_when_h:'When?', pop_where_h:'Which zone? (pick several)', pop_cat_h:'What kind of art? (pick several)', pop_month_h:'By month', where_all:'All zones', pop_map:'See on the map', act_h:'Active filters', act_remove:'Remove this filter', clear_all:'Clear all', zone_art_h:'Our artists in this zone', view_work:'See their collection in the store', view_coll:'See collection', zart_alt:'Close-up of a work by {0}', zone_spaces_h:'Spaces ({0})', n_zones:'zones', n_arts:'kinds', multi_hint:'You can pick several', view_h:'View', view_grid:'Grid', view_list:'List', skip:'Skip to content', fer_home_h:'Fairs and festivals', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions →', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs and festivals', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
  visitor:'Visitor', see_post:'See their post ↗', initial:'starting', ci_one:'check-in', ci_many:'check-ins', rec_one:'recommendation', rec_many:'recommendations',
  place_events:'Events at this space', place_events_sub:'Sorted by date, soonest first.', none_place_events:"We haven't loaded events for this space yet.",
  place_data:'Space details', phone:'Phone', website:'Website', instagram:'Instagram', zone:'Zone', addr_source:'Address source', santiago_note:'* Santiago, N.L. is included within the South zone.', pin_note:'The map pin is approximate.',
@@ -2459,6 +4809,7 @@ function shareText(ev){const p=PLACES[ev.lugar];return '🎨 '+eT(ev)+' · '+pN(
 function shareItems(ev){
   const u=encodeURIComponent(shareUrl(ev)), tx=encodeURIComponent(shareText(ev)), tu=encodeURIComponent(shareText(ev)+' '+shareUrl(ev));
   return `<button type="button" data-story="${ev._f?'f:'+ev._f:esc(ev.id)}"><span class="dot" style="background:#E1306C"></span>${esc(t('story_ig'))}</button>
+    <button type="button" data-qr="${ev._f?'f:'+ev._f:esc(ev.id)}"><span class="dot" style="background:#232322"></span>${esc(t('qr_btn'))}</button>
     <a href="https://wa.me/?text=${tu}" target="_blank" rel="noopener"><span class="dot" style="background:#25D366"></span>WhatsApp</a>
     <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener"><span class="dot" style="background:#1877F2"></span>Facebook</a>
     <a href="https://twitter.com/intent/tweet?text=${tx}&url=${u}" target="_blank" rel="noopener"><span class="dot" style="background:#232322"></span>X</a>
@@ -3752,6 +6103,7 @@ $('#themeBtn').onclick=()=>{
 window.addEventListener('storage',e=>{if(e.key==='cucoarts-theme')applyTheme(e.newValue)});
 function refreshStatic(){
   applyStatic();
+  $$('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
   $('#langBtn').textContent=t('lang_btn');
   {const f3=$('#foot3'); if(f3)f3.textContent=t('foot_an')}
   $('#foot1').innerHTML=t('foot_1','<a href="https://store.cucoarts.com" target="_blank" rel="noopener">store.cucoarts.com</a>');
@@ -4289,6 +6641,60 @@ document.addEventListener('click',e=>{
   else if(/store\.cucoarts\.com/.test(h))track('cta_store',{link_url:h});
   else if(/instagram\.com|facebook\.com/.test(h)&&a.target==='_blank')track('click_organizer',{link_url:h.slice(0,120)});
 },true);
+
+
+/* ===== Código QR para impresos, con trazabilidad por campaña =====
+ * Genera un QR (PNG de alta resolución) que lleva a /mty con parámetros UTM: fuente "qr", medio "print", campaña = el nombre que escribe la persona.
+ * Google Analytics lo registra como campaña, así cada impreso (cartel, volante, tarjeta) se mide por separado. El QR se dibuja en el navegador: no se envía nada a ningún servicio. */
+let qrKey='agenda', qrState={url:'',slug:''};
+function qrSlug(x){return String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)}
+function qrTarget(key){
+  const base='https://cucoarts.com/mty';
+  if(key==='agenda')return {hash:'',item:'agenda',label:t('qr_scan_agenda'),short:'cucoarts.com/mty'};
+  if(String(key).startsWith('f:')){const k=key.slice(2);return {hash:'#/feria/'+k,item:'feria-'+k,label:t('qr_scan_event'),short:'cucoarts.com/mty'}}
+  const ev=EVENTS.find(e=>e.id===key);return {hash:'#/evento/'+key,item:key,label:t('qr_scan_event'),short:'cucoarts.com/mty',title:ev?eT(ev):''};
+}
+function qrBuild(){
+  const tg=qrTarget(qrKey), d=today(), def='qr-'+tg.item+'-'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0');
+  const slug=qrSlug($('#qrCamp').value)||def;
+  const url='https://cucoarts.com/mty?utm_source=qr&utm_medium=print&utm_campaign='+encodeURIComponent(slug)+'&utm_content='+encodeURIComponent(tg.item)+tg.hash;
+  qrState={url,slug,tg}; $('#qrUrl').textContent=url; return qrState;
+}
+function qrMatrix(url){const q=qrcode(0,'M');q.addData(url,'Byte');q.make();return q}
+function qrPaint(g,q,x,y,size,fg,bg){const n=q.getModuleCount(),quiet=4,m=Math.floor(size/(n+2*quiet)),tot=m*(n+2*quiet);const ox=x+Math.floor((size-tot)/2),oy=y+Math.floor((size-tot)/2);g.fillStyle=bg;g.fillRect(x,y,size,size);g.fillStyle=fg;for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))g.fillRect(ox+(c+quiet)*m,oy+(r+quiet)*m,m,m)}
+function qrDrawPlain(url){const q=qrMatrix(url),n=q.getModuleCount(),m=Math.max(10,Math.floor(2000/(n+8))),size=m*(n+8),c=document.createElement('canvas');c.width=c.height=size;qrPaint(c.getContext('2d'),q,0,0,size,'#000000','#FFFFFF');return c}
+let qrCol=0; try{qrCol=Math.max(0,Math.min(AG_GROUNDS.length-1,+(localStorage.getItem('mty_qr_color')||0)))}catch(e){}
+async function qrDrawFramed(url,tg,ci){
+  const gr=AG_GROUNDS[ci==null?qrCol:ci], FG=gr.fg;
+  await loadStoryFonts();
+  const W=2000,H=2600,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d'),q=qrMatrix(url);
+  g.fillStyle=gr.bg;g.fillRect(0,0,W,H);
+  g.fillStyle=FG;g.font='700 52px "Courier Prime","Courier New",monospace';g.textBaseline='alphabetic';g.fillText('CUCOARTS / ART COMPANY',120,150);g.textAlign='right';g.fillText('ARTE LOCAL',W-120,150);g.textAlign='left';
+  g.fillStyle='#232322';rrect(g,120+16,250+16,W-240,W-240,60);g.fill();g.fillStyle='#FFFFFF';rrect(g,120,250,W-240,W-240,60);g.fill();g.lineWidth=14;g.strokeStyle='#232322';g.stroke();
+  qrPaint(g,q,200,330,W-400,'#000000','#FFFFFF');
+  const y0=250+(W-240)+130;g.fillStyle=FG;g.font='700 84px '+SF;
+  const L=wrapLines(g,(tg.title&&qrKey!=='agenda'?tg.title.toUpperCase():tg.label),W-240,3);L.forEach((l,i)=>g.fillText(l,120,y0+i*92));
+  g.font='700 54px "Courier Prime","Courier New",monospace';g.fillText(tg.short,120,y0+L.length*92+30);g.fillRect(120,y0+L.length*92+42,g.measureText(tg.short).width,6);
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');if(logo){const lw=520,lh=lw*logo.naturalHeight/logo.naturalWidth;g.drawImage(tintImg(logo,FG,Math.round(lw),Math.round(lh)),W-120-lw,H-120-lh,lw,lh)}
+  return c;
+}
+let qrSeq=0;
+async function qrRefresh(){const st=qrBuild(),my=++qrSeq,src=await qrDrawFramed(st.url,st.tg);if(my!==qrSeq)return;const cv=$('#qrCanvas');cv.width=src.width;cv.height=src.height;cv.getContext('2d').drawImage(src,0,0)}
+function qrSwatches(){const sw=$('#qrSw');if(!sw)return;sw.setAttribute('aria-label',t('qr_color'));const names=t('qr_cn');sw.innerHTML=AG_GROUNDS.map((g,i)=>'<button type="button" role="radio" class="qrdot'+(i===qrCol?' on':'')+'" data-ci="'+i+'" aria-checked="'+(i===qrCol)+'" title="'+esc(names[i])+'" aria-label="'+esc(names[i])+'" style="background:'+g.bg+'"></button>').join('')}
+function openQR(key){qrKey=key;$('#qrMsg').textContent='';$('#qrCamp').value='';qrSwatches();qrRefresh();$('#qrOverlay').classList.add('open');document.body.style.overflow='hidden';track('qr_open',{item_id:qrTarget(key).item})}
+function closeQR(){$('#qrOverlay').classList.remove('open');document.body.style.overflow=''}
+function qrSave(c,name){c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);$('#qrMsg').textContent=t('qr_saved')},'image/png')}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-qr]');if(!b)return;e.preventDefault();const m=$('#shareMenu');if(m)m.hidden=true;openQR(b.dataset.qr)});
+$('#storyQR').onclick=()=>{const k=storyKey;closeStory();openQR(k)};
+$('#qrCamp').addEventListener('input',()=>qrRefresh());
+$('#qrSw').addEventListener('click',e=>{const b=e.target.closest('[data-ci]');if(!b)return;qrCol=+b.dataset.ci;try{localStorage.setItem('mty_qr_color',String(qrCol))}catch(x){}qrSwatches();qrRefresh();haptic(8)});
+$('#qrClose').onclick=closeQR; $('#qrOverlay').addEventListener('mousedown',e=>{if(e.target.id==='qrOverlay')closeQR()});
+$('#qrDl').onclick=()=>{const st=qrBuild();qrSave(qrDrawPlain(st.url),'cuco-arts-qr-'+st.slug+'.png');track('qr_download',{campaign:st.slug,style:'plain'})};
+$('#qrDlF').onclick=async()=>{const st=qrBuild();qrSave(await qrDrawFramed(st.url,st.tg),'cuco-arts-qr-'+st.slug+'-marco.png');track('qr_download',{campaign:st.slug,style:'framed'})};
+$('#qrCopy').onclick=async()=>{const st=qrBuild();try{await navigator.clipboard.writeText(st.url);$('#qrMsg').textContent=t('qr_copied')}catch(x){$('#qrMsg').textContent=st.url}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#qrOverlay').classList.contains('open'))closeQR()});
+/* solo para pruebas locales: devuelve el PNG del QR sin descargarlo */
+async function qrToServer(key,camp,framed,ci){qrKey=key;$('#qrCamp').value=camp||'';if(ci!=null)qrCol=ci;const st=qrBuild();const c=framed?await qrDrawFramed(st.url,st.tg):qrDrawPlain(st.url);const b=await new Promise(r=>c.toBlob(r,'image/png'));const r=await fetch('/__save?name=qr-'+(framed?'marco':'plano')+'.png',{method:'POST',body:b});return {st:r.status,url:st.url,w:c.width,h:c.height}}
 
 /* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
 /* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
