@@ -690,6 +690,35 @@ main:focus{outline:none}
 .fercardh .fdates{font:700 12px/1 var(--mono,monospace);letter-spacing:.06em;text-transform:uppercase;opacity:.9}
 .fercardh .fgo{margin-top:4px;font-weight:700}
 
+/* vista previa de la historia: el recuadro punteado marca dónde pegar el sticker de enlace (no sale en la imagen exportada) */
+.storyprev{position:relative;width:min(100%,300px);margin:0 auto}
+.storyprev #storyCanvas{width:100%;margin:0}
+.stickerguide{position:absolute;left:13.9%;top:80.8%;width:72.2%;height:6.25%;border:2px dashed #FA2713;border-radius:10px;display:grid;place-items:center;pointer-events:none;background:rgba(250,39,19,.07)}
+.stickerguide span{font:700 9px/1.1 var(--mono,monospace);letter-spacing:.04em;text-transform:uppercase;color:#FA2713;text-align:center;padding:0 4px}
+
+/* letra de la imagen para historias (se usa en el canvas; Neue Montreal solo existe donde está instalada) */
+@font-face{font-family:"Hanken Grotesk";src:url("/mty/fonts/hanken-500.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("/mty/fonts/hanken-700.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("/mty/fonts/hanken-800.woff2") format("woff2");font-weight:800;font-display:swap}
+
+/* instructivo de la historia (dentro de la misma ventana) */
+.storyprev[hidden],.storyguide[hidden]{display:none}
+.storyhow{width:100%;margin-top:10px;justify-content:center}
+.storyguide{text-align:left;color:#232322;max-height:min(62vh,520px);overflow:auto;padding:2px 4px 4px}
+.storyguide h3{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+.storyguide ol{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.storyguide li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.sgnum{width:34px;height:34px;border-radius:50%;background:#232322;color:#FFE7CF;display:grid;place-items:center;font-weight:800;font-size:16px}
+.sgh{display:block;font-size:17px;line-height:1.2}
+.storyguide p{margin:4px 0 0;font-size:15px;line-height:1.4}
+.sgalt{display:block;margin-top:6px;padding:8px 10px;border-radius:10px;background:rgba(35,35,34,.09);color:#232322;font-size:14px}
+.sgvis{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.igchip{display:inline-flex;align-items:center;gap:6px;border:2px solid #232322;border-radius:999px;padding:5px 12px;background:#fff;color:#232322;font-weight:800;font-size:13px;letter-spacing:.04em}
+.igchip i{font-style:normal;font-size:16px}
+.igchip.face{padding:5px 9px}
+.sgarrow{font-size:20px;font-weight:800}
+.sgtip{margin-top:14px;padding:10px 12px;border:2px dashed #232322;border-radius:12px;color:#232322}
+
 /* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
 .cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
   border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 #EA663D}
@@ -883,12 +912,14 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
   <div class="modal story" id="storyModal">
     <button class="x" type="button" id="storyClose" data-i18n-title="close">×</button>
     <h2 id="stTitle" data-i18n="story_title"></h2>
-    <canvas id="storyCanvas" width="1080" height="1920" aria-label="Historia de Instagram"></canvas>
+    <div class="storyprev"><canvas id="storyCanvas" width="1080" height="1920" aria-label="Historia de Instagram"></canvas><div class="stickerguide" aria-hidden="true"><span data-i18n="story_sticker"></span></div></div>
+    <div class="storyguide" id="storyGuide" hidden></div>
     <div class="story-actions">
       <button class="btn big" type="button" id="storyShare" style="animation:none" data-i18n="story_share"></button>
       <button class="btn alt" type="button" id="storyDl" data-i18n="story_dl"></button>
       <button class="btn alt" type="button" id="storyCopy" data-i18n="story_copy"></button>
     </div>
+    <button class="btn alt storyhow" type="button" id="storyHow" aria-expanded="false"></button>
     <p class="note" id="storyMsg" style="margin:8px 0 0;min-height:1.2em;font-weight:700"></p>
     <p class="note" data-i18n="story_hint"></p>
   </div>
@@ -1603,7 +1634,7 @@ es:{
  rating:'Calificación', rating_init:'Aún sin calificaciones. Sé el primero en contar tu experiencia.', rating_avg:'Promedio de {0}.', be_first_short:'Sé el primero', ci_cta:'Cuenta tu experiencia',
  ex_date_h:'Busca por fecha', ex_date_sub:'Toca para elegir cuándo quieres salir.', ex_zone_h:'Busca por zona', ex_zone_sub:'Toca para elegir una zona y ver sus lugares.', ex_all:'Ver todos', ex_n:'{0} eventos', ex_n1:'1 evento', src_web:'Sitio oficial ↗', see_event:'Ver evento →', map_sec_h:'Mapa de zonas culturales',
  checkin:'Check in ✱', checkin_opens:'El check-in se abre cuando empieza el evento ({0}).',
- story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_share:'📲 Compartir', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace: la liga ya quedó copiada, solo pégala. Así quien la vea podrá descubrir más en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', skip:'Ir al contenido', fer_home_h:'Ferias y festivales', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas →', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias y festivales', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
+ story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_share:'📲 Compartir', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', skip:'Ir al contenido', fer_home_h:'Ferias y festivales', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas →', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias y festivales', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
  visitor:'Visitante', see_post:'Ver su publicación ↗', initial:'inicial', ci_one:'check-in', ci_many:'check-ins', rec_one:'recomendación', rec_many:'recomendaciones',
  place_events:'Eventos en este espacio', place_events_sub:'Ordenados por fecha, con lo más cercano primero.', none_place_events:'Aún no hemos cargado eventos de este espacio.',
  place_data:'Datos del espacio', phone:'Teléfono', website:'Sitio web', instagram:'Instagram', zone:'Zona', addr_source:'Fuente de la dirección', santiago_note:'* Santiago, N.L. está incluido dentro de la zona Sur.', pin_note:'El pin del mapa es aproximado.',
@@ -1650,7 +1681,7 @@ en:{
  rating:'Rating', rating_init:'No ratings yet. Be the first to share your experience.', rating_avg:'Average of {0}.', be_first_short:'Be the first', ci_cta:'Share your experience',
  ex_date_h:'Search by date', ex_date_sub:'Tap to pick when you want to go out.', ex_zone_h:'Search by zone', ex_zone_sub:'Tap to pick a zone and see its places.', ex_all:'See all', ex_n:'{0} events', ex_n1:'1 event', src_web:'Official website ↗', see_event:'View event →', map_sec_h:'Cultural zones map',
  checkin:'Check in ✱', checkin_opens:'Check-in opens when the event starts ({0}).',
- story_ig:'Instagram story', story_title:'Share it in your story', story_share:'📲 Share', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_hint:'Upload the image to your Instagram story and add the link sticker: the link is already copied, just paste it. Whoever sees it can discover more at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', skip:'Skip to content', fer_home_h:'Fairs and festivals', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions →', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs and festivals', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
+ story_ig:'Instagram story', story_title:'Share it in your story', story_share:'📲 Share', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', skip:'Skip to content', fer_home_h:'Fairs and festivals', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions →', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs and festivals', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
  visitor:'Visitor', see_post:'See their post ↗', initial:'starting', ci_one:'check-in', ci_many:'check-ins', rec_one:'recommendation', rec_many:'recommendations',
  place_events:'Events at this space', place_events_sub:'Sorted by date, soonest first.', none_place_events:"We haven't loaded events for this space yet.",
  place_data:'Space details', phone:'Phone', website:'Website', instagram:'Instagram', zone:'Zone', addr_source:'Address source', santiago_note:'* Santiago, N.L. is included within the South zone.', pin_note:'The map pin is approximate.',
@@ -3129,96 +3160,145 @@ function storyBlurb(ev,max){
   if(dot>max*0.55)return cut.slice(0,dot+1);
   return cut.slice(0,cut.lastIndexOf(' '))+'…';
 }
+/* Medidas de la historia (1080×1920, el tamaño que pide Instagram; en el teléfono se ve a ~36 % de este tamaño, por eso el texto nunca baja de ~28 px).
+ * Instagram tapa con su interfaz ~250 px arriba (perfil y audio) y ~220 px abajo (responder); las guías recomiendan ~250 px libres arriba y abajo
+ * y ~6-8 % a los lados. El contenido vive entre TOP y LIMIT, con márgenes laterales de 84 px (7.8 %).
+ * Arriba (debajo de lo que tapa Instagram): un listón oscuro de lado a lado con la etiqueta de tiempo (HOY…) y la invitación de marca "comparte tu experiencia en cucoarts.com/mty".
+ * El hueco STICKER queda vacío en el tercio inferior (lejos de los bordes y sin tapar texto): ahí se pega a mano el sticker con la liga al evento. */
+const STORY={M:84,TOP:268,RIB_Y:262,RIB_H:112,LIMIT:1520,STICKER:{x:150,y:1552,w:780,h:120},DARK_Y:1704};
+/* Letra propia de la historia: Hanken Grotesk (licencia libre OFL, se sirve desde /mty/fonts) para que se vea igual en iPhone, Android y escritorio;
+ * Neue Montreal solo existe en equipos donde está instalada, así que en un teléfono caía a Helvetica o Roboto. */
+const SF='"Hanken Grotesk","Helvetica Neue",Arial,sans-serif';
+async function loadStoryFonts(){try{await Promise.all([500,700,800].map(w=>document.fonts.load(w+' 40px "Hanken Grotesk"')))}catch(e){}}
+/* fondo suave sin ctx.filter (iOS/Safari no lo soporta y la foto salía duplicada): se reduce a miniatura y se amplía con suavizado */
+function softBg(g,img,x,y,w,h){
+  const sw=Math.max(8,Math.round(w/40)), sh=Math.max(8,Math.round(h/40)), s=document.createElement('canvas'); s.width=sw; s.height=sh;
+  const sg=s.getContext('2d'); sg.imageSmoothingEnabled=true; sg.imageSmoothingQuality='high';
+  const rc=Math.max(sw/img.naturalWidth,sh/img.naturalHeight), cw=img.naturalWidth*rc, ch=img.naturalHeight*rc; sg.drawImage(img,(sw-cw)/2,(sh-ch)/2,cw,ch);
+  g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high'; g.drawImage(s,x,y,w,h);
+  g.fillStyle='rgba(35,35,34,.2)'; g.fillRect(x,y,w,h);
+}
 async function drawStory(key){
-  // dos pasadas: la primera mide cuánto sobra abajo y la segunda agranda la foto con ese espacio
-  const p1=await drawStoryPass(key,700), extra=1700-p1.yEnd;
+  await loadStoryFonts();
+  // dos pasadas: la primera da prioridad al texto y mide cuánto sobra; la segunda agranda la foto con ese espacio
+  const p1=await drawStoryPass(key,380), extra=STORY.LIMIT-p1.yEnd;
   if(extra<40)return p1.c;
-  return (await drawStoryPass(key,Math.min(900,700+extra))).c;
+  return (await drawStoryPass(key,Math.min(640,380+extra))).c;
 }
 async function drawStoryPass(key,fhIn){
-  const {ev,fk}=storyTarget(key), en=LANG==='en';
+  const {ev,fk}=storyTarget(key), en=LANG==='en', M=STORY.M, TW=SW-2*M;
   const c=document.createElement('canvas'); c.width=SW; c.height=SH; const g=c.getContext('2d');
   const cs=getComputedStyle(document.documentElement), col=n=>cs.getPropertyValue(n).trim()||'#888';
-  const INK='#232322', CREAM='#FFE7CF', VIO='#644DEF', MUTED='#4a4a45';
+  const INK='#232322', CREAM='#FFE7CF', VIO='#644DEF', MUTED='#45453f';
   const p=PLACES[ev.lugar], z=ZONES[p.zona], zc=col(z.color);
   const lab=storyLabel(ev);
-  // fondo: crema con franja de color de la zona
+  // fondo: crema con franja del color de la zona arriba (y abajo, en la zona que cubre Instagram)
   g.fillStyle=CREAM; g.fillRect(0,0,SW,SH);
-  g.fillStyle=zc; g.fillRect(0,0,SW,520);
-  // logotipo: solo las letras de CUCO ARTS (negro, transparente)
-  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
-  if(logo){const lw=250, lh=Math.round(lw*logo.naturalHeight/logo.naturalWidth); g.drawImage(tintImg(logo,INK,lw,lh),56,52,lw,lh)}
-  else{g.fillStyle=INK;g.font='800 64px '+STORY_FONT;g.textBaseline='top';g.fillText('CUCO ARTS',56,60)}
-  // etiqueta de tiempo
-  g.font='800 46px '+STORY_FONT; g.textBaseline='middle';
-  const tw=g.measureText(lab.txt).width+64, tx=SW-56-tw;
-  g.fillStyle=INK; rrect(g,tx+6,64+6,tw,92,46); g.fill();
-  g.fillStyle=lab.bg; rrect(g,tx,64,tw,92,46); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke();
-  g.fillStyle=lab.fg; g.fillText(lab.txt,tx+32,64+47);
-  // foto con marco y sombra (la imagen completa sobre su propio fondo difuminado)
-  const fx=60, fy=230, fw=SW-120, fh=fhIn;
-  g.fillStyle=fk?VIO:INK; rrect(g,fx+14,fy+14,fw,fh,40); g.fill();
-  g.save(); rrect(g,fx,fy,fw,fh,40); g.clip();
+  g.fillStyle=zc; g.fillRect(0,0,SW,620);
+
+  // ---- encabezado: listón oscuro de lado a lado, justo debajo de lo que tapa Instagram ----
+  // a la izquierda la etiqueta de tiempo (HOY…); a la derecha la invitación de marca. Si no caben, el texto se reduce en vez de encimarse.
+  const RY=STORY.RIB_Y, RH=STORY.RIB_H;
+  g.fillStyle=INK; g.fillRect(0,RY,SW,RH);
+  const cta1=en?'SHARE YOUR EXPERIENCE AT':'COMPARTE TU EXPERIENCIA EN', cta2='cucoarts.com/mty';
+  const pv0=await loadImgSafe('/mty/img/pavo-mask.png');
+  let k=1, lw, w1, w2, bw; const PVW=38, PVH=68, GAP=16;
+  const measure=()=>{
+    g.textBaseline='middle'; g.font='800 '+Math.round(44*k)+'px '+SF; lw=g.measureText(lab.txt).width+Math.round(52*k);
+    g.textBaseline='alphabetic'; g.font='700 '+Math.round(25*k)+'px '+SF; w1=g.measureText(cta1).width; g.font='800 '+Math.round(44*k)+'px '+SF; w2=g.measureText(cta2).width;
+    bw=Math.max(w1,w2)+(pv0?Math.round(PVW*k)+GAP:0);
+  };
+  measure(); while(M+lw+36+bw>SW-M&&k>0.6){k-=0.05;measure()}
+  const lh=Math.round(72*k), ly=RY+(RH-lh)/2;
+  g.fillStyle=lab.bg; rrect(g,M,ly,lw,lh,lh/2); g.fill();
+  g.fillStyle=lab.fg; g.textBaseline='middle'; g.font='800 '+Math.round(44*k)+'px '+SF; g.fillText(lab.txt,M+Math.round(26*k),ly+lh/2+2);
+  let tx=SW-M-bw; g.textBaseline='alphabetic';
+  if(pv0){const pw2=Math.round(PVW*k), ph2=Math.round(PVH*k); g.drawImage(tintImg(pv0,CREAM,pw2,ph2),tx,RY+(RH-ph2)/2,pw2,ph2); tx+=pw2+GAP}
+  g.fillStyle=CREAM; g.font='700 '+Math.round(25*k)+'px '+SF; g.fillText(cta1,tx,RY+Math.round(40*k)+4);
+  g.fillStyle='#F7D649'; g.font='800 '+Math.round(44*k)+'px '+SF; g.fillText(cta2,tx,RY+RH-Math.round(20*k)-2);
+
+  // ---- foto con marco y sombra (la imagen completa sobre una versión suave de sí misma) ----
+  const fx=M, fy=RY+RH+30, fw=TW, fh=fhIn;
+  g.fillStyle=fk?VIO:INK; rrect(g,fx+12,fy+12,fw,fh,36); g.fill();
+  g.save(); rrect(g,fx,fy,fw,fh,36); g.clip();
   g.fillStyle='#d9c7b3'; g.fillRect(fx,fy,fw,fh);
   const img=await loadImgSafe(ev.imgs[0]);
   if(img){
-    const rc=Math.max(fw/img.naturalWidth,fh/img.naturalHeight), cw=img.naturalWidth*rc, ch=img.naturalHeight*rc;
-    try{g.filter='blur(28px) brightness(.8)'}catch(e){}
-    g.drawImage(img,fx+(fw-cw)/2,fy+(fh-ch)/2,cw,ch); g.filter='none';
+    softBg(g,img,fx,fy,fw,fh);
     const rf=Math.min(fw/img.naturalWidth,fh/img.naturalHeight), iw=img.naturalWidth*rf, ih=img.naturalHeight*rf;
-    g.drawImage(img,fx+(fw-iw)/2,fy+(fh-ih)/2,iw,ih);
+    g.imageSmoothingQuality='high'; g.drawImage(img,fx+(fw-iw)/2,fy+(fh-ih)/2,iw,ih);
   }
-  g.restore(); g.lineWidth=7; g.strokeStyle=INK; rrect(g,fx,fy,fw,fh,40); g.stroke();
-  if(fk){g.font='800 40px '+STORY_FONT;const ft=(en?'FAIR':'FERIA'), fw2=g.measureText(ft).width+56;g.fillStyle=VIO;rrect(g,fx+28,fy+28,fw2,74,37);g.fill();g.lineWidth=5;g.strokeStyle=INK;g.stroke();g.fillStyle='#fff';g.textBaseline='middle';g.fillText(ft,fx+56,fy+66)}
+  g.restore(); g.lineWidth=7; g.strokeStyle=INK; rrect(g,fx,fy,fw,fh,36); g.stroke();
+  if(fk){g.font='800 38px '+SF;g.textBaseline='middle';const ft=(en?'FAIR':'FERIA'), fw2=g.measureText(ft).width+52;g.fillStyle=VIO;rrect(g,fx+fw-24-fw2,fy+24,fw2,72,36);g.fill();g.lineWidth=5;g.strokeStyle=INK;g.stroke();g.fillStyle='#fff';g.fillText(ft,fx+fw-24-fw2+26,fy+24+38)}
 
-  // ---- texto: se arma de arriba hacia abajo y se descarta lo que ya no cabe antes de la barra de marca ----
-  const LIMIT=1730; let y=fy+fh+40;
+  // ---- texto: de arriba hacia abajo; primero lo esencial, la descripción usa el espacio que sobre ----
+  const LIMIT=STORY.LIMIT; let y=fy+fh+34;
   g.fillStyle=INK; g.textBaseline='alphabetic';
-  let size=92, lines;
-  for(const sz of [92,84,76,68,60]){size=sz;g.font='800 '+sz+'px '+STORY_FONT;lines=wrapLines(g,eT(ev),SW-120,9);if(lines.length<=2)break}
-  if(lines.length>2)lines=wrapLines(g,eT(ev),SW-120,2);
-  y+=size*0.8; lines.forEach(l=>{g.fillText(l,60,y);y+=size*1.05}); y-=size*1.05-12;
-  g.font='500 38px '+STORY_FONT; g.fillStyle=MUTED;
-  const art=wrapLines(g,eA(ev),SW-120,1)[0]||''; g.fillText(art,60,y+40); y+=40;
-  // fecha, hora y lugar
-  g.fillStyle=INK; g.font='800 44px '+STORY_FONT;
-  const fecha=(ev.fin&&ev.fin!==ev.inicio?fmtShort(ev.inicio)+' → '+fmtShort(ev.fin):fmt(ev.inicio).replace(/, \d{4}$/,'').replace(/ \d{4}$/,''));
-  y+=62; g.fillText('📅 '+fecha.toUpperCase(),60,y);
-  const hr=L(ev,'hora'); if(hr&&hr.length<28){y+=48;g.font='600 36px '+STORY_FONT;g.fillStyle=MUTED;g.fillText(hr,60,y)}
-  g.font='800 40px '+STORY_FONT; g.fillStyle=INK; y+=52;
-  g.fillText(wrapLines(g,'📍 '+pN(p)+(ev.sedes?' +'+ev.sedes.length:''),SW-120,1)[0],60,y);
-  // zonas (con emoji), categoría, gratis: se miden primero para saber cuánto espacio ocupan
+  let size=88, lines;
+  for(const sz of [88,80,72,64,58]){size=sz;g.font='800 '+sz+'px '+SF;lines=wrapLines(g,eT(ev),TW,9);if(lines.length<=2)break}
+  if(lines.length>2)lines=wrapLines(g,eT(ev),TW,2);
+  y+=size*0.8; lines.forEach(l=>{g.fillText(l,M,y);y+=size*1.05}); y-=size*1.05-12;
+  g.font='500 38px '+SF; g.fillStyle=MUTED;
+  const art=wrapLines(g,eA(ev),TW,1)[0]||''; g.fillText(art,M,y+40); y+=40;
+  // fecha y hora en una línea cuando caben; lugar debajo
+  g.fillStyle=INK; g.font='800 46px '+SF;
+  const fecha=(ev.fin&&ev.fin!==ev.inicio?fmtShort(ev.inicio)+' → '+fmtShort(ev.fin):fmt(ev.inicio).replace(/, \d{4}$/,'').replace(/ \d{4}$/,'')).toUpperCase();
+  const hr=L(ev,'hora'), hrOk=hr&&hr.length<24;
+  y+=62; const fl='📅 '+fecha; g.fillText(fl,M,y);
+  if(hrOk){const fw3=g.measureText(fl+'  ').width; g.font='700 38px '+SF; g.fillStyle=MUTED;
+    if(fw3+g.measureText(hr).width<=TW)g.fillText(hr,M+fw3,y); else{y+=48;g.fillText(hr,M,y)}}
+  g.font='800 42px '+SF; g.fillStyle=INK; y+=56;
+  g.fillText(wrapLines(g,'📍 '+pN(p)+(ev.sedes?' +'+ev.sedes.length:''),TW,1)[0],M,y);
+  // zonas (con emoji), categoría, gratis
   const chips=[]; evZones(ev).slice(0,3).forEach(k=>chips.push([zN(ZONES[k]).toUpperCase(),col(ZONES[k].color),col(ZONES[k].on)]));
   chips.push([cN(CATS[ev.cat]).toUpperCase(),'#fff',INK]); if(ev.gratis===true)chips.push([en?'FREE':'ENTRADA LIBRE','#C8F34A',INK]);
-  g.font='800 34px '+STORY_FONT; let rows=1,cx=60; chips.forEach(ch=>{const w=g.measureText(ch[0]).width+48; if(cx+w>SW-40){rows++;cx=60} cx+=w+14});
+  g.font='800 33px '+SF; let rows=1,cx=M; chips.forEach(ch=>{const w=g.measureText(ch[0]).width+46; if(cx+w>SW-M){rows++;cx=M} cx+=w+12});
   const r=rating('evento',ev.id), h=hypeCount(ev.id), hasMeta=r.n||(h>0&&!evStarted(ev));
-  const chipsH=rows*64+(rows-1)*14, metaH=hasMeta?84:0;
-  // descripción breve en el espacio que sobre (hasta 3 líneas)
-  const blurbRoom=LIMIT-(y+30)-chipsH-metaH-30;
-  const maxL=Math.min(3,Math.floor(blurbRoom/46));
+  const chipsH=rows*64+(rows-1)*12, metaH=hasMeta?84:0;
+  // descripción breve en el espacio que sobre (2 a 4 líneas de 38 px)
+  const blurbRoom=LIMIT-(y+28)-chipsH-metaH-28;
+  const maxL=Math.min(4,Math.floor(blurbRoom/52));
   if(maxL>=1){
-    g.font='500 34px '+STORY_FONT; g.fillStyle=MUTED;
-    const bl=wrapLines(g,storyBlurb(ev,190),SW-120,maxL); y+=34;
-    bl.forEach(l=>{y+=46;g.fillText(l,60,y)});
+    g.font='500 38px '+SF; g.fillStyle=MUTED;
+    const bl=wrapLines(g,storyBlurb(ev,300),TW,maxL); y+=30;
+    bl.forEach(l=>{y+=52;g.fillText(l,M,y)});
   }
-  y+=30;
-  g.textBaseline='middle'; let cx2=60, cy=y;
-  chips.forEach(ch=>{g.font='800 34px '+STORY_FONT;const w=g.measureText(ch[0]).width+48; if(cx2+w>SW-40){cx2=60;cy+=78} g.fillStyle=ch[1];rrect(g,cx2,cy,w,64,32);g.fill();g.lineWidth=5;g.strokeStyle=INK;g.stroke();g.fillStyle=ch[2];g.fillText(ch[0],cx2+24,cy+34);cx2+=w+14});
+  y+=28;
+  g.textBaseline='middle'; let cx2=M, cy=y;
+  chips.forEach(ch=>{g.font='800 33px '+SF;const w=g.measureText(ch[0]).width+46; if(cx2+w>SW-M){cx2=M;cy+=76} g.fillStyle=ch[1];rrect(g,cx2,cy,w,64,32);g.fill();g.lineWidth=5;g.strokeStyle=INK;g.stroke();g.fillStyle=ch[2];g.fillText(ch[0],cx2+23,cy+34);cx2+=w+12});
   // calificación y asistentes
-  let ry=cy+64+44;
-  if(r.n){g.font='800 46px '+STORY_FONT;g.fillStyle='#FA2713';g.fillText('★',60,ry);g.fillStyle=INK;g.fillText(r.prom.toFixed(1),116,ry);g.font='500 32px '+STORY_FONT;g.fillStyle=MUTED;g.fillText(r.n+' '+(en?(r.n===1?'rating':'ratings'):(r.n===1?'calificación':'calificaciones')),224,ry+2)}
-  if(h>0&&!evStarted(ev)){const pv=await loadImgSafe('/mty/img/pavo-mask.png'); const x0=r.n?640:60; if(pv)g.drawImage(tintImg(pv,INK,34,60),x0,ry-30,34,60); g.font='800 42px '+STORY_FONT;g.fillStyle=INK;g.fillText(String(h),x0+50,ry);const nw=g.measureText(String(h)).width;g.font='500 30px '+STORY_FONT;g.fillStyle=MUTED;g.fillText(hypeLabel(h,false),x0+50+nw+18,ry+2)}
-  // barra inferior de marca
+  let ry=cy+64+46;
+  if(r.n){g.font='800 46px '+SF;g.fillStyle='#FA2713';g.fillText('★',M,ry);g.fillStyle=INK;g.fillText(r.prom.toFixed(1),M+56,ry);g.font='500 32px '+SF;g.fillStyle=MUTED;g.fillText(r.n+' '+(en?(r.n===1?'rating':'ratings'):(r.n===1?'calificación':'calificaciones')),M+168,ry+2)}
+  if(h>0&&!evStarted(ev)){const pv=await loadImgSafe('/mty/img/pavo-mask.png'); const x0=r.n?600:M; if(pv)g.drawImage(tintImg(pv,INK,34,60),x0,ry-31,34,60); g.font='800 44px '+SF;g.fillStyle=INK;g.fillText(String(h),x0+48,ry);const nw=g.measureText(String(h)).width;g.font='500 32px '+SF;g.fillStyle=MUTED;g.fillText(hypeLabel(h,false),x0+48+nw+16,ry+2)}
   const yEnd=Math.max(cy+64,(r.n||(h>0&&!evStarted(ev)))?ry+34:0);
-  g.fillStyle=INK; g.fillRect(0,1750,SW,170);
-  g.textBaseline='alphabetic'; g.fillStyle=CREAM; g.font='700 34px '+STORY_FONT; g.fillText(en?'SHARE YOUR EXPERIENCE AT':'COMPARTE TU EXPERIENCIA EN',60,1816);
-  g.fillStyle='#F7D649'; g.font='800 74px '+STORY_FONT; g.fillText('cucoarts.com/mty',60,1894);
-  const pv2=await loadImgSafe('/mty/img/pavo-mask.png'); if(pv2)g.drawImage(tintImg(pv2,CREAM,86,152),SW-60-86,1768,86,152);
+
+  // hueco libre para el sticker de enlace (no se dibuja nada en STORY.STICKER) y franja inferior del color de la zona (simétrica a la de arriba), que Instagram cubre con su interfaz
+  g.fillStyle=zc; g.fillRect(0,STORY.DARK_Y,SW,SH-STORY.DARK_Y);
   return {c,yEnd};
 }
+/* Instructivo dentro de la misma ventana: reemplaza la vista previa por 5 pasos con iconos; el mismo botón regresa a la imagen */
+function storyGuideHTML(){
+  const mobile=!!(navigator.canShare&&navigator.canShare({files:[new File([''],'a.png',{type:'image/png'})]}));
+  const chip=(ic,k)=>'<span class="igchip"><i aria-hidden="true">'+ic+'</i>'+esc(t(k))+'</span>';
+  const face='<span class="igchip face" aria-hidden="true"><i>🙂</i></span><span class="sgarrow" aria-hidden="true">›</span>';
+  const steps=[
+    ['📤',t('sg_s1_h'),t('sg_s1_m')+(mobile?'':'<span class="sgalt">'+t('sg_s1_d')+'</span>'),''],
+    ['🔗',t('sg_s2_h'),t('sg_s2_m'),face+chip('🔗','sg_ig_link')],
+    ['🎵',t('sg_s3_h'),t('sg_s3_m'),face+chip('🎵','sg_ig_music')],
+    ['@',t('sg_s4_h'),t('sg_s4_m'),chip('@','sg_ig_mention')],
+    ['✅',t('sg_s5_h'),t('sg_s5_m'),'']
+  ];
+  return '<h3>'+esc(t('sg_h'))+'</h3><ol>'+steps.map((s,n)=>'<li><span class="sgnum" aria-hidden="true">'+(n+1)+'</span><div><b class="sgh"><span aria-hidden="true">'+s[0]+'</span> '+esc(s[1])+'</b><p>'+s[2]+'</p>'+(s[3]?'<div class="sgvis">'+s[3]+'</div>':'')+'</div></li>').join('')+'</ol><p class="sgtip">💡 '+esc(t('sg_tip'))+'</p>';
+}
+function setStoryGuide(on){
+  const g=$('#storyGuide'), pv=$('.storyprev'), b=$('#storyHow'); if(!g||!pv||!b)return;
+  g.hidden=!on; pv.hidden=on; b.setAttribute('aria-expanded',on?'true':'false'); b.textContent=t(on?'story_how_back':'story_how');
+  if(on){g.innerHTML=storyGuideHTML(); g.scrollTop=0}
+}
+$('#storyHow').onclick=()=>setStoryGuide($('#storyGuide').hidden);
 let storyKey=null, storyUrl='';
 async function openStory(key){
-  storyKey=key; const ov=$('#storyOverlay'), cv=$('#storyCanvas');
+  storyKey=key; const ov=$('#storyOverlay'), cv=$('#storyCanvas'); setStoryGuide(false);
   $('#storyMsg').textContent=''; ov.classList.add('open'); document.body.style.overflow='hidden';
   cv.style.opacity='.35';
   try{const c=await drawStory(key); cv.width=SW; cv.height=SH; cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')}
