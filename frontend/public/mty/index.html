@@ -15,6 +15,8 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>window.MTY_RO=true;window.MTY_API={"base":"https://7q2ymxv5k8.execute-api.us-east-2.amazonaws.com/dev","key":"rRMCj4FK1k6nOXjxSPPRE2G1OtouQDIFaLjbmSVD"};</script>
+<script>/* Google Analytics 4 (mismo identificador que cucoarts.com). Solo en el sitio real, nunca en pruebas locales, y no se carga si la persona activó "no rastrear" o Global Privacy Control. */
+(function(){var h=location.hostname;if(h!=='cucoarts.com'&&h!=='www.cucoarts.com')return;if(navigator.doNotTrack==='1'||window.doNotTrack==='1'||navigator.globalPrivacyControl===true)return;var s=document.createElement('script');s.async=1;s.src='https://www.googletagmanager.com/gtag/js?id=G-D2Z3H4FNSQ';document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','G-D2Z3H4FNSQ',{send_page_view:false})})();</script>
 <style>
 
 /* Tipografías elegidas por la diseñadora (carpeta BRANDING): Neue Montreal para texto y títulos, Courier para etiquetas y créditos. Courier va como Courier Prime (licencia libre, el mismo trazo). */
@@ -1151,6 +1153,7 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
 <footer>
   <div class="wrap">
     <p><span class="mono">CUCO ARTS / MTY</span> · <span id="foot1"></span></p>
+    <p class="note" id="foot3"></p>
     <p class="note"><span data-i18n="foot_2"></span> <a href="mailto:hello@cucoarts.com?subject=Evento%20para%20CUCO%20ARTS%20%2Fmty">hello@cucoarts.com</a></p>
   </div>
 </footer>
@@ -2154,7 +2157,7 @@ es:{
  com_h:'Comunidad', com_sub:'Esto lo construimos entre todos: calificamos lugares, compartimos experiencias y recomendamos a quienes hacen arte en Monterrey.', com_rec_btn:'Recomienda un artista o colectivo', com_list_h:'Recomendados por la comunidad', com_empty:'Todavía no hay recomendaciones. Sé la primera persona.', com_note:'Lo que envíes se revisa antes de publicarse.',
  rec_stamp:'RECOMIENDA ✱', rec_title:'Recomienda un artista o colectivo', rec_name:'Nombre del artista o colectivo', rec_what:'¿Qué hace?', rec_choose:'Elige una disciplina', rec_link:'Instagram o enlace', rec_zone:'Zona', rec_zone_opt:'(opcional)', rec_why:'¿Por qué lo recomiendas?', rec_alias:'¿Cómo quieres aparecer?', rec_send:'Enviar recomendación', rec_thanks_h:'¡Gracias por recomendar!', rec_thanks_p:'Lo revisaremos antes de publicarlo.',
  rec_err_name:'Escribe su nombre.', rec_err_what:'Elige una disciplina.', rec_err_link:'Escribe un enlace o @usuario de Instagram.', rec_err_why:'Cuéntanos por qué (mínimo 10 caracteres).',
- foot_1:'Descubre y apoya el arte local de Monterrey. Cada obra en {0} sostiene la carrera de un artista de aquí.', foot_2:'Los datos y carteles de cada evento vienen de la cuenta u organizador que se indica. Confirma horario y cambios con ellos antes de ir. ¿Falta un evento?',
+ foot_1:'Descubre y apoya el arte local de Monterrey. Cada obra en {0} sostiene la carrera de un artista de aquí.', foot_an:'Medimos las visitas de forma agregada con Google Analytics. Si tu navegador envía “no rastrear”, no se mide nada.', foot_2:'Los datos y carteles de cada evento vienen de la cuenta u organizador que se indica. Confirma horario y cambios con ellos antes de ir. ¿Falta un evento?',
  nf:'No encontramos esa página.', nf_back:'Volver a /mty', ast_santiago:'Santiago, N.L.'
 },
 en:{
@@ -2201,7 +2204,7 @@ en:{
  com_h:'Community', com_sub:'We build this together: we rate places, share experiences and recommend the people making art in Monterrey.', com_rec_btn:'Recommend an artist or collective', com_list_h:'Recommended by the community', com_empty:'No recommendations yet. Be the first.', com_note:'What you send is reviewed before it is published.',
  rec_stamp:'RECOMMEND ✱', rec_title:'Recommend an artist or collective', rec_name:'Name of the artist or collective', rec_what:'What do they do?', rec_choose:'Choose a discipline', rec_link:'Instagram or link', rec_zone:'Zone', rec_zone_opt:'(optional)', rec_why:'Why do you recommend them?', rec_alias:'How do you want to appear?', rec_send:'Send recommendation', rec_thanks_h:'Thanks for recommending!', rec_thanks_p:"We'll review it before publishing.",
  rec_err_name:'Enter their name.', rec_err_what:'Choose a discipline.', rec_err_link:'Enter a link or an Instagram @handle.', rec_err_why:'Tell us why (at least 10 characters).',
- foot_1:'Discover and support the local art of Monterrey. Every piece in {0} sustains the career of an artist from here.', foot_2:'Event data and posters come from the account or organizer shown. Confirm times and changes with them before you go. Missing an event?',
+ foot_1:'Discover and support the local art of Monterrey. Every piece in {0} sustains the career of an artist from here.', foot_an:'We measure visits in aggregate with Google Analytics. If your browser sends “Do Not Track”, nothing is measured.', foot_2:'Event data and posters come from the account or organizer shown. Confirm times and changes with them before you go. Missing an event?',
  nf:"We couldn't find that page.", nf_back:'Back to /mty', ast_santiago:'Santiago, N.L.'
 }};
 const t=(k,...a)=>{let s=(T[LANG]&&T[LANG][k]!=null)?T[LANG][k]:(T.es[k]!=null?T.es[k]:k);a.forEach((v,i)=>{s=s.split('{'+i+'}').join(v)});return s};
@@ -2365,6 +2368,8 @@ function toast(msg,ms){
   el.textContent=msg; el.classList.add('on'); clearTimeout(window.__toastT); window.__toastT=setTimeout(()=>el.classList.remove('on'),ms||2600);
 }
 /* Vibración corta. Android: navigator.vibrate. iPhone (Safari 17.4+) no la ofrece: se usa el "interruptor" nativo, que da un toque háptico al activarse. */
+/* analítica: eventos del embudo (no hace nada si GA no cargó: pruebas locales, "no rastrear", bloqueadores) */
+function track(name,params){try{if(window.gtag)gtag('event',name,params||{})}catch(e){}}
 let hapticLbl=null;
 function haptic(ms){
   try{
@@ -2389,7 +2394,7 @@ async function confirmHype(){
   const prev=hypeCount(ev.id);
   if(API){const a=AGG['evento:'+ev.id]||(AGG['evento:'+ev.id]={n:0,sum:0}); a.h=(a.h|0)+1}
   else{try{localStorage.setItem('mty_hn_'+ev.id,String(prev+1))}catch(e){}}
-  hypeMark(ev.id); closeHype(); refreshHypeBox(ev);
+  hypeMark(ev.id); closeHype(); refreshHypeBox(ev); track('hype',{item_id:ev.id});
   const bt=$('#hypeOpen')||document.querySelector('#hypeBox .hbtn'); if(bt){bt.classList.add('popin');sparkle(bt)}
   document.querySelectorAll('#hypeBox .hN').forEach(n=>n.classList.add('bump'));
   haptic(18); toast(t('hype_thanks'),2200);
@@ -3748,6 +3753,7 @@ window.addEventListener('storage',e=>{if(e.key==='cucoarts-theme')applyTheme(e.n
 function refreshStatic(){
   applyStatic();
   $('#langBtn').textContent=t('lang_btn');
+  {const f3=$('#foot3'); if(f3)f3.textContent=t('foot_an')}
   $('#foot1').innerHTML=t('foot_1','<a href="https://store.cucoarts.com" target="_blank" rel="noopener">store.cucoarts.com</a>');
   applyTheme(theme());
 }
@@ -3877,7 +3883,8 @@ function route(){
    let tt=''; if(a==='evento'){const e=EVENTS.find(x=>x.id===b);tt=e?eT(e):''}else if(a==='lugar'){const p=PLACES[b];tt=p?pN(p):''}else if(a==='feria'){const f=FERIAS[b];tt=f?f.nombre:''}else if(a==='zona'&&ZONES[b])tt=zC(ZONES[b]);
    document.title=tt?tt+' · CUCO ARTS /mty':base;
    if(window.__routed&&a!=='zona'&&h!=='#mapa'&&h!=='#evsec'&&!window.__toMap&&!window.__restoreY)app.focus({preventScroll:true});
-   window.__routed=true;}
+   window.__routed=true;
+   track('page_view',{page_title:document.title,page_location:location.href,page_path:'/mty'+(location.hash||'')});}
   if(window.__restoreY!=null){const y=window.__restoreY;window.__restoreY=null;window.scrollTo({top:y,left:0,behavior:'instant'});requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:'instant'}));return}
   if(window.__toMap&&h==='#/'){window.__toMap=false;const m=$('#mapa');if(m){m.scrollIntoView({behavior:'instant',block:'start'});return}}
   window.scrollTo({top:0,left:0,behavior:'instant'});
@@ -4195,6 +4202,7 @@ $('#storyHow').onclick=()=>setStoryGuide($('#storyGuide').hidden);
 let storyKey=null, storyUrl='';
 async function openStory(key){
   storyKey=key; const ov=$('#storyOverlay'), cv=$('#storyCanvas'); setStoryGuide(false);
+  track('open_share',{content_type:key==='agenda'?'agenda':'event',item_id:String(key)});
   $('#stTitle').textContent=t(key==='agenda'?'story_title_agenda':'story_title'); $('#storyShuffle').hidden=key!=='agenda';
   $('#storyMsg').textContent=''; ov.classList.add('open'); document.body.style.overflow='hidden';
   cv.style.opacity='.35';
@@ -4205,16 +4213,19 @@ async function openStory(key){
 function closeStory(){$('#storyOverlay').classList.remove('open');document.body.style.overflow=''}
 function storyBlob(){return new Promise(r=>$('#storyCanvas').toBlob(r,'image/png'))}
 async function storyShare(){
+  track('share',{method:'story_share',content_type:storyKey==='agenda'?'agenda':'event',item_id:String(storyKey)});
   const b=await storyBlob(), name='cuco-arts-'+String(storyKey).replace(':','-')+'.png', file=new File([b],name,{type:'image/png'});
   try{await navigator.clipboard.writeText(storyUrl)}catch(e){}
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],url:storyUrl});return}catch(e){if(e&&e.name==='AbortError')return}}
   storyDownload();
 }
 async function storyDownload(){
+  track('share',{method:'story_download',content_type:storyKey==='agenda'?'agenda':'event',item_id:String(storyKey)});
   const b=await storyBlob(), a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='cuco-arts-'+String(storyKey).replace(':','-')+'.png'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
   $('#storyMsg').textContent=t('story_saved');
 }
-async function storyCopy(){try{await navigator.clipboard.writeText(storyUrl);$('#storyMsg').textContent=t('story_copied')}catch(e){$('#storyMsg').textContent=storyUrl}}
+async function storyCopy(){
+  track('share',{method:'story_copy_link',content_type:storyKey==='agenda'?'agenda':'event',item_id:String(storyKey)});try{await navigator.clipboard.writeText(storyUrl);$('#storyMsg').textContent=t('story_copied')}catch(e){$('#storyMsg').textContent=storyUrl}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-story]'); if(!b)return; e.preventDefault(); const m=$('#shareMenu'); if(m)m.hidden=true; openStory(b.dataset.story)});
 async function storyReroll(){const cv=$('#storyCanvas'); cv.style.opacity='.35'; try{const c=await drawStory('agenda'); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')} haptic(10)}
 $('#storyShuffle').onclick=storyReroll;
@@ -4237,7 +4248,7 @@ document.addEventListener('click',async e=>{
   if(b.dataset.busy)return; b.dataset.busy='1';
   // respuesta inmediata: corazón, contador y aviso al instante; el servidor se entera en segundo plano y, si lo rechaza, se deshace
   const prev=likeCount(id);
-  likeMark(id);
+  likeMark(id); track('like_place',{item_id:id});
   if(API){const a=AGG['lugar:'+id]||(AGG['lugar:'+id]={n:0,sum:0});a.l=(a.l|0)+1}
   else{try{localStorage.setItem('mty_ln_'+id,String(prev+1))}catch(x){}}
   refreshLikes(id);
@@ -4269,6 +4280,15 @@ $$('.overlay').forEach(ov=>{
     else if(e.touches.length===1&&y0!==null&&e.touches[0].clientY-y0>110&&ov.scrollTop<=0){closed=true;const b=x();if(b)b.click()}
   },{passive:true});
 });
+
+/* clics que llevan a la tienda, a la colección de un artista, a encargos/murales o a una red del organizador */
+document.addEventListener('click',e=>{
+  const a=e.target.closest&&e.target.closest('a[href]'); if(!a)return; const h=a.getAttribute('href')||'';
+  if(a.classList.contains('zartc'))track('view_collection',{item_id:h.split('/').pop()});
+  else if(/arte-por-encargo|custom-art|\/murales|\/murals/.test(h))track('cta_encargos',{link_url:h});
+  else if(/store\.cucoarts\.com/.test(h))track('cta_store',{link_url:h});
+  else if(/instagram\.com|facebook\.com/.test(h)&&a.target==='_blank')track('click_organizer',{link_url:h.slice(0,120)});
+},true);
 
 /* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
 /* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
