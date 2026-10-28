@@ -3,3 +3,4 @@ User-agent: *
 Disallow:
 
 Sitemap: https://cucoarts.com/sitemap.xml
+Sitemap: https://cucoarts.com/mty/sitemap.xml
