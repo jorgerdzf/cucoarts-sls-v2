@@ -11,7 +11,7 @@ const fake = {
 };
 const orig = Module.prototype.require;
 Module.prototype.require = function (id) { return fake[id] || orig.apply(this, arguments); };
-Object.assign(process.env, { MTY_TABLE: 't', NOTIFY_TO: 'to@x.mx', NOTIFY_FROM: 'from@x.mx', MTY_SECRET: 'secreto-de-prueba', MAX_MAIL_DAY: '30', MOD_BASE: 'https://mod.test/' });
+Object.assign(process.env, { MTY_TABLE: 't', NOTIFY_TO: 'to@x.mx', NOTIFY_FROM: 'from@x.mx', MTY_SECRET: 'secreto-de-prueba', MAX_MAIL_DAY: '30', MAX_HYPE_DEV_PER_IP: '3', MOD_BASE: 'https://mod.test/' });
 
 const L = require('./lib');
 const { makeStore, plain } = require('./store');
@@ -23,6 +23,12 @@ function memStore() {
   return {
     rows, agg,
     async reserveDedupe(t, h) { const k = t + '|' + h; if (dedupe.has(k)) return false; dedupe.add(k); return true; },
+    ips: {}, hypes: {},
+    async bumpIp(k, max) { this.ips[k] = (this.ips[k] || 0); if (this.ips[k] >= max) return false; this.ips[k]++; return true; },
+    async addHype(ref) { this.hypes[ref] = (this.hypes[ref] || 0) + 1; return this.hypes[ref]; },
+    async releaseDedupe(t, h) { dedupe.delete(t + '|' + h); },
+    likes: {},
+    async addLike(ref) { this.likes[ref] = (this.likes[ref] || 0) + 1; return this.likes[ref]; },
     async bumpMail(day) { mail[day] = (mail[day] || 0) + 1; return mail[day]; },
     async putSubmission(target, id, item, estado, nowIso) { const pk = 's#' + target, sk = nowIso + '#' + id; rows.set(pk + '|' + sk, { ...item, pk, sk, id, estado }); return { pk, sk }; },
     async getSubmission(pk, sk) { return rows.get(pk + '|' + sk) || null; },
@@ -205,5 +211,37 @@ const qs = (url) => Object.fromEntries(new URL(url).searchParams);
   calls.forEach((c) => { const e = (c.UpdateExpression || '') + ' ' + (c.FilterExpression || '') + ' ' + (c.ConditionExpression || ''); assert(!/\b(ttl|status|name|timestamp)\b/i.test(e), e); });
   assert.deepStrictEqual(plain({ a: { S: 'x' }, n: { N: '3' } }), { a: 'x', n: 3 });
 
+
+  /* ---- "voy a ir" (hype) ---- */
+  const stH = memStore(); m._test.setStore(stH); const nOut = outbox.length;
+  const hy = (b, ip) => ({ body: JSON.stringify(b), requestContext: { identity: { sourceIp: ip || '1.1.1.1' } } });
+  const D = (n) => 'dispositivo-' + String(n).padStart(8, '0');
+  let hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(1) })); assert.strictEqual(hr.statusCode, 200); assert.strictEqual(JSON.parse(hr.body).h, 1);
+  hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(1) })); assert.strictEqual(hr.statusCode, 409);   // mismo dispositivo: una sola vez
+  assert.strictEqual(stH.hypes['evento:megaflat'], 1);
+  hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(2) })); assert.strictEqual(JSON.parse(hr.body).h, 2);
+  hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(3) })); assert.strictEqual(hr.statusCode, 200);
+  hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(4) })); assert.strictEqual(hr.statusCode, 429);   // 4.º dispositivo desde la misma IP
+  hr = await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: D(4) }, '2.2.2.2')); assert.strictEqual(hr.statusCode, 200);   // otra IP sí
+  assert.strictEqual((await m.submit(hy({ tipo: 'hype', ref: 'lugar:husky', dev: D(9) }))).statusCode, 400);                       // solo eventos
+  assert.strictEqual((await m.submit(hy({ tipo: 'hype', ref: 'evento:../x', dev: D(9) }))).statusCode, 400);
+  assert.strictEqual((await m.submit(hy({ tipo: 'hype', ref: 'evento:megaflat', dev: 'corto' }))).statusCode, 400);
+  assert.strictEqual(outbox.length, nOut, 'el hype no manda correos');
+
+  /* ---- "me gusta" de un lugar (sin correo) ---- */
+  const stL = memStore(); m._test.setStore(stL); const nOutL = outbox.length;
+  const lkk = (b, ip) => ({ body: JSON.stringify(b), requestContext: { identity: { sourceIp: ip || '3.3.3.3' } } });
+  const DV = (n) => 'dispositivo-' + String(n).padStart(8, '0');
+  const good2 = (o) => ({ tipo: 'like', ref: 'lugar:marco', dev: DV(1), ...(o || {}) });
+  let lr = await m.submit(lkk(good2())); assert.strictEqual(lr.statusCode, 200); assert.strictEqual(JSON.parse(lr.body).l, 1);
+  lr = await m.submit(lkk(good2())); assert.strictEqual(lr.statusCode, 409);                                           // mismo dispositivo: un solo like
+  assert.strictEqual(stL.likes['lugar:marco'], 1);
+  lr = await m.submit(lkk(good2({ dev: DV(2) }))); assert.strictEqual(JSON.parse(lr.body).l, 2);
+  lr = await m.submit(lkk(good2({ ref: 'lugar:fav' }))); assert.strictEqual(lr.statusCode, 200);                       // mismo dispositivo, otro lugar: sí
+  assert.strictEqual((await m.submit(lkk(good2({ dev: 'corto' })))).statusCode, 400);
+  assert.strictEqual((await m.submit(lkk(good2({ ref: 'evento:x' })))).statusCode, 400);                              // solo lugares
+  assert.strictEqual((await m.submit(lkk(good2({ ref: 'lugar:../x' })))).statusCode, 400);
+  assert.strictEqual(outbox.length, nOutL, 'el like no manda correos');
+  assert(!/contacto|correo/i.test(JSON.stringify([...Object.keys(stL.likes)])), 'no se guarda ningún dato personal');
   console.log('OK  todas las pruebas de /mty pasan');
 })().catch((e) => { console.error('FALLÓ:', e); process.exit(1); });

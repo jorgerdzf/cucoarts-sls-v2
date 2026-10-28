@@ -6,11 +6,16 @@
  *   d#<destino>   | <huella>              "ya participaste" (evita votos repetidos)
  *   c#mail        | <día>                 contador de correos del día
  *   agg           | <destino>             promedios (solo cuenta lo aprobado)
+ *   agg           | h#<destino>           contador de "voy a ir" (hype) de un evento
+ *   d#h#<destino> | <huella>              "ya dije que voy" (una vez por dispositivo)
+ *   agg           | l#<destino>           contador de "me gusta" de un lugar
+ *   d#l#<destino> | <huella>              "ya dio like" (una vez por dispositivo y lugar)
+ *   c#ip          | <huella ip+destino>   cuántos dispositivos distintos votaron desde una misma IP
  * Estados: pendiente -> aprobado | rechazado (info = sugerencias, solo informativas).
  * `expira` borra solo: pendientes a los 90 días, rechazados a los 30, huellas a los 365, contador a los 2. */
 
 const DAY = 86400;
-const TTL = { pendiente: 90 * DAY, rechazado: 30 * DAY, huella: 365 * DAY, contador: 2 * DAY, info: 90 * DAY };
+const TTL = { like: 365 * DAY, pendiente: 90 * DAY, rechazado: 30 * DAY, huella: 365 * DAY, contador: 2 * DAY, info: 90 * DAY };
 
 const S = (v) => ({ S: String(v) });
 const N = (v) => ({ N: String(v) });
@@ -34,6 +39,38 @@ function makeStore({ ddb, table, C }) {
       }));
       return true;
     } catch (e) { if (isCond(e)) return false; throw e; }
+  }
+
+  async function releaseDedupe(target, hash) {
+    await send(new C.DeleteItemCommand({ TableName: table, Key: { pk: S('d#' + target), sk: S(hash) } }));
+  }
+
+  /* Tope de dispositivos distintos por IP y destino: frena a quien invente identificadores para inflar el contador. */
+  async function bumpIp(key, max, nowSec) {
+    try {
+      await send(new C.UpdateItemCommand({
+        TableName: table, Key: { pk: S('c#ip'), sk: S(key) },
+        UpdateExpression: 'ADD n :one SET expira = :t', ConditionExpression: 'attribute_not_exists(n) OR n < :max',
+        ExpressionAttributeValues: { ':one': N(1), ':t': N(nowSec + TTL.huella), ':max': N(max) },
+      }));
+      return true;
+    } catch (e) { if (isCond(e)) return false; throw e; }
+  }
+
+  async function addLike(ref) {
+    const r = await send(new C.UpdateItemCommand({
+      TableName: table, Key: { pk: S('agg'), sk: S('l#' + ref) },
+      UpdateExpression: 'ADD n :one', ExpressionAttributeValues: { ':one': N(1) }, ReturnValues: 'UPDATED_NEW',
+    }));
+    return Number(r.Attributes.n.N);
+  }
+
+  async function addHype(ref) {
+    const r = await send(new C.UpdateItemCommand({
+      TableName: table, Key: { pk: S('agg'), sk: S('h#' + ref) },
+      UpdateExpression: 'ADD n :one', ExpressionAttributeValues: { ':one': N(1) }, ReturnValues: 'UPDATED_NEW',
+    }));
+    return Number(r.Attributes.n.N);
   }
 
   async function bumpMail(day, nowSec) {
@@ -106,11 +143,14 @@ function makeStore({ ddb, table, C }) {
   async function listAgg() {
     const r = await send(new C.QueryCommand({ TableName: table, KeyConditionExpression: 'pk = :pk', ExpressionAttributeValues: { ':pk': S('agg') } }));
     const out = {};
-    (r.Items || []).map(plain).forEach((x) => { out[x.sk] = { n: x.n || 0, sum: x.sm || 0 }; });
+    (r.Items || []).map(plain).forEach((x) => {
+      if (x.sk.startsWith('h#') || x.sk.startsWith('l#')) { const ref = x.sk.slice(2); out[ref] = Object.assign(out[ref] || { n: 0, sum: 0 }, x.sk[0] === 'h' ? { h: x.n || 0 } : { l: x.n || 0 }); }
+      else out[x.sk] = Object.assign({ n: x.n || 0, sum: x.sm || 0 }, out[x.sk] && out[x.sk].h ? { h: out[x.sk].h } : {}, out[x.sk] && out[x.sk].l ? { l: out[x.sk].l } : {});
+    });
     return out;
   }
 
-  return { reserveDedupe, bumpMail, putSubmission, getSubmission, decide, listApproved, listAgg };
+  return { reserveDedupe, releaseDedupe, bumpIp, addHype, addLike, bumpMail, putSubmission, getSubmission, decide, listApproved, listAgg };
 }
 
 module.exports = { makeStore, TTL, plain };

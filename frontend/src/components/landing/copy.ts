@@ -42,10 +42,10 @@ const es = {
     title: 'Descubre Monterrey a través de su arte y su cultura',
     text: [
       'CUCO ARTS es una plataforma para descubrir el arte, los artistas y los espacios creativos de Monterrey. En nuestra tienda en línea encontrarás obra original de artistas locales —pintura, grabado, ilustración y escultura— con envíos internacionales. También impulsamos exposiciones y colaboraciones culturales, y conectamos ideas con artistas para crear murales y obras a medida.',
-      'A través de nuestro proyecto de zonas culturales, buscamos acercarte a quienes crean en la ciudad y explorar cómo el arte se vive en sus distintos territorios: Norte, Sur, Oriente, Centro y Poniente.',
+      'A través de nuestro proyecto de zonas culturales, buscamos acercarte a quienes crean en la ciudad y explorar cómo el arte se vive en sus distintos territorios: 🧭 Norte, 🌵 Sur, ⛰️ Oriente, 🏛️ Centro y 🌄 Poniente.',
     ],
     zonesLabel: 'Zonas culturales',
-    zones: ['Norte', 'Sur', 'Oriente', 'Centro', 'Poniente'],
+    zones: ['🧭 Norte', '🌵 Sur', '⛰️ Oriente', '🏛️ Centro', '🌄 Poniente'],
     mapCta: 'Visitar el mapa',
   },
   cards: {
@@ -220,10 +220,10 @@ const en: Copy = {
     title: 'Discover Monterrey through its art and culture',
     text: [
       'CUCO ARTS is a platform for discovering the art, the artists, and the creative spaces of Monterrey. In our online store you will find original work by local artists —painting, printmaking, illustration, and sculpture— with international shipping. We also promote exhibitions and cultural collaborations, and we connect ideas with artists to create murals and custom artworks.',
-      'Through our cultural zones project, we aim to bring you closer to the people who create in the city and to explore how art is lived across its different territories: North, South, East, Downtown, and West.',
+      'Through our cultural zones project, we aim to bring you closer to the people who create in the city and to explore how art is lived across its different territories: 🧭 North, 🌵 South, ⛰️ East, 🏛️ Downtown, and 🌄 West.',
     ],
     zonesLabel: 'Cultural zones',
-    zones: ['North', 'South', 'East', 'Downtown', 'West'],
+    zones: ['🧭 North', '🌵 South', '⛰️ East', '🏛️ Downtown', '🌄 West'],
     mapCta: 'Visit the map',
   },
   cards: {

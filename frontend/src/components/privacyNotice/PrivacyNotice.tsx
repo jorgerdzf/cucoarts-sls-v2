@@ -86,7 +86,7 @@ const SECCIONES: Seccion[] = [
     titulo: '8. Agenda cultural (cucoarts.com/mty)',
     parrafos: [
       'La agenda reúne eventos de artes visuales de Monterrey que otras personas y organizaciones publican de forma abierta. De cada evento mostramos la información que ellos difunden, con el crédito y la liga a su cuenta o publicación original. Si eres organizador, artista o espacio y prefieres que corrijamos o retiremos un evento, escríbenos a ' + CORREO + '.',
-      'Si participas con un check-in, una calificación, un comentario o una recomendación, lo revisamos antes de publicarlo; lo que no aprobamos no se publica. Se muestra tu alias (o "Visitante" si no pones uno), tu comentario, tu calificación y, si los das, tu red social y la liga a tu contenido. Tu correo o WhatsApp solo los usamos para contactarte sobre tu envío y no se muestran.',
+      'Si participas con un check-in, una calificación, un comentario o una recomendación, lo revisamos antes de publicarlo; lo que no aprobamos no se publica. Se muestra tu alias (o "Visitante" si no pones uno), tu comentario, tu calificación y, si los das, tu red social y la liga a tu contenido. Tu correo o WhatsApp solo los usamos para contactarte sobre tu envío y no se muestran. Si das "me gusta" a un espacio o marcas "Yo voy" a un evento, no te pedimos correo ni nombre: guardamos solo un identificador anónimo que tu navegador genera (sin relación con tu identidad) para contar una sola vez por persona, y se muestra únicamente el total.',
       'No aceptamos archivos ni fotos: si quieres compartir contenido tuyo, pon la liga a tu publicación en tu red social, para que siempre tenga tu crédito. Las ligas llevan a sitios de terceros con sus propios avisos de privacidad. Te pedimos no incluir datos personales de otras personas ni datos sensibles.',
     ],
   },
@@ -112,7 +112,7 @@ const SECCIONES: Seccion[] = [
 ]
 
 const FECHA_ALTA = '31 de marzo de 2023'
-const FECHA_ACT = '26 de octubre de 2026'
+const FECHA_ACT = '27 de octubre de 2026'
 
 // El modo día / noche comparte la llave "cucoarts-theme" con la landing y /rob.
 function usePageTheme() {

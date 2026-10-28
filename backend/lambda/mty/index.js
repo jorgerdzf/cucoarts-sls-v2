@@ -8,7 +8,7 @@
  * Usa solo el AWS SDK v3 que ya trae el runtime de Lambda (sin node_modules). Diseño: MTY_PROTOTIPO/DISENO_SERVIDOR_MTY.md. */
 
 const crypto = require('crypto');
-const { DynamoDBClient, PutItemCommand, GetItemCommand, UpdateItemCommand, QueryCommand, TransactWriteItemsCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, QueryCommand, TransactWriteItemsCommand } = require('@aws-sdk/client-dynamodb');
 const { SESv2Client, SendEmailCommand } = require('@aws-sdk/client-sesv2');
 const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
 const L = require('./lib');
@@ -25,7 +25,7 @@ const MAX_BODY = 10 * 1024;
 const ddb = new DynamoDBClient({ region: REGION });
 const ses = new SESv2Client({ region: REGION });
 const ssm = new SSMClient({ region: REGION });
-let store = makeStore({ ddb, table: TABLE, C: { PutItemCommand, GetItemCommand, UpdateItemCommand, QueryCommand, TransactWriteItemsCommand } });
+let store = makeStore({ ddb, table: TABLE, C: { PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, QueryCommand, TransactWriteItemsCommand } });
 let mailer = (msg) => ses.send(new SendEmailCommand({
   FromEmailAddress: NOTIFY_FROM, Destination: { ToAddresses: [NOTIFY_TO] },
   Content: { Simple: { Subject: { Data: msg.subject, Charset: 'UTF-8' }, Body: { Text: { Data: msg.text, Charset: 'UTF-8' }, Html: { Data: msg.html, Charset: 'UTF-8' } } } },
@@ -54,6 +54,39 @@ const rawBody = (event) => (event.isBase64Encoded ? Buffer.from(event.body || ''
 const modBase = () => process.env.MOD_BASE;
 const newId = (now) => now.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14) + '-' + crypto.randomBytes(3).toString('hex');
 
+/* ---------- "Voy a ir" (hype): un toque por dispositivo, sin contacto ni moderación ---------- */
+const MAX_DEV_PER_IP = parseInt(process.env.MAX_HYPE_DEV_PER_IP || '25', 10);
+const hmac = (secret, s) => crypto.createHmac('sha256', secret).update(s).digest('hex');
+async function hype(event, body, deps = {}) {
+  const now = deps.now || new Date(), nowSec = Math.floor(now.getTime() / 1000);
+  const ref = typeof body.ref === 'string' ? body.ref : '', dev = typeof body.dev === 'string' ? body.dev : '';
+  if (!/^evento:[a-z0-9-]{1,60}$/.test(ref) || !/^[A-Za-z0-9-]{16,64}$/.test(dev)) return reply(400, { ok: false, error: 'validation' });
+  try {
+    const secret = await getSecret();
+    const dh = hmac(secret, 'hype|' + ref + '|' + dev);
+    if (!(await store.reserveDedupe('h#' + ref, dh, nowSec))) return reply(409, { ok: false, error: 'duplicate' });
+    const ip = (event.requestContext && event.requestContext.identity && event.requestContext.identity.sourceIp) || '';
+    if (!(await store.bumpIp(hmac(secret, 'ip|' + ip + '|' + ref), MAX_DEV_PER_IP, nowSec))) { await store.releaseDedupe('h#' + ref, dh); return reply(429, { ok: false, error: 'limit' }); }   // redes compartidas: el cupo es amplio y el dispositivo puede reintentar desde otra red
+    return reply(200, { ok: true, h: await store.addHype(ref) });
+  } catch (e) { console.error('hype', e && e.name, e && e.message); return reply(500, { ok: false, error: 'storage' }); }
+}
+
+/* ---------- "Me gusta" de un lugar: un toque por dispositivo, sin correo ni datos personales ---------- */
+const MAX_LIKE_PER_IP = parseInt(process.env.MAX_LIKE_PER_IP || '30', 10);
+async function like(event, body, deps = {}) {
+  const now = deps.now || new Date(), nowSec = Math.floor(now.getTime() / 1000);
+  const ref = typeof body.ref === 'string' ? body.ref : '', dev = typeof body.dev === 'string' ? body.dev : '';
+  if (!/^lugar:[a-z0-9-]{1,60}$/.test(ref) || !/^[A-Za-z0-9-]{16,64}$/.test(dev)) return reply(400, { ok: false, error: 'validation' });
+  try {
+    const secret = await getSecret();
+    const dh = hmac(secret, 'like|' + ref + '|' + dev);
+    if (!(await store.reserveDedupe('l#' + ref, dh, nowSec))) return reply(409, { ok: false, error: 'duplicate' });
+    const ip = (event.requestContext && event.requestContext.identity && event.requestContext.identity.sourceIp) || '';
+    if (!(await store.bumpIp(hmac(secret, 'ipl|' + ip + '|' + ref), MAX_LIKE_PER_IP, nowSec))) { await store.releaseDedupe('l#' + ref, dh); return reply(429, { ok: false, error: 'limit' }); }   // redes compartidas: cupo amplio, y el dispositivo puede reintentar
+    return reply(200, { ok: true, l: await store.addLike(ref) });
+  } catch (e) { console.error('like', e && e.name, e && e.message); return reply(500, { ok: false, error: 'storage' }); }
+}
+
 /* ---------- POST /mty/submit ---------- */
 async function submit(event, deps = {}) {
   const now = deps.now || new Date();
@@ -61,6 +94,8 @@ async function submit(event, deps = {}) {
   const body = parseJson(event);
   if (!body) return reply(400, { ok: false, error: 'json' });
   if (body.website) return reply(200, { ok: true, id: 'ok' });                    // trampa para bots: se ignora en silencio
+  if (body.tipo === 'hype') return hype(event, body, deps);
+  if (body.tipo === 'like') return like(event, body, deps);
   const { errs, item } = L.validate(body);
   if (errs.length) return reply(400, { ok: false, error: 'validation', fields: errs });
 
