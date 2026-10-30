@@ -4992,7 +4992,7 @@ function linkify(raw){
 /* ============ COMPARTIR Y CALENDARIO ============ */
 /* El enlace apunta a una página liviana (/mty/e/<id>.html) con título, descripción e imagen para las vistas previas de WhatsApp, Facebook, X e Instagram; ahí mismo manda a la persona a la página del evento. */
 const SHARE_BASE='https://cucoarts.com/mty';
-function shareUrl(ev){return ev._f?SHARE_BASE+'/f/'+ev._f+'.html':SHARE_BASE+'/e/'+ev.id+'.html'}
+function shareUrl(ev){return (ev._f?SHARE_BASE+'/f/'+ev._f+'.html':SHARE_BASE+'/e/'+ev.id+'.html')+'?utm_source=share'}
 function shareText(ev){const p=PLACES[ev.lugar];return '🎨 '+eT(ev)+' · '+pN(p)+', '+fmtShort(ev.inicio)+'. '+(LANG==='en'?'Discover it on CUCO ARTS /mty':'Descúbrelo en CUCO ARTS /mty')}
 function shareItems(ev){
   const u=encodeURIComponent(shareUrl(ev)), tx=encodeURIComponent(shareText(ev)), tu=encodeURIComponent(shareText(ev)+' '+shareUrl(ev));
