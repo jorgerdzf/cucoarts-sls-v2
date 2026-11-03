@@ -280,7 +280,8 @@ async function draftLoad(event) {
   try { out = await ddb.send(new GetItemCommand({ TableName: TABLE, Key: { id: { S: 'draft-' + body.k } } })); }
   catch (e) { console.error('dynamodb', e); return reply(500, { ok: false, error: 'storage' }); }
   const it = out && out.Item;
-  if (!it || (body.artista && it.artista && it.artista.S !== body.artista)) return reply(404, { ok: false, error: 'not_found' });
+  /* Sin borrador (o clave de otro formulario) responde 200 con found:false: es lo normal en la primera visita y no debe verse como error en la consola. */
+  if (!it || (body.artista && it.artista && it.artista.S !== body.artista)) return reply(200, { ok: true, found: false });
   return reply(200, { ok: true, artista: it.artista.S, datos: it.datos.S, updatedAt: it.updatedAt.S });
 }
 

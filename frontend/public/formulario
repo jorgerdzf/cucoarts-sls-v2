@@ -26,7 +26,7 @@ main{padding:16px}
 .sec h2{margin:8px 0 2px;font-size:24px;text-transform:uppercase}
 .sec>.lead{color:var(--mut);margin:0 0 16px}
 .f{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
-label.l{display:block;font-weight:600;margin-bottom:2px}
+label.l,.lg{display:block;font-weight:600;margin-bottom:2px}
 .h{display:block;color:var(--mut);font-size:14px;margin-bottom:8px}
 input[type=text],input[type=tel],input[type=email],input[type=url],textarea,select{width:100%;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:8px;padding:10px}
 textarea{min-height:90px;resize:vertical}
@@ -102,6 +102,7 @@ async function push(keepalive){
 async function pull(){
  try{
   const j=await api("requests/draft/load",{k:K,artista:slug});
+  if(j.found===false||!j.datos)return;                  // aún no hay avance en línea (el servidor responde 200, sin error en consola)
   const s=JSON.parse(j.datos);
   if((s._t||0)>(D._t||0)){D=s;try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
  }catch(e){/* 404: todavía no hay avance en línea; sin conexión: se usa lo del dispositivo */}
@@ -137,14 +138,18 @@ async function boot(){
  render();
 }
 
+/* Cada campo enlaza su etiqueta (for/id) y su ayuda (aria-describedby); los grupos de casillas se anuncian como grupo con su título (accesibilidad). */
 function fieldHTML(f,val,name){
- const h=f.help?`<span class="h">${esc(f.help)}</span>`:"";
+ const id="f_"+name.replace(/[^A-Za-z0-9_-]/g,"_");
+ const h=f.help?`<span class="h" id="${id}_h">${esc(f.help)}</span>`:"";
+ const dby=f.help?` aria-describedby="${id}_h"`:"";
  const nm=`data-n="${name}"`;
- if(f.type==="area")return `<div class="f"><label class="l">${esc(f.label)}</label>${h}<textarea ${nm}>${esc(val)}</textarea></div>`;
- if(f.type==="sel")return `<div class="f"><label class="l">${esc(f.label)}</label>${h}<select ${nm}><option value="">—</option>${f.opts.map(o=>`<option${val===o?" selected":""}>${esc(o)}</option>`).join("")}</select></div>`;
- if(f.type==="opts"){const v=Array.isArray(val)?val:[];return `<div class="f"><label class="l">${esc(f.label)}</label>${h}<div class="opts">${f.opts.map(o=>`<label><input type="checkbox" ${nm} value="${esc(o)}"${v.includes(o)?" checked":""}>${esc(o)}</label>`).join("")}</div></div>`}
+ const lab=`<label class="l" for="${id}">${esc(f.label)}</label>`;
+ if(f.type==="area")return `<div class="f">${lab}${h}<textarea id="${id}" ${nm}${dby}>${esc(val)}</textarea></div>`;
+ if(f.type==="sel")return `<div class="f">${lab}${h}<select id="${id}" ${nm}${dby}><option value="">—</option>${f.opts.map(o=>`<option${val===o?" selected":""}>${esc(o)}</option>`).join("")}</select></div>`;
+ if(f.type==="opts"){const v=Array.isArray(val)?val:[];return `<div class="f" role="group" aria-labelledby="${id}_l"><div class="lg" id="${id}_l">${esc(f.label)}</div>${h}<div class="opts">${f.opts.map(o=>`<label><input type="checkbox" ${nm} value="${esc(o)}"${v.includes(o)?" checked":""}>${esc(o)}</label>`).join("")}</div></div>`}
  if(f.type==="chk")return `<div class="f"><div class="opts"><label><input type="checkbox" ${nm} ${val?"checked":""}> <span>${esc(f.label)}</span></label></div></div>`;
- return `<div class="f"><label class="l">${esc(f.label)}</label>${h}<input type="${f.type}" ${nm} value="${esc(val)}"></div>`;
+ return `<div class="f">${lab}${h}<input id="${id}" type="${f.type}" ${nm} value="${esc(val)}"${dby}></div>`;
 }
 
 function render(){
@@ -225,9 +230,9 @@ function finish(){
  app.innerHTML=`<section class="sec res" id="fin"><h2>Casi listo</h2>
  <p class="lead">Revisa que tus datos de contacto estén bien y pulsa Enviar. Si algo falla, abajo puedes descargar tus respuestas.</p>
  ${c?`<p class="warn">${esc(c)} Puedes regresar y marcarla.</p>`:""}
- <div class="f"><label class="l">Tu nombre *</label><input type="text" id="fn" value="${esc(fin.nombre)}"></div>
- <div class="f"><label class="l">WhatsApp o correo para responderte *</label><input type="text" id="fc" value="${esc(fin.contacto)}"></div>
- <div class="f"><label class="l">Adjuntar archivos (opcional)</label><span class="h">Hasta ${MAX_N}, de 5 MB cada uno (JPG, PNG, WEBP, HEIC, PDF, ZIP, Word). Logo, foto del grupo, repertorio… Lo demás va en la carpeta de Drive.</span><input type="file" id="ff" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.zip,.doc,.docx"><div class="sk" id="fl"></div></div>
+ <div class="f"><label class="l" for="fn">Tu nombre *</label><input type="text" id="fn" autocomplete="name" value="${esc(fin.nombre)}"></div>
+ <div class="f"><label class="l" for="fc">WhatsApp o correo para responderte *</label><input type="text" id="fc" autocomplete="tel" value="${esc(fin.contacto)}"></div>
+ <div class="f"><label class="l" for="ff">Adjuntar archivos (opcional)</label><span class="h" id="ff_h">Hasta ${MAX_N}, de 5 MB cada uno (JPG, PNG, WEBP, HEIC, PDF, ZIP, Word). Logo, foto del grupo, repertorio… Lo demás va en la carpeta de Drive.</span><input type="file" id="ff" aria-describedby="ff_h" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.zip,.doc,.docx"><div class="sk" id="fl"></div></div>
  <div class="hp" aria-hidden="true"><label>Sitio web<input type="text" id="fw" tabindex="-1" autocomplete="off"></label></div>
  <p class="sk">Al enviar aceptas el <a href="/privacidad" target="_blank" rel="noopener">aviso de privacidad</a> de CUCO ARTS. Usamos tus respuestas solo para armar tu perfil. Mientras lo llenas guardamos tu avance en línea hasta 90 días.</p>
  <p class="warn" id="fe" hidden></p>

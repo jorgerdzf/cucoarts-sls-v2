@@ -109,8 +109,8 @@ const ev = (b) => ({ body: JSON.stringify(b) });
   r = await m.draftSave(ev({ k: K, artista: 'bluewave', datos: JSON.stringify({ proyecto: { nombre: 'Blue Wave Live' }, _t: 2 }) }));   // sobrescribe
   r = await m.draftLoad(ev({ k: K, artista: 'bluewave' })); b = JSON.parse(r.body);
   assert.strictEqual(r.statusCode, 200); assert.strictEqual(JSON.parse(b.datos).proyecto.nombre, 'Blue Wave Live'); assert.strictEqual(b.artista, 'bluewave');
-  r = await m.draftLoad(ev({ k: K, artista: 'otro-artista' })); assert.strictEqual(r.statusCode, 404);   // la clave no abre el borrador de otro formulario
-  r = await m.draftLoad(ev({ k: 'zzzzzzzzzzzzzzzzzzzzzzzzzz', artista: 'bluewave' })); assert.strictEqual(r.statusCode, 404);
+  r = await m.draftLoad(ev({ k: K, artista: 'otro-artista' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.found, false); assert(!b.datos);   // la clave no abre el borrador de otro formulario
+  r = await m.draftLoad(ev({ k: 'zzzzzzzzzzzzzzzzzzzzzzzzzz', artista: 'bluewave' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.ok, true); assert.strictEqual(b.found, false);   // sin borrador: 200, no error
   r = await m.draftLoad(ev({ k: '../../etc' })); assert.strictEqual(r.statusCode, 400);
   console.log('OK: todas las pruebas pasaron');
 })().catch((e) => { console.error('FALLÓ:', e.message); process.exit(1); });
