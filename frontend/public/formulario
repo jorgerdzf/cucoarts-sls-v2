@@ -20,6 +20,8 @@ header p{margin:0;max-width:56ch}
 .track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
 .track i{display:block;height:100%;width:0;background:var(--rec);transition:width .2s}
 .bar .tag{white-space:nowrap}
+.bar .sv{justify-content:space-between;margin-top:6px;min-height:28px}
+.bar .sv .tag{text-transform:none;letter-spacing:0;font-size:12px;color:var(--mut);white-space:normal}
 main{padding:16px}
 .sec h2{margin:8px 0 2px;font-size:24px;text-transform:uppercase}
 .sec>.lead{color:var(--mut);margin:0 0 16px}
@@ -60,7 +62,8 @@ a{color:inherit}
 <h1 id="hTitulo">Perfil creativo</h1>
 <p id="hIntro">Cargando…</p>
 </div></header>
-<div class="bar"><div class="in"><span class="tag" id="stepTxt"></span><div class="track"><i id="prog"></i></div></div></div>
+<div class="bar"><div class="in"><span class="tag" id="stepTxt"></span><div class="track"><i id="prog"></i></div></div>
+<div class="in sv"><span class="tag" id="saveTxt"></span><button class="sm" id="copyLink" type="button">Copiar mi enlace</button></div></div>
 <main id="app"></main>
 
 <script>
@@ -74,10 +77,37 @@ const MAX_N=4, MAX_F=5*1024*1024, MAX_T=7*1024*1024, EXT=/\.(pdf|jpe?g|png|webp|
 const app=document.getElementById("app");
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const slug=(new URLSearchParams(location.search).get("a")||"").toLowerCase().replace(/[^a-z0-9-]/g,"");
-let CFG,TPL,D={},step=0,KEY="",picked=[];
+let CFG,TPL,D={},step=0,KEY="",K="",picked=[],tmr=null,dirty=false;
+const TOKEN=/^[A-Za-z0-9_-]{22,64}$/, MAX_DRAFT=100000;
+const newKey=()=>{const b=new Uint8Array(18);crypto.getRandomValues(b);return btoa(String.fromCharCode(...b)).replace(/\+/g,"-").replace(/\//g,"_")};
+const stamp=()=>new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+const status=t=>{const el=document.getElementById("saveTxt");if(el)el.textContent=t};
 
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+/* Avance: se guarda al instante en este dispositivo y, unos segundos después, en el servidor bajo la clave personal del enlace (?k=).
+   Quien abre ese enlace en otro dispositivo retoma donde se quedó. Gana la versión más reciente (D._t). El borrador se borra solo a los 90 días. */
+const save=()=>{D._t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){} dirty=true;status("Guardando…");clearTimeout(tmr);tmr=setTimeout(()=>push(),2500)};
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}};
+async function push(keepalive){
+ clearTimeout(tmr);if(!dirty)return;
+ const datos=JSON.stringify(D);
+ if(datos.length>MAX_DRAFT){status("Muy largo para guardarse en línea; queda en este dispositivo");return}
+ dirty=false;
+ try{
+  const r=await fetch(API+"requests/draft",{method:"POST",keepalive:!!keepalive,headers:{"Content-Type":"application/json","x-api-key":API_KEY},body:JSON.stringify({k:K,artista:slug,datos})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||!j.ok)throw new Error(j.error||("http "+r.status));
+  status("Guardado ✓ "+stamp());
+ }catch(e){dirty=true;status("Sin conexión: guardado solo en este dispositivo")}
+}
+async function pull(){
+ try{
+  const j=await api("requests/draft/load",{k:K,artista:slug});
+  const s=JSON.parse(j.datos);
+  if((s._t||0)>(D._t||0)){D=s;try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+ }catch(e){/* 404: todavía no hay avance en línea; sin conexión: se usa lo del dispositivo */}
+}
+addEventListener("pagehide",()=>push(true));
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")push(true)});
 
 function fail(msg){
  document.getElementById("hIntro").textContent="";
@@ -89,8 +119,16 @@ async function boot(){
   CFG=await (await fetch(`/formulario-datos/${slug}.json`,{cache:"no-cache"})).json();
   TPL=await (await fetch(`/formulario-datos/plantillas/${CFG.plantilla}.json`,{cache:"no-cache"})).json();
  }catch(e){return fail("No encontramos este formulario.")}
- KEY=`cuco-formulario-${slug}`;
+ // clave personal del enlace (?k=): si falta, se reutiliza la última de este dispositivo o se crea una nueva
+ const qs=new URLSearchParams(location.search), kKey=`cuco-formulario-${slug}-k`;
+ K=qs.get("k")||"";
+ if(!TOKEN.test(K)){try{K=localStorage.getItem(kKey)||""}catch(e){K=""} if(!TOKEN.test(K))K=newKey(); qs.set("k",K); history.replaceState(null,"",location.pathname+"?"+qs.toString())}
+ try{localStorage.setItem(kKey,K)}catch(e){}
+ KEY=`cuco-formulario-${slug}-${K}`;
  D=load();
+ status("Revisando tu avance…");
+ await pull();
+ status("");
  // respuestas prellenadas (solo datos comprobados); no pisan lo que la persona ya escribió
  Object.entries(CFG.prellenado||{}).forEach(([s,fs])=>{D[s]=D[s]||{};Object.entries(fs).forEach(([k,v])=>{if(D[s][k]===undefined)D[s][k]=v})});
  document.title=`${CFG.titulo} · CUCO ARTS`;
@@ -115,6 +153,7 @@ function render(){
  document.getElementById("prog").style.width=(step/total*100)+"%";
  const sd=D[sec.id]=D[sec.id]||{};
  let h=`<section class="sec"><h2>${esc(sec.titulo)}</h2><p class="lead">${esc(sec.intro||"")}</p>`;
+ if(step===0)h+=`<div class="f"><b>Tu avance se guarda solo.</b> Puedes cerrar y volver cuando quieras. Para seguir en otro dispositivo, o para que Roberto vea cómo vas, usa tu enlace personal (botón “Copiar mi enlace” arriba). No lo compartas con nadie más: quien lo tenga puede ver y editar tus respuestas.</div>`;
  if(sec.archivos){
   const fl=sd._files=sd._files||{};
   h+=`<div class="f"><table class="files">${TPL.archivos.map(a=>`<tr><td><b>${esc(a.label)}</b><small>${esc(a.help||"")}</small></td><td><select data-file="${a.id}"><option value="">—</option>${["Ya lo tengo","Lo tengo pero hay que mejorarlo","No lo tengo"].map(o=>`<option${fl[a.id]===o?" selected":""}>${o}</option>`).join("")}</select></td></tr>`).join("")}</table></div>`;
@@ -153,8 +192,8 @@ app.addEventListener("input",e=>{
 app.addEventListener("click",e=>{
  const b=e.target.closest("button");if(!b||b.closest("#fin"))return;
  const sec=TPL.secciones[step];
- if(b.hasAttribute("data-prev")){step--;render()}
- else if(b.hasAttribute("data-next")){if(step===TPL.secciones.length-1)finish();else{step++;render()}}
+ if(b.hasAttribute("data-prev")){push();step--;render()}
+ else if(b.hasAttribute("data-next")){push();if(step===TPL.secciones.length-1)finish();else{step++;render()}}
  else if(b.dataset.add){D[sec.id][sec.repetible.id].push({});save();render()}
  else if(b.dataset.del!==undefined){D[sec.id][sec.repetible.id].splice(+b.dataset.del,1);save();render()}
 });
@@ -190,7 +229,7 @@ function finish(){
  <div class="f"><label class="l">WhatsApp o correo para responderte *</label><input type="text" id="fc" value="${esc(fin.contacto)}"></div>
  <div class="f"><label class="l">Adjuntar archivos (opcional)</label><span class="h">Hasta ${MAX_N}, de 5 MB cada uno (JPG, PNG, WEBP, HEIC, PDF, ZIP, Word). Logo, foto del grupo, repertorio… Lo demás va en la carpeta de Drive.</span><input type="file" id="ff" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.zip,.doc,.docx"><div class="sk" id="fl"></div></div>
  <div class="hp" aria-hidden="true"><label>Sitio web<input type="text" id="fw" tabindex="-1" autocomplete="off"></label></div>
- <p class="sk">Al enviar aceptas el <a href="/privacidad" target="_blank" rel="noopener">aviso de privacidad</a> de CUCO ARTS. Usamos tus respuestas solo para armar tu perfil.</p>
+ <p class="sk">Al enviar aceptas el <a href="/privacidad" target="_blank" rel="noopener">aviso de privacidad</a> de CUCO ARTS. Usamos tus respuestas solo para armar tu perfil. Mientras lo llenas guardamos tu avance en línea hasta 90 días.</p>
  <p class="warn" id="fe" hidden></p>
  <div class="row"><button class="pri" id="send">Enviar</button><button id="back">← Revisar respuestas</button></div>
  <div class="ok" id="done" hidden></div>
@@ -237,6 +276,11 @@ function finish(){
  };
  window.scrollTo(0,0);
 }
+document.getElementById("copyLink").onclick=async e=>{
+ const b=e.currentTarget;
+ try{await navigator.clipboard.writeText(location.href);b.textContent="Enlace copiado ✓"}catch(x){prompt("Copia tu enlace personal:",location.href)}
+ setTimeout(()=>b.textContent="Copiar mi enlace",2000);
+};
 boot();
 </script>
 </body>

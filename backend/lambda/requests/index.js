@@ -7,7 +7,7 @@
  * Usa solo el AWS SDK v3 que ya trae el runtime de Lambda (sin node_modules). */
 
 const crypto = require('crypto');
-const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, PutItemCommand, GetItemCommand } = require('@aws-sdk/client-dynamodb');
 const { S3Client, HeadObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { SESv2Client, SendEmailCommand } = require('@aws-sdk/client-sesv2');
 
@@ -246,4 +246,42 @@ async function submit(event) {
   return reply(200, { ok: true, id, emailed });
 }
 
-module.exports = { uploadUrl, submit, _test: { presignPut, validate, buildRaw, emailText, safeName } };
+/* ---------- borradores del formulario de perfil creativo (cucoarts.com/formulario) ----------
+ *  POST /requests/draft       -> guarda el avance bajo una clave larga que genera el navegador (quien tiene el enlace lo retoma).
+ *  POST /requests/draft/load  -> devuelve ese avance. Se borra solo a los 90 días de la última vez que se guardó (atributo TTL "expira"). */
+const MAX_DRAFT = 100000;
+const DRAFT_DAYS = 90;
+const tokenOk = (k) => /^[A-Za-z0-9_-]{22,64}$/.test(String(k || ''));
+const artistaOk = (a) => /^[a-z0-9-]{2,40}$/.test(a);
+
+async function draftSave(event) {
+  const body = parse(event);
+  if (!body || !tokenOk(body.k)) return reply(400, { ok: false, error: 'token' });
+  const artista = oneLine(body.artista, 40);
+  if (!artistaOk(artista)) return reply(400, { ok: false, error: 'artista' });
+  const raw = typeof body.datos === 'string' ? body.datos : '';
+  if (raw.length > MAX_DRAFT) return reply(413, { ok: false, error: 'too_big' });
+  let obj; try { obj = JSON.parse(raw); } catch (e) { obj = null; }
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return reply(400, { ok: false, error: 'datos' });
+  const now = new Date();
+  const item = {
+    id: { S: 'draft-' + body.k }, type: { S: 'borrador' }, status: { S: 'borrador' }, artista: { S: artista },
+    datos: { S: raw }, updatedAt: { S: now.toISOString() }, expira: { N: String(Math.floor(now.getTime() / 1000) + DRAFT_DAYS * 86400) },
+  };
+  try { await ddb.send(new PutItemCommand({ TableName: TABLE, Item: item })); }
+  catch (e) { console.error('dynamodb', e); return reply(500, { ok: false, error: 'storage' }); }
+  return reply(200, { ok: true, updatedAt: item.updatedAt.S });
+}
+
+async function draftLoad(event) {
+  const body = parse(event);
+  if (!body || !tokenOk(body.k)) return reply(400, { ok: false, error: 'token' });
+  let out;
+  try { out = await ddb.send(new GetItemCommand({ TableName: TABLE, Key: { id: { S: 'draft-' + body.k } } })); }
+  catch (e) { console.error('dynamodb', e); return reply(500, { ok: false, error: 'storage' }); }
+  const it = out && out.Item;
+  if (!it || (body.artista && it.artista && it.artista.S !== body.artista)) return reply(404, { ok: false, error: 'not_found' });
+  return reply(200, { ok: true, artista: it.artista.S, datos: it.datos.S, updatedAt: it.updatedAt.S });
+}
+
+module.exports = { uploadUrl, submit, draftSave, draftLoad, _test: { presignPut, validate, buildRaw, emailText, safeName } };
