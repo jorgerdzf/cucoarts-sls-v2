@@ -5,8 +5,13 @@ const Module = require('module');
 const assert = require('assert');
 
 const sent = { ddb: [], ses: [], s3: [] };
+const store = {};                                   // tabla simulada: id -> item
 const fake = {
-  '@aws-sdk/client-dynamodb': { DynamoDBClient: class { send(c) { sent.ddb.push(c); return {}; } }, PutItemCommand: class { constructor(i) { Object.assign(this, i); } } },
+  '@aws-sdk/client-dynamodb': {
+    DynamoDBClient: class { send(c) { if (c.kind === 'getitem') return { Item: store[c.Key.id.S] }; sent.ddb.push(c); if (c.Item) store[c.Item.id.S] = c.Item; return {}; } },
+    PutItemCommand: class { constructor(i) { Object.assign(this, i); } },
+    GetItemCommand: class { constructor(i) { Object.assign(this, i, { kind: 'getitem' }); } },
+  },
   '@aws-sdk/client-s3': {
     S3Client: class { send(c) { sent.s3.push(c); if (c.kind === 'head') { if (c.Key.includes('missing')) throw new Error('404'); return { ContentLength: c.Key.includes('big') ? 9e6 : 1234, ContentType: 'application/pdf' }; }
       return { Body: (async function* () { yield Buffer.from('%PDF-fake'); })() }; } },
@@ -73,6 +78,39 @@ const ev = (b) => ({ body: JSON.stringify(b) });
   const subj = Buffer.from(rawRob.match(/Subject: =\?UTF-8\?B\?([^?]+)\?=/)[1], 'base64').toString('utf8'); assert.strictEqual(subj, 'Rob: Cobertura de un evento — Marca MX');
   const textRob = Buffer.from(rawRob.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0].replace(/\r\n/g, ''), 'base64').toString('utf8');
   assert(/Servicio: Cobertura de un evento/.test(textRob) && /cucoarts\.com\/rob/.test(textRob) && /Quiere recibir noticias: Sí/.test(textRob), textRob);
+  // formulario de perfil creativo (/formulario?a=<artista>)
+  r = await m.submit(ev({ type: 'perfil', values: { nombre: '', artista: 'Mal Slug', correo: 'mal' } }));
+  assert.deepStrictEqual(JSON.parse(r.body).fields.sort(), ['artista', 'correo', 'nombre'].sort());
+  r = await m.submit(ev({ type: 'perfil', values: { nombre: 'Raúl', artista: 'bluewave' } })); assert.deepStrictEqual(JSON.parse(r.body).fields, ['contacto']);
+  const antesP = sent.ses.length, ddbP = sent.ddb.length;
+  const largo = 'Respuesta larga. '.repeat(1500);                                    // ~25 KB: cabe en el resumen de perfil (40,000)
+  r = await m.submit(ev({ type: 'perfil', lang: 'es', summary: largo, values: { nombre: 'Raúl Martínez', artista: 'bluewave', proyecto: 'Blue Wave · Live music', tel: '81 1234 5678', datos: '{"proyecto":{"nombre":"x"}}' } }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200, r.body); assert.strictEqual(b.emailed, true);
+  assert.strictEqual(sent.ddb.length, ddbP + 1); assert.strictEqual(sent.ddb[ddbP].Item.type.S, 'perfil');
+  assert.strictEqual(sent.ddb[ddbP].Item.summary.S.length, largo.trim().length);
+  const rawP = sent.ses[antesP].Content.Raw.Data.toString('utf8');
+  const subjP = Buffer.from(rawP.match(/Subject: =\?UTF-8\?B\?([^?]+)\?=/)[1], 'base64').toString('utf8'); assert.strictEqual(subjP, 'Perfil creativo: Blue Wave · Live music — Raúl Martínez');
+  const textP = Buffer.from(rawP.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0].replace(/\r\n/g, ''), 'base64').toString('utf8');
+  assert(/NUEVAS RESPUESTAS \(cucoarts\.com\/formulario\)/.test(textP) && /WhatsApp: 81 1234 5678/.test(textP) && !/recibir noticias/.test(textP), textP.slice(0, 300));
   r = await m.submit({ body: 'no es json' }); assert.strictEqual(r.statusCode, 400);
+
+  // borradores del formulario (guardar y retomar)
+  const K = 'abcdefghijklmnopqrstuv1234';                                       // 26 caracteres
+  r = await m.draftSave(ev({ k: 'corta', artista: 'bluewave', datos: '{}' })); assert.strictEqual(JSON.parse(r.body).error, 'token');
+  r = await m.draftSave(ev({ k: K, artista: 'Mal Slug', datos: '{}' })); assert.strictEqual(JSON.parse(r.body).error, 'artista');
+  r = await m.draftSave(ev({ k: K, artista: 'bluewave', datos: 'no json' })); assert.strictEqual(JSON.parse(r.body).error, 'datos');
+  r = await m.draftSave(ev({ k: K, artista: 'bluewave', datos: JSON.stringify({ x: 'y'.repeat(100001) }) })); assert.strictEqual(r.statusCode, 413);
+  const antesD = sent.ses.length;
+  r = await m.draftSave(ev({ k: K, artista: 'bluewave', datos: JSON.stringify({ proyecto: { nombre: 'Blue Wave' }, _t: 1 }) }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200, r.body); assert(b.updatedAt);
+  const dItem = store['draft-' + K]; assert.strictEqual(dItem.type.S, 'borrador');
+  const dias = (Number(dItem.expira.N) - Date.now() / 1000) / 86400; assert(dias > 89.9 && dias <= 90.1, 'TTL 90 días: ' + dias);
+  assert.strictEqual(sent.ses.length, antesD);                                   // guardar un borrador no manda correo
+  r = await m.draftSave(ev({ k: K, artista: 'bluewave', datos: JSON.stringify({ proyecto: { nombre: 'Blue Wave Live' }, _t: 2 }) }));   // sobrescribe
+  r = await m.draftLoad(ev({ k: K, artista: 'bluewave' })); b = JSON.parse(r.body);
+  assert.strictEqual(r.statusCode, 200); assert.strictEqual(JSON.parse(b.datos).proyecto.nombre, 'Blue Wave Live'); assert.strictEqual(b.artista, 'bluewave');
+  r = await m.draftLoad(ev({ k: K, artista: 'otro-artista' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.found, false); assert(!b.datos);   // la clave no abre el borrador de otro formulario
+  r = await m.draftLoad(ev({ k: 'zzzzzzzzzzzzzzzzzzzzzzzzzz', artista: 'bluewave' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.ok, true); assert.strictEqual(b.found, false);   // sin borrador: 200, no error
+  r = await m.draftLoad(ev({ k: '../../etc' })); assert.strictEqual(r.statusCode, 400);
   console.log('OK: todas las pruebas pasaron');
 })().catch((e) => { console.error('FALLÓ:', e.message); process.exit(1); });

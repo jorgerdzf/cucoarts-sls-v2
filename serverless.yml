@@ -30,6 +30,7 @@ provider:
         - Effect: Allow
           Action:
             - dynamodb:PutItem
+            - dynamodb:GetItem
           Resource: !GetAtt RequestsTable.Arn
         - Effect: Allow
           Action:
@@ -95,6 +96,33 @@ functions:
           cors: true
     environment:
       UPLOADS_BUCKET: ${self:custom.uploadsBucketName}
+
+  # ---- borradores del formulario cucoarts.com/formulario: guardar y retomar el avance ----
+  requestsDraftSave:
+    name: ${sls:stage}-requestsDraftSave-lambda
+    handler: backend/lambda/requests/index.draftSave
+    memorySize: 256
+    events:
+      - http:
+          path: requests/draft
+          method: post
+          private: true
+          cors: true
+    environment:
+      REQUESTS_TABLE: ${self:custom.requestsTableName}
+
+  requestsDraftLoad:
+    name: ${sls:stage}-requestsDraftLoad-lambda
+    handler: backend/lambda/requests/index.draftLoad
+    memorySize: 256
+    events:
+      - http:
+          path: requests/draft/load
+          method: post
+          private: true
+          cors: true
+    environment:
+      REQUESTS_TABLE: ${self:custom.requestsTableName}
 
   requestsSubmit:
     name: ${sls:stage}-requestsSubmit-lambda
@@ -180,6 +208,10 @@ custom:
         - rob:
             ContentType: text/html; charset=utf-8
             CacheControl: max-age=300
+        # cucoarts.com/formulario?a=<artista>: reusable creative-profile form (extensionless file; its data is formulario-datos/*.json).
+        - formulario:
+            ContentType: text/html; charset=utf-8
+            CacheControl: max-age=300
         # Images: 7 days in the browser so returning visitors don't download them again. ONLY image files inside these
         # folders (never pages such as murales/index.html or husky/index.html, nor the JS/CSS bundles); if an image is
         # replaced under the same name, visitors who already have it keep the old one for up to a week, so prefer new
@@ -214,6 +246,10 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        # Los borradores del formulario de perfil creativo llevan "expira" (90 días); las solicitudes enviadas no, y nunca se borran solas.
+        TimeToLiveSpecification:
+          AttributeName: expira
+          Enabled: true
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true
     MtyTable:

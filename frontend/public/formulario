@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Perfil creativo · CUCO ARTS</title>
+<style>
+:root{--bg:#F6F1E9;--ink:#141414;--mut:#6b655c;--line:#d9d1c4;--card:#fff;--rec:#EA663D}
+@media (prefers-color-scheme:dark){:root{--bg:#121212;--ink:#f2ede4;--mut:#a39d92;--line:#333;--card:#1c1c1c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Helvetica Neue",Arial,sans-serif}
+header{background:var(--rec);color:#141414;padding:20px 16px}
+header .in,main,.bar .in{max-width:760px;margin:0 auto}
+.tag{font:12px "Courier New",monospace;letter-spacing:.08em;text-transform:uppercase}
+h1{margin:6px 0 4px;font-size:clamp(26px,6vw,38px);line-height:1.1;text-transform:uppercase}
+header p{margin:0;max-width:56ch}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 16px}
+.bar .in{display:flex;gap:12px;align-items:center}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--rec);transition:width .2s}
+.bar .tag{white-space:nowrap}
+.bar .sv{justify-content:space-between;margin-top:6px;min-height:28px}
+.bar .sv .tag{text-transform:none;letter-spacing:0;font-size:12px;color:var(--mut);white-space:normal}
+main{padding:16px}
+.sec h2{margin:8px 0 2px;font-size:24px;text-transform:uppercase}
+.sec>.lead{color:var(--mut);margin:0 0 16px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+label.l,.lg{display:block;font-weight:600;margin-bottom:2px}
+.h{display:block;color:var(--mut);font-size:14px;margin-bottom:8px}
+input[type=text],input[type=tel],input[type=email],input[type=url],textarea,select{width:100%;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--rec);outline-offset:1px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.opts input{accent-color:var(--rec)}
+.opts label:has(input:checked){border-color:var(--rec);background:color-mix(in srgb,var(--rec) 15%,transparent)}
+.rep{border:1px dashed var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.rep .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.rep .top b{font:13px "Courier New",monospace;text-transform:uppercase}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--ink);background:transparent;color:inherit;padding:10px 16px}
+button:disabled{opacity:.5;cursor:default}
+button.pri{background:var(--rec);border-color:var(--rec);color:#141414;font-weight:700}
+button.sm{padding:4px 10px;font-size:14px}
+.nav{display:flex;justify-content:space-between;gap:8px;margin:20px 0 40px}
+.sk{font-size:14px;color:var(--mut);margin-top:6px}
+.files{width:100%;border-collapse:collapse}
+.files td{padding:8px 4px;border-top:1px solid var(--line);vertical-align:top}
+.files td:first-child{width:50%}
+.files small{display:block;color:var(--mut)}
+.res pre{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.4 "Courier New",monospace;max-height:300px;overflow:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.warn{color:#b3261e;font-size:14px}
+.ok{background:var(--card);border:2px solid var(--rec);border-radius:10px;padding:14px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+a{color:inherit}
+</style>
+</head>
+<body>
+<header><div class="in">
+<div class="tag">CUCO ARTS · Perfil creativo</div>
+<h1 id="hTitulo">Perfil creativo</h1>
+<p id="hIntro">Cargando…</p>
+</div></header>
+<div class="bar"><div class="in"><span class="tag" id="stepTxt"></span><div class="track"><i id="prog"></i></div></div>
+<div class="in sv"><span class="tag" id="saveTxt"></span><button class="sm" id="copyLink" type="button">Copiar mi enlace</button></div></div>
+<main id="app"></main>
+
+<script>
+/* Formulario de perfil creativo de CUCO ARTS (reutilizable).
+   Dirección: cucoarts.com/formulario?a=<artista>
+   Datos del artista:  /formulario-datos/<artista>.json            (nombre, texto de bienvenida, plantilla, respuestas prellenadas)
+   Preguntas:          /formulario-datos/plantillas/<plantilla>.json (secciones, campos y lista de archivos)
+   Para otro artista: copiar un <artista>.json, cambiar sus datos y (si es otra disciplina) apuntar a otra plantilla. No hay que tocar este archivo. */
+const API="https://7q2ymxv5k8.execute-api.us-east-2.amazonaws.com/dev/", API_KEY="Sm9ykkuXnO6rUB9sX9cZn2wEDcqPGuCM4XiVdG49";
+const MAX_N=4, MAX_F=5*1024*1024, MAX_T=7*1024*1024, EXT=/\.(pdf|jpe?g|png|webp|heic|zip|docx?)$/i;
+const app=document.getElementById("app");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const slug=(new URLSearchParams(location.search).get("a")||"").toLowerCase().replace(/[^a-z0-9-]/g,"");
+let CFG,TPL,D={},step=0,KEY="",K="",picked=[],tmr=null,dirty=false;
+const TOKEN=/^[A-Za-z0-9_-]{22,64}$/, MAX_DRAFT=100000;
+const newKey=()=>{const b=new Uint8Array(18);crypto.getRandomValues(b);return btoa(String.fromCharCode(...b)).replace(/\+/g,"-").replace(/\//g,"_")};
+const stamp=()=>new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+const status=t=>{const el=document.getElementById("saveTxt");if(el)el.textContent=t};
+
+/* Avance: se guarda al instante en este dispositivo y, unos segundos después, en el servidor bajo la clave personal del enlace (?k=).
+   Quien abre ese enlace en otro dispositivo retoma donde se quedó. Gana la versión más reciente (D._t). El borrador se borra solo a los 90 días. */
+const save=()=>{D._t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){} dirty=true;status("Guardando…");clearTimeout(tmr);tmr=setTimeout(()=>push(),2500)};
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}};
+async function push(keepalive){
+ clearTimeout(tmr);if(!dirty)return;
+ const datos=JSON.stringify(D);
+ if(datos.length>MAX_DRAFT){status("Muy largo para guardarse en línea; queda en este dispositivo");return}
+ dirty=false;
+ try{
+  const r=await fetch(API+"requests/draft",{method:"POST",keepalive:!!keepalive,headers:{"Content-Type":"application/json","x-api-key":API_KEY},body:JSON.stringify({k:K,artista:slug,datos})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||!j.ok)throw new Error(j.error||("http "+r.status));
+  status("Guardado ✓ "+stamp());
+ }catch(e){dirty=true;status("Sin conexión: guardado solo en este dispositivo")}
+}
+async function pull(){
+ try{
+  const j=await api("requests/draft/load",{k:K,artista:slug});
+  if(j.found===false||!j.datos)return;                  // aún no hay avance en línea (el servidor responde 200, sin error en consola)
+  const s=JSON.parse(j.datos);
+  if((s._t||0)>(D._t||0)){D=s;try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+ }catch(e){/* 404: todavía no hay avance en línea; sin conexión: se usa lo del dispositivo */}
+}
+addEventListener("pagehide",()=>push(true));
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")push(true)});
+
+function fail(msg){
+ document.getElementById("hIntro").textContent="";
+ app.innerHTML=`<p>${esc(msg)}</p><p class="sk">Si crees que es un error, escríbele a quien te mandó este enlace.</p>`;
+}
+async function boot(){
+ if(!slug)return fail("Falta el nombre del artista en el enlace.");
+ try{
+  CFG=await (await fetch(`/formulario-datos/${slug}.json`,{cache:"no-cache"})).json();
+  TPL=await (await fetch(`/formulario-datos/plantillas/${CFG.plantilla}.json`,{cache:"no-cache"})).json();
+ }catch(e){return fail("No encontramos este formulario.")}
+ // clave personal del enlace (?k=): si falta, se reutiliza la última de este dispositivo o se crea una nueva
+ const qs=new URLSearchParams(location.search), kKey=`cuco-formulario-${slug}-k`;
+ K=qs.get("k")||"";
+ if(!TOKEN.test(K)){try{K=localStorage.getItem(kKey)||""}catch(e){K=""} if(!TOKEN.test(K))K=newKey(); qs.set("k",K); history.replaceState(null,"",location.pathname+"?"+qs.toString())}
+ try{localStorage.setItem(kKey,K)}catch(e){}
+ KEY=`cuco-formulario-${slug}-${K}`;
+ D=load();
+ status("Revisando tu avance…");
+ await pull();
+ status("");
+ // respuestas prellenadas (solo datos comprobados); no pisan lo que la persona ya escribió
+ Object.entries(CFG.prellenado||{}).forEach(([s,fs])=>{D[s]=D[s]||{};Object.entries(fs).forEach(([k,v])=>{if(D[s][k]===undefined)D[s][k]=v})});
+ document.title=`${CFG.titulo} · CUCO ARTS`;
+ document.getElementById("hTitulo").textContent=CFG.titulo;
+ document.getElementById("hIntro").textContent=CFG.intro||"";
+ render();
+}
+
+/* Cada campo enlaza su etiqueta (for/id) y su ayuda (aria-describedby); los grupos de casillas se anuncian como grupo con su título (accesibilidad). */
+function fieldHTML(f,val,name){
+ const id="f_"+name.replace(/[^A-Za-z0-9_-]/g,"_");
+ const h=f.help?`<span class="h" id="${id}_h">${esc(f.help)}</span>`:"";
+ const dby=f.help?` aria-describedby="${id}_h"`:"";
+ const nm=`data-n="${name}"`;
+ const lab=`<label class="l" for="${id}">${esc(f.label)}</label>`;
+ if(f.type==="area")return `<div class="f">${lab}${h}<textarea id="${id}" ${nm}${dby}>${esc(val)}</textarea></div>`;
+ if(f.type==="sel")return `<div class="f">${lab}${h}<select id="${id}" ${nm}${dby}><option value="">—</option>${f.opts.map(o=>`<option${val===o?" selected":""}>${esc(o)}</option>`).join("")}</select></div>`;
+ if(f.type==="opts"){const v=Array.isArray(val)?val:[];return `<div class="f" role="group" aria-labelledby="${id}_l"><div class="lg" id="${id}_l">${esc(f.label)}</div>${h}<div class="opts">${f.opts.map(o=>`<label><input type="checkbox" ${nm} value="${esc(o)}"${v.includes(o)?" checked":""}>${esc(o)}</label>`).join("")}</div></div>`}
+ if(f.type==="chk")return `<div class="f"><div class="opts"><label><input type="checkbox" ${nm} ${val?"checked":""}> <span>${esc(f.label)}</span></label></div></div>`;
+ return `<div class="f">${lab}${h}<input id="${id}" type="${f.type}" ${nm} value="${esc(val)}"${dby}></div>`;
+}
+
+function render(){
+ const sec=TPL.secciones[step], total=TPL.secciones.length;
+ document.getElementById("stepTxt").textContent=`${step+1} / ${total+1}`;
+ document.getElementById("prog").style.width=(step/total*100)+"%";
+ const sd=D[sec.id]=D[sec.id]||{};
+ let h=`<section class="sec"><h2>${esc(sec.titulo)}</h2><p class="lead">${esc(sec.intro||"")}</p>`;
+ if(step===0)h+=`<div class="f"><b>Tu avance se guarda solo.</b> Puedes cerrar y volver cuando quieras. Para seguir en otro dispositivo, o para que Roberto vea cómo vas, usa tu enlace personal (botón “Copiar mi enlace” arriba). No lo compartas con nadie más: quien lo tenga puede ver y editar tus respuestas.</div>`;
+ if(sec.archivos){
+  const fl=sd._files=sd._files||{};
+  h+=`<div class="f"><table class="files">${TPL.archivos.map(a=>`<tr><td><b>${esc(a.label)}</b><small>${esc(a.help||"")}</small></td><td><select data-file="${a.id}"><option value="">—</option>${["Ya lo tengo","Lo tengo pero hay que mejorarlo","No lo tengo"].map(o=>`<option${fl[a.id]===o?" selected":""}>${o}</option>`).join("")}</select></td></tr>`).join("")}</table></div>`;
+ }
+ // "ajustes" del artista cambian textos de una pregunta de la plantilla: {"seccion.campo": {"help": "...", "label": "..."}}
+ (sec.campos||[]).forEach(f=>{h+=fieldHTML({...f,...((CFG.ajustes||{})[`${sec.id}.${f.id}`]||{})},sd[f.id],`${sec.id}.${f.id}`)});
+ if(sec.repetible){
+  const r=sec.repetible, arr=sd[r.id]=sd[r.id]||[{}];
+  arr.forEach((item,i)=>{
+   h+=`<div class="rep"><div class="top"><b>${esc(r.etiqueta)} ${i+1}</b>${arr.length>1?`<button class="sm" data-del="${i}">Quitar</button>`:""}</div>`;
+   r.campos.forEach(f=>{h+=fieldHTML(f,item[f.id],`${sec.id}.${r.id}.${i}.${f.id}`)});
+   h+=`</div>`;
+  });
+  if(arr.length<r.max)h+=`<button data-add="1">+ Agregar ${esc(r.etiqueta.toLowerCase())}</button>`;
+ }
+ h+=`<div class="nav"><button data-prev ${step?"":"disabled"}>← Atrás</button><button class="pri" data-next>${step===total-1?"Terminar":"Siguiente →"}</button></div></section>`;
+ app.innerHTML=h;
+ window.scrollTo(0,0);
+}
+
+function setVal(path,el){
+ const p=path.split(".");let o=D;
+ for(let i=0;i<p.length-1;i++){o=o[p[i]]=o[p[i]]??(isNaN(p[i+1])?{}:[])}
+ const k=p[p.length-1];
+ if(el.type==="checkbox"&&el.value&&el.value!=="on"){
+  const arr=Array.isArray(o[k])?o[k]:[];
+  o[k]=el.checked?[...new Set([...arr,el.value])]:arr.filter(x=>x!==el.value);
+ }else if(el.type==="checkbox")o[k]=el.checked;
+ else o[k]=el.value;
+}
+app.addEventListener("input",e=>{
+ const t=e.target;
+ if(t.dataset.n){setVal(t.dataset.n,t);save()}
+ if(t.dataset.file){D[TPL.secciones[step].id]._files[t.dataset.file]=t.value;save()}
+});
+app.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b||b.closest("#fin"))return;
+ const sec=TPL.secciones[step];
+ if(b.hasAttribute("data-prev")){push();step--;render()}
+ else if(b.hasAttribute("data-next")){push();if(step===TPL.secciones.length-1)finish();else{step++;render()}}
+ else if(b.dataset.add){D[sec.id][sec.repetible.id].push({});save();render()}
+ else if(b.dataset.del!==undefined){D[sec.id][sec.repetible.id].splice(+b.dataset.del,1);save();render()}
+});
+
+/* ---------- Resultado ---------- */
+const line=(l,v)=>(v===undefined||v===""||(Array.isArray(v)&&!v.length))?"":`${l}: ${Array.isArray(v)?v.join(", "):v}\n`;
+function build(){
+ let t=`PERFIL CREATIVO · ${CFG.titulo} · Respuestas del formulario\n${new Date().toLocaleString("es-MX")}\n\n`;
+ TPL.secciones.forEach(sec=>{
+  const sd=D[sec.id]||{};let b="";
+  if(sd._files)b+="Archivos:\n"+TPL.archivos.map(a=>`  - ${a.label}: ${sd._files[a.id]||"sin responder"}`).join("\n")+"\n";
+  (sec.campos||[]).forEach(f=>{b+=line(f.label,sd[f.id])});
+  if(sec.repetible)(sd[sec.repetible.id]||[]).forEach((it,i)=>{const r=sec.repetible.campos.map(f=>line("  "+f.label,it[f.id])).join("");if(r)b+=`\n${sec.repetible.etiqueta.toUpperCase()} ${i+1}\n${r}`});
+  if(b)t+=`== ${sec.titulo.toUpperCase()} ==\n${b}\n`;
+ });
+ return t;
+}
+async function api(path,body){
+ const r=await fetch(API+path,{method:"POST",headers:{"Content-Type":"application/json","x-api-key":API_KEY},body:JSON.stringify(body)});
+ const j=await r.json().catch(()=>({}));
+ if(!r.ok||!j.ok)throw new Error(j.error||("http "+r.status));
+ return j;
+}
+function finish(){
+ const txt=build(), c=(D.autoriza&&D.autoriza.c_uso)?"":"Falta marcar la autorización de uso del material (sección anterior).";
+ const fin=D._fin=D._fin||{};
+ document.getElementById("stepTxt").textContent="Listo";
+ document.getElementById("prog").style.width="100%";
+ app.innerHTML=`<section class="sec res" id="fin"><h2>Casi listo</h2>
+ <p class="lead">Revisa que tus datos de contacto estén bien y pulsa Enviar. Si algo falla, abajo puedes descargar tus respuestas.</p>
+ ${c?`<p class="warn">${esc(c)} Puedes regresar y marcarla.</p>`:""}
+ <div class="f"><label class="l" for="fn">Tu nombre *</label><input type="text" id="fn" autocomplete="name" value="${esc(fin.nombre)}"></div>
+ <div class="f"><label class="l" for="fc">WhatsApp o correo para responderte *</label><input type="text" id="fc" autocomplete="tel" value="${esc(fin.contacto)}"></div>
+ <div class="f"><label class="l" for="ff">Adjuntar archivos (opcional)</label><span class="h" id="ff_h">Hasta ${MAX_N}, de 5 MB cada uno (JPG, PNG, WEBP, HEIC, PDF, ZIP, Word). Logo, foto del grupo, repertorio… Lo demás va en la carpeta de Drive.</span><input type="file" id="ff" aria-describedby="ff_h" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.zip,.doc,.docx"><div class="sk" id="fl"></div></div>
+ <div class="hp" aria-hidden="true"><label>Sitio web<input type="text" id="fw" tabindex="-1" autocomplete="off"></label></div>
+ <p class="sk">Al enviar aceptas el <a href="/privacidad" target="_blank" rel="noopener">aviso de privacidad</a> de CUCO ARTS. Usamos tus respuestas solo para armar tu perfil. Mientras lo llenas guardamos tu avance en línea hasta 90 días.</p>
+ <p class="warn" id="fe" hidden></p>
+ <div class="row"><button class="pri" id="send">Enviar</button><button id="back">← Revisar respuestas</button></div>
+ <div class="ok" id="done" hidden></div>
+ <h3>Respaldo</h3>
+ <div class="row"><button id="dl">Descargar respuestas (.txt)</button><button id="cp">Copiar texto</button>${CFG.whatsapp?`<a href="https://wa.me/${esc(CFG.whatsapp)}?text=${encodeURIComponent(CFG.whatsapp_msg||"Hola, terminé el formulario de perfil creativo.")}" target="_blank" rel="noopener"><button>Abrir WhatsApp</button></a>`:""}</div>
+ <pre>${esc(txt)}</pre></section>`;
+ const $=id=>document.getElementById(id);
+ $("fn").oninput=()=>{fin.nombre=$("fn").value;save()};
+ $("fc").oninput=()=>{fin.contacto=$("fc").value;save()};
+ $("ff").onchange=()=>{
+  picked=[...$("ff").files];
+  const tot=picked.reduce((a,f)=>a+f.size,0);
+  const bad=picked.length>MAX_N?`Máximo ${MAX_N} archivos.`:picked.find(f=>!EXT.test(f.name))?`“${picked.find(f=>!EXT.test(f.name)).name}” no es un tipo permitido.`:picked.find(f=>f.size>MAX_F)?`“${picked.find(f=>f.size>MAX_F).name}” pesa más de 5 MB.`:tot>MAX_T?"Entre todos pasan de 7 MB.":"";
+  $("fl").textContent=bad||picked.map(f=>f.name).join(", ");
+  $("fl").className=bad?"warn":"sk"; if(bad)picked=[];
+ };
+ $("back").onclick=()=>{step=TPL.secciones.length-1;render()};
+ const dl=(n,d,t)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([d],{type:t}));a.download=n;a.click()};
+ $("dl").onclick=()=>dl(`${slug}_perfil_respuestas.txt`,txt,"text/plain;charset=utf-8");
+ $("cp").onclick=async e=>{try{await navigator.clipboard.writeText(txt);e.target.textContent="Copiado ✓"}catch(x){e.target.textContent="No se pudo copiar"}};
+ $("send").onclick=async()=>{
+  const fe=$("fe"),b=$("send"),nombre=$("fn").value.trim(),contacto=$("fc").value.trim();
+  fe.hidden=true;
+  if(!nombre||!contacto){fe.textContent="Escribe tu nombre y un WhatsApp o correo.";fe.hidden=false;return}
+  const esMail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contacto);
+  if(!esMail&&contacto.replace(/\D/g,"").length<10){fe.textContent="El contacto debe ser un correo o un WhatsApp de 10 dígitos.";fe.hidden=false;return}
+  b.disabled=true;const lab=b.textContent;b.textContent="Enviando…";
+  try{
+   let files=[];
+   if(picked.length){
+    const {uploads}=await api("requests/upload-url",{files:picked.map(f=>({name:f.name,size:f.size,type:f.type}))});
+    await Promise.all(uploads.map(async(u,i)=>{const r=await fetch(u.url,{method:"PUT",headers:{"Content-Type":u.type},body:picked[i]});if(!r.ok)throw new Error("subida "+r.status)}));
+    files=uploads.map(u=>({key:u.key}));
+   }
+   const values={artista:slug,proyecto:CFG.titulo,nombre,correo:esMail?contacto:"",tel:esMail?"":contacto,datos:JSON.stringify(D)};
+   const r=await api("requests",{type:"perfil",lang:"es",values,summary:txt,files,website:$("fw").value});
+   $("done").hidden=false;
+   $("done").innerHTML=`<b>¡Enviado!</b> Gracias, ${esc(nombre)}. Ya recibimos tus respuestas y te escribiremos pronto.<br><span class="sk">Folio: ${esc(r.id)}${r.emailed?"":" (guardado; el aviso por correo se retrasó)"}</span>`;
+   b.hidden=true;$("done").scrollIntoView({behavior:"smooth",block:"center"});
+  }catch(e){
+   fe.textContent="No se pudo enviar. Intenta de nuevo; si sigue fallando, descarga tus respuestas y mándalas por WhatsApp.";fe.hidden=false;
+   b.disabled=false;b.textContent=lab;
+  }
+ };
+ window.scrollTo(0,0);
+}
+document.getElementById("copyLink").onclick=async e=>{
+ const b=e.currentTarget;
+ try{await navigator.clipboard.writeText(location.href);b.textContent="Enlace copiado ✓"}catch(x){prompt("Copia tu enlace personal:",location.href)}
+ setTimeout(()=>b.textContent="Copiar mi enlace",2000);
+};
+boot();
+</script>
+</body>
+</html>

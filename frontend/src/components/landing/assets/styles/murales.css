@@ -88,7 +88,7 @@
 
 /* mosaico */
 .mp-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
-.mp-chipbtn{border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:99px;padding:7px 14px;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.mp-chipbtn{border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:99px;padding:11px 14px;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
 .mp-chipbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .mp-tiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .mp-tiles li{aspect-ratio:1/1;position:relative;overflow:hidden;border-radius:4px;border:2px solid var(--ink);background:#000}
