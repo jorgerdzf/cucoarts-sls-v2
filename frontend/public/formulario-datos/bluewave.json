@@ -13,10 +13,10 @@
  },
  "ajustes": {
   "proyecto.nombre": {
-   "help": "Tal como quieres que aparezca. ¿Qué significa “LM”?"
+   "help": "Tal como quieres que aparezca. En Instagram dice “Live music” y el usuario es @bluewavelm (LM = Latin Music). ¿Cuál es el nombre oficial?"
   },
   "proyecto.historia": {
-   "help": "Cómo nació, quiénes son, de dónde vienen (JAZZUV, FAMUS, etc.). No tiene que sonar formal."
+   "help": "Cómo nació, quiénes son, de dónde vienen (JAZZUV en Xalapa, FAMUS de la UANL, etc.). No tiene que sonar formal."
   }
  }
 }
