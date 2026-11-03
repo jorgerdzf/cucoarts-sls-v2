@@ -1,0 +1,22 @@
+{
+ "plantilla": "musica-eventos",
+ "titulo": "Blue Wave · Live music",
+ "intro": "Con estas respuestas armamos tu perfil creativo en CUCO ARTS: quién eres, cómo suenan, qué paquetes ofreces y cómo te reservan. Tarda unos 25 minutos. Lo que no sepas todavía, déjalo vacío o escribe “por definir”. Tu avance se guarda en este dispositivo.",
+ "whatsapp": "528120321492",
+ "whatsapp_msg": "Hola Roberto, terminé el formulario de Blue Wave. Te mando el archivo de respuestas.",
+ "prellenado": {
+  "proyecto": {
+   "nombre": "Blue Wave | Live music",
+   "lema": "Música en vivo a la altura de tu evento",
+   "ciudad": "Monterrey, N.L."
+  }
+ },
+ "ajustes": {
+  "proyecto.nombre": {
+   "help": "Tal como quieres que aparezca. ¿Qué significa “LM”?"
+  },
+  "proyecto.historia": {
+   "help": "Cómo nació, quiénes son, de dónde vienen (JAZZUV, FAMUS, etc.). No tiene que sonar formal."
+  }
+ }
+}

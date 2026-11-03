@@ -1,0 +1,825 @@
+{
+ "plantilla": "musica-eventos",
+ "descripcion": "Perfil creativo para músicos y agrupaciones que tocan en eventos (bodas, XV, corporativos…).",
+ "archivos": [
+  {
+   "id": "logo",
+   "label": "Logo (vectorial .svg/.ai/.pdf y .png fondo transparente)",
+   "help": "Versión para fondo claro y para fondo oscuro, si existen"
+  },
+  {
+   "id": "foto_grupal",
+   "label": "Foto oficial del grupo (alta resolución)",
+   "help": "Horizontal y vertical. Mín. 2000 px por lado"
+  },
+  {
+   "id": "fotos_ind",
+   "label": "Retrato de cada integrante",
+   "help": "Mismo estilo, de preferencia fondo parejo"
+  },
+  {
+   "id": "fotos_vivo",
+   "label": "Fotos tocando en eventos reales",
+   "help": "Mín. 10; que se vea público, instrumentos y ambiente. Anota el fotógrafo para dar crédito"
+  },
+  {
+   "id": "video_promo",
+   "label": "Video promocional (1–2 min)",
+   "help": "Lo mejor de la agrupación, vertical y horizontal si existe"
+  },
+  {
+   "id": "videos_vivo",
+   "label": "Videos de presentaciones completas o clips (1–3 min)",
+   "help": "Con audio directo de buena calidad"
+  },
+  {
+   "id": "audio",
+   "label": "Audios de 3–5 temas representativos (WAV o MP3 320 kbps)",
+   "help": "Mejor grabación en vivo o estudio, sin ruido de sala"
+  },
+  {
+   "id": "plataformas",
+   "label": "Enlaces a Spotify / YouTube / SoundCloud",
+   "help": "Si tienen producción propia"
+  },
+  {
+   "id": "repertorio",
+   "label": "Lista de repertorio (PDF, Word o Excel)",
+   "help": "Título, artista original y género"
+  },
+  {
+   "id": "bio",
+   "label": "Biografía corta (50 palabras) y larga (200 palabras)",
+   "help": "Si no la tienes, la redactamos con tus respuestas"
+  },
+  {
+   "id": "testimonios",
+   "label": "Testimonios de clientes",
+   "help": "Texto o captura, con nombre y permiso para publicar"
+  },
+  {
+   "id": "rider",
+   "label": "Rider técnico y plano de escenario (stage plot)",
+   "help": "Si no existe, lo hacemos con tus respuestas"
+  },
+  {
+   "id": "contrato",
+   "label": "Contrato o carta de condiciones que ya uses",
+   "help": "Si tienes uno"
+  },
+  {
+   "id": "cotizacion",
+   "label": "Cotización o PDF de paquetes actual",
+   "help": "Para ver cómo presentas hoy tus precios"
+  }
+ ],
+ "secciones": [
+  {
+   "id": "proyecto",
+   "titulo": "El proyecto",
+   "intro": "Cómo se presenta Blue Wave.",
+   "campos": [
+    {
+     "id": "nombre",
+     "label": "Nombre artístico del proyecto",
+     "type": "text",
+     "help": "Tal como quieres que aparezca en tu perfil"
+    },
+    {
+     "id": "lema",
+     "label": "Frase o lema",
+     "type": "text",
+     "help": "Ej. el que ya usas en tu Instagram"
+    },
+    {
+     "id": "formacion",
+     "label": "¿Qué tipo de agrupación es?",
+     "type": "opts",
+     "help": "Puedes marcar varias si ofreces más de un formato",
+     "opts": [
+      "Solista",
+      "Dúo",
+      "Trío",
+      "Cuarteto",
+      "Quinteto o más",
+      "Banda completa",
+      "DJ + músicos en vivo",
+      "Formato variable"
+     ]
+    },
+    {
+     "id": "anios",
+     "label": "¿Desde cuándo tocan juntos? ¿Cuántos eventos aproximados han hecho?",
+     "type": "text"
+    },
+    {
+     "id": "historia",
+     "label": "Cuéntanos su historia en tus palabras",
+     "type": "area",
+     "help": "Cómo nació, quiénes son, de dónde vienen (escuela, banda anterior, etc.). No tiene que sonar formal."
+    },
+    {
+     "id": "diferencia",
+     "label": "¿Qué los hace distintos de otras opciones para un evento?",
+     "type": "area",
+     "help": "Lo que un cliente debe saber para elegirlos a ustedes"
+    },
+    {
+     "id": "ciudad",
+     "label": "Ciudad base y zona de cobertura",
+     "type": "text",
+     "help": "Monterrey y área metropolitana, otras ciudades del estado, todo México…"
+    },
+    {
+     "id": "idiomas",
+     "label": "Idiomas en que cantan o presentan",
+     "type": "text"
+    }
+   ]
+  },
+  {
+   "id": "equipo",
+   "titulo": "Integrantes y equipo",
+   "intro": "Las personas detrás del proyecto.",
+   "campos": [
+    {
+     "id": "sustitutos",
+     "label": "Si un integrante no puede asistir, ¿qué pasa?",
+     "type": "area",
+     "help": "¿Tienen suplentes? ¿Cambia el precio o el formato?"
+    },
+    {
+     "id": "tecnico",
+     "label": "¿Llevan técnico de sonido, coordinador o staff?",
+     "type": "area",
+     "help": "Quién es, si cobra aparte o va incluido"
+    },
+    {
+     "id": "contacto_nom",
+     "label": "Persona que atiende a clientes y cierra contratos",
+     "type": "text",
+     "help": "Nombre"
+    },
+    {
+     "id": "contacto_wa",
+     "label": "WhatsApp de contacto",
+     "type": "tel"
+    },
+    {
+     "id": "contacto_mail",
+     "label": "Correo de contacto",
+     "type": "email"
+    }
+   ],
+   "repetible": {
+    "id": "integrantes",
+    "etiqueta": "Integrante",
+    "max": 12,
+    "campos": [
+     {
+      "id": "nom",
+      "label": "Nombre completo",
+      "type": "text"
+     },
+     {
+      "id": "rol",
+      "label": "Instrumento o rol",
+      "type": "text",
+      "help": "Voz, guitarra, batería, violín, armónica, ingeniero de sonido…"
+     },
+     {
+      "id": "ig",
+      "label": "Instagram u otro enlace",
+      "type": "text"
+     },
+     {
+      "id": "bio",
+      "label": "Una línea sobre su trayectoria",
+      "type": "area",
+      "help": "Estudios, docencia, bandas anteriores, logros"
+     },
+     {
+      "id": "fijo",
+      "label": "¿Es integrante fijo o músico invitado?",
+      "type": "sel",
+      "opts": [
+       "Fijo",
+       "Invitado / sustituible"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "musica",
+   "titulo": "Música y repertorio",
+   "intro": "Cómo suenan y qué tocan.",
+   "campos": [
+    {
+     "id": "generos",
+     "label": "Géneros que tocan",
+     "type": "opts",
+     "opts": [
+      "Jazz",
+      "Blues",
+      "Soul / R&B",
+      "Pop",
+      "Rock",
+      "Bossa nova",
+      "Funk",
+      "Latin / salsa",
+      "Baladas",
+      "Boleros",
+      "Regional mexicano",
+      "Clásica / cámara",
+      "Electrónica en vivo",
+      "Música original",
+      "Otro"
+     ]
+    },
+    {
+     "id": "estilo",
+     "label": "Describe su sonido en dos o tres frases",
+     "type": "area",
+     "help": "Como se lo explicarías a alguien que nunca los ha escuchado"
+    },
+    {
+     "id": "repertorio_n",
+     "label": "¿Cuántas canciones tienen en repertorio, aprox.?",
+     "type": "text"
+    },
+    {
+     "id": "top",
+     "label": "Las 10 canciones que mejor los representan",
+     "type": "area",
+     "help": "Título – artista original. Una por línea."
+    },
+    {
+     "id": "peticiones",
+     "label": "¿Aceptan peticiones del cliente?",
+     "type": "sel",
+     "opts": [
+      "Sí, sin límite",
+      "Sí, con tiempo de anticipación",
+      "Solo de una lista que ellos dan",
+      "No"
+     ]
+    },
+    {
+     "id": "peticiones_det",
+     "label": "Detalle de peticiones",
+     "type": "area",
+     "help": "¿Cuántas canciones nuevas por evento? ¿Con cuánto tiempo de anticipación? ¿Costo extra?"
+    },
+    {
+     "id": "original",
+     "label": "¿Tocan música original?",
+     "type": "sel",
+     "opts": [
+      "Sí",
+      "No, solo covers",
+      "Ambas"
+     ]
+    },
+    {
+     "id": "playlist",
+     "label": "Enlace a una lista de reproducción de ejemplo",
+     "type": "url",
+     "help": "Spotify, YouTube o SoundCloud"
+    }
+   ]
+  },
+  {
+   "id": "eventos",
+   "titulo": "Tipos de evento",
+   "intro": "Dónde y para quién quieren tocar.",
+   "campos": [
+    {
+     "id": "eventos",
+     "label": "Eventos que atienden",
+     "type": "opts",
+     "opts": [
+      "Bodas (ceremonia)",
+      "Bodas (recepción)",
+      "XV años",
+      "Cumpleaños",
+      "Aniversarios",
+      "Posadas / fin de año",
+      "Corporativo / empresa",
+      "Restaurantes / bares",
+      "Cocteles y cenas privadas",
+      "Inauguraciones",
+      "Eventos culturales / galerías",
+      "Funerales / misas",
+      "Graduaciones",
+      "Otro"
+     ]
+    },
+    {
+     "id": "ideal",
+     "label": "Evento ideal: ¿cuál disfrutan más y en cuál se lucen mejor?",
+     "type": "area"
+    },
+    {
+     "id": "no",
+     "label": "¿Hay eventos que NO aceptan o prefieren evitar?",
+     "type": "area",
+     "help": "Por ejemplo, horarios, zonas, tipo de público"
+    },
+    {
+     "id": "mejores",
+     "label": "Describe tu mejor evento hasta ahora",
+     "type": "area",
+     "help": "Dónde fue, qué pasó, qué dijeron. Sirve como caso de éxito."
+    },
+    {
+     "id": "lugares",
+     "label": "Lugares, empresas o eventos donde han tocado",
+     "type": "area",
+     "help": "Una línea cada uno. Marca con * los que sí nos permiten mencionar públicamente."
+    }
+   ]
+  },
+  {
+   "id": "paquetes",
+   "titulo": "Paquetes",
+   "intro": "Lo más importante para vender. Si hoy no tienes paquetes definidos, escribe lo que se te ocurra: lo afinamos juntos.",
+   "campos": [
+    {
+     "id": "n_paq",
+     "label": "¿Cuántos paquetes distintos quieres ofrecer?",
+     "type": "sel",
+     "help": "Recomendación inicial: 3 (básico, completo, premium). Tú decides.",
+     "opts": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "No lo sé aún"
+     ]
+    }
+   ],
+   "repetible": {
+    "id": "paquetes",
+    "etiqueta": "Paquete",
+    "max": 6,
+    "campos": [
+     {
+      "id": "nom",
+      "label": "Nombre del paquete",
+      "type": "text",
+      "help": "Ej. Íntimo, Esencial, Gala"
+     },
+     {
+      "id": "para",
+      "label": "¿Para qué tipo de evento es ideal?",
+      "type": "text"
+     },
+     {
+      "id": "integr",
+      "label": "Integrantes / formato",
+      "type": "text",
+      "help": "Cuántos músicos y qué instrumentos"
+     },
+     {
+      "id": "dur",
+      "label": "Duración total de música",
+      "type": "text",
+      "help": "Ej. 2 sets de 45 min"
+     },
+     {
+      "id": "sets",
+      "label": "Cómo se reparte (sets, descansos, música entre sets)",
+      "type": "area"
+     },
+     {
+      "id": "incl",
+      "label": "¿Qué incluye?",
+      "type": "area",
+      "help": "Sonido, iluminación, repertorio, canción dedicada, MC, ceremonia, etc."
+     },
+     {
+      "id": "precio",
+      "label": "Precio (MXN)",
+      "type": "text",
+      "help": "Desde / fijo. Indica si incluye IVA"
+     },
+     {
+      "id": "pers",
+      "label": "Capacidad para la que está pensado (invitados)",
+      "type": "text"
+     },
+     {
+      "id": "notas",
+      "label": "Condiciones especiales",
+      "type": "area"
+     }
+    ]
+   }
+  },
+  {
+   "id": "extras",
+   "titulo": "Extras y adicionales",
+   "intro": "Todo lo que se puede sumar a un paquete.",
+   "campos": [
+    {
+     "id": "hora_extra",
+     "label": "Hora extra",
+     "type": "text",
+     "help": "Costo por hora o fracción"
+    },
+    {
+     "id": "extras",
+     "label": "Lista de extras con su precio",
+     "type": "area",
+     "help": "Ej. integrante adicional, iluminación, ceremonia, cóctel, canción dedicada, grabación de video, MC, prueba de sonido previa…"
+    },
+    {
+     "id": "viaticos",
+     "label": "Viáticos y traslado fuera del área metropolitana",
+     "type": "area",
+     "help": "Cómo cobran gasolina, hospedaje, alimentos, casetas"
+    },
+    {
+     "id": "fechas_altas",
+     "label": "¿Cambian precios en temporada alta o fines de semana?",
+     "type": "area",
+     "help": "Diciembre, mayo, sábados, festivos…"
+    },
+    {
+     "id": "descuentos",
+     "label": "¿Descuentos o promociones?",
+     "type": "area",
+     "help": "Entre semana, recurrentes, empresas, paquetes combinados"
+    }
+   ]
+  },
+  {
+   "id": "pagos",
+   "titulo": "Precios, pagos y contratos",
+   "intro": "Reglas claras que dan confianza al cliente.",
+   "campos": [
+    {
+     "id": "anticipo",
+     "label": "¿Cuánto piden de anticipo para apartar fecha?",
+     "type": "text",
+     "help": "% o monto"
+    },
+    {
+     "id": "liquidacion",
+     "label": "¿Cuándo se liquida el resto?",
+     "type": "text",
+     "help": "Antes del evento, el día del evento…"
+    },
+    {
+     "id": "metodos",
+     "label": "Métodos de pago",
+     "type": "opts",
+     "opts": [
+      "Transferencia",
+      "Efectivo",
+      "Tarjeta / terminal",
+      "Depósito",
+      "Otro"
+     ]
+    },
+    {
+     "id": "factura",
+     "label": "¿Emiten factura?",
+     "type": "sel",
+     "opts": [
+      "Sí, a persona física",
+      "Sí, a empresa",
+      "No",
+      "Por definir"
+     ]
+    },
+    {
+     "id": "cancel",
+     "label": "Política de cancelación",
+     "type": "area",
+     "help": "¿Se devuelve el anticipo? ¿En qué plazo?"
+    },
+    {
+     "id": "reprog",
+     "label": "Política de reprogramación",
+     "type": "area"
+    },
+    {
+     "id": "vigencia",
+     "label": "¿Cuánto tiempo vale una cotización?",
+     "type": "text",
+     "help": "Ej. 15 días"
+    },
+    {
+     "id": "contrato",
+     "label": "¿Firman contrato?",
+     "type": "sel",
+     "opts": [
+      "Sí, siempre",
+      "Solo eventos grandes",
+      "No, acuerdo por mensaje",
+      "Por definir"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "reservas",
+   "titulo": "Reservas y días previos",
+   "intro": "Cómo se aparta una fecha y qué pasa antes del evento.",
+   "campos": [
+    {
+     "id": "como_reservan",
+     "label": "Paso a paso: ¿cómo reserva un cliente?",
+     "type": "area",
+     "help": "Mensaje → cotización → anticipo → contrato → …"
+    },
+    {
+     "id": "anticipacion",
+     "label": "Anticipación mínima y recomendada para contratar",
+     "type": "text",
+     "help": "Ej. mínimo 2 semanas, ideal 2 meses"
+    },
+    {
+     "id": "calendario",
+     "label": "¿Cómo llevan su calendario?",
+     "type": "sel",
+     "help": "Para mostrar fechas ocupadas en el perfil",
+     "opts": [
+      "Google Calendar",
+      "Agenda en papel",
+      "Notas / WhatsApp",
+      "No tenemos"
+     ]
+    },
+    {
+     "id": "bloqueadas",
+     "label": "Fechas o periodos no disponibles (ya reservados o personales)",
+     "type": "area"
+    },
+    {
+     "id": "dias_max",
+     "label": "¿Cuántos eventos pueden hacer el mismo día?",
+     "type": "text"
+    },
+    {
+     "id": "reunion",
+     "label": "¿Tienen reunión previa con el cliente?",
+     "type": "area",
+     "help": "Videollamada, llenado de cuestionario, definir canciones, timeline del evento"
+    },
+    {
+     "id": "cuestionario",
+     "label": "Información que piden al cliente antes del evento",
+     "type": "opts",
+     "opts": [
+      "Lista de canciones",
+      "Canciones prohibidas",
+      "Entrada/primer baile/vals",
+      "Timeline del evento",
+      "Contacto del coordinador/lugar",
+      "Fotos del lugar",
+      "Plano del lugar"
+     ]
+    },
+    {
+     "id": "prueba",
+     "label": "¿Hacen visita al lugar o prueba de sonido previa?",
+     "type": "area"
+    },
+    {
+     "id": "dias_previos",
+     "label": "¿Hay días previos necesarios?",
+     "type": "area",
+     "help": "Ensayos para canciones especiales, visita técnica, entrega de repertorio, etc."
+    }
+   ]
+  },
+  {
+   "id": "logistica",
+   "titulo": "Logística del día del evento",
+   "intro": "Lo que el cliente y el lugar necesitan saber.",
+   "campos": [
+    {
+     "id": "llegada",
+     "label": "¿Cuánto tiempo antes llegan para montar?",
+     "type": "text"
+    },
+    {
+     "id": "prueba_dur",
+     "label": "Duración de la prueba de sonido",
+     "type": "text"
+    },
+    {
+     "id": "desmontaje",
+     "label": "Tiempo de desmontaje",
+     "type": "text"
+    },
+    {
+     "id": "espacio",
+     "label": "Espacio mínimo requerido en el escenario o piso",
+     "type": "text",
+     "help": "Metros aproximados"
+    },
+    {
+     "id": "electricidad",
+     "label": "Requerimientos eléctricos",
+     "type": "text",
+     "help": "Número de contactos, voltaje, circuito independiente"
+    },
+    {
+     "id": "techado",
+     "label": "Condiciones del lugar",
+     "type": "opts",
+     "opts": [
+      "Bajo techo",
+      "Exterior con sombra/techo",
+      "Exterior sin techo (solo con clima favorable)",
+      "Necesita piso nivelado",
+      "Necesita acceso para carga"
+     ]
+    },
+    {
+     "id": "hospitalidad",
+     "label": "Hospitalidad que piden",
+     "type": "area",
+     "help": "Agua, alimentos, camerino, estacionamiento, vestimenta"
+    },
+    {
+     "id": "vestimenta",
+     "label": "Vestimenta de la banda",
+     "type": "text",
+     "help": "Y si puede adaptarse al código del evento"
+    },
+    {
+     "id": "horarios",
+     "label": "¿Horarios máximos o límites?",
+     "type": "area",
+     "help": "Ruido, decibeles, cierre del lugar"
+    },
+    {
+     "id": "lluvia",
+     "label": "Plan por clima, retrasos o cambio de lugar",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "tecnico",
+   "titulo": "Equipo técnico",
+   "intro": "Para decidir qué ofrecer y para el rider que se le envía al lugar.",
+   "campos": [
+    {
+     "id": "self",
+     "label": "¿Son autosuficientes (llevan su propio equipo)?",
+     "type": "sel",
+     "opts": [
+      "Sí, llevamos todo",
+      "Parcialmente",
+      "Dependemos del lugar",
+      "Depende del paquete"
+     ]
+    },
+    {
+     "id": "pa",
+     "label": "Equipo de sonido propio",
+     "type": "area",
+     "help": "Bocinas, consola, micrófonos, monitores, potencia y capacidad (personas que cubre)"
+    },
+    {
+     "id": "inst",
+     "label": "Instrumentos y amplificadores que llevan",
+     "type": "area",
+     "help": "Por integrante"
+    },
+    {
+     "id": "luces",
+     "label": "Iluminación propia",
+     "type": "area",
+     "help": "Si hay, qué incluye y qué paquetes"
+    },
+    {
+     "id": "req_lugar",
+     "label": "Lo que el lugar debe proporcionar",
+     "type": "area",
+     "help": "Escenario, sillas, mesas, energía, tarimas…"
+    },
+    {
+     "id": "stage",
+     "label": "¿Tienen plano de escenario o rider?",
+     "type": "sel",
+     "help": "Si no, lo armamos con tus respuestas",
+     "opts": [
+      "Sí, lo enviamos",
+      "No, hay que hacerlo",
+      "No estoy seguro"
+     ]
+    },
+    {
+     "id": "logistica_vehiculos",
+     "label": "Vehículos y carga",
+     "type": "text",
+     "help": "Cuántos autos, espacio de carga"
+    }
+   ]
+  },
+  {
+   "id": "archivos",
+   "titulo": "Archivos y material",
+   "intro": "Marca lo que ya tienes. Tú no los subes aquí: al final te decimos cómo mandarlos (carpeta de Drive o enlace).",
+   "archivos": true,
+   "campos": [
+    {
+     "id": "carpeta",
+     "label": "Enlace a la carpeta con todo (Drive, Dropbox, WeTransfer)",
+     "type": "url",
+     "help": "Pega aquí el enlace. Revisa que esté en “cualquiera con el enlace puede ver”."
+    },
+    {
+     "id": "derechos_media",
+     "label": "¿Todo el material es de ustedes o tiene permiso de uso?",
+     "type": "area",
+     "help": "Fotos, videos y audios de terceros: nombre del fotógrafo o dueño"
+    },
+    {
+     "id": "creditos",
+     "label": "Créditos obligatorios",
+     "type": "area",
+     "help": "Fotógrafo, camarógrafo, estudio, etc."
+    },
+    {
+     "id": "colores",
+     "label": "Colores y tipografías de la marca, si existen",
+     "type": "text",
+     "help": "Códigos hex o nombre de la fuente"
+    }
+   ]
+  },
+  {
+   "id": "presencia",
+   "titulo": "Presencia y confianza",
+   "intro": "Lo que ayuda a que un cliente decida.",
+   "campos": [
+    {
+     "id": "ig",
+     "label": "Instagram",
+     "type": "text",
+     "help": "@"
+    },
+    {
+     "id": "otros_ig",
+     "label": "Otras redes (YouTube, TikTok, Facebook, web, Spotify)",
+     "type": "area",
+     "help": "Un enlace por línea"
+    },
+    {
+     "id": "ref",
+     "label": "Clientes que den referencias",
+     "type": "area",
+     "help": "Nombre, tipo de evento y si autorizan que los contactemos o publiquemos su comentario"
+    },
+    {
+     "id": "prensa",
+     "label": "Reseñas, notas de prensa, premios o reconocimientos",
+     "type": "area"
+    },
+    {
+     "id": "preguntas",
+     "label": "Preguntas frecuentes que les hacen los clientes",
+     "type": "area",
+     "help": "Y cómo las responden"
+    },
+    {
+     "id": "cierre",
+     "label": "¿Algo más que quieras que sepamos?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "autoriza",
+   "titulo": "Autorización",
+   "intro": "Para publicar el perfil.",
+   "autorizacion": true,
+   "campos": [
+    {
+     "id": "c_uso",
+     "label": "Autorizo a CUCO ARTS a usar mis textos, fotos, videos y audios en mi perfil creativo.",
+     "type": "chk"
+    },
+    {
+     "id": "c_terceros",
+     "label": "Confirmo que tengo permiso o los créditos de los materiales que no son míos.",
+     "type": "chk"
+    },
+    {
+     "id": "c_datos",
+     "label": "Entiendo que los datos que escribí aquí se usarán solo para armar y mantener mi perfil.",
+     "type": "chk"
+    }
+   ]
+  }
+ ]
+}

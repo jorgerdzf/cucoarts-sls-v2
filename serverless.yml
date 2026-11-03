@@ -180,6 +180,10 @@ custom:
         - rob:
             ContentType: text/html; charset=utf-8
             CacheControl: max-age=300
+        # cucoarts.com/formulario?a=<artista>: reusable creative-profile form (extensionless file; its data is formulario-datos/*.json).
+        - formulario:
+            ContentType: text/html; charset=utf-8
+            CacheControl: max-age=300
         # Images: 7 days in the browser so returning visitors don't download them again. ONLY image files inside these
         # folders (never pages such as murales/index.html or husky/index.html, nor the JS/CSS bundles); if an image is
         # replaced under the same name, visitors who already have it keep the old one for up to a week, so prefer new

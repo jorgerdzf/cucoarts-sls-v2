@@ -73,6 +73,20 @@ const ev = (b) => ({ body: JSON.stringify(b) });
   const subj = Buffer.from(rawRob.match(/Subject: =\?UTF-8\?B\?([^?]+)\?=/)[1], 'base64').toString('utf8'); assert.strictEqual(subj, 'Rob: Cobertura de un evento — Marca MX');
   const textRob = Buffer.from(rawRob.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0].replace(/\r\n/g, ''), 'base64').toString('utf8');
   assert(/Servicio: Cobertura de un evento/.test(textRob) && /cucoarts\.com\/rob/.test(textRob) && /Quiere recibir noticias: Sí/.test(textRob), textRob);
+  // formulario de perfil creativo (/formulario?a=<artista>)
+  r = await m.submit(ev({ type: 'perfil', values: { nombre: '', artista: 'Mal Slug', correo: 'mal' } }));
+  assert.deepStrictEqual(JSON.parse(r.body).fields.sort(), ['artista', 'correo', 'nombre'].sort());
+  r = await m.submit(ev({ type: 'perfil', values: { nombre: 'Raúl', artista: 'bluewave' } })); assert.deepStrictEqual(JSON.parse(r.body).fields, ['contacto']);
+  const antesP = sent.ses.length, ddbP = sent.ddb.length;
+  const largo = 'Respuesta larga. '.repeat(1500);                                    // ~25 KB: cabe en el resumen de perfil (40,000)
+  r = await m.submit(ev({ type: 'perfil', lang: 'es', summary: largo, values: { nombre: 'Raúl Martínez', artista: 'bluewave', proyecto: 'Blue Wave · Live music', tel: '81 1234 5678', datos: '{"proyecto":{"nombre":"x"}}' } }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200, r.body); assert.strictEqual(b.emailed, true);
+  assert.strictEqual(sent.ddb.length, ddbP + 1); assert.strictEqual(sent.ddb[ddbP].Item.type.S, 'perfil');
+  assert.strictEqual(sent.ddb[ddbP].Item.summary.S.length, largo.trim().length);
+  const rawP = sent.ses[antesP].Content.Raw.Data.toString('utf8');
+  const subjP = Buffer.from(rawP.match(/Subject: =\?UTF-8\?B\?([^?]+)\?=/)[1], 'base64').toString('utf8'); assert.strictEqual(subjP, 'Perfil creativo: Blue Wave · Live music — Raúl Martínez');
+  const textP = Buffer.from(rawP.split('Content-Transfer-Encoding: base64\r\n\r\n')[1].split('\r\n--')[0].replace(/\r\n/g, ''), 'base64').toString('utf8');
+  assert(/NUEVAS RESPUESTAS \(cucoarts\.com\/formulario\)/.test(textP) && /WhatsApp: 81 1234 5678/.test(textP) && !/recibir noticias/.test(textP), textP.slice(0, 300));
   r = await m.submit({ body: 'no es json' }); assert.strictEqual(r.statusCode, 400);
   console.log('OK: todas las pruebas pasaron');
 })().catch((e) => { console.error('FALLÓ:', e.message); process.exit(1); });
