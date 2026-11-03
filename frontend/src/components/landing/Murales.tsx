@@ -3,7 +3,7 @@ import { COPY } from './copy';
 import MuralWizard from './MuralWizard';
 import { MURALES, PROJECTS, Project } from './muralesCopy';
 import { PHOTOS, COVER } from './muralesPhotos';
-import { Lightbox, LbItem, MuralMosaic, thumbSrc, fullSrc } from './MuralGallery';
+import { Lightbox, LbItem, MuralMosaic, thumbSrc, midSrc, fullSrc } from './MuralGallery';
 import { Cycler } from './Cycler';
 import HeroPols, { dealFour } from './HeroPols';
 import { Icon, useTheme } from './Landing';
@@ -90,7 +90,7 @@ function ProjectCard({ p, lang, m, onOpen }: { p: Project; lang: Lang; m: MText;
             render={q => (
               <img
                 src={thumbSrc(q)}
-                srcSet={`${thumbSrc(q)} 640w, ${fullSrc(q)} 1600w`}
+                srcSet={`${thumbSrc(q)} 640w, ${midSrc(q)} 960w, ${fullSrc(q)} 1600w`}
                 sizes="(min-width: 900px) 33vw, (min-width: 640px) 50vw, 100vw"
                 width={q.w} height={q.h} alt={x.title} loading="lazy" decoding="async" />
             )} />

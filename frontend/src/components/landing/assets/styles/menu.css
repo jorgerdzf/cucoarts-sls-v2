@@ -96,3 +96,8 @@ a.cl-mi.is-current:hover .cl-mi-here{color:#232322}
 .mw-lb-credit{margin-left:auto;margin-right:12px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#111110;background:var(--yellow);border-radius:999px;padding:8px 14px;text-decoration:none;white-space:nowrap}
 .mw-lb-credit:hover{background:var(--lime)}
 @media (max-width:520px){.mw-lb-credit{font-size:11px;padding:7px 10px;white-space:normal;text-align:center;max-width:46vw;line-height:1.2}}
+
+/* botón de menú: mínimo 44 px de alto y de ancho (auditoría del 3-nov-2026) */
+.cl-menubtn{min-height:44px;min-width:44px;justify-content:center}
+
+.cl-menu-foot a{display:block;padding:11px 0}

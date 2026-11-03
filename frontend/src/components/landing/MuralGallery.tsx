@@ -7,6 +7,7 @@ import { PHOTOS, Photo, Tag } from './muralesPhotos';
 
 export const fullSrc = (p: Photo) => `/murales/proyectos/${p.dir}/${p.n}.jpg`;
 export const thumbSrc = (p: Photo) => `/murales/proyectos/${p.dir}/${p.n}-t.jpg`;
+export const midSrc = (p: Photo) => `/murales/proyectos/${p.dir}/${p.n}-m.jpg`;   // 960 px: la que bajan los celulares (antes bajaban la de 1600 px)
 
 export type LbItem = { photo: Photo; caption: string };
 type LbText = { close: string; prev: string; next: string; of: string; cartel: string };
