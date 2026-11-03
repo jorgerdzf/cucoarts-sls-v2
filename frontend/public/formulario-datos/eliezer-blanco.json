@@ -1,0 +1,136 @@
+{
+ "plantilla": "trayectoria-artista",
+ "titulo": "Eliezer Blanco · Trayectoria",
+ "intro": "Estamos armando tu perfil de artista en CUCO ARTS. Con lo que ya tenemos de tu entrevista, tu tienda y fuentes públicas, ya pusimos algunos datos: revísalos, corrígelos y complétalos con tus exposiciones, premios, proyectos y cómo trabajas. Nada es obligatorio y nada se publica sin tu aprobación. Tu avance se guarda solo: puedes cerrar y seguir después, incluso desde otro dispositivo, con tu enlace personal.",
+ "whatsapp": "528120321492",
+ "whatsapp_msg": "Hola Roberto, terminé el formulario de trayectoria. ",
+ "prellenado": {
+  "basicos": {
+   "nombre": "Eliezer Blanco",
+   "ciudad": "San Pedro Garza García, Nuevo León",
+   "anios": "2008",
+   "redes": "@eliezer_blanco1 (Instagram)"
+  },
+  "formacion": {
+   "items": [
+    {
+     "que": "Ciencias Biológicas",
+     "donde": "Universidad Autónoma de Nuevo León",
+     "anios": "",
+     "nota": "La dejaste al descubrir el arte en 2008. ¿Es correcto?"
+    },
+    {
+     "que": "Diseño Gráfico",
+     "donde": "Universidad Regiomontana",
+     "anios": "",
+     "nota": ""
+    },
+    {
+     "que": "Taller de óleo con el maestro Arnoldo Montemayor",
+     "donde": "",
+     "anios": "",
+     "nota": "Seis meses, según tu entrevista."
+    },
+    {
+     "que": "Talleres de cerámica y escultura",
+     "donde": "Unidad Cultural de Arquitectura, UANL (Barrio Antiguo)",
+     "anios": "",
+     "nota": ""
+    }
+   ]
+  },
+  "colectivas": {
+   "items": [
+    {
+     "titulo": "Expo-venta CUCO ARTS × HUSKY",
+     "lugar": "HUSKY Coffee Shop, Santiago, N.L.",
+     "anio": "",
+     "detalle": "Participación con obra. ¿Qué piezas llevaste y en qué fechas?",
+     "enlace": ""
+    }
+   ]
+  },
+  "proyectos": {
+   "items": [
+    {
+     "titulo": "Pintura conmemorativa de los 200 años del Congreso de Nuevo León",
+     "para": "H. Congreso del Estado de Nuevo León",
+     "anio": "2023",
+     "detalle": "Colocada en el vestíbulo el 14 de diciembre de 2023. Faltan título, técnica y medidas.",
+     "permiso": "Sí",
+     "enlace": "https://www.hcnl.gob.mx/sala_de_prensa/2023/12/colocan_pintura_conmemorativa_por_los_200_anos_del_congreso_del_estado.php"
+    },
+    {
+     "titulo": "Pinturas con niños de Nuevo Amanecer",
+     "para": "Nuevo Amanecer",
+     "anio": "",
+     "detalle": "Colaboración de cuatro clases con un niño con parálisis cerebral. Sin nombre ni imagen del niño. ¿Podemos nombrar a la institución?",
+     "permiso": "No sé",
+     "enlace": ""
+    },
+    {
+     "titulo": "Mural «La Casa de Tita»",
+     "para": "",
+     "anio": "",
+     "detalle": "Mural de una cocina y sus personajes en un restaurante. ¿Dónde está, de qué año es y para quién lo hiciste?",
+     "permiso": "No sé",
+     "enlace": ""
+    },
+    {
+     "titulo": "Mural en la escalera de un edificio",
+     "para": "",
+     "anio": "",
+     "detalle": "Vimos una foto de un mural en una escalera con mucho color. ¿Dónde es y para quién?",
+     "permiso": "No sé",
+     "enlace": ""
+    },
+    {
+     "titulo": "Arte para botellas y vasos de cerveza «Indio»",
+     "para": "",
+     "anio": "",
+     "detalle": "Vimos botellas y un vaso con tu arte. ¿Con quién lo hiciste, de qué año es y podemos nombrar a la marca?",
+     "permiso": "No sé",
+     "enlace": ""
+    }
+   ]
+  },
+  "prensa": {
+   "items": [
+    {
+     "medio": "H. Congreso del Estado de Nuevo León",
+     "titulo": "Colocan pintura conmemorativa por los 200 años del Congreso",
+     "anio": "2023",
+     "enlace": "https://www.hcnl.gob.mx/sala_de_prensa/2023/12/colocan_pintura_conmemorativa_por_los_200_anos_del_congreso_del_estado.php"
+    },
+    {
+     "medio": "CUCO ARTS",
+     "titulo": "Entrevista “El color de la vida”",
+     "anio": "2026",
+     "enlace": ""
+    }
+   ]
+  },
+  "premios": {
+   "items": [
+    {
+     "titulo": "Presea al Mérito Ciudadano «Francisco de Barbadillo y Vitoria»",
+     "otorga": "Gobierno Municipal de Guadalupe, Nuevo León",
+     "anio": "2019",
+     "detalle": "Vimos tu medalla y tu placa de 2019. ¿En qué categoría fue y por qué te lo dieron?",
+     "enlace": ""
+    }
+   ]
+  },
+  "indiv": {
+   "items": [
+    {
+     "titulo": "Exposición en la Unidad Cultural de Arquitectura",
+     "lugar": "Unidad Cultural de Arquitectura, UANL, Barrio Antiguo, Monterrey",
+     "anio": "2021",
+     "detalle": "1 de noviembre de 2021. ¿Cómo se llamó la muestra y qué obra mostraste? (Vimos pintura, grabados y esculturas de barro).",
+     "enlace": ""
+    }
+   ]
+  }
+ }
+}

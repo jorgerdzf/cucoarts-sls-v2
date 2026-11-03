@@ -1,0 +1,565 @@
+{
+ "plantilla": "trayectoria-artista",
+ "descripcion": "Trayectoria y servicios de artistas visuales (formación, exposiciones, premios, proyectos, prensa, clases y cómo trabajan). Alimenta el perfil de artista de CUCO ARTS.",
+ "archivos": [
+  {
+   "id": "cv",
+   "label": "Currículum o semblanza (PDF o Word)",
+   "help": "Si ya tienes uno, aunque esté desactualizado"
+  },
+  {
+   "id": "retrato",
+   "label": "Retratos tuyos (alta resolución)",
+   "help": "Idealmente en tu taller, trabajando o con tu obra"
+  },
+  {
+   "id": "taller",
+   "label": "Fotos de tu taller y de tu proceso",
+   "help": "Manos, materiales, obra a medias"
+  },
+  {
+   "id": "obra_alta",
+   "label": "Fotos de tu obra en alta resolución",
+   "help": "Incluye obra que no esté en la tienda"
+  },
+  {
+   "id": "videos",
+   "label": "Videos de proceso, entrevistas o murales",
+   "help": "Enlaces a YouTube/Instagram o archivos"
+  },
+  {
+   "id": "catalogo",
+   "label": "Catálogos, folletos o carteles de exposiciones",
+   "help": "PDF o fotos"
+  },
+  {
+   "id": "constancias",
+   "label": "Constancias, diplomas o cartas de premios",
+   "help": "Para respaldar premios y proyectos"
+  },
+  {
+   "id": "prensa",
+   "label": "Notas de prensa o artículos sobre ti",
+   "help": "Enlaces o recortes"
+  },
+  {
+   "id": "testimonios",
+   "label": "Testimonios de clientes o instituciones",
+   "help": "Con permiso para publicarlos"
+  }
+ ],
+ "secciones": [
+  {
+   "id": "basicos",
+   "titulo": "Tus datos",
+   "intro": "Lo básico de cómo te presentas. Aquí ya pusimos lo que sabemos: corrige lo que no esté bien.",
+   "campos": [
+    {
+     "id": "nombre",
+     "label": "Nombre artístico",
+     "type": "text",
+     "help": "Como quieres que aparezca en tu perfil"
+    },
+    {
+     "id": "nombre_legal",
+     "label": "Nombre completo (opcional)",
+     "type": "text",
+     "help": "Solo si lo quieres mostrar"
+    },
+    {
+     "id": "ciudad",
+     "label": "Ciudad donde trabajas",
+     "type": "text",
+     "help": "Y dónde está tu taller"
+    },
+    {
+     "id": "origen",
+     "label": "Ciudad de origen",
+     "type": "text"
+    },
+    {
+     "id": "anios",
+     "label": "¿Desde qué año te dedicas al arte?",
+     "type": "text"
+    },
+    {
+     "id": "web",
+     "label": "Sitio web",
+     "type": "url",
+     "help": "Revisa que funcione: es el que está en tu Instagram"
+    },
+    {
+     "id": "redes",
+     "label": "Redes sociales",
+     "type": "area",
+     "help": "Una por línea: Instagram, YouTube, TikTok, Facebook…"
+    },
+    {
+     "id": "contacto",
+     "label": "Contacto de trabajo",
+     "type": "area",
+     "help": "WhatsApp y correo. Dinos si prefieres que CUCO ARTS atienda a quien te busque (lo recomendamos) o si se muestra tu contacto directo."
+    }
+   ]
+  },
+  {
+   "id": "formacion",
+   "titulo": "Formación y maestros",
+   "intro": "Escuelas, talleres, maestros y mentores que marcaron tu trabajo.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Formación",
+    "max": 15,
+    "campos": [
+     {
+      "id": "que",
+      "label": "Qué estudiaste o con quién",
+      "type": "text",
+      "help": "Carrera, taller, curso, maestro…"
+     },
+     {
+      "id": "donde",
+      "label": "Institución o lugar",
+      "type": "text"
+     },
+     {
+      "id": "anios",
+      "label": "Años",
+      "type": "text"
+     },
+     {
+      "id": "nota",
+      "label": "Qué te dejó (opcional)",
+      "type": "area"
+     }
+    ]
+   }
+  },
+  {
+   "id": "indiv",
+   "titulo": "Exposiciones individuales",
+   "intro": "Muestras donde fue solo tu obra. Si no recuerdas el año exacto, pon el aproximado.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Exposición individual",
+    "max": 30,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Título de la exposición",
+      "type": "text"
+     },
+     {
+      "id": "lugar",
+      "label": "Lugar (museo, galería, espacio) y ciudad",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text",
+      "help": "Ej. 2023. Si es un periodo: 2019–2021"
+     },
+     {
+      "id": "detalle",
+      "label": "De qué trató o qué obra se mostró",
+      "type": "area"
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Nota de prensa, ficha del museo, publicación…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "colectivas",
+   "titulo": "Exposiciones colectivas y ferias",
+   "intro": "Colectivas, ferias, bienales y muestras donde participaste con otros artistas.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Colectiva o feria",
+    "max": 40,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Nombre de la muestra o feria",
+      "type": "text"
+     },
+     {
+      "id": "lugar",
+      "label": "Lugar y ciudad",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text",
+      "help": "Ej. 2023. Si es un periodo: 2019–2021"
+     },
+     {
+      "id": "detalle",
+      "label": "Tu participación",
+      "type": "area",
+      "help": "Qué obra llevaste, si fue por invitación o convocatoria"
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Nota de prensa, ficha del museo, publicación…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "premios",
+   "titulo": "Premios, becas y reconocimientos",
+   "intro": "Todo reconocimiento que puedas respaldar: premios, becas, menciones, residencias, selecciones.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Reconocimiento",
+    "max": 30,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Nombre del premio o reconocimiento",
+      "type": "text"
+     },
+     {
+      "id": "otorga",
+      "label": "Quién lo otorgó",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text",
+      "help": "Ej. 2023. Si es un periodo: 2019–2021"
+     },
+     {
+      "id": "detalle",
+      "label": "Categoría o detalle",
+      "type": "area"
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Nota de prensa, ficha del museo, publicación…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "proyectos",
+   "titulo": "Proyectos públicos, murales y comisiones",
+   "intro": "Obras que hiciste para instituciones, empresas, espacios públicos o fundaciones. Dinos si podemos mencionar el nombre.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Proyecto",
+    "max": 40,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Proyecto u obra",
+      "type": "text"
+     },
+     {
+      "id": "para",
+      "label": "Para quién o dónde (institución, empresa, lugar)",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text",
+      "help": "Ej. 2023. Si es un periodo: 2019–2021"
+     },
+     {
+      "id": "detalle",
+      "label": "Qué hiciste y qué significó",
+      "type": "area",
+      "help": "Técnica, medidas, qué representa, cuánto tiempo tomó"
+     },
+     {
+      "id": "permiso",
+      "label": "¿Podemos nombrar a la institución o empresa?",
+      "type": "sel",
+      "help": "Si dudas, elige “No sé”; lo confirmamos contigo",
+      "opts": [
+       "Sí",
+       "No",
+       "No sé"
+      ]
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Nota de prensa, ficha del museo, publicación…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "colecciones",
+   "titulo": "Colecciones y coleccionistas",
+   "intro": "Colecciones públicas o privadas donde está tu obra. No pongas nombres de personas sin su permiso: puedes escribir “colección privada”.",
+   "campos": [
+    {
+     "id": "publicas",
+     "label": "Colecciones públicas o institucionales",
+     "type": "area",
+     "help": "Museos, universidades, gobiernos, fundaciones"
+    },
+    {
+     "id": "privadas",
+     "label": "Colecciones privadas o empresariales que puedas nombrar",
+     "type": "area",
+     "help": "Solo si tienen permiso"
+    },
+    {
+     "id": "alcance",
+     "label": "Obra tuya en otras ciudades o países",
+     "type": "area",
+     "help": "Dónde ha viajado o vive tu obra"
+    }
+   ]
+  },
+  {
+   "id": "prensa",
+   "titulo": "Prensa, entrevistas y publicaciones",
+   "intro": "Notas, entrevistas, reseñas, catálogos, podcasts y videos donde aparece tu trabajo.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Publicación",
+    "max": 40,
+    "campos": [
+     {
+      "id": "medio",
+      "label": "Medio o espacio",
+      "type": "text",
+      "help": "Periódico, TV, canal, podcast, revista, blog…"
+     },
+     {
+      "id": "titulo",
+      "label": "Título o tema",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text",
+      "help": "Ej. 2023. Si es un periodo: 2019–2021"
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Nota de prensa, ficha del museo, publicación…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "docencia",
+   "titulo": "Clases y talleres",
+   "intro": "Si das clases, talleres o charlas, o te gustaría hacerlo.",
+   "campos": [
+    {
+     "id": "imparte",
+     "label": "¿Das clases o talleres?",
+     "type": "sel",
+     "opts": [
+      "Sí, de forma regular",
+      "Sí, de vez en cuando",
+      "No, pero me gustaría",
+      "No"
+     ]
+    },
+    {
+     "id": "detalle",
+     "label": "Qué enseñas y a quién",
+     "type": "area",
+     "help": "Técnicas, edades, niveles, grupos o clases individuales"
+    },
+    {
+     "id": "formato",
+     "label": "Formato, duración y lugar",
+     "type": "area"
+    },
+    {
+     "id": "precio",
+     "label": "Precio aproximado (opcional)",
+     "type": "text",
+     "help": "Por clase, por mes o por taller. Lo mostramos solo si tú lo autorizas."
+    }
+   ]
+  },
+  {
+   "id": "servicios",
+   "titulo": "Cómo trabajas con clientes",
+   "intro": "Para que quien quiera contratarte sepa qué esperar. Nada se publica sin tu aprobación.",
+   "campos": [
+    {
+     "id": "servicios",
+     "label": "¿Qué servicios ofreces?",
+     "type": "opts",
+     "help": "Marca todos los que aplican",
+     "opts": [
+      "Pintura por encargo",
+      "Escultura por encargo",
+      "Murales",
+      "Retratos",
+      "Ilustración o diseño",
+      "Obra para marcas o empresas",
+      "Clases o talleres",
+      "Colaboraciones con fundaciones",
+      "Otro"
+     ]
+    },
+    {
+     "id": "proceso",
+     "label": "Cómo es tu proceso de un encargo, paso a paso",
+     "type": "area",
+     "help": "Desde que alguien te escribe hasta que entregas"
+    },
+    {
+     "id": "tiempos",
+     "label": "Cuánto tarda normalmente cada tipo de encargo",
+     "type": "area"
+    },
+    {
+     "id": "precios",
+     "label": "Rangos de precio “desde”",
+     "type": "area",
+     "help": "Por tipo de trabajo (pintura, escultura, mural por m², clase…). Solo sirve para orientar; la cotización final se hace por proyecto."
+    },
+    {
+     "id": "anticipo",
+     "label": "Anticipo y formas de pago",
+     "type": "area"
+    },
+    {
+     "id": "zona",
+     "label": "¿Hasta dónde puedes trabajar?",
+     "type": "area",
+     "help": "Ciudad, estado, viajas a otras ciudades, envíos"
+    },
+    {
+     "id": "mural",
+     "label": "Si haces murales: cómo cotizas y qué necesitas",
+     "type": "area",
+     "help": "Por metro cuadrado, materiales, andamios, permisos"
+    },
+    {
+     "id": "no",
+     "label": "¿Hay trabajos que no tomas?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "persona",
+   "titulo": "Tu lado humano",
+   "intro": "Esto es lo que más conecta con la gente. Escribe como si le platicaras a alguien.",
+   "campos": [
+    {
+     "id": "sabes",
+     "label": "Si la gente supiera una sola cosa de ti, ¿cuál sería?",
+     "type": "area"
+    },
+    {
+     "id": "recuerdo",
+     "label": "Un momento o recuerdo que explique por qué haces arte",
+     "type": "area"
+    },
+    {
+     "id": "entrega",
+     "label": "¿Qué sientes cuando alguien se lleva una obra tuya?",
+     "type": "area"
+    },
+    {
+     "id": "taller",
+     "label": "Cuéntanos de tu taller",
+     "type": "area",
+     "help": "Cómo es, qué hay ahí, un ritual o costumbre"
+    },
+    {
+     "id": "causas",
+     "label": "Causas o proyectos humanos en los que participas",
+     "type": "area",
+     "help": "Sin nombres de menores ni datos de personas vulnerables"
+    },
+    {
+     "id": "fotos",
+     "label": "¿Podemos usar fotos tuyas en el taller y trabajando?",
+     "type": "sel",
+     "help": "Incluye las que ya tiene CUCO ARTS de tu entrevista",
+     "opts": [
+      "Sí",
+      "Sí, pero me las enseñan antes",
+      "No"
+     ]
+    },
+    {
+     "id": "algo_mas",
+     "label": "¿Algo más que quieras que sepan?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "archivos",
+   "titulo": "Archivos y material",
+   "intro": "Marca lo que tienes. Los archivos los puedes mandar por una carpeta de Drive o por WhatsApp; aquí abajo puedes adjuntar hasta 4 al final.",
+   "archivos": true,
+   "campos": [
+    {
+     "id": "carpeta",
+     "label": "Enlace a una carpeta con tu material",
+     "type": "url",
+     "help": "Drive, Dropbox o WeTransfer. Revisa que cualquiera con el enlace pueda verla."
+    },
+    {
+     "id": "creditos",
+     "label": "Créditos obligatorios",
+     "type": "area",
+     "help": "Fotógrafos, camarógrafos o artistas con quienes colaboraste"
+    }
+   ]
+  },
+  {
+   "id": "autoriza",
+   "titulo": "Autorización",
+   "intro": "Para armar y publicar tu perfil.",
+   "autorizacion": true,
+   "campos": [
+    {
+     "id": "c_uso",
+     "label": "Autorizo a CUCO ARTS a usar mis textos, fotos y videos en mi perfil de artista, una vez que yo lo apruebe.",
+     "type": "chk"
+    },
+    {
+     "id": "c_terceros",
+     "label": "Confirmo que tengo permiso o los créditos de lo que no es mío, y que no incluí nombres de menores ni de clientes sin su permiso.",
+     "type": "chk"
+    },
+    {
+     "id": "c_datos",
+     "label": "Entiendo que mis respuestas se usarán solo para armar y mantener mi perfil.",
+     "type": "chk"
+    }
+   ]
+  }
+ ]
+}

@@ -41,3 +41,8 @@ los cambios en `frontend/public/` salen con `serverless s3sync` + invalidación 
   Las solicitudes enviadas (`type: perfil`) no llevan `expira` y no se borran solas. Máximo 100,000 caracteres por borrador.
 - Si no hay conexión, el avance queda en el dispositivo y se reintenta en el siguiente cambio.
 - Pruebas: `backend/lambda/requests/test.local.js` (tabla simulada).
+
+## Plantillas disponibles
+
+- `musica-eventos`: músicos y agrupaciones que tocan en eventos (primer uso: Blue Wave).
+- `trayectoria-artista`: artistas visuales (formación, exposiciones, premios, proyectos, prensa, clases, cómo trabajan, lado humano). Primer uso: `?a=eliezer-blanco`. Sus respuestas alimentan el perfil de artista con `PERFILES_ARTISTAS\herramientas\importar_trayectoria.js`.
