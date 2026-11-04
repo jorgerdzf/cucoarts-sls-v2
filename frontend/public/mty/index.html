@@ -1017,7 +1017,7 @@ a,button,summary,[role="button"],[role="link"],.zone,.pin,svg *{-webkit-tap-high
 .pin:hover{transform:none}
 .pin .pgh{transform-box:fill-box;transform-origin:50% 100%;transition:transform .15s}
 .pin:hover .pgh,.pin:focus-visible .pgh{transform:scale(1.18)}
-.pin text{paint-order:stroke;stroke:var(--map);stroke-linejoin:round;font-weight:700;pointer-events:none}
+.pin text{paint-order:stroke;stroke:var(--map);stroke-linejoin:round;font-weight:700;pointer-events:auto;cursor:pointer}
 .pin.sel text{font-weight:800}
 .pin.sel path,.pin.sel circle:not(.pulse){animation:none!important}
 .pin.sel .pgh{animation:pinBounce .6s cubic-bezier(.3,1.7,.5,1) both}
@@ -1252,21 +1252,309 @@ body.mapfull{overflow:hidden}
 .shnone{padding:14px}
 .stleft{order:3}.stright{order:4}
 .modal.story.hub{max-width:460px}
-@media (min-width:900px){
-  .modal.story.hub{max-width:940px;width:min(940px,calc(100vw - 32px));text-align:left}
-  .modal.story.hub>h2{padding-right:44px}
-  .modal.story.hub .sthub{display:grid;grid-template-columns:340px minmax(0,1fr);grid-template-areas:"tabs tabs" "left find" "left right";column-gap:30px;align-items:start}
-  .modal.story.hub .shtabs{grid-area:tabs;justify-content:flex-start;margin-bottom:16px}
-  .modal.story.hub .sharefind{grid-area:find}
-  .modal.story.hub .stleft{grid-area:left}
-  .modal.story.hub .stright{grid-area:right}
-  .modal.story.hub .storyprev{width:100%;max-width:340px}
-  .modal.story.hub .shareres{max-height:300px}
-  .modal.story.hub .story-actions{justify-content:flex-start}
-  .modal.story.hub .stright .note{text-align:left}
-}
 
 .shemo{flex:0 0 auto;width:28px;height:28px;display:grid;place-items:center;font-size:16px;border:2px solid var(--ink);border-radius:50%;background:var(--c,#fff)}
+
+/* tarjeta del mapa: lista de eventos del espacio (en curso y archivo) */
+.pc-actions .pc-evbtn{background:var(--surface);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:6px 12px;font:700 12px var(--sans);cursor:pointer}
+.pc-actions .pc-evbtn[aria-expanded=true]{background:var(--ink);color:var(--surface)}
+.pc-evlist{margin:8px 0 2px;max-height:150px;overflow:auto;display:flex;flex-direction:column;gap:5px}
+.pc-evlist[hidden]{display:none}
+.pc-ev{display:flex;gap:8px;align-items:baseline;justify-content:space-between;padding:6px 9px;border:2px solid var(--ink);border-radius:10px;text-decoration:none;color:var(--ink);font-size:13px;line-height:1.25}
+.pc-ev b{font-weight:700}
+.pc-ev small{color:var(--muted);white-space:nowrap;font-size:11px}
+.pc-ev.arch{opacity:.72}
+.pc-evh{font:700 11px var(--mono,monospace);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:4px 0 0}
+
+/* ===== Compartir v3 (4-nov-2026): todo cabe en la pantalla sin scroll, zoom «a detalle» y botones con movimiento =====
+ * La ventana ocupa el alto visible (100dvh): la imagen toma el espacio que sobra y se escala sola (unidades de contenedor), los controles quedan abajo.
+ * Pantalla ancha o teléfono horizontal: imagen a la izquierda y controles a la derecha. Todo respeta prefers-reduced-motion. */
+#storyOverlay{align-items:center;justify-content:center;overflow:hidden;padding:max(10px,env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+#storyOverlay .modal.story{display:flex;flex-direction:column;box-sizing:border-box;margin:0;width:min(460px,100%);max-width:100%;height:calc(100vh - 20px);height:calc(100dvh - 20px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));max-height:880px;padding:10px 12px 10px;overflow:hidden;text-align:center;box-shadow:8px 8px 0 #E1306C}
+#storyOverlay .modal.story.hub{max-width:100%}
+#storyOverlay .modal.story .x{position:absolute;left:auto;right:8px;top:8px;width:38px;height:38px;font-size:24px;padding:0 0 2px;z-index:5}
+#storyOverlay .modal.story h2{flex:none;margin:0 0 6px;padding:0 44px;font-size:19px;line-height:1.1;text-align:center}
+.sthub{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:8px}
+.shtabs{flex:none;order:1;margin:0;gap:5px;justify-content:center}
+.shtab{padding:5px 9px;font-size:10.5px;gap:5px}
+.shtab i{padding:0 6px;font-size:10px}
+.sharefind{flex:none;order:2;margin:0}
+.sharefind input{padding:7px 14px;font-size:14px}
+.shareres{max-height:min(22dvh,190px)}
+.stleft{order:3;flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+.storyprev{position:relative;flex:1 1 0;min-height:0;width:100%;max-width:none;margin:0;display:grid;place-items:center;container-type:size;overflow:hidden;border-radius:16px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.cvwrap{position:relative;width:min(100cqw,calc(100cqh * 9 / 16));aspect-ratio:9/16;transform-origin:50% 50%;will-change:transform}
+.cvwrap.zanim{transition:transform .28s cubic-bezier(.2,.9,.3,1)}
+.storyprev #storyCanvas{width:100%;height:100%;aspect-ratio:9/16;margin:0;display:block;cursor:zoom-in;-webkit-touch-callout:none}
+.storyguide{flex:1 1 0;min-height:0;overflow:auto;text-align:left}
+.stright{order:4;flex:none;display:flex;flex-direction:column;gap:6px}
+.storypick{margin:0}
+.storypick .pkrow{flex-wrap:nowrap;overflow-x:auto;gap:6px}
+.storypick .pkb{flex:0 0 auto}
+.storypick .pkb img{height:40px;width:auto}
+.stright .storymsg{margin:0;min-height:16px;font:700 12px/1.3 var(--sans);text-align:center}
+.stright .storyhint{display:none;margin:2px 0 0;text-align:left}
+.story-actions{display:flex;flex-direction:column;gap:7px;margin:0;align-items:stretch}
+.story-actions [hidden]{display:none!important}
+.sa-row{display:flex;gap:6px}
+/* botón principal */
+.sbp{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:11px 16px;border:2px solid #232322;border-radius:999px;background:#FA2713;color:#fff;font:800 14px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 #232322;transition:transform .2s cubic-bezier(.2,1.5,.4,1),box-shadow .2s ease,background .2s}
+.sbp .ico{font-size:19px;display:inline-block;transform-origin:50% 60%}
+.sbp::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);transform:translateX(-130%);pointer-events:none}
+/* botones secundarios: icono arriba, nombre corto abajo */
+.sa{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:7px 3px 6px;border:2px solid #232322;border-radius:14px;background:#FFF8EE;color:#232322;font:800 10.5px/1.1 var(--sans);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:transform .2s cubic-bezier(.2,1.5,.4,1),box-shadow .2s ease,background .2s,color .2s}
+.sa .ico{font-size:19px;line-height:1;display:inline-block;transform-origin:50% 60%}
+.sa .lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sa.done,.sbp.done{background:#C8F34A;color:#232322;border-color:#232322}
+.sa.done .ico,.sbp.done .ico{animation:shPop .5s cubic-bezier(.2,1.8,.4,1)}
+.storyhow{align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:5px 14px;border:2px dashed #232322;border-radius:999px;background:transparent;color:#232322;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;cursor:pointer;margin:0;width:auto;transition:transform .2s cubic-bezier(.2,1.5,.4,1),background .2s,color .2s}
+@media (hover:hover){
+  .sbp:hover{transform:translate(-2px,-3px);box-shadow:5px 6px 0 #232322}
+  .sbp:hover .ico{animation:shWig .7s ease}
+  .sa:hover{transform:translate(-2px,-3px);box-shadow:3px 5px 0 #232322;background:#F7D649}
+  .sa:hover .ico{animation:shWig .7s ease}
+  .storyhow:hover{background:#232322;color:#FFE7CF;border-style:solid;transform:translateY(-2px)}
+}
+.sbp:active,.sa:active{transform:translate(1px,2px) scale(.95);box-shadow:0 0 0 #232322;transition-duration:.06s}
+.sbp:focus-visible,.sa:focus-visible,.storyhow:focus-visible,.zbar button:focus-visible,.zopen:focus-visible{outline:3px solid #F7D649;outline-offset:2px}
+/* efectos por botón al presionar (la clase .go se pone 700 ms) */
+.sa.go .ico,.sbp.go .ico{animation:var(--goanim,shPop) .65s cubic-bezier(.2,1.4,.4,1)}
+#storyDl{--goanim:shDrop}#storyShuffle{--goanim:shSpin}#storyQR{--goanim:shPop}#storyCopy{--goanim:shLink}#storyText{--goanim:shWig}#storyShare{--goanim:shFly}
+/* entrada escalonada + ola de invitación una vez */
+#storyOverlay.open .sbp{animation:shIn .55s cubic-bezier(.2,1.4,.4,1) .15s backwards,shPulse 3.4s ease-out 1.6s infinite}
+#storyOverlay.open .sbp .ico{animation:shNudge 3.4s ease-in-out 1.6s infinite}
+#storyOverlay.open .sbp::after{animation:shShine 4.6s ease-in-out 2.2s infinite}
+#storyOverlay.open .sa-row .sa{animation:shIn .5s cubic-bezier(.2,1.4,.4,1) calc(.28s + var(--i,0)*70ms) backwards,shWave .8s ease calc(1.5s + var(--i,0)*130ms) 1}
+.sa-row .sa:nth-child(1){--i:0}.sa-row .sa:nth-child(2){--i:1}.sa-row .sa:nth-child(3){--i:2}.sa-row .sa:nth-child(4){--i:3}.sa-row .sa:nth-child(5){--i:4}
+#storyOverlay.open .storyhow{animation:shIn .5s cubic-bezier(.2,1.4,.4,1) .75s backwards}
+.shtab.on{animation:shPop .4s cubic-bezier(.2,1.8,.4,1)}
+.stright .storymsg:not(:empty){animation:shIn .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes shIn{from{opacity:0;transform:translateY(14px) scale(.92)}to{opacity:1;transform:none}}
+@keyframes shPop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes shWig{0%{transform:none}25%{transform:rotate(-14deg) scale(1.15)}60%{transform:rotate(10deg) scale(1.1)}100%{transform:none}}
+@keyframes shWave{0%,100%{transform:none}35%{transform:translateY(-6px) rotate(-2deg)}65%{transform:translateY(0)}}
+@keyframes shDrop{0%{transform:translateY(-8px);opacity:.2}55%{transform:translateY(5px)}100%{transform:none;opacity:1}}
+@keyframes shSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes shLink{0%{transform:scale(1) rotate(0)}40%{transform:scale(1.3) rotate(-20deg)}70%{transform:scale(1.1) rotate(8deg)}100%{transform:none}}
+@keyframes shFly{0%{transform:none}45%{transform:translate(9px,-9px) scale(1.2) rotate(8deg);opacity:.5}60%{transform:translate(-8px,8px) scale(.8);opacity:0}100%{transform:none;opacity:1}}
+@keyframes shPulse{0%{box-shadow:3px 3px 0 #232322,0 0 0 0 rgba(250,39,19,.5)}70%,100%{box-shadow:3px 3px 0 #232322,0 0 0 14px rgba(250,39,19,0)}}
+@keyframes shNudge{0%,78%,100%{transform:none}84%{transform:translate(3px,-3px) rotate(-12deg)}92%{transform:translate(-1px,1px) rotate(5deg)}}
+@keyframes shShine{0%,70%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+/* lupa, aviso y barra de zoom dentro de la imagen */
+.zopen{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:50%;border:2px solid #232322;background:#FFF8EE;color:#232322;font-size:18px;display:grid;place-items:center;cursor:pointer;z-index:3;box-shadow:2px 3px 0 #232322;transition:transform .2s cubic-bezier(.2,1.5,.4,1)}
+.zopen:active{transform:scale(.9)}
+@media (hover:hover){.zopen:hover{transform:translate(-2px,-2px) scale(1.06)}}
+.zopen span{display:inline-block}
+#storyOverlay.open .zopen span{animation:shNudge 4s ease-in-out 2.4s infinite}
+.zhint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;pointer-events:none;max-width:calc(100% - 64px)}
+.zhint span{display:block;background:rgba(35,35,34,.88);color:#FFE7CF;border-radius:999px;padding:5px 12px;font:700 10.5px/1.2 var(--sans);letter-spacing:.04em;text-align:center;opacity:0}
+#storyOverlay.open .zhint span{animation:shHint 4.2s ease 1.2s both}
+@keyframes shHint{0%{opacity:0;transform:translateY(8px)}12%,78%{opacity:1;transform:none}100%{opacity:0;transform:translateY(4px)}}
+.zbar{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;display:none;gap:6px;align-items:center;background:rgba(35,35,34,.92);border-radius:999px;padding:5px 6px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.zbar button{min-width:38px;height:38px;border:0;border-radius:999px;background:#FFE7CF;color:#232322;font:800 18px/1 var(--sans);cursor:pointer;display:grid;place-items:center;padding:0 10px;transition:transform .15s cubic-bezier(.2,1.5,.4,1),background .15s}
+.zbar button:active{transform:scale(.9)}
+.zbar button.zc{background:#FA2713;color:#fff;font-size:12px;letter-spacing:.05em;text-transform:uppercase;display:flex;gap:5px;align-items:center;padding:0 12px}
+.zbar #zPct{font:700 12px var(--mono,monospace)}
+/* modo detalle: la imagen ocupa toda la ventana */
+#storyOverlay .modal.story.detail{width:min(1100px,100%);max-width:100%;max-height:none;padding:8px;background:#232322;box-shadow:none}
+#storyModal.detail h2,#storyModal.detail .shtabs,#storyModal.detail .sharefind,#storyModal.detail .stright,#storyModal.detail .x{display:none}
+#storyOverlay #storyModal.detail .sthub{display:flex;flex-direction:column;gap:0}
+#storyModal.detail .storyprev{touch-action:none;cursor:grab}
+#storyModal.detail .storyprev.drag{cursor:grabbing}
+#storyModal.detail #storyCanvas{cursor:inherit}
+#storyModal.detail .zbar{display:flex;animation:shIn .35s cubic-bezier(.2,1.4,.4,1)}
+#storyModal.detail .zopen,#storyModal.detail .zhint{display:none}
+#storyModal.detail .stickerguide{display:none}
+/* pantallas anchas y teléfono horizontal: imagen a la izquierda, controles a la derecha */
+@media (min-width:900px) and (min-height:540px),(orientation:landscape) and (min-width:640px) and (max-height:539px){
+  #storyOverlay .modal.story,#storyOverlay .modal.story.hub{width:min(1000px,100%);max-height:820px;padding:12px 16px 12px}
+  #storyOverlay .modal.story h2{text-align:left;padding:0 48px 0 2px;font-size:22px;margin-bottom:8px}
+  .sthub{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"left tabs" "left find" "left right";column-gap:22px;row-gap:8px}
+  .stleft{grid-area:left;min-height:0}
+  .shtabs{grid-area:tabs;justify-content:flex-start}
+  .sharefind{grid-area:find;text-align:left}
+  .stright{grid-area:right;min-height:0;overflow:hidden;justify-content:flex-start;gap:10px}
+  .shtab{font-size:12px;padding:6px 12px}
+  .story-actions{gap:10px}
+  .sbp{font-size:15px;padding:14px 18px}
+  .sa{font-size:11.5px;padding:10px 4px 9px}
+  .sa .ico{font-size:22px}
+  .stright .storyhint{display:block}
+  .stright .storymsg{text-align:left}
+  .storyhow{align-self:flex-start}
+  .shareres{max-height:none;flex:1}
+  #storyOverlay #storyModal.detail{width:min(1100px,100%)}
+  #storyOverlay #storyModal.detail .sthub{display:flex}
+}
+@media (orientation:landscape) and (max-height:539px){
+  #storyOverlay .modal.story h2{display:none}
+  #storyOverlay .modal.story{padding:8px 12px}
+  #storyOverlay .modal.story .x{top:6px;right:6px}
+  .stright .storyhint{display:none}
+  .sbp{padding:9px 14px;font-size:13px}
+  .sa{padding:6px 3px 5px}
+  .sa .ico{font-size:17px}
+  .shtabs{padding-right:44px}
+}
+@media (max-height:600px) and (orientation:portrait){
+  .stright .storyhint{display:none}
+  .sa .lbl{font-size:9.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  #storyOverlay *,#storyOverlay *::after{animation:none!important;transition:none!important}
+}
+
+@media (max-width:420px){.shtab i{display:none}.sa{letter-spacing:.02em}}
+
+.cvwrap{container-type:inline-size}
+.stickerguide span{font-size:max(4px,2.9cqw)!important;padding:0 2px}
+.sharefind{display:flex;flex-direction:column;min-height:0}
+.shareres{flex:1 1 auto;min-height:64px;max-height:min(19dvh,150px)}
+.storyprev{min-height:120px}
+
+/* ===== Paneles dentro de la herramienta de compartir (instructivo y QR): misma ventana, misma lógica de composición ===== */
+.stpanel{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:8px;text-align:left}
+.stpanel[hidden]{display:none}
+#storyModal.view-guide .sthub,#storyModal.view-qr .sthub,#storyModal.view-guide>h2,#storyModal.view-qr>h2{display:none}
+.stpanel:not([hidden]){animation:shSlide .4s cubic-bezier(.2,1.1,.3,1)}
+@keyframes shSlide{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+.pn-head{flex:none;display:flex;align-items:center;gap:10px;padding-right:46px;min-height:38px}
+.pn-head h3{margin:0;flex:1;min-width:0;font-size:18px;line-height:1.1;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pn-back{flex:none;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border:2px solid #232322;border-radius:999px;background:#FFF8EE;color:#232322;font:800 12px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:transform .2s cubic-bezier(.2,1.5,.4,1),background .2s}
+.pn-back .ar{display:inline-block;font-size:15px;transition:transform .2s}
+.pn-back:active{transform:scale(.94)}
+@media (hover:hover){.pn-back:hover{background:#F7D649;transform:translate(-2px,-2px);box-shadow:2px 3px 0 #232322}.pn-back:hover .ar{transform:translateX(-4px)}}
+.pn-back:focus-visible,.pn-info:focus-visible,.gd-dot:focus-visible{outline:3px solid #F7D649;outline-offset:2px}
+/* --- instructivo: un paso a la vez --- */
+.pn-guide{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:10px}
+.gd-stage{flex:1 1 0;min-height:0;position:relative;overflow:hidden;border:3px solid #232322;border-radius:18px;background:#FFF8EE;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.gd-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px 18px;text-align:center;overflow:auto}
+.gd-card.in-r{animation:gdR .42s cubic-bezier(.2,1,.3,1)}
+.gd-card.in-l{animation:gdL .42s cubic-bezier(.2,1,.3,1)}
+.gd-card.in-f{animation:shIn .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes gdR{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
+@keyframes gdL{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
+.gd-num{font:800 11px/1 var(--mono,monospace);letter-spacing:.12em;text-transform:uppercase;background:#232322;color:#FFE7CF;border-radius:999px;padding:5px 11px}
+.gd-ico{font-size:clamp(40px,9cqh,60px);line-height:1;animation:shBob 2.6s ease-in-out infinite}
+@keyframes shBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-4deg)}}
+.gd-card h4{margin:0;font-size:clamp(19px,4.6cqw,24px);line-height:1.1;letter-spacing:-.02em;color:#232322}
+.gd-card p{margin:0;font-size:15px;line-height:1.4;max-width:34ch;color:#232322}
+.gd-card p b{font-weight:800}
+.gd-card .sgalt{text-align:left}
+.gd-vis{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.gd-tip{padding:8px 11px;border:2px dashed #232322;border-radius:12px;font-size:13px;line-height:1.35;color:#232322;max-width:36ch}
+.gd-dots{flex:none;display:flex;gap:8px;justify-content:center;align-items:center}
+.gd-dot{width:10px;height:10px;padding:0;border-radius:50%;border:2px solid #232322;background:#fff;cursor:pointer;transition:width .25s cubic-bezier(.2,1.5,.4,1),background .2s,border-radius .25s}
+.gd-dot.on{width:28px;border-radius:6px;background:#FA2713}
+.gd-nav{flex:none;display:flex;gap:8px;align-items:stretch}
+.gd-nav .sa{flex:0 0 34%;flex-direction:row;gap:6px;padding:11px 8px;font-size:12px}
+.gd-nav .sa[disabled]{opacity:.35;pointer-events:none}
+.gd-nav .sbp{flex:1 1 auto;width:auto;padding:11px 14px}
+/* --- QR --- */
+.pn-qr{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:8px}
+.qr-left{flex:1 1 0;min-height:0;display:grid;place-items:center;container-type:size}
+.pn-qr .qrprev{margin:0;display:block;width:min(100cqw,calc(100cqh * 20 / 26))}
+.pn-qr #qrCanvas{width:100%;height:auto;aspect-ratio:2000/2600;border-radius:12px;display:block}
+.qr-right{flex:none;display:flex;flex-direction:column;gap:5px;min-width:0}
+.qr-right .qrlab{margin:0;font-size:10.5px}
+.qr-right #qrCamp{padding:8px 11px;font-size:15px;border-width:2px}
+.qrsw{flex-wrap:nowrap;gap:6px;margin:0}
+.qrdot{flex:1 1 0;min-width:0;max-width:34px;width:auto;height:auto;aspect-ratio:1}
+.qr-actions{margin-top:3px}
+.qr-right .qrmsg{margin:0;min-height:15px;font:700 12px/1.3 var(--sans);text-align:center}
+.pn-info{align-self:center;display:inline-flex;gap:6px;align-items:center;padding:5px 12px;border:2px dashed #232322;border-radius:999px;background:transparent;color:#232322;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.qrinfo{display:none}
+.qr-right.info .qrinfo{display:block;position:absolute;left:12px;right:12px;bottom:12px;z-index:6;background:#FFF8EE;border:3px solid #232322;border-radius:16px;padding:10px 12px;box-shadow:4px 5px 0 #232322;max-height:46%;overflow:auto;animation:shIn .3s cubic-bezier(.2,1.4,.4,1)}
+.qrinfo .note{margin:3px 0;font-size:12.5px;line-height:1.35;text-align:left}
+.qrinfo .qrurl{font-family:var(--mono);font-size:10.5px;word-break:break-all}
+@media (min-width:900px) and (min-height:540px),(orientation:landscape) and (min-width:640px) and (max-height:539px){
+  .stpanel{gap:10px}
+  .pn-qr{flex-direction:row;gap:22px;align-items:stretch}
+  .qr-left{flex:0 0 40%}
+  .qr-right{flex:1 1 0;justify-content:center;gap:8px;overflow:hidden}
+  .pn-info{display:none}
+  .qrinfo{display:block}
+  .qr-right.info .qrinfo{position:static;box-shadow:none;border:0;padding:0;background:transparent;max-height:none;animation:none}
+  .qrinfo .note{font-size:12.5px}
+}
+@media (orientation:landscape) and (max-height:539px){
+  .gd-card{flex-direction:row;flex-wrap:wrap;gap:6px 14px;padding:8px 16px}
+  .gd-ico{font-size:40px}
+  .gd-card h4{font-size:19px}
+  .gd-card p{font-size:13.5px;max-width:48ch}
+  .qrinfo .note{font-size:11px}
+  .gd-nav .sa,.gd-nav .sbp{padding:8px}
+  .pn-head{min-height:32px}
+}
+@media (prefers-reduced-motion:reduce){.gd-ico{animation:none!important}}
+
+/* ===== Respuesta inmediata (4-nov-2026): tiempos recortados y retroalimentación al tocar =====
+ * Antes: ventanas con rebote de 450 ms, menú de 650-700 ms con escalón de 65 ms por renglón, pines que entraban hasta 1.4 s después, tarjeta del mapa 420 ms.
+ * Ahora todo arranca de inmediato y termina en ~250-300 ms; además cada control se hunde un poco al tocarlo (60 ms) para que el dedo sienta que «ya fue». */
+.modal{animation-duration:.26s;animation-timing-function:cubic-bezier(.2,1.25,.4,1)}
+.overlay.open{animation-duration:.16s}
+.pincard.on{animation-duration:.26s}
+.mapchip.on{animation-duration:.26s}
+.pin.pop{animation-duration:.32s}
+.card .thumb img,.cc-media>img,.cc-img img,.fercardh .fimg img,.cp-media>img,.gtile>img{transition-duration:.22s}
+.cl-menu{transition:clip-path .42s cubic-bezier(.7,0,.2,1),visibility 0s .42s}
+.cl-menu.is-open{transition:clip-path .42s cubic-bezier(.7,0,.2,1),visibility 0s}
+.cl-menu.is-open .cl-mi{transition:opacity .3s ease calc(.1s + var(--i) * 35ms),transform .4s cubic-bezier(.2,.8,.2,1) calc(.1s + var(--i) * 35ms),background .2s,color .2s,padding .3s cubic-bezier(.2,.8,.2,1)}
+.cl-menu.is-open .cl-menu-foot{transition:opacity .3s ease .4s}
+a,button,summary,[role="button"],label,select,input,.pill,.bbtn,.chip,.achip{touch-action:manipulation}
+.pill,.bbtn,.btn,.sbtn,.chip,.achip,.wchip,.zpill,.popopt,.pchip,.mtz,.cl-mi,.ecard,.erow{transition-property:background,color,border-color,box-shadow,transform,translate,scale;-webkit-user-select:none;user-select:none}
+.pill:active,.bbtn:active,.btn:active,.sbtn:active,.chip:active,.achip:active,.wchip:active,.zpill:active,.popopt:active,.pchip:active,.mtz:active,.erow:active,.ecard:active{scale:.965;transition:scale 60ms ease-out}
+/* la pastilla «Mapa» de la barra pulsa hasta que alguien abre el mapa la primera vez */
+.bbtn.map.hint{animation:mtRing 2.2s ease-out infinite}
+@keyframes mtRing{0%{box-shadow:0 0 0 0 rgba(250,39,19,.55)}70%,100%{box-shadow:0 0 0 12px rgba(250,39,19,0)}}
+@media (prefers-reduced-motion:reduce){.mtz,.mtz-go i,.mtz-map .mtp,.bbtn.map.hint{animation:none!important}}
+
+/* --- instructivo en ventana ancha: todos los pasos a la vista (riel) + paso actual grande + botones de tamaño normal --- */
+.gd-rail{display:none;list-style:none;margin:0;padding:0}
+.gd-nav .sa{flex:0 0 auto;min-width:112px}
+.gd-nav .sbp{flex:1 1 auto}
+@media (min-width:900px) and (min-height:540px){
+  .pn-guide{display:grid;grid-template-columns:minmax(210px,34%) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:12px 22px}
+  .gd-rail{display:flex;flex-direction:column;gap:6px;grid-column:1;grid-row:1/3;overflow:hidden;position:relative}
+  .gd-rail::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:3px;background:rgba(35,35,34,.18);border-radius:3px}
+  .gd-rail li{position:relative}
+  .gd-r{width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:8px 10px 8px 6px;border:2px solid transparent;border-radius:14px;background:transparent;color:#232322;font:700 14px/1.2 var(--sans);cursor:pointer;transition:background .18s,border-color .18s,transform .18s cubic-bezier(.2,1.5,.4,1)}
+  .gd-r .gn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#FFF8EE;border:2.5px solid #232322;font:800 13px/1 var(--sans);position:relative;z-index:1;transition:background .2s,color .2s,transform .25s cubic-bezier(.2,1.8,.4,1)}
+  .gd-r .gt{flex:1;min-width:0}
+  .gd-r:hover{background:rgba(247,214,73,.35);transform:translateX(3px)}
+  .gd-r.done .gn{background:#C8F34A}
+  .gd-r.on{background:#FFF8EE;border-color:#232322;box-shadow:3px 3px 0 #232322}
+  .gd-r.on .gn{background:#FA2713;color:#fff;transform:scale(1.15)}
+  .gd-stage{grid-column:2;grid-row:1}
+  .gd-dots{display:none}
+  .gd-nav{grid-column:2;grid-row:2;justify-content:flex-end}
+  .gd-nav .sa{min-width:130px;padding:11px 18px}
+  .gd-nav .sbp{flex:0 0 auto;min-width:210px;padding:12px 22px}
+  .gd-card{padding:20px 34px;gap:12px}
+  .gd-card h4{font-size:28px}
+  .gd-card p{font-size:17px;max-width:40ch}
+  .gd-ico{font-size:64px}
+}
+
+/* el instructivo se escala con el alto disponible (ventanas altas ya no quedan vacías) y avisa qué sigue */
+.gd-stage{container-type:size}
+.gd-card{gap:clamp(10px,2.6cqh,22px)}
+.gd-ico{font-size:clamp(40px,13cqh,92px)}
+.gd-card h4{font-size:clamp(20px,min(6.2cqw,4cqh),30px)}
+.gd-card p{font-size:clamp(15px,min(4.3cqw,2.4cqh),19px)}
+.gd-up{margin-top:4px;padding:6px 12px;border-radius:999px;background:rgba(35,35,34,.08);font:700 11.5px/1.2 var(--mono,monospace);letter-spacing:.03em;color:#232322;max-width:100%}
+.gd-up b{font-family:var(--sans);letter-spacing:0}
+@media (min-width:900px) and (min-height:540px){.gd-card h4{font-size:clamp(24px,5cqh,34px)}.gd-card p{font-size:clamp(16px,2.6cqh,20px)}}
+@media (orientation:landscape) and (max-height:539px){.gd-up{display:none}.gd-ico{font-size:40px}.gd-card h4{font-size:19px}.gd-card p{font-size:13.5px}}
+@media (min-width:900px) and (min-height:540px){.gd-rail{align-self:start}.gd-rail::before{bottom:22px}}
+
+/* «Un evento» en escritorio: la lista de resultados aprovecha todo el alto libre de la columna (los controles quedan abajo) */
+@media (min-width:900px) and (min-height:540px),(orientation:landscape) and (min-width:640px) and (max-height:539px){
+  #storyModal .sthub:has(.sharefind:not([hidden])){grid-template-rows:auto minmax(0,1fr) auto}
+  #storyModal .sharefind:not([hidden]){min-height:0;display:flex;flex-direction:column}
+  #storyModal .sharefind .shareres{flex:1 1 auto;min-height:0;max-height:none}
+  #storyModal .sthub:has(.sharefind:not([hidden])) .stright{align-self:end}
+}
 
 /* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
 .cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
@@ -1353,7 +1641,7 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
   </div>
 </header>
 
-<main id="app" class="wrap" tabindex="-1"><section class="seo-fallback"><h1>Agenda de artes visuales en Monterrey</h1><p>Exposiciones, ferias y espacios por zona cultural de Monterrey, con mapa, en español e inglés. Actualizada el 3 de noviembre de 2026.</p><h2>Eventos vigentes</h2><ul><li><a href="/mty/e/eames-marco-2026.html">Charles &amp; Ray Eames: La inusual belleza de las cosas comunes</a> · Museo MARCO · 5 de junio al 7 de febrero</li><li><a href="/mty/e/transitos-de-la-materia.html">Tránsitos de la materia</a> · Heitz Art Gallery · 2 de septiembre al 30 de noviembre</li><li><a href="/mty/e/ecos-de-un-camino.html">Ecos de un camino</a> · GERARDA 103 (Nave Tampiquito) · 9 de septiembre al 30 de noviembre</li><li><a href="/mty/e/v-premio-de-las-artes.html">V Premio de las Artes</a> · Centro de las Artes (CONARTE) · 17 de septiembre al 21 de febrero</li><li><a href="/mty/e/autorretrato-no-autorizado.html">Autorretrato no autorizado</a> · Museo MARCO · 25 de septiembre al 18 de abril</li><li><a href="/mty/e/visor-2025.html">Visor 2025</a> · Centro de las Artes (CONARTE) · 13 de octubre al 14 de febrero</li><li><a href="/mty/e/melancolia-bce-apmty.html">Melancolía</a> · Biblioteca Central del Estado Fray Servando Teresa de Mier · 15 de octubre al 10 de noviembre</li><li><a href="/mty/e/festival-santa-lucia.html">Festival Internacional Santa Lucía 2026</a> · Explanada de los Héroes (Macroplaza) · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/ofrenda-entre-luces-y-almas.html">Ofrenda de Día de Muertos: Entre Luces y Almas</a> · Explanada de los Héroes (Macroplaza) · 22 de octubre al 8 de noviembre</li><li><a href="/mty/e/la-asociacion-jaime-ruiz.html">La Asociación</a> · Arte y Cultura Tec · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/dario-escobar-pabellon.html">Darío Escobar · Pabellón Expositivo</a> · Laboratorio Arte AC · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/esperando-el-impacto.html">Esperando el impacto</a> · Fototeca de Nuevo León · 22 de octubre al 21 de febrero</li><li><a href="/mty/e/retratos.html">Retratos</a> · Casa de la Cultura de San Nicolás &quot;La Pérgola&quot; · 22 de octubre al 20 de noviembre</li><li><a href="/mty/e/maser-into-the-grid.html">Maser · Into the Grid</a> · Explanada de los Héroes (Macroplaza) · 23 de octubre al 29 de noviembre</li><li><a href="/mty/e/altares-de-los-nuestros-2026.html">Altares de los Nuestros 2026</a> · Plaza Ocampo (Santiago) · 23 de octubre al 16 de noviembre</li><li><a href="/mty/e/sintonia-sonidera.html">Sintonía Sonidera: memoria de la aguja y el vinil</a> · Casa de la Cultura de Nuevo León · 27 de octubre al 1 de diciembre</li><li><a href="/mty/e/despues-del-silencio.html">Después del silencio</a> · Capilla Histórica del Casco · 28 de octubre al 7 de diciembre</li><li><a href="/mty/e/las-cosas-posibles.html">Las cosas posibles al encender la luz</a> · Arte Actual Galería · 28 de octubre al 4 de diciembre</li><li><a href="/mty/e/in-pulverem.html">In Pulverem</a> · Centro de las Artes (CONARTE) · 29 de octubre al 28 de febrero</li><li><a href="/mty/e/ya-paso-por-aqui.html">Ya pasó por aquí</a> · Sitio · 29 de octubre al 5 de noviembre</li><li><a href="/mty/e/cuadrante-2026.html">CUADRANTE 2026</a> · Centro de las Artes (CONARTE) · 29 de octubre al 8 de noviembre</li><li><a href="/mty/e/florar-aridez.html">Florar en la Aridez</a> · Centro Cultural Manuel L. Barragán · 30 de octubre al 23 de noviembre</li><li><a href="/mty/e/megaflat.html">Flux Forma MEGAFLAT</a> · Colector Gallery · 30 de octubre al 15 de diciembre</li><li><a href="/mty/e/hay-fantasmas-en-la-casa.html">Hay fantasmas en la casa</a> · Arde Arte · 31 de octubre al 18 de noviembre</li><li><a href="/mty/e/la-muerte-y-mi-cocol.html">La muerte, el silencio… ¿y mi cocol?</a> · Centro de las Artes (CONARTE) · 1 de noviembre al 22 de noviembre</li><li><a href="/mty/e/teje-por-la-monarca-2026.html">Teje por la monarca</a> · Parque Arboleda · 2 de noviembre al 6 de noviembre</li><li><a href="/mty/e/dibujo-outfits-casa-motis-2026.html">Una tarde de outfits y dibujo a tu ritmo</a> · Casa Motis · 3 de noviembre</li><li><a href="/mty/e/escultores-en-nuevo-leon.html">Escultores en Nuevo León, 1945–1995</a> · Unidad Cultural de Arquitectura (FARQ UANL) · 3 de noviembre al 27 de noviembre</li><li><a href="/mty/e/naturaleza-eterna.html">Naturaleza eterna</a> · Akadem · Galería Abierta · 4 de noviembre</li><li><a href="/mty/e/homenaje-porfirio-tamez.html">Exposición colectiva en homenaje al Dr. Porfirio Tamez Solís</a> · Biblioteca Universitaria Raúl Rangel Frías · 4 de noviembre al 6 de diciembre</li><li><a href="/mty/e/archivo-de-lo-cotidiano-2026.html">Archivo de lo cotidiano</a> · Galería Abierta distritotec · 4 de noviembre</li><li><a href="/mty/e/axis-mundi-2026.html">Axis Mundi</a> · Museo Metropolitano de Monterrey · 4 de noviembre</li><li><a href="/mty/e/color-calavera-2026.html">Color Calavera</a> · Museo Metropolitano de Monterrey · 4 de noviembre</li><li><a href="/mty/e/antes-todo-esto-era-monte.html">antes todo esto era monte</a> · Radical Espacio Cultural · 4 de noviembre</li><li><a href="/mty/e/eclipses.html">Eclipses</a> · Arte Actual Galería · 4 de noviembre</li><li><a href="/mty/e/resolana-juan-jose-ceron.html">Resolana. Retrospectiva de Juan José Cerón</a> · Fototeca de Nuevo León · 5 de noviembre al 28 de febrero</li><li><a href="/mty/e/entre-miradas.html">Entre Miradas</a> · Drexel Galería · 5 de noviembre</li><li><a href="/mty/e/memoria-viva.html">Memoria viva</a> · Galería Addy (nueva sede) · 5 de noviembre</li><li><a href="/mty/e/capas-npc-2026.html">Capas · exposición de procesos pictóricos</a> · WAM · 6 de noviembre</li><li><a href="/mty/e/habitar-pabellon-arquitectas.html">HA BI TAR · Pabellón Arquitectas</a> · OUM · Arboleda (Mezzanine) · 6 de noviembre al 8 de noviembre</li><li><a href="/mty/e/pesadilla-colectiva-2026.html">Pesadilla Colectiva 2026</a> · Colectivo Regio · 6 de noviembre</li><li><a href="/mty/e/fama-26.html">FAMA 2026</a> · OUM · Arboleda (Mezzanine) · 6 de noviembre al 8 de noviembre</li><li><a href="/mty/e/sors-fors-mirari-sacer-2026.html">SORS/FORS/MIRARI/SACER</a> · Sitio · 7 de noviembre</li><li><a href="/mty/e/cuerpo-inamovible-barro-2026.html">Cuerpo Inamovible</a> · BARRO Galería · 7 de noviembre al 14 de noviembre</li><li><a href="/mty/e/fama-fiesta-2026.html">Fiesta oficial de FAMA 2026 · Soul Clap and Dance-Off</a> · Nodriza Estudio · 7 de noviembre</li><li><a href="/mty/e/fuerza-irresistible.html">Fuerza irresistible · Revisión de portafolio</a> · BARRO Galería · 7 de noviembre</li><li><a href="/mty/e/contagiemos-arte-performance-28.html">Contagiemos ARTE · Performance 28</a> · Contagiemos Arte Galería · Valle Oriente · 7 de noviembre</li><li><a href="/mty/e/maquinas-sensibles.html">Máquinas Sensibles</a> · Radical Espacio Cultural · 7 de noviembre</li><li><a href="/mty/e/taller-fotografia-analogica.html">Introducción a la fotografía analógica desde cero</a> · Bengala MTY (laboratorio fotográfico) · 7 de noviembre</li><li><a href="/mty/e/soft-focus.html">Soft Focus</a> · Dreaming Estudio · 8 de noviembre</li><li><a href="/mty/e/adaptacion-natural-vanessa-monsivais-2026.html">Adaptación natural</a> · OLARTE Galería y Taller · 12 de noviembre</li><li><a href="/mty/e/muy-regios.html">Muy Regios</a> · Biblioteca Central del Estado Fray Servando Teresa de Mier · 28 de noviembre</li><li><a href="/mty/e/bazar-ilustracion-drink-and-draw-15.html">Drink and Draw · Bazar de Ilustración Vol. 15: Payasos</a> · Metapatio · 28 de noviembre</li></ul><h2>Espacios por zona</h2><h3>Zona Centro</h3><ul><li><a href="/mty/l/metrocuauhtemoc.html">Estación Cuauhtémoc (Metro, Línea 2)</a></li><li><a href="/mty/l/metrozaragoza.html">Estación Zaragoza (Metro)</a></li><li><a href="/mty/l/casamotis.html">Casa Motis</a></li><li><a href="/mty/l/addy.html">Galería Addy (nueva sede)</a></li><li><a href="/mty/l/larevo.html">La Revo</a></li><li><a href="/mty/l/olarte.html">OLARTE Galería y Taller</a></li><li><a href="/mty/l/radical.html">Radical Espacio Cultural</a></li><li><a href="/mty/l/sitio.html">Sitio</a></li><li><a href="/mty/l/centroartes.html">Centro de las Artes (CONARTE)</a></li><li><a href="/mty/l/fototeca.html">Fototeca de Nuevo León</a></li><li><a href="/mty/l/marco.html">Museo MARCO</a></li><li><a href="/mty/l/museometropolitano.html">Museo Metropolitano de Monterrey</a></li><li><a href="/mty/l/pabellonciudadano.html">Pabellón Ciudadano</a></li><li><a href="/mty/l/casacultura.html">Casa de la Cultura de Nuevo León</a></li><li><a href="/mty/l/colegiocivil.html">Colegio Civil Centro Cultural Universitario</a></li><li><a href="/mty/l/explanada.html">Explanada de los Héroes (Macroplaza)</a></li><li><a href="/mty/l/teatrociudad.html">Teatro de la Ciudad</a></li><li><a href="/mty/l/parquefundidora.html">Parque Fundidora</a></li><li><a href="/mty/l/nodriza.html">Nodriza Estudio</a></li><li><a href="/mty/l/bce.html">Biblioteca Central del Estado Fray Servando Teresa de Mier</a></li><li><a href="/mty/l/barro.html">BARRO Galería</a></li><li><a href="/mty/l/cooperativa.html">La Cooperativa 308</a></li><li><a href="/mty/l/metapatio.html">Metapatio</a></li><li><a href="/mty/l/galeriacontagio_centrika.html">Contagiemos Arte Galería · Patio Céntrika</a></li><li><a href="/mty/l/ucafarq.html">Unidad Cultural de Arquitectura (FARQ UANL)</a></li><li><a href="/mty/l/galeria1010mty.html">Galería 10:10 (Barrio Antiguo)</a></li><li><a href="/mty/l/cintermex.html">Cintermex</a></li><li><a href="/mty/l/dreaming.html">Dreaming Estudio</a></li><li><a href="/mty/l/tallergraficolaluz.html">Taller Gráfico La Luz</a></li></ul><h3>Zona Norte</h3><ul><li><a href="/mty/l/plazasn.html">Plaza Principal Bernardo Reyes (San Nicolás)</a></li><li><a href="/mty/l/perg.html">Casa de la Cultura de San Nicolás &quot;La Pérgola&quot;</a></li><li><a href="/mty/l/biblioraul.html">Biblioteca Universitaria Raúl Rangel Frías</a></li><li><a href="/mty/l/barragan.html">Centro Cultural Manuel L. Barragán</a></li></ul><h3>Zona Oriente</h3><ul><li><a href="/mty/l/m1881.html">M1881</a></li><li><a href="/mty/l/parquedelagua.html">Nuevo Parque del Agua</a></li><li><a href="/mty/l/museoguadalupe.html">Museo de Ciudad Guadalupe</a></li><li><a href="/mty/l/colectivoregio.html">Colectivo Regio</a></li></ul><h3>Zona Sur</h3><ul><li><a href="/mty/l/galeriaabierta.html">Galería Abierta distritotec</a></li><li><a href="/mty/l/parquebolsillo.html">Parque de Bolsillo CIAP</a></li><li><a href="/mty/l/mtcaballero.html">Centro de Arte y Cultura “María Trinidad Caballero”</a></li><li><a href="/mty/l/husky.html">HUSKY Coffee Shop</a></li><li><a href="/mty/l/galeria1010.html">Galería 10:10 (Santiago)</a></li><li><a href="/mty/l/creativa.html">Creativa Escuela de Arte</a></li><li><a href="/mty/l/artecolectivo.html">ARTE COLECTIVO Studio + Gallery</a></li><li><a href="/mty/l/laboratorioarte.html">Laboratorio Arte AC</a></li><li><a href="/mty/l/plazaocampo.html">Plaza Ocampo (Santiago)</a></li><li><a href="/mty/l/wam.html">WAM</a></li><li><a href="/mty/l/skyspace.html">Espíritu de Luz Skyspace</a></li><li><a href="/mty/l/casanaranjos.html">Casa Naranjos</a></li><li><a href="/mty/l/arteyculturatec.html">Arte y Cultura Tec</a></li><li><a href="/mty/l/fav.html">Facultad de Artes Visuales, UANL</a></li><li><a href="/mty/l/ciida.html">Centro de Investigación, Innovación y Desarrollo de las Artes (CIIDA)</a></li></ul><h3>Zona Poniente</h3><ul><li><a href="/mty/l/drexel.html">Drexel Galería</a></li><li><a href="/mty/l/arboleda.html">Parque Arboleda</a></li><li><a href="/mty/l/blanqueo.html">Museo Industrial El Blanqueo</a></li><li><a href="/mty/l/capilla.html">Capilla Histórica del Casco</a></li><li><a href="/mty/l/fatima.html">Centro Cultural Plaza Fátima</a></li><li><a href="/mty/l/galeb.html">Galería de Arte Eliezer Blanco</a></li><li><a href="/mty/l/arteactual.html">Arte Actual Galería</a></li><li><a href="/mty/l/gerarda.html">GERARDA 103 (Nave Tampiquito)</a></li><li><a href="/mty/l/bengala.html">Bengala MTY (laboratorio fotográfico)</a></li><li><a href="/mty/l/oum.html">OUM · Arboleda (Mezzanine)</a></li><li><a href="/mty/l/ardearte.html">Arde Arte</a></li><li><a href="/mty/l/koboroom.html">Kobo Room</a></li><li><a href="/mty/l/heitz.html">Heitz Art Gallery</a></li><li><a href="/mty/l/galeriacontagio_gvo.html">Contagiemos Arte Galería · Valle Oriente</a></li><li><a href="/mty/l/akadem.html">Akadem · Galería Abierta</a></li><li><a href="/mty/l/nngaleria.html">NN Galería Monterrey</a></li><li><a href="/mty/l/lamilarca.html">Museo La Milarca</a></li><li><a href="/mty/l/carcamo.html">Cárcamo Galería</a></li><li><a href="/mty/l/colector.html">Colector Gallery</a></li></ul><h2>Ferias y festivales</h2><ul><li><a href="/mty/f/contagiemos.html">Contagiemos ARTE</a></li><li><a href="/mty/f/cuadrante.html">CUADRANTE</a></li><li><a href="/mty/f/fama.html">FAMA</a></li><li><a href="/mty/f/santalucia.html">Festival Internacional Santa Lucía</a></li></ul></section></main>
+<main id="app" class="wrap" tabindex="-1"><section class="seo-fallback"><h1>Agenda de artes visuales en Monterrey</h1><p>Exposiciones, ferias y espacios por zona cultural de Monterrey, con mapa, en español e inglés. Actualizada el 4 de noviembre de 2026.</p><h2>Eventos vigentes</h2><ul><li><a href="/mty/e/eames-marco-2026.html">Charles &amp; Ray Eames: La inusual belleza de las cosas comunes</a> · Museo MARCO · 5 de junio al 7 de febrero</li><li><a href="/mty/e/transitos-de-la-materia.html">Tránsitos de la materia</a> · Heitz Art Gallery · 2 de septiembre al 30 de noviembre</li><li><a href="/mty/e/ecos-de-un-camino.html">Ecos de un camino</a> · GERARDA 103 (Nave Tampiquito) · 9 de septiembre al 30 de noviembre</li><li><a href="/mty/e/v-premio-de-las-artes.html">V Premio de las Artes</a> · Centro de las Artes (CONARTE) · 17 de septiembre al 21 de febrero</li><li><a href="/mty/e/autorretrato-no-autorizado.html">Autorretrato no autorizado</a> · Museo MARCO · 25 de septiembre al 18 de abril</li><li><a href="/mty/e/visor-2025.html">Visor 2025</a> · Centro de las Artes (CONARTE) · 13 de octubre al 14 de febrero</li><li><a href="/mty/e/melancolia-bce-apmty.html">Melancolía</a> · Biblioteca Central del Estado Fray Servando Teresa de Mier · 15 de octubre al 10 de noviembre</li><li><a href="/mty/e/festival-santa-lucia.html">Festival Internacional Santa Lucía 2026</a> · Explanada de los Héroes (Macroplaza) · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/ofrenda-entre-luces-y-almas.html">Ofrenda de Día de Muertos: Entre Luces y Almas</a> · Explanada de los Héroes (Macroplaza) · 22 de octubre al 8 de noviembre</li><li><a href="/mty/e/la-asociacion-jaime-ruiz.html">La Asociación</a> · Arte y Cultura Tec · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/dario-escobar-pabellon.html">Darío Escobar · Pabellón Expositivo</a> · Laboratorio Arte AC · 22 de octubre al 4 de noviembre</li><li><a href="/mty/e/esperando-el-impacto.html">Esperando el impacto</a> · Fototeca de Nuevo León · 22 de octubre al 21 de febrero</li><li><a href="/mty/e/retratos.html">Retratos</a> · Casa de la Cultura de San Nicolás &quot;La Pérgola&quot; · 22 de octubre al 20 de noviembre</li><li><a href="/mty/e/maser-into-the-grid.html">Maser · Into the Grid</a> · Explanada de los Héroes (Macroplaza) · 23 de octubre al 29 de noviembre</li><li><a href="/mty/e/altares-de-los-nuestros-2026.html">Altares de los Nuestros 2026</a> · Plaza Ocampo (Santiago) · 23 de octubre al 16 de noviembre</li><li><a href="/mty/e/sintonia-sonidera.html">Sintonía Sonidera: memoria de la aguja y el vinil</a> · Casa de la Cultura de Nuevo León · 27 de octubre al 1 de diciembre</li><li><a href="/mty/e/despues-del-silencio.html">Después del silencio</a> · Capilla Histórica del Casco · 28 de octubre al 7 de diciembre</li><li><a href="/mty/e/las-cosas-posibles.html">Las cosas posibles al encender la luz</a> · Arte Actual Galería · 28 de octubre al 4 de diciembre</li><li><a href="/mty/e/in-pulverem.html">In Pulverem</a> · Centro de las Artes (CONARTE) · 29 de octubre al 28 de febrero</li><li><a href="/mty/e/ya-paso-por-aqui.html">Ya pasó por aquí</a> · Sitio · 29 de octubre al 5 de noviembre</li><li><a href="/mty/e/cuadrante-2026.html">CUADRANTE 2026</a> · Centro de las Artes (CONARTE) · 29 de octubre al 8 de noviembre</li><li><a href="/mty/e/florar-aridez.html">Florar en la Aridez</a> · Centro Cultural Manuel L. Barragán · 30 de octubre al 23 de noviembre</li><li><a href="/mty/e/megaflat.html">Flux Forma MEGAFLAT</a> · Colector Gallery · 30 de octubre al 15 de diciembre</li><li><a href="/mty/e/hay-fantasmas-en-la-casa.html">Hay fantasmas en la casa</a> · Arde Arte · 31 de octubre al 18 de noviembre</li><li><a href="/mty/e/la-muerte-y-mi-cocol.html">La muerte, el silencio… ¿y mi cocol?</a> · Centro de las Artes (CONARTE) · 1 de noviembre al 22 de noviembre</li><li><a href="/mty/e/teje-por-la-monarca-2026.html">Teje por la monarca</a> · Parque Arboleda · 2 de noviembre al 6 de noviembre</li><li><a href="/mty/e/escultores-en-nuevo-leon.html">Escultores en Nuevo León, 1945–1995</a> · Unidad Cultural de Arquitectura (FARQ UANL) · 3 de noviembre al 27 de noviembre</li><li><a href="/mty/e/naturaleza-eterna.html">Naturaleza eterna</a> · Akadem · Galería Abierta · 4 de noviembre</li><li><a href="/mty/e/homenaje-porfirio-tamez.html">Exposición colectiva en homenaje al Dr. Porfirio Tamez Solís</a> · Biblioteca Universitaria Raúl Rangel Frías · 4 de noviembre al 6 de diciembre</li><li><a href="/mty/e/archivo-de-lo-cotidiano-2026.html">Archivo de lo cotidiano</a> · Galería Abierta distritotec · 4 de noviembre</li><li><a href="/mty/e/axis-mundi-2026.html">Axis Mundi</a> · Museo Metropolitano de Monterrey · 4 de noviembre</li><li><a href="/mty/e/color-calavera-2026.html">Color Calavera</a> · Museo Metropolitano de Monterrey · 4 de noviembre</li><li><a href="/mty/e/antes-todo-esto-era-monte.html">antes todo esto era monte</a> · Radical Espacio Cultural · 4 de noviembre</li><li><a href="/mty/e/eclipses.html">Eclipses</a> · Arte Actual Galería · 4 de noviembre</li><li><a href="/mty/e/resolana-juan-jose-ceron.html">Resolana. Retrospectiva de Juan José Cerón</a> · Fototeca de Nuevo León · 5 de noviembre al 28 de febrero</li><li><a href="/mty/e/entre-miradas.html">Entre Miradas</a> · Drexel Galería · 5 de noviembre</li><li><a href="/mty/e/memoria-viva.html">Memoria viva</a> · Galería Addy (nueva sede) · 5 de noviembre</li><li><a href="/mty/e/capas-npc-2026.html">Capas · exposición de procesos pictóricos</a> · WAM · 6 de noviembre</li><li><a href="/mty/e/habitar-pabellon-arquitectas.html">HA BI TAR · Pabellón Arquitectas</a> · OUM · Arboleda (Mezzanine) · 6 de noviembre al 8 de noviembre</li><li><a href="/mty/e/pesadilla-colectiva-2026.html">Pesadilla Colectiva 2026</a> · Colectivo Regio · 6 de noviembre</li><li><a href="/mty/e/fama-26.html">FAMA 2026</a> · OUM · Arboleda (Mezzanine) · 6 de noviembre al 8 de noviembre</li><li><a href="/mty/e/sors-fors-mirari-sacer-2026.html">SORS/FORS/MIRARI/SACER</a> · Sitio · 7 de noviembre</li><li><a href="/mty/e/cuerpo-inamovible-barro-2026.html">Cuerpo Inamovible</a> · BARRO Galería · 7 de noviembre al 14 de noviembre</li><li><a href="/mty/e/fama-fiesta-2026.html">Fiesta oficial de FAMA 2026 · Soul Clap and Dance-Off</a> · Nodriza Estudio · 7 de noviembre</li><li><a href="/mty/e/fuerza-irresistible.html">Fuerza irresistible · Revisión de portafolio</a> · BARRO Galería · 7 de noviembre</li><li><a href="/mty/e/contagiemos-arte-performance-28.html">Contagiemos ARTE · Performance 28</a> · Contagiemos Arte Galería · Valle Oriente · 7 de noviembre</li><li><a href="/mty/e/maquinas-sensibles.html">Máquinas Sensibles</a> · Radical Espacio Cultural · 7 de noviembre</li><li><a href="/mty/e/taller-fotografia-analogica.html">Introducción a la fotografía analógica desde cero</a> · Bengala MTY (laboratorio fotográfico) · 7 de noviembre</li><li><a href="/mty/e/soft-focus.html">Soft Focus</a> · Dreaming Estudio · 8 de noviembre</li><li><a href="/mty/e/adaptacion-natural-vanessa-monsivais-2026.html">Adaptación natural</a> · OLARTE Galería y Taller · 12 de noviembre</li><li><a href="/mty/e/muy-regios.html">Muy Regios</a> · Biblioteca Central del Estado Fray Servando Teresa de Mier · 28 de noviembre</li><li><a href="/mty/e/bazar-ilustracion-drink-and-draw-15.html">Drink and Draw · Bazar de Ilustración Vol. 15: Payasos</a> · Metapatio · 28 de noviembre</li></ul><h2>Espacios por zona</h2><h3>Zona Centro</h3><ul><li><a href="/mty/l/metrocuauhtemoc.html">Estación Cuauhtémoc (Metro, Línea 2)</a></li><li><a href="/mty/l/metrozaragoza.html">Estación Zaragoza (Metro)</a></li><li><a href="/mty/l/casamotis.html">Casa Motis</a></li><li><a href="/mty/l/addy.html">Galería Addy (nueva sede)</a></li><li><a href="/mty/l/larevo.html">La Revo</a></li><li><a href="/mty/l/olarte.html">OLARTE Galería y Taller</a></li><li><a href="/mty/l/radical.html">Radical Espacio Cultural</a></li><li><a href="/mty/l/sitio.html">Sitio</a></li><li><a href="/mty/l/centroartes.html">Centro de las Artes (CONARTE)</a></li><li><a href="/mty/l/fototeca.html">Fototeca de Nuevo León</a></li><li><a href="/mty/l/marco.html">Museo MARCO</a></li><li><a href="/mty/l/museometropolitano.html">Museo Metropolitano de Monterrey</a></li><li><a href="/mty/l/pabellonciudadano.html">Pabellón Ciudadano</a></li><li><a href="/mty/l/casacultura.html">Casa de la Cultura de Nuevo León</a></li><li><a href="/mty/l/colegiocivil.html">Colegio Civil Centro Cultural Universitario</a></li><li><a href="/mty/l/explanada.html">Explanada de los Héroes (Macroplaza)</a></li><li><a href="/mty/l/teatrociudad.html">Teatro de la Ciudad</a></li><li><a href="/mty/l/parquefundidora.html">Parque Fundidora</a></li><li><a href="/mty/l/nodriza.html">Nodriza Estudio</a></li><li><a href="/mty/l/bce.html">Biblioteca Central del Estado Fray Servando Teresa de Mier</a></li><li><a href="/mty/l/barro.html">BARRO Galería</a></li><li><a href="/mty/l/cooperativa.html">La Cooperativa 308</a></li><li><a href="/mty/l/metapatio.html">Metapatio</a></li><li><a href="/mty/l/galeriacontagio_centrika.html">Contagiemos Arte Galería · Patio Céntrika</a></li><li><a href="/mty/l/ucafarq.html">Unidad Cultural de Arquitectura (FARQ UANL)</a></li><li><a href="/mty/l/galeria1010mty.html">Galería 10:10 (Barrio Antiguo)</a></li><li><a href="/mty/l/cintermex.html">Cintermex</a></li><li><a href="/mty/l/dreaming.html">Dreaming Estudio</a></li><li><a href="/mty/l/tallergraficolaluz.html">Taller Gráfico La Luz</a></li></ul><h3>Zona Norte</h3><ul><li><a href="/mty/l/plazasn.html">Plaza Principal Bernardo Reyes (San Nicolás)</a></li><li><a href="/mty/l/perg.html">Casa de la Cultura de San Nicolás &quot;La Pérgola&quot;</a></li><li><a href="/mty/l/biblioraul.html">Biblioteca Universitaria Raúl Rangel Frías</a></li><li><a href="/mty/l/barragan.html">Centro Cultural Manuel L. Barragán</a></li></ul><h3>Zona Oriente</h3><ul><li><a href="/mty/l/m1881.html">M1881</a></li><li><a href="/mty/l/parquedelagua.html">Nuevo Parque del Agua</a></li><li><a href="/mty/l/museoguadalupe.html">Museo de Ciudad Guadalupe</a></li><li><a href="/mty/l/colectivoregio.html">Colectivo Regio</a></li></ul><h3>Zona Sur</h3><ul><li><a href="/mty/l/galeriaabierta.html">Galería Abierta distritotec</a></li><li><a href="/mty/l/parquebolsillo.html">Parque de Bolsillo CIAP</a></li><li><a href="/mty/l/mtcaballero.html">Centro de Arte y Cultura “María Trinidad Caballero”</a></li><li><a href="/mty/l/husky.html">HUSKY Coffee Shop</a></li><li><a href="/mty/l/galeria1010.html">Galería 10:10 (Santiago)</a></li><li><a href="/mty/l/creativa.html">Creativa Escuela de Arte</a></li><li><a href="/mty/l/artecolectivo.html">ARTE COLECTIVO Studio + Gallery</a></li><li><a href="/mty/l/laboratorioarte.html">Laboratorio Arte AC</a></li><li><a href="/mty/l/plazaocampo.html">Plaza Ocampo (Santiago)</a></li><li><a href="/mty/l/wam.html">WAM</a></li><li><a href="/mty/l/skyspace.html">Espíritu de Luz Skyspace</a></li><li><a href="/mty/l/casanaranjos.html">Casa Naranjos</a></li><li><a href="/mty/l/arteyculturatec.html">Arte y Cultura Tec</a></li><li><a href="/mty/l/fav.html">Facultad de Artes Visuales, UANL</a></li><li><a href="/mty/l/ciida.html">Centro de Investigación, Innovación y Desarrollo de las Artes (CIIDA)</a></li></ul><h3>Zona Poniente</h3><ul><li><a href="/mty/l/drexel.html">Drexel Galería</a></li><li><a href="/mty/l/arboleda.html">Parque Arboleda</a></li><li><a href="/mty/l/blanqueo.html">Museo Industrial El Blanqueo</a></li><li><a href="/mty/l/capilla.html">Capilla Histórica del Casco</a></li><li><a href="/mty/l/fatima.html">Centro Cultural Plaza Fátima</a></li><li><a href="/mty/l/galeb.html">Galería de Arte Eliezer Blanco</a></li><li><a href="/mty/l/arteactual.html">Arte Actual Galería</a></li><li><a href="/mty/l/gerarda.html">GERARDA 103 (Nave Tampiquito)</a></li><li><a href="/mty/l/bengala.html">Bengala MTY (laboratorio fotográfico)</a></li><li><a href="/mty/l/oum.html">OUM · Arboleda (Mezzanine)</a></li><li><a href="/mty/l/ardearte.html">Arde Arte</a></li><li><a href="/mty/l/koboroom.html">Kobo Room</a></li><li><a href="/mty/l/heitz.html">Heitz Art Gallery</a></li><li><a href="/mty/l/galeriacontagio_gvo.html">Contagiemos Arte Galería · Valle Oriente</a></li><li><a href="/mty/l/akadem.html">Akadem · Galería Abierta</a></li><li><a href="/mty/l/nngaleria.html">NN Galería Monterrey</a></li><li><a href="/mty/l/lamilarca.html">Museo La Milarca</a></li><li><a href="/mty/l/carcamo.html">Cárcamo Galería</a></li><li><a href="/mty/l/colector.html">Colector Gallery</a></li></ul><h2>Ferias y festivales</h2><ul><li><a href="/mty/f/contagiemos.html">Contagiemos ARTE</a></li><li><a href="/mty/f/cuadrante.html">CUADRANTE</a></li><li><a href="/mty/f/fama.html">FAMA</a></li><li><a href="/mty/f/santalucia.html">Festival Internacional Santa Lucía</a></li></ul></section></main>
 
 <div class="fpop" id="pop" role="dialog" aria-modal="true" aria-labelledby="popT" hidden>
   <div class="popscrim" id="popScrim"></div>
@@ -1478,45 +1766,72 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
         <div class="shareres" id="shareRes"></div>
       </div>
       <div class="stleft">
-        <div class="storyprev"><canvas id="storyCanvas" width="1080" height="1920" aria-label="Historia de Instagram"></canvas><div class="stickerguide" aria-hidden="true"><span data-i18n="story_sticker"></span></div></div>
-        <div class="storyguide" id="storyGuide" hidden></div>
-      </div>
+        <div class="storyprev" id="storyPrev">
+          <div class="cvwrap" id="cvWrap"><canvas id="storyCanvas" width="1080" height="1920" aria-label="Historia de Instagram"></canvas><div class="stickerguide" aria-hidden="true"><span data-i18n="story_sticker"></span></div></div>
+          <div class="zhint" aria-hidden="true"><span data-i18n="st_zoom_hint"></span></div>
+          <button class="zopen" type="button" id="zOpen" data-i18n-title="st_zoom"><span aria-hidden="true">🔍</span></button>
+          <div class="zbar" id="zBar" role="toolbar">
+            <button type="button" id="zOut" data-i18n-title="st_zoom_out">−</button>
+            <button type="button" id="zReset" data-i18n-title="st_zoom_reset"><span id="zPct">100%</span></button>
+            <button type="button" id="zIn" data-i18n-title="st_zoom_in">+</button>
+            <button type="button" id="zClose" class="zc"><span aria-hidden="true">✕</span> <span data-i18n="st_back"></span></button>
+          </div>
+        </div>
+              </div>
       <div class="stright">
         <div class="storypick" id="storyPick" hidden></div>
         <div class="story-actions">
-          <button class="btn big" type="button" id="storyShare" style="animation:none" data-i18n="story_share"></button>
-          <button class="btn alt" type="button" id="storyDl" data-i18n="story_dl"></button>
-          <button class="btn alt" type="button" id="storyCopy" data-i18n="story_copy"></button>
-          <button class="btn alt" type="button" id="storyText" data-i18n="sh_copy_text" hidden></button>
-          <button class="btn alt" type="button" id="storyShuffle" data-i18n="ag_shuffle" hidden></button>
-          <button class="btn alt" type="button" id="storyQR" data-i18n="qr_btn"></button>
+          <button class="sbp" type="button" id="storyShare"><span class="ico" aria-hidden="true">📲</span><span class="lbl" data-i18n="st_share_s"></span></button>
+          <div class="sa-row">
+            <button class="sa" type="button" id="storyDl"><span class="ico" aria-hidden="true">⬇️</span><span class="lbl" data-i18n="st_dl_s"></span></button>
+            <button class="sa" type="button" id="storyCopy"><span class="ico" aria-hidden="true">🔗</span><span class="lbl" data-i18n="st_copy_s"></span></button>
+            <button class="sa" type="button" id="storyText" hidden><span class="ico" aria-hidden="true">📝</span><span class="lbl" data-i18n="st_text_s"></span></button>
+            <button class="sa" type="button" id="storyShuffle" hidden><span class="ico" aria-hidden="true">🔀</span><span class="lbl" data-i18n="st_shuffle_s"></span></button>
+            <button class="sa" type="button" id="storyQR"><span class="ico" aria-hidden="true">▦</span><span class="lbl" data-i18n="st_qr_s"></span></button>
+          </div>
         </div>
-        <button class="btn alt storyhow" type="button" id="storyHow" aria-expanded="false"></button>
-        <p class="note" id="storyMsg" style="margin:8px 0 0;min-height:1.2em;font-weight:700"></p>
-        <p class="note" data-i18n="story_hint"></p>
+        <button class="storyhow" type="button" id="storyHow" aria-expanded="false"></button>
+        <p class="note storymsg" id="storyMsg" role="status"></p>
+        <p class="note storyhint" data-i18n="story_hint"></p>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="overlay" id="qrOverlay" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
-  <div class="modal qrm" id="qrModal">
-    <button class="x" type="button" id="qrClose" data-i18n-title="close">×</button>
-    <h2 id="qrTitle" data-i18n="qr_title"></h2>
-    <label class="qrlab" for="qrCamp" data-i18n="qr_camp"></label>
-    <input id="qrCamp" type="text" maxlength="40" autocomplete="off" data-i18n-ph="qr_camp_ph">
-    <span class="qrlab" data-i18n="qr_color"></span>
-    <div class="qrsw" id="qrSw" role="radiogroup" data-i18n-label="qr_color"></div>
-    <div class="qrprev"><canvas id="qrCanvas" aria-label="QR"></canvas></div>
-    <p class="note qrurl" id="qrUrl"></p>
-    <div class="story-actions">
-      <button class="btn big" type="button" id="qrDl" style="animation:none" data-i18n="qr_dl"></button>
-      <button class="btn alt" type="button" id="qrDlF" data-i18n="qr_dlf"></button>
-      <button class="btn alt" type="button" id="qrCopy" data-i18n="qr_copy"></button>
+    <!-- Paneles dentro de la misma ventana: instructivo paso a paso y QR para impresos -->
+    <div class="stpanel" id="stPanel" hidden>
+      <div class="pn-head">
+        <button class="pn-back" type="button" id="pnBack"><span class="ar" aria-hidden="true">←</span> <span data-i18n="st_back_img"></span></button>
+        <h3 id="pnTitle"></h3>
+      </div>
+      <section class="pn-guide" id="pnGuide" hidden>
+        <ol class="gd-rail" id="gdRail"></ol>
+        <div class="gd-stage" id="gdStage" aria-live="polite"></div>
+        <div class="gd-dots" id="gdDots"></div>
+        <div class="gd-nav">
+          <button class="sa" type="button" id="gdPrev"><span class="ico" aria-hidden="true">←</span><span class="lbl" data-i18n="st_prev"></span></button>
+          <button class="sbp" type="button" id="gdNext"><span class="lbl" id="gdNextLbl"></span><span class="ico" id="gdNextIco" aria-hidden="true">→</span></button>
+        </div>
+      </section>
+      <section class="pn-qr" id="pnQr" hidden>
+        <div class="qr-left"><div class="qrprev"><canvas id="qrCanvas" aria-label="QR"></canvas></div></div>
+        <div class="qr-right" id="qrRight">
+          <label class="qrlab" for="qrCamp" data-i18n="qr_camp"></label>
+          <input id="qrCamp" type="text" maxlength="40" autocomplete="off" data-i18n-ph="qr_camp_ph">
+          <span class="qrlab" data-i18n="qr_color"></span>
+          <div class="qrsw" id="qrSw" role="radiogroup"></div>
+          <div class="sa-row qr-actions">
+            <button class="sa" type="button" id="qrDlF"><span class="ico" aria-hidden="true">🖼️</span><span class="lbl" data-i18n="qr_dlf_s"></span></button>
+            <button class="sa" type="button" id="qrDl"><span class="ico" aria-hidden="true">⬇️</span><span class="lbl" data-i18n="qr_dl_s"></span></button>
+            <button class="sa" type="button" id="qrCopy"><span class="ico" aria-hidden="true">🔗</span><span class="lbl" data-i18n="qr_copy_s"></span></button>
+          </div>
+          <p class="note qrmsg" id="qrMsg" role="status"></p>
+          <button class="pn-info" type="button" id="qrInfoBtn" aria-expanded="false">ℹ️ <span data-i18n="st_info"></span></button>
+          <div class="qrinfo" id="qrInfo">
+            <p class="note" data-i18n="qr_hint"></p>
+            <p class="note" data-i18n="qr_size"></p>
+            <p class="note qrurl" id="qrUrl"></p>
+          </div>
+        </div>
+      </section>
     </div>
-    <p class="note" id="qrMsg" style="margin:8px 0 0;min-height:1.2em;font-weight:700"></p>
-    <p class="note" data-i18n="qr_hint"></p>
-    <p class="note" data-i18n="qr_size"></p>
   </div>
 </div>
 
@@ -4992,7 +5307,7 @@ es:{
  checkin:'Check in ✱', checkin_opens:'El check-in se abre cuando empieza el evento ({0}).',
  co_photos:'fotos', co_post:'publicación', co_posts:'publicaciones', co_tagged:'Etiquetados:', co_posted_on:'Publicado en {0}', co_part_more:'Cuentas tomadas de la publicación del evento.', co_gal_open:'Ver galería ({0} fotos)', co_h:'La comunidad lo vivió', co_sub:'Fotos, reels y videos de quienes estuvieron ahí: cada pieza con su creador, la red donde la subió y el enlace a la publicación original. Es el registro de lo que hacemos como ciudad.', co_creator:'creador', co_creators:'creadores', co_piece:'pieza', co_pieces:'piezas', co_event:'evento', co_events:'eventos', co_place:'lugar', co_places:'lugares', co_zone:'zona', co_zones:'zonas', co_tipo_foto:'Foto', co_tipo_reel:'Reel', co_tipo_video:'Video', co_tipo_carrusel:'Carrusel', co_tipo_historia:'Historia', co_tipo_post:'Publicación', co_view_on:'Ver en {0} ↗', co_note:'Cada pieza es de su autor y se muestra con crédito y enlace al original.', co_takedown:'¿Quieres que la quitemos?', co_more:'Mandar más contenido', co_empty_h:'Nadie ha subido contenido de este evento… todavía', co_empty_p:'Si estuviste ahí, mándanos la liga de tu publicación o tus archivos. Aparecerás aquí con tu nombre y la red donde lo publicaste.', co_ask_btn:'Mandar mi contenido', co_pl_h:'La comunidad en este lugar', co_pl_sub:'Lo que la gente ha creado en este espacio, a partir de los eventos que han pasado por aquí.', co_pl_evs:'Eventos con contenido', co_pl_empty_h:'Este lugar aún no tiene contenido de la comunidad', co_pl_empty_p:'Si hiciste fotos, un reel o un video aquí, mándanoslo: tu pieza queda en el registro del lugar y del evento, con tu crédito.', co_cr:'Creador', co_cr_sub:'Lo que {0} ha creado y compartido sobre el arte de Monterrey. Su registro en la ciudad.', co_year:'Registro {0}',
  sh_tab_agenda:'Agenda', sh_tab_hoy:'Hoy', sh_tab_semana:'Esta semana', sh_tab_buscar:'Un evento', sh_title_hoy:'Comparte lo de hoy', sh_title_semana:'Comparte la semana', sh_title_buscar:'Comparte un evento', sh_find_ph:'Busca un evento, artista o lugar', sh_find_special:'Ferias y eventos especiales', sh_find_next:'Próximos eventos', sh_find_none:'No encontramos eventos con eso. Prueba con otro nombre o lugar.', sh_copy_text:'📝 Copiar texto', sh_text_copied:'Texto copiado: pégalo en tu publicación o chat.',
- story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_title_agenda:'Comparte la agenda', qr_btn:'▦ QR para impresos', qr_color:'Color del marco', qr_cn:['Amarillo','Lima','Celeste','Menta','Naranja','Azul','Violeta','Gris'], qr_title:'Código QR para impresos', qr_camp:'Nombre de la campaña', qr_camp_ph:'ej. cartel expo noviembre', qr_hint:'Cada escaneo se registra en Google Analytics como campaña con ese nombre (fuente “qr”, medio “print”). Usa un nombre distinto para cada impreso.', qr_size:'Para imprimir: mínimo 2.5 cm por lado y deja el margen blanco alrededor.', qr_dl:'⬇ PNG sin marco (alta calidad)', qr_dlf:'⬇ PNG con marco CUCO ARTS', qr_copy:'🔗 Copiar liga con medición', qr_copied:'Liga copiada.', qr_saved:'Imagen guardada.', qr_scan_agenda:'ESCANEA · AGENDA VIVA DE ARTES VISUALES', qr_scan_event:'ESCANEA PARA VER EL EVENTO', ag_btn:'📲 Compartir', ag_shuffle:'🔀 Otro diseño', ag_invite_h:'Invita a tu comunidad', ag_invite_p:'Si eres artista, organizas o vas a ir: comparte la agenda, lo de hoy, lo de la semana o un evento en tu historia. Las ferias y los eventos especiales salen destacados.', story_share:'📲 Compartir', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', f_today2:'Hoy', f_week2:'Esta semana', f_nextweek:'Próxima semana', f_month_btn:'Mes', f_all2:'Todo', where_h:'Dónde', map_btn:'Mapa', ctrl_h:'Buscar por fecha y zona', f_cat_btn:'Categoría', hint_abierto:'Lo que empieza hoy y lo que sigue abierto.', hint_sem:'Lo que empieza en los próximos 7 días.', hint_sem2:'Lo que empieza dentro de 8 a 14 días.', hint_todos:'Todo lo vigente: hoy, lo que sigue abierto y lo que viene.', hint_archivo:'Eventos que ya terminaron.', hint_mes:'Lo que está activo en {0}.', more_n:'Ver {0} más', less_ev:'Ver menos', vis_short:'Elige tus intereses y te decimos a dónde ir', com_short:'Recomienda artistas y cuenta tu experiencia', bar_search:'Buscar', bar_date:'Fecha', bar_zone:'Zona', bar_art:'Arte', bar_map:'Mapa', pop_close:'Cerrar', pop_done:'Listo', pop_clear:'Limpiar', pop_srch_h:'Buscar', pop_when_h:'¿Cuándo?', pop_where_h:'¿En qué zona? (puedes elegir varias)', pop_cat_h:'¿Qué tipo de arte? (puedes elegir varios)', pop_month_h:'Por mes', where_all:'Todas las zonas', pop_map:'Ver en el mapa', act_h:'Filtros activos', act_remove:'Quitar este filtro', clear_all:'Limpiar todo', zone_art_h:'Nuestros artistas en esta zona', view_work:'Ver su colección en la tienda', view_coll:'Ver colección', zart_alt:'Detalle de una obra de {0}', zone_spaces_h:'Espacios ({0})', n_zones:'zonas', n_arts:'tipos', multi_hint:'Puedes elegir varias', view_h:'Vista', view_grid:'Cuadrícula', view_list:'Lista', skip:'Ir al contenido', fer_home_h:'Ferias, festivales y movimientos', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', photo_takedown:'¿Eres titular y prefieres retirarla? Escríbenos', ph_what:'Sobre el lugar', ph_line:'Línea del tiempo', ph_src:'Fuentes', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias, festivales y movimientos', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
+ story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_title_agenda:'Comparte la agenda', qr_btn:'▦ QR para impresos', qr_color:'Color del marco', qr_cn:['Amarillo','Lima','Celeste','Menta','Naranja','Azul','Violeta','Gris'], qr_title:'Código QR para impresos', qr_camp:'Nombre de la campaña', qr_camp_ph:'ej. cartel expo noviembre', qr_hint:'Cada escaneo se registra en Google Analytics como campaña con ese nombre (fuente “qr”, medio “print”). Usa un nombre distinto para cada impreso.', qr_size:'Para imprimir: mínimo 2.5 cm por lado y deja el margen blanco alrededor.', qr_dl:'⬇ PNG sin marco (alta calidad)', qr_dlf:'⬇ PNG con marco CUCO ARTS', qr_copy:'🔗 Copiar liga con medición', qr_copied:'Liga copiada.', qr_saved:'Imagen guardada.', qr_scan_agenda:'ESCANEA · AGENDA VIVA DE ARTES VISUALES', qr_scan_event:'ESCANEA PARA VER EL EVENTO', ag_btn:'📲 Compartir', ag_shuffle:'🔀 Otro diseño', ag_invite_h:'Invita a tu comunidad', ag_invite_p:'Si eres artista, organizas o vas a ir: comparte la agenda, lo de hoy, lo de la semana o un evento en tu historia. Las ferias y los eventos especiales salen destacados.', story_share:'📲 Compartir', st_share_s:'Compartir', mt_h:'Explora el arte por barrio', mt_s:'{0} eventos hoy en {1} zonas · toca el mapa', mt_s0:'{0} zonas culturales · toca y descubre', mt_go:'Abrir mapa', st_back_img:'Volver', st_prev:'Atrás', st_next:'Siguiente', st_step:'Paso', st_info:'Info', qr_dl_s:'Sin marco', qr_dlf_s:'Con marco', qr_copy_s:'Liga', st_dl_s:'Guardar', st_copy_s:'Liga', st_text_s:'Texto', st_shuffle_s:'Otro', st_qr_s:'QR', st_how_s:'📖 Paso a paso', st_how_back_s:'🖼️ Volver a la imagen', st_zoom:'Ver a detalle', st_zoom_hint:'Toca la imagen para verla a detalle', st_back:'Volver', st_zoom_in:'Acercar', st_zoom_out:'Alejar', st_zoom_reset:'Tamaño completo', st_done:'¡Listo!', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', f_today2:'Hoy', f_week2:'Esta semana', f_nextweek:'Próxima semana', f_month_btn:'Mes', f_all2:'Todo', where_h:'Dónde', map_btn:'Mapa', ctrl_h:'Buscar por fecha y zona', f_cat_btn:'Categoría', hint_abierto:'Lo que empieza hoy y lo que sigue abierto.', hint_sem:'Lo que empieza en los próximos 7 días.', hint_sem2:'Lo que empieza dentro de 8 a 14 días.', hint_todos:'Todo lo vigente: hoy, lo que sigue abierto y lo que viene.', hint_archivo:'Eventos que ya terminaron.', hint_mes:'Lo que está activo en {0}.', more_n:'Ver {0} más', less_ev:'Ver menos', vis_short:'Elige tus intereses y te decimos a dónde ir', com_short:'Recomienda artistas y cuenta tu experiencia', bar_search:'Buscar', bar_date:'Fecha', bar_zone:'Zona', bar_art:'Arte', bar_map:'Mapa', pop_close:'Cerrar', pop_done:'Listo', pop_clear:'Limpiar', pop_srch_h:'Buscar', pop_when_h:'¿Cuándo?', pop_where_h:'¿En qué zona? (puedes elegir varias)', pop_cat_h:'¿Qué tipo de arte? (puedes elegir varios)', pop_month_h:'Por mes', where_all:'Todas las zonas', pop_map:'Ver en el mapa', act_h:'Filtros activos', act_remove:'Quitar este filtro', clear_all:'Limpiar todo', zone_art_h:'Nuestros artistas en esta zona', view_work:'Ver su colección en la tienda', view_coll:'Ver colección', zart_alt:'Detalle de una obra de {0}', zone_spaces_h:'Espacios ({0})', n_zones:'zonas', n_arts:'tipos', multi_hint:'Puedes elegir varias', view_h:'Vista', view_grid:'Cuadrícula', view_list:'Lista', skip:'Ir al contenido', fer_home_h:'Ferias, festivales y movimientos', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', pc_events:'Ver eventos', pc_events_hide:'Ocultar eventos', pc_no_events:'Aún no hay eventos cargados en este espacio.', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', photo_takedown:'¿Eres titular y prefieres retirarla? Escríbenos', ph_what:'Sobre el lugar', ph_line:'Línea del tiempo', ph_src:'Fuentes', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias, festivales y movimientos', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
  visitor:'Visitante', see_post:'Ver su publicación ↗', initial:'inicial', ci_one:'check-in', ci_many:'check-ins', rec_one:'recomendación', rec_many:'recomendaciones',
  place_events:'Eventos en este espacio', place_events_sub:'Ordenados por fecha, con lo más cercano primero.', none_place_events:'Aún no hemos cargado eventos de este espacio.',
  place_data:'Datos del espacio', phone:'Teléfono', website:'Sitio web', instagram:'Instagram', zone:'Zona', addr_source:'Fuente de la dirección', santiago_note:'* Santiago, N.L. está incluido dentro de la zona Sur.', pin_note:'El pin del mapa es aproximado.',
@@ -5041,7 +5356,7 @@ en:{
  checkin:'Check in ✱', checkin_opens:'Check-in opens when the event starts ({0}).',
  co_photos:'photos', co_post:'post', co_posts:'posts', co_tagged:'Tagged:', co_posted_on:'Posted on {0}', co_part_more:'Accounts taken from the event’s post.', co_gal_open:'Open gallery ({0} photos)', co_h:'The community lived it', co_sub:'Photos, reels and videos from people who were there: each piece with its creator, the network where it was posted and a link to the original post. It is the record of what we make as a city.', co_creator:'creator', co_creators:'creators', co_piece:'piece', co_pieces:'pieces', co_event:'event', co_events:'events', co_place:'place', co_places:'places', co_zone:'zone', co_zones:'zones', co_tipo_foto:'Photo', co_tipo_reel:'Reel', co_tipo_video:'Video', co_tipo_carrusel:'Carousel', co_tipo_historia:'Story', co_tipo_post:'Post', co_view_on:'View on {0} ↗', co_note:'Each piece belongs to its author and is shown with credit and a link to the original.', co_takedown:'Want us to remove it?', co_more:'Send more content', co_empty_h:'Nobody has shared content from this event… yet', co_empty_p:'If you were there, send us the link to your post or your files. You will appear here with your name and the network where you posted it.', co_ask_btn:'Send my content', co_pl_h:'The community at this place', co_pl_sub:'What people have created at this space, from the events that have passed through.', co_pl_evs:'Events with content', co_pl_empty_h:'This place has no community content yet', co_pl_empty_p:'If you took photos, a reel or a video here, send it to us: your piece joins the record of the place and the event, with your credit.', co_cr:'Creator', co_cr_sub:'What {0} has created and shared about Monterrey art. Their record in the city.', co_year:'{0} record',
  sh_tab_agenda:'Agenda', sh_tab_hoy:'Today', sh_tab_semana:'This week', sh_tab_buscar:'One event', sh_title_hoy:'Share today’s events', sh_title_semana:'Share this week', sh_title_buscar:'Share an event', sh_find_ph:'Search an event, artist or place', sh_find_special:'Fairs and special events', sh_find_next:'Upcoming events', sh_find_none:'No events match that. Try another name or place.', sh_copy_text:'📝 Copy text', sh_text_copied:'Text copied: paste it in your post or chat.',
- story_ig:'Instagram story', story_title:'Share it in your story', story_title_agenda:'Share the agenda', qr_btn:'▦ QR for print', qr_color:'Frame color', qr_cn:['Yellow','Lime','Sky blue','Mint','Orange','Blue','Violet','Grey'], qr_title:'QR code for print', qr_camp:'Campaign name', qr_camp_ph:'e.g. november expo poster', qr_hint:'Every scan is recorded in Google Analytics as a campaign with that name (source “qr”, medium “print”). Use a different name for each printed piece.', qr_size:'For printing: at least 2.5 cm per side and keep the white margin around it.', qr_dl:'⬇ PNG without frame (high quality)', qr_dlf:'⬇ PNG with CUCO ARTS frame', qr_copy:'🔗 Copy tracked link', qr_copied:'Link copied.', qr_saved:'Image saved.', qr_scan_agenda:'SCAN · LIVE VISUAL ARTS AGENDA', qr_scan_event:'SCAN TO SEE THE EVENT', ag_btn:'📲 Share', ag_shuffle:'🔀 Another design', ag_invite_h:'Invite your community', ag_invite_p:'Whether you are an artist, an organizer or going: share the agenda, today’s events, this week or one event in your story. Fairs and special events stand out.', story_share:'📲 Share', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', f_today2:'Today', f_week2:'This week', f_nextweek:'Next week', f_month_btn:'Month', f_all2:'All', where_h:'Where', map_btn:'Map', ctrl_h:'Browse by date and zone', f_cat_btn:'Category', hint_abierto:'What starts today and what is still open.', hint_sem:'What starts in the next 7 days.', hint_sem2:'What starts in 8 to 14 days.', hint_todos:'Everything current: today, still open and upcoming.', hint_archivo:'Events that have ended.', hint_mes:'What is active in {0}.', more_n:'See {0} more', less_ev:'See less', vis_short:'Pick your interests and we show you where to go', com_short:'Recommend artists and share your experience', bar_search:'Search', bar_date:'Date', bar_zone:'Zone', bar_art:'Art', bar_map:'Map', pop_close:'Close', pop_done:'Done', pop_clear:'Clear', pop_srch_h:'Search', pop_when_h:'When?', pop_where_h:'Which zone? (pick several)', pop_cat_h:'What kind of art? (pick several)', pop_month_h:'By month', where_all:'All zones', pop_map:'See on the map', act_h:'Active filters', act_remove:'Remove this filter', clear_all:'Clear all', zone_art_h:'Our artists in this zone', view_work:'See their collection in the store', view_coll:'See collection', zart_alt:'Close-up of a work by {0}', zone_spaces_h:'Spaces ({0})', n_zones:'zones', n_arts:'kinds', multi_hint:'You can pick several', view_h:'View', view_grid:'Grid', view_list:'List', skip:'Skip to content', fer_home_h:'Fairs, festivals and movements', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', photo_takedown:'Are you the rights holder and want it removed? Write to us', ph_what:'About the place', ph_line:'Timeline', ph_src:'Sources', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs, festivals and movements', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
+ story_ig:'Instagram story', story_title:'Share it in your story', story_title_agenda:'Share the agenda', qr_btn:'▦ QR for print', qr_color:'Frame color', qr_cn:['Yellow','Lime','Sky blue','Mint','Orange','Blue','Violet','Grey'], qr_title:'QR code for print', qr_camp:'Campaign name', qr_camp_ph:'e.g. november expo poster', qr_hint:'Every scan is recorded in Google Analytics as a campaign with that name (source “qr”, medium “print”). Use a different name for each printed piece.', qr_size:'For printing: at least 2.5 cm per side and keep the white margin around it.', qr_dl:'⬇ PNG without frame (high quality)', qr_dlf:'⬇ PNG with CUCO ARTS frame', qr_copy:'🔗 Copy tracked link', qr_copied:'Link copied.', qr_saved:'Image saved.', qr_scan_agenda:'SCAN · LIVE VISUAL ARTS AGENDA', qr_scan_event:'SCAN TO SEE THE EVENT', ag_btn:'📲 Share', ag_shuffle:'🔀 Another design', ag_invite_h:'Invite your community', ag_invite_p:'Whether you are an artist, an organizer or going: share the agenda, today’s events, this week or one event in your story. Fairs and special events stand out.', story_share:'📲 Share', st_share_s:'Share', mt_h:'Explore art by neighborhood', mt_s:'{0} events today in {1} zones · tap the map', mt_s0:'{0} cultural zones · tap to discover', mt_go:'Open map', st_back_img:'Back', st_prev:'Previous', st_next:'Next', st_step:'Step', st_info:'Info', qr_dl_s:'No frame', qr_dlf_s:'Framed', qr_copy_s:'Link', st_dl_s:'Save', st_copy_s:'Link', st_text_s:'Text', st_shuffle_s:'Remix', st_qr_s:'QR', st_how_s:'📖 Step by step', st_how_back_s:'🖼️ Back to the image', st_zoom:'Zoom in', st_zoom_hint:'Tap the image to see it in detail', st_back:'Back', st_zoom_in:'Zoom in', st_zoom_out:'Zoom out', st_zoom_reset:'Full size', st_done:'Done!', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', f_today2:'Today', f_week2:'This week', f_nextweek:'Next week', f_month_btn:'Month', f_all2:'All', where_h:'Where', map_btn:'Map', ctrl_h:'Browse by date and zone', f_cat_btn:'Category', hint_abierto:'What starts today and what is still open.', hint_sem:'What starts in the next 7 days.', hint_sem2:'What starts in 8 to 14 days.', hint_todos:'Everything current: today, still open and upcoming.', hint_archivo:'Events that have ended.', hint_mes:'What is active in {0}.', more_n:'See {0} more', less_ev:'See less', vis_short:'Pick your interests and we show you where to go', com_short:'Recommend artists and share your experience', bar_search:'Search', bar_date:'Date', bar_zone:'Zone', bar_art:'Art', bar_map:'Map', pop_close:'Close', pop_done:'Done', pop_clear:'Clear', pop_srch_h:'Search', pop_when_h:'When?', pop_where_h:'Which zone? (pick several)', pop_cat_h:'What kind of art? (pick several)', pop_month_h:'By month', where_all:'All zones', pop_map:'See on the map', act_h:'Active filters', act_remove:'Remove this filter', clear_all:'Clear all', zone_art_h:'Our artists in this zone', view_work:'See their collection in the store', view_coll:'See collection', zart_alt:'Close-up of a work by {0}', zone_spaces_h:'Spaces ({0})', n_zones:'zones', n_arts:'kinds', multi_hint:'You can pick several', view_h:'View', view_grid:'Grid', view_list:'List', skip:'Skip to content', fer_home_h:'Fairs, festivals and movements', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', pc_events:'See events', pc_events_hide:'Hide events', pc_no_events:'No events loaded for this venue yet.', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', photo_takedown:'Are you the rights holder and want it removed? Write to us', ph_what:'About the place', ph_line:'Timeline', ph_src:'Sources', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs, festivals and movements', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
  visitor:'Visitor', see_post:'See their post ↗', initial:'starting', ci_one:'check-in', ci_many:'check-ins', rec_one:'recommendation', rec_many:'recommendations',
  place_events:'Events at this space', place_events_sub:'Sorted by date, soonest first.', none_place_events:"We haven't loaded events for this space yet.",
  place_data:'Space details', phone:'Phone', website:'Website', instagram:'Instagram', zone:'Zone', addr_source:'Address source', santiago_note:'* Santiago, N.L. is included within the South zone.', pin_note:'The map pin is approximate.',
@@ -5232,24 +5547,59 @@ function toast(msg,ms){
 /* Vibración corta. Android: navigator.vibrate. iPhone (Safari 17.4+) no la ofrece: se usa el "interruptor" nativo, que da un toque háptico al activarse. */
 /* analítica: eventos del embudo (no hace nada si GA no cargó: pruebas locales, "no rastrear", bloqueadores) */
 function track(name,params){try{if(window.gtag)gtag('event',name,params||{})}catch(e){}}
+/* Vibración (4-nov-2026): antes duraba 6-18 ms y en el teléfono no se sentía. Ahora hay niveles con nombre y duraciones que sí se perciben pero siguen suaves.
+ * Android (Chrome/Firefox): navigator.vibrate con la duración exacta. iPhone/iPad (iOS 17.4+): no existe vibrate; se usa el truco del interruptor del sistema,
+ * que da un toque fijo (no se puede graduar), así que los niveles fuertes se arman con dos toques seguidos. HAP_GAIN permite subir o bajar todo de una vez.
+ * Los valores se pueden probar en el teléfono con la página /__tools/vibra.html del servidor local. */
+const HAP={tick:[14],tap:[20],select:[24],press:[28],success:[22,55,34],bump:[36],warn:[38,70,38],
+  open:[16,36,26],toggleOn:[18,34,26],toggleOff:[12],undo:[10,34,10],switch:[16,30,16],celebrate:[20,40,20,40,56],pop:[14,28,14]};
+let HAP_LAST=0;
+let HAP_GAIN=1; try{HAP_GAIN=parseFloat(localStorage.getItem('mty_hap_gain'))||1}catch(e){}
 let hapticLbl=null;
-function haptic(ms){
+function hapticIOS(){
+  if(!hapticLbl){
+    hapticLbl=document.createElement('label'); hapticLbl.setAttribute('aria-hidden','true');
+    hapticLbl.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
+    const i=document.createElement('input'); i.type='checkbox'; i.setAttribute('switch',''); i.tabIndex=-1; hapticLbl.appendChild(i); document.body.appendChild(hapticLbl);
+  }
+  hapticLbl.click();
+}
+/* haptic('tap'|'select'|'press'|'success'|'bump'|'warn'|'tick') o, por compatibilidad, haptic(ms) con los milisegundos de antes (se escalan a un valor perceptible) */
+function haptic(x){
   try{
     if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-    if(navigator.vibrate){navigator.vibrate(ms||15);return}
-    if(!hapticLbl){
-      hapticLbl=document.createElement('label'); hapticLbl.setAttribute('aria-hidden','true');
-      hapticLbl.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
-      const i=document.createElement('input'); i.type='checkbox'; i.setAttribute('switch',''); i.tabIndex=-1; hapticLbl.appendChild(i); document.body.appendChild(hapticLbl);
-    }
-    hapticLbl.click();
+    let pat=typeof x==='string'?(HAP[x]||HAP.tap):[Math.round(14+0.9*(x||10))];
+    HAP_LAST=performance.now();
+    pat=pat.map((v,i)=>i%2===0?Math.max(8,Math.round(v*HAP_GAIN)):v);
+    if(navigator.vibrate){navigator.vibrate(pat);return}
+    let at=0; pat.forEach((v,i)=>{if(i%2===0)setTimeout(hapticIOS,at); at+=v});
+    if(pat[0]>=30)setTimeout(hapticIOS,70);   // nivel fuerte en iPhone: segundo toque
   }catch(e){}
 }
-/* toque suave en todo lo tocable (los que ya vibran por su cuenta, como "voy a ir" y el corazón, quedan fuera) */
+/* Vibración por tipo de elemento (4-nov-2026): cada clase de control tiene su propio patrón, así el dedo distingue «abrir», «elegir», «activar/quitar», «cambiar» y «celebrar».
+ * El primer renglón que coincida gana. Los controles que ya vibran por su cuenta (corazón, «voy a ir», ventana de compartir) quedan fuera: si en ese mismo toque
+ * ya sonó una vibración, la general no se suma. */
+const HAP_RULES=[
+  ['#mapTeaser,#mapToggle','open'],['.mapall,[data-mz="full"]','select'],['[data-mz]','tick'],['.pin,.pc-evbtn','press'],['.zone,.zpill,.zartc','select'],
+  ['.btn.big,.agbtn,[data-story],.sbtn.ibtn','press'],
+  ['.bbtn','select'],['.popopt.multi,.pchip,.chip,.wchip','toggle'],['.popopt,.seg label,.shtab','select'],['.achip,.popx,.x,.popclear,#popClear','undo'],
+  ['#themeBtn,#langBtn','switch'],['#toTop,summary','tick'],['.nav .pill,.cl-menubtn,.cl-mi','tap'],
+  ['a.ecard,.erow,.ferbanner,.fercardh,.vcards a,.gtile,.cc-card','press'],['.btn,button,.sbtn,.pill,[role="button"]','tap']];
+const HAP_SEL='button,.btn,.pill,.sbtn,summary,.zone,.pin,.chip,.wchip,.srmain,.zartc,.zpill,.bbtn,[role="button"],[data-pop],a.ecard,.erow,.ferbanner,.fercardh,.cl-mi,.gtile,.seg label,.popopt';
+function hapticFor(el){
+  for(const [sel,name] of HAP_RULES){
+    if(el.matches(sel)||el.closest(sel)){
+      if(name==='toggle')return (el.classList.contains('on')||el.getAttribute('aria-pressed')==='true')?'toggleOff':'toggleOn';
+      return name;
+    }
+  }
+  return 'tap';
+}
 document.addEventListener('click',e=>{
-  const el=e.target.closest&&e.target.closest('button,.btn,.pill,.sbtn,summary,.zone,.pin,.chip,.wchip,.srmain,.zartc,.zpill,.bbtn,[role="button"],[data-pop],a.ecard,.erow,.ferbanner,.fercardh');
-  if(!el||el.closest('[data-like],#hypeBox,#hypeOpen')||el.matches('[data-like],#hypeOpen'))return;
-  haptic(6);
+  const el=e.target.closest&&e.target.closest(HAP_SEL);
+  if(!el||el.closest('[data-like],#hypeBox,#hypeOpen,#storyModal')||el.matches('[data-like],#hypeOpen'))return;   // la ventana de compartir tiene sus propios niveles
+  const name=hapticFor(el), t0=performance.now();
+  setTimeout(()=>{if(HAP_LAST<t0)haptic(name)},0);   // si el propio botón ya vibró en este toque, no se suma
 },true);
 async function confirmHype(){
   const ev=hypeEv; if(!ev||hypeDone(ev.id)){closeHype();return}
@@ -5566,10 +5916,18 @@ function focusPin(id){
   const w=230,h=w*520/600, x=p.pin[0], y=p.pin[1];
   zoomTo([Math.max(0,Math.min(600-w,x-w/2)),Math.max(0,Math.min(520-h,y-0.34*h)),w,h]);
 }
+/* eventos de un espacio para la tarjeta del mapa: primero los vigentes (hoy, próximos, en curso) y luego el archivo */
+function placeEvents(id){return EVENTS.filter(e=>evPlaces(e).includes(id)).sort((a,b)=>estado(a).orden-estado(b).orden||a.inicio.localeCompare(b.inicio))}
+function pcEvsHTML(evs){
+  if(!evs.length)return '<p class="pc-desc">'+esc(t('pc_no_events'))+'</p>';
+  const row=e=>{const k=estado(e).k; return '<a class="pc-ev'+(k==='archivo'?' arch':'')+'" href="#/evento/'+e.id+'"><b>'+esc(eT(e))+'</b><small>'+esc(t(BKEY[k]))+' · '+esc(fmtShort(e.inicio)+(e.fin&&e.fin!==e.inicio?' → '+fmtShort(e.fin):''))+'</small></a>'};
+  const vig=evs.filter(e=>estado(e).k!=='archivo'), arc=evs.filter(e=>estado(e).k==='archivo');
+  return vig.map(row).join('')+(arc.length?'<div class="pc-evh">'+esc(t('b_archivo'))+'</div>'+arc.map(row).join(''):'');
+}
 function renderPinCard(id){
   const box=$('#pinCard'); if(!box)return;
   if(!id){selPin=null;box.classList.remove('on');box.innerHTML='';markPins();return}
-  const p=PLACES[id], z=ZONES[p.zona], d=placeDesc(p);
+  const p=PLACES[id], z=ZONES[p.zona], d=placeDesc(p), pcEvs=placeEvents(id);
   box.innerHTML=`<button class="pc-x" type="button" id="pcClose" aria-label="${esc(t('close'))}">×</button>
     <div class="pc-body">
       ${p.foto?`<img class="pc-img" src="${esc(p.foto)}" alt="">`:`<div class="pc-img ph" aria-hidden="true">${zEmo(z)}</div>`}
@@ -5580,8 +5938,10 @@ function renderPinCard(id){
       </div>
     </div>
     ${d?`<p class="pc-desc">${esc(excerpt(d,150))}</p>`:''}
-    <div class="pc-actions"><a class="btn" href="#/lugar/${id}" data-frommap="1">${esc(t('pc_open'))} →</a>${placeLinks(p,false)}</div>`;
+    <div class="pc-actions"><a class="btn" href="#/lugar/${id}" data-frommap="1">${esc(t('pc_open'))} →</a><button class="pc-evbtn" type="button" id="pcEv" aria-expanded="false" aria-controls="pcEvList">📅 ${esc(t('pc_events'))} (${pcEvs.length})</button>${placeLinks(p,false)}</div>
+    <div class="pc-evlist" id="pcEvList" hidden>${pcEvsHTML(pcEvs)}</div>`;
   box.classList.remove('on'); void box.offsetWidth; box.classList.add('on');
+  const pcb=$('#pcEv'); if(pcb)pcb.onclick=()=>{const l=$('#pcEvList'), open=l.hidden; l.hidden=!open; pcb.setAttribute('aria-expanded',open); pcb.textContent='📅 '+t(open?'pc_events_hide':'pc_events')+' ('+pcEvs.length+')'};
   $('#pcClose').onclick=()=>{renderPinCard(null);renderZonePanel()};
   selPin=id; markPins(); focusPin(id);
 }
@@ -5593,7 +5953,7 @@ function zoomTo(vb){
   const cur=svg.getAttribute('viewBox').split(' ').map(Number);
   cancelAnimationFrame(vbAnim);
   if(matchMedia('(prefers-reduced-motion:reduce)').matches){mapSetVB(vb);return;}
-  const t0=performance.now(),d=450;
+  const t0=performance.now(),d=300;
   const step=tt=>{const k=Math.min(1,(tt-t0)/d),e=1-Math.pow(1-k,3);
     svg.setAttribute('viewBox',cur.map((c,i)=>c+(vb[i]-c)*e).join(' ')); drawPinsSoon();
     if(k<1)vbAnim=requestAnimationFrame(step); else mapSetVB(vb)};
@@ -5651,7 +6011,7 @@ function drawPins(withPop){
     const order=items.slice().sort((a,b)=>a.y-b.y);                          // los de abajo quedan encima de los de arriba
     pins.innerHTML=order.map((it,i)=>{
       const sel=it.id===selPin;
-      return '<g class="pin'+(withPop?' pop':'')+(sel?' sel':'')+(selPin&&!sel?' dimp':'')+'" data-p="'+it.id+'" role="link" tabindex="0" aria-label="'+esc(pN(it.p))+'"'+(withPop?' style="animation-delay:'+i*70+'ms"':'')+'>'
+      return '<g class="pin'+(withPop?' pop':'')+(sel?' sel':'')+(selPin&&!sel?' dimp':'')+'" data-p="'+it.id+'" role="link" tabindex="0" aria-label="'+esc(pN(it.p))+'"'+(withPop?' style="animation-delay:'+Math.min(i*30,330)+'ms"':'')+'>'
         +'<g class="pk" transform="translate('+it.p.pin[0]+' '+it.p.pin[1]+') scale('+k+')">'
         +(sel?'<g class="pulseg"><circle class="pulse" cy="-15" r="9"/><circle class="pulse p2" cy="-15" r="9"/></g>':'')
         +'<g class="pgh"><path d="'+pinPath+'" transform="scale('+PS+')" fill="'+(sel?'#644DEF':'#FA2713')+'" stroke="#232322" stroke-width="2.2" vector-effect="non-scaling-stroke"/><circle cy="'+(-19.2*PS)+'" r="'+(3.4*PS)+'" fill="#fff"/></g>'
@@ -5880,6 +6240,7 @@ function renderCtrl(){
   $$('[data-pop]',el).forEach(b=>b.onclick=()=>openPop(b.dataset.pop,b));
   $$('[data-x]',el).forEach(b=>b.onclick=()=>{const k=b.dataset.x; if(k==='all')resetFilters(); else if(k==='m'||k==='f'){filtro=DEF_F.filtro;filtroMes=null} else if(k.startsWith('z:'))setZones(zonesSel.filter(z=>z!==k.slice(2))); else if(k.startsWith('c:'))catsSel=catsSel.filter(c=>c!==k.slice(2)); listAll=false; if(k==='all'||k.startsWith('z:')){renderZonePanel()}else renderEvents()});
   $('#mapToggle').onclick=()=>setMap(!mapOpen,true);
+  if(!MAP_SEEN)$('#mapToggle').classList.add('hint');
 }
 
 /* ---- ventanita ---- */
@@ -5946,8 +6307,11 @@ window.addEventListener('resize',()=>{if(popKind)placePop(popOpener)});
 function openSearch(){openPop('srch',$('[data-pop="srch"]'))}
 function closeSearch(){if(popKind==='srch')closePop()}
 
+/* La pastilla «Mapa» pulsa hasta que alguien abre el mapa por primera vez. */
+let MAP_SEEN=false; try{MAP_SEEN=localStorage.getItem('mty_map_seen')==='1'}catch(e){}
 function setMap(open,scroll){
   mapOpen=open; const m=$('#mapa'); if(m)m.hidden=!open;
+  if(open&&!MAP_SEEN){MAP_SEEN=true; try{localStorage.setItem('mty_map_seen','1')}catch(e){} const mb=$('#mapToggle'); if(mb)mb.classList.remove('hint')}
   const b=$('#mapToggle'); if(b){b.classList.toggle('on',open);b.setAttribute('aria-expanded',open)}
   if(open){renderZonePanel(); if(scroll&&m)setTimeout(()=>m.scrollIntoView({behavior:'smooth',block:'start'}),40)}
 }
@@ -7268,7 +7632,7 @@ async function drawStoryPass(key){
 }
 
 /* Instructivo dentro de la misma ventana: reemplaza la vista previa por 5 pasos con iconos; el mismo botón regresa a la imagen */
-function storyGuideHTML(){
+function storyGuideSteps(){
   const mobile=!!(navigator.canShare&&navigator.canShare({files:[new File([''],'a.png',{type:'image/png'})]}));
   const chip=(ic,k)=>'<span class="igchip"><i aria-hidden="true">'+ic+'</i>'+esc(t(k))+'</span>';
   const face='<span class="igchip face" aria-hidden="true"><i>🙂</i></span><span class="sgarrow" aria-hidden="true">›</span>';
@@ -7279,17 +7643,13 @@ function storyGuideHTML(){
     ['@',t('sg_s4_h'),t('sg_s4_m'),chip('@','sg_ig_mention')],
     ['✅',t('sg_s5_h'),t('sg_s5_m'),'']
   ];
-  return '<h3>'+esc(t('sg_h'))+'</h3><ol>'+steps.map((s,n)=>'<li><span class="sgnum" aria-hidden="true">'+(n+1)+'</span><div><b class="sgh"><span aria-hidden="true">'+s[0]+'</span> '+esc(s[1])+'</b><p>'+s[2]+'</p>'+(s[3]?'<div class="sgvis">'+s[3]+'</div>':'')+'</div></li>').join('')+'</ol><p class="sgtip">💡 '+esc(t('sg_tip'))+'</p>';
+  return steps;
 }
-function setStoryGuide(on){
-  const g=$('#storyGuide'), pv=$('.storyprev'), b=$('#storyHow'); if(!g||!pv||!b)return;
-  g.hidden=!on; pv.hidden=on; b.setAttribute('aria-expanded',on?'true':'false'); b.textContent=t(on?'story_how_back':'story_how');
-  if(on){g.innerHTML=storyGuideHTML(); g.scrollTop=0}
-}
-$('#storyHow').onclick=()=>setStoryGuide($('#storyGuide').hidden);
+function setStoryGuide(on){const b=$('#storyHow'); if(b)b.textContent=t('st_how_s'); if(window.stShowPanel)stShowPanel(on?'guide':null)}
+$('#storyHow').onclick=()=>stShowPanel('guide');
 let storyKey=null, storyUrl='';
 async function openStory(key){
-  shareTab=HOME_KEYS.includes(key)?key:'evento'; SHARE_GROUND=-1; if(key==='buscar')key=shareEv||shareFirstEvent();
+  shareTab=HOME_KEYS.includes(key)?key:'evento'; SHARE_GROUND=-1; SHARE_PHRASE=-1; if(key==='buscar')key=shareEv||shareFirstEvent();
   storyKey=key; STORY_IMG=0; buildStoryPick(key); const ov=$('#storyOverlay'), cv=$('#storyCanvas'); setStoryGuide(false);
   track('open_share',{content_type:storyType(shareTab==='buscar'||shareTab==='evento'?key:shareTab),item_id:String(key)});
   shareSetChrome(); if(shareTab==='buscar'){$('#shareQ').value=''; shareFind('')}
@@ -7331,7 +7691,7 @@ document.addEventListener('click',async e=>{
   try{const c=await drawStory(storyKey); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(err){$('#storyMsg').textContent=t('story_err')}
   track('select_content',{content_type:'story_design',item_id:String(storyKey)+'#'+(STORY_IMG+1)});
 });
-async function storyReroll(){const cv=$('#storyCanvas'); cv.style.opacity='.35'; const rk=(storyKey==='hoy'||storyKey==='semana')?storyKey:'agenda'; if(rk!=='agenda')SHARE_GROUND=((SHARE_GROUND<0?0:SHARE_GROUND)+1)%AG_GROUNDS.length; try{const c=await drawStory(rk); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')} haptic(10)}
+async function storyReroll(){const cv=$('#storyCanvas'); cv.style.opacity='.35'; const rk=(storyKey==='hoy'||storyKey==='semana')?storyKey:'agenda'; if(rk!=='agenda'){SHARE_GROUND=((SHARE_GROUND<0?0:SHARE_GROUND)+1)%AG_GROUNDS.length; SHARE_PHRASE=-1} try{const c=await drawStory(rk); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')} haptic(10)}
 $('#storyShuffle').onclick=storyReroll;
 $('#storyClose').onclick=closeStory; $('#storyShare').onclick=storyShare; $('#storyDl').onclick=storyDownload; $('#storyCopy').onclick=storyCopy;
 $('#storyOverlay').addEventListener('mousedown',e=>{if(e.target.id==='storyOverlay')closeStory()});
@@ -7433,18 +7793,22 @@ async function qrDrawFramed(url,tg,ci){
 let qrSeq=0;
 async function qrRefresh(){const st=qrBuild(),my=++qrSeq,src=await qrDrawFramed(st.url,st.tg);if(my!==qrSeq)return;const cv=$('#qrCanvas');cv.width=src.width;cv.height=src.height;cv.getContext('2d').drawImage(src,0,0)}
 function qrSwatches(){const sw=$('#qrSw');if(!sw)return;sw.setAttribute('aria-label',t('qr_color'));const names=t('qr_cn');sw.innerHTML=AG_GROUNDS.map((g,i)=>'<button type="button" role="radio" class="qrdot'+(i===qrCol?' on':'')+'" data-ci="'+i+'" aria-checked="'+(i===qrCol)+'" title="'+esc(names[i])+'" aria-label="'+esc(names[i])+'" style="background:'+g.bg+'"></button>').join('')}
-function openQR(key){qrKey=key;$('#qrMsg').textContent='';$('#qrCamp').value='';qrSwatches();qrRefresh();$('#qrOverlay').classList.add('open');document.body.style.overflow='hidden';track('qr_open',{item_id:qrTarget(key).item})}
-function closeQR(){$('#qrOverlay').classList.remove('open');document.body.style.overflow=''}
+/* El QR vive dentro de la herramienta de compartir (panel «qr»): desde otros botones del sitio también se abre ahí */
+async function openQR(key){
+  key=(!key||key==='hoy'||key==='semana'||key==='buscar')?'agenda':key; qrKey=key;
+  $('#qrMsg').textContent=''; $('#qrCamp').value=''; qrSwatches();
+  if(!$('#storyOverlay').classList.contains('open'))await openStory(key);
+  stShowPanel('qr'); qrRefresh(); track('qr_open',{item_id:qrTarget(key).item});
+}
+function closeQR(){stShowPanel(null)}
 function qrSave(c,name){c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);$('#qrMsg').textContent=t('qr_saved')},'image/png')}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-qr]');if(!b)return;e.preventDefault();const m=$('#shareMenu');if(m)m.hidden=true;openQR(b.dataset.qr)});
-$('#storyQR').onclick=()=>{const k=storyKey;closeStory();openQR(k)};
+$('#storyQR').onclick=()=>openQR(storyKey);
 $('#qrCamp').addEventListener('input',()=>qrRefresh());
 $('#qrSw').addEventListener('click',e=>{const b=e.target.closest('[data-ci]');if(!b)return;qrCol=+b.dataset.ci;try{localStorage.setItem('mty_qr_color',String(qrCol))}catch(x){}qrSwatches();qrRefresh();haptic(8)});
-$('#qrClose').onclick=closeQR; $('#qrOverlay').addEventListener('mousedown',e=>{if(e.target.id==='qrOverlay')closeQR()});
 $('#qrDl').onclick=()=>{const st=qrBuild();qrSave(qrDrawPlain(st.url),'cuco-arts-qr-'+st.slug+'.png');track('qr_download',{campaign:st.slug,style:'plain'})};
 $('#qrDlF').onclick=async()=>{const st=qrBuild();qrSave(await qrDrawFramed(st.url,st.tg),'cuco-arts-qr-'+st.slug+'-marco.png');track('qr_download',{campaign:st.slug,style:'framed'})};
 $('#qrCopy').onclick=async()=>{const st=qrBuild();try{await navigator.clipboard.writeText(st.url);$('#qrMsg').textContent=t('qr_copied')}catch(x){$('#qrMsg').textContent=st.url}};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#qrOverlay').classList.contains('open'))closeQR()});
 /* solo para pruebas locales: devuelve el PNG del QR sin descargarlo */
 async function qrToServer(key,camp,framed,ci){qrKey=key;$('#qrCamp').value=camp||'';if(ci!=null)qrCol=ci;const st=qrBuild();const c=framed?await qrDrawFramed(st.url,st.tg):qrDrawPlain(st.url);const b=await new Promise(r=>c.toBlob(r,'image/png'));const r=await fetch('/__save?name=qr-'+(framed?'marco':'plano')+'.png',{method:'POST',body:b});return {st:r.status,url:st.url,w:c.width,h:c.height}}
 
@@ -7473,6 +7837,8 @@ function shareTag(ev){
 function shareColor(ev){const fk=ev.feria||ev.parte; return (fk&&FERIAS[fk]&&FERIAS[fk].color)||'#FFE7CF'}
 function shareMin(ev){const m=String(ev.cal&&ev.cal.h||'').match(/^(\d{1,2}):(\d{2})$/); return m?+m[1]*60+ +m[2]:24*60}
 function shareTime(ev){
+  const ch=String(ev.cal&&ev.cal.h||'').match(/^(\d{1,2}):(\d{2})$/);   // hora de inicio confiable (la del calendario): evita tomar la hora de cierre de "7:00 a 10:00 pm"
+  if(ch){const h=+ch[1]; return ((h%12)||12)+':'+ch[2]+' '+(h>=12?'PM':'AM')}
   const m=String(L(ev,'hora')||'').match(/\d{1,2}(?::\d{2})?\s*[ap]\.?\s?m\.?/i);
   if(m)return m[0].replace(/\./g,'').replace(/\s+/g,' ').toUpperCase().replace(/(\d)(AM|PM)/,'$1 $2');
   return '';
@@ -7480,11 +7846,13 @@ function shareTime(ev){
 /* eventos de una pestaña: hoy = empiezan hoy o están abiertos (feria); semana = hoy y los próximos 6 días */
 function shareSet(key){
   const t0=today(), dd=e=>Math.round((parse(e.inicio)-t0)/DAY), all=EVENTS.filter(e=>estado(e).k!=='archivo');
-  const start=all.filter(e=>{const k=estado(e).k; return key==='hoy'?(k==='hoy'):(k==='hoy'||k==='manana'||(k==='semana'&&dd(e)<=6))});
+  // semana = la semana en curso de lunes a domingo (sin importar el día de hoy); incluye lo que ya inauguró esta semana
+  const ws=new Date(t0.getTime()-((t0.getDay()+6)%7)*DAY), we=new Date(ws.getTime()+6*DAY), dw=e=>Math.round((parse(e.inicio)-ws)/DAY);
+  const start=key==='hoy'?all.filter(e=>estado(e).k==='hoy'):EVENTS.filter(e=>{const d=dw(e); return d>=0&&d<=6});
   const curso=all.filter(e=>estado(e).k==='curso');
   const big=start.filter(e=>e.feria||e.especial||e.id==='husky-expo');
   const rows=start.filter(e=>!big.includes(e)).sort((a,b)=>dd(a)-dd(b)||shareMin(a)-shareMin(b)||eT(a).localeCompare(eT(b)));
-  return {t0,start,curso,big,rows,dd};
+  return {t0,start,curso,big,rows,dd,ws,we,dw};
 }
 const shareCount=k=>{const s=shareSet(k); return s.start.length};
 
@@ -7496,6 +7864,7 @@ function shareCaption(key){
   const one=e=>{const p=PLACES[e.lugar]; return '• '+(shareSpecial(e)?'⭐ ':'')+eT(e)+' · '+pC(p)+', '+(key==='semana'?fmtShort(e.inicio)+(shareTime(e)?' '+shareTime(e):''):(shareTime(e)||''))};
   s.big.concat(s.rows).forEach(e=>lines.push(one(e).replace(/, $/,'')));
   if(!s.start.length)lines.push(en?'Nothing opens '+(key==='hoy'?'today':'this week')+' yet.':'Aún no hay inauguraciones '+(key==='hoy'?'hoy':'esta semana')+'.');
+  if(key==='hoy'){shClosing(s).fairs.forEach(f=>{const nm=(FERIAS[f.e.feria]&&(FERIAS[f.e.feria].corto||FERIAS[f.e.feria].nombre))||eT(f.e); if(f.d<=0)lines.push('',(en?'🔔 Closing today: ':'🔔 Clausura hoy: ')+nm+(f.name?' · '+f.name:'')); else if(f.d===1)lines.push('',(en?'🔔 Closes tomorrow: ':'🔔 Clausura mañana: ')+nm)})}
   if(s.curso.length)lines.push('',(en?'Also on now: ':'Y en curso: ')+s.curso.length+(en?' exhibitions':' exposiciones'));
   lines.push('',(en?'The full live agenda: ':'La agenda completa: ')+SHARE_BASE+'?utm_source=share&utm_content='+key);
   return lines.join('\n');
@@ -7529,7 +7898,58 @@ function shareWhere(ev){
 }
 const THUMBS=new Map();
 function shThumb(ev){const u=ev.imgs&&ev.imgs[0]; if(!u)return Promise.resolve(null); if(!THUMBS.has(u))THUMBS.set(u,loadImgSafe(u)); return THUMBS.get(u)}
+/* frases cortas del encabezado (en vez de repetir la etiqueta de tiempo); es y en van en paralelo y cambian al azar con cada imagen o al barajar */
+const SH_PHRASES=[   // [español, inglés, para cuál historia: 'hoy' | 'semana' | vacío = las dos]
+  ['Comparte nuestro arte local','Share our local art'],
+  ['Arte local, aquí cerca','Local art, right here'],
+  ['Ve, vive y comparte','Go, see, share'],
+  ['Tu ciudad es una galería','Your city is a gallery'],
+  ['Apoya el arte local','Support local art'],
+  ['Descubre, visita, comparte','Discover, visit, share'],
+  ['Monterrey se vive en arte','Monterrey lives in art'],
+  ['Orgullo regio, en arte','Local pride, in art'],
+  ['Sal a ver arte','Step out for art'],
+  ['El arte regio se comparte','Local art is meant to be shared'],
+  ['Participa con artistas locales','Join in with local artists'],
+  ['¡Disfruta tu cultura, Monterrey!','Enjoy your culture, Monterrey!'],
+  ['Los regios también hacen arte','Regios make art too'],
+  ['Inspiración en forma de arte','Inspiration, in the form of art'],
+  ['Conoce a tus artistas locales','Meet your local artists'],
+  ['Vive la cultura regia','Live the local culture'],
+  ['Haz espacio para el arte','Make room for art'],
+  ['Monterrey crea, tú descubres','Monterrey creates, you discover'],
+  ['Planea tu día creativo','Plan your creative day','hoy'],
+  ['Hoy toca arte local','Today, it’s local art','hoy'],
+  ['Hoy el arte está cerca','Art is close by today','hoy'],
+  ['Un día regio de arte','A day of Monterrey art','hoy'],
+  ['Una semana regia y creativa','A creative week, Monterrey style','semana'],
+  ['Arma tu semana de arte','Build your week of art','semana'],
+  ['Tu semana, con más arte','Your week, with more art','semana']];
+let SHARE_PHRASE=-1, SHARE_PHRASE_LAST=-1;
+function shPhrase(key){
+  const ok=i=>!SH_PHRASES[i][2]||SH_PHRASES[i][2]===key, pool=SH_PHRASES.map((_,i)=>i).filter(ok);
+  if(SHARE_PHRASE<0||!ok(SHARE_PHRASE)){let i; do{i=pool[Math.floor(Math.random()*pool.length)]}while(pool.length>1&&i===SHARE_PHRASE_LAST); SHARE_PHRASE=SHARE_PHRASE_LAST=i}
+  return SH_PHRASES[SHARE_PHRASE][LANG==='en'?1:0];
+}
+/* encabezado compacto de las historias de lista: fecha · número de eventos, titular y logo chico. Devuelve la y donde sigue el contenido */
+function shHeader(g,gr,key,S,logo,nEv){
+  // ---- encabezado compacto: fecha, titular y logo chico (el espacio que sobra es para los eventos) ----
+  let y=STORY.RIB_Y+STORY.RIB_H+40; const en=LANG==='en', M=STORY.M, TW=SW-2*M, t0=S.t0, last=S.we||new Date(t0.getTime()+6*DAY);
+  const dl=(d)=>(en?DIAS.en:DIAS.es)[d.getDay()].toUpperCase().slice(0,3)+' '+d.getDate()+' '+(en?MESES.en:MESES.es)[d.getMonth()].toUpperCase();
+  const dateLine=key==='hoy'?((en?DIAS.en:DIAS.es)[t0.getDay()]+' '+t0.getDate()+' '+(en?'':'DE ')+(en?MESES_L.en:MESES_L.es)[t0.getMonth()]+' '+t0.getFullYear()).toUpperCase():dl(S.ws||t0)+' → '+dl(last)+' '+last.getFullYear();
+  const LW=logo?190:0;
+  g.fillStyle=gr.fg; g.font='700 24px '+SH_MONO; g.fillText(shEllipsis(g,dateLine+'  ·  '+nEv+' '+(en?(nEv===1?'EVENT':'EVENTS'):(nEv===1?'EVENTO':'EVENTOS')),TW-LW-10),M,y);
+  const head=shPhrase(key);
+  const hw=TW-LW; let hs=56,hl=null; for(const sz of [68,64,60,56,52,48]){g.font='800 '+sz+'px '+SF; const l=wrapLines(g,head,hw,3); if(l.length===1){hs=sz;hl=l;break}}
+  if(!hl){hs=54; g.font='800 54px '+SF; hl=wrapLines(g,head,hw,3); const ws=head.split(' '); if(hl.length!==2||hl[1].split(' ').length===1){const h=Math.ceil(ws.length/2); hl=[ws.slice(0,h).join(' '),ws.slice(h).join(' ')]}}
+  g.font='800 '+hs+'px '+SF; hl.forEach((l,i)=>g.fillText(l,M,y+14+hs*0.9+i*Math.round(hs*1.04)));
+  if(logo){const lwid=170, lhei=Math.round(lwid*logo.naturalHeight/logo.naturalWidth); g.drawImage(tintImg(logo,gr.fg===SH_INK?SH_INK:'#FFFFFF',lwid,lhei),SW-M-lwid,y-18,lwid,lhei)}
+  y+=14+hs*0.9+(hl.length-1)*Math.round(hs*1.04)+hs*0.2+22;
+
+  return y;
+}
 async function drawListStory(key){
+  if(key==='hoy'||key==='semana')return drawDayStory(key);
   const en=LANG==='en', M=STORY.M, TW=SW-2*M, S=shareSet(key), c=document.createElement('canvas'); c.width=SW; c.height=SH; const g=c.getContext('2d');
   const cs=getComputedStyle(document.documentElement), col=n=>cs.getPropertyValue(n).trim()||'#888';
   if(SHARE_GROUND<0)SHARE_GROUND=key==='hoy'?0:2; const gr=AG_GROUNDS[SHARE_GROUND%AG_GROUNDS.length];
@@ -7537,19 +7957,7 @@ async function drawListStory(key){
   const [pv0,logo]=await Promise.all([loadImgSafe('/mty/img/pavo-mask.png'),loadImgSafe('/mty/img/logo-cuco-mask.png')]);
   shRibbon(g,key==='hoy'?(en?'TODAY':'HOY'):(en?'THIS WEEK':'ESTA SEMANA'),pv0);
 
-  // ---- encabezado compacto: fecha, titular y logo chico (el espacio que sobra es para los eventos) ----
-  let y=STORY.RIB_Y+STORY.RIB_H+40; const t0=S.t0, last=new Date(t0.getTime()+6*DAY);
-  const dl=(d)=>(en?DIAS.en:DIAS.es)[d.getDay()].toUpperCase().slice(0,3)+' '+d.getDate()+' '+(en?MESES.en:MESES.es)[d.getMonth()].toUpperCase();
-  const dateLine=key==='hoy'?((en?DIAS.en:DIAS.es)[t0.getDay()]+' '+t0.getDate()+' '+(en?'':'DE ')+(en?MESES_L.en:MESES_L.es)[t0.getMonth()]+' '+t0.getFullYear()).toUpperCase():dl(t0)+' → '+dl(last)+' '+last.getFullYear();
-  const nEv=S.start.length, LW=logo?190:0;
-  g.fillStyle=gr.fg; g.font='700 24px '+SH_MONO; g.fillText(shEllipsis(g,dateLine+'  ·  '+nEv+' '+(en?(nEv===1?'EVENT':'EVENTS'):(nEv===1?'EVENTO':'EVENTOS')),TW-LW-10),M,y);
-  const head=key==='hoy'?(en?'Today in Monterrey art':'Hoy en el arte de Monterrey'):(en?'This week in Monterrey art':'Esta semana en el arte de Monterrey');
-  const hw=TW-LW; let hs=56,hl=null; for(const sz of [60,56,52,48]){g.font='800 '+sz+'px '+SF; const l=wrapLines(g,head,hw,3); if(l.length===1){hs=sz;hl=l;break}}
-  if(!hl){hs=54; g.font='800 54px '+SF; hl=wrapLines(g,head,hw,3); const ws=head.split(' '); if(hl.length!==2||hl[1].split(' ').length===1){const h=Math.ceil(ws.length/2); hl=[ws.slice(0,h).join(' '),ws.slice(h).join(' ')]}}
-  g.font='800 '+hs+'px '+SF; hl.forEach((l,i)=>g.fillText(l,M,y+14+hs*0.9+i*Math.round(hs*1.04)));
-  if(logo){const lwid=170, lhei=Math.round(lwid*logo.naturalHeight/logo.naturalWidth); g.drawImage(tintImg(logo,gr.fg===SH_INK?SH_INK:'#FFFFFF',lwid,lhei),SW-M-lwid,y-18,lwid,lhei)}
-  y+=14+hs*0.9+(hl.length-1)*Math.round(hs*1.04)+hs*0.2+22;
-
+  let y=shHeader(g,gr,key,S,logo,S.start.length); const t0=S.t0;
   // ---- lista: cada fila (miniatura + emoji de su categoría) mide su alto real; la densidad se elige según el espacio ----
   const LIMIT=STORY.LIMIT-40, avail=LIMIT-y, flat=[];
   const groups=[];
@@ -7617,6 +8025,179 @@ async function drawListStory(key){
   return c;
 }
 
+/* ---- historia HOY (rediseño 4-nov-2026, correcciones del mismo día) ----
+ * Arriba: lo que empieza hoy, una tarjeta por evento con miniatura, hora, categoría, artista y zona. El título se achica para caber en 1 renglón;
+ * si no cabe así y hay espacio, esa tarjeta crece a 2 renglones. Los nombres largos de asociaciones y lugares se abrevian (shAbbr).
+ * Abajo: estadística del mes (en noviembre lleva papel picado y cempasúchil, como el carrusel de Día de Muertos) y la sección "EN CURSO"
+ * con el número de eventos abiertos y las clausuras de ferias (campo `clausura` del evento de la feria si ella le da un nombre). */
+const SH_ABBR=[[/Biblioteca Ra[uú]l Rangel Fr[ií]as/gi,'BRRF'],[/Biblioteca Central del Estado/gi,'BCE'],[/Universidad Aut[oó]noma de Nuevo Le[oó]n/gi,'UANL'],[/Asociaci[oó]n Pl[aá]stica/gi,'Asoc. Plástica'],[/Asociaci[oó]n/gi,'Asoc.'],[/Association/gi,'Assoc.'],[/Universidad/gi,'Univ.'],[/Fundaci[oó]n/gi,'Fund.'],[/Instituto/gi,'Inst.']];
+function shAbbr(t){let s=String(t||''); SH_ABBR.forEach(([r,a])=>{s=s.replace(r,a)}); return s}
+/* artistas: con 3 o menos nombres se abrevian y se muestran todos; con más, los dos primeros y "+N" */
+function shArtist(e){
+  const raw=String(L(e,'artista')||'').replace(/\s+/g,' ').trim(); if(!raw)return '';
+  const parts=raw.split(/,\s*|\s+(?:y|and)\s+/).map(p=>p.trim()).filter(Boolean);
+  if(parts.length<=3)return parts.map(shAbbr).join(', ');
+  const a=parts.map(shAbbr), two=a.slice(0,2).join(', '); return two.length<=26?two+' +'+(parts.length-2):a[0]+' +'+(parts.length-1);
+}
+function shMonthStat(S){
+  const t0=S.t0, y=t0.getFullYear(), m=t0.getMonth();
+  return {m,n:EVENTS.filter(e=>{const s=parse(e.inicio); return s.getFullYear()===y&&s.getMonth()===m&&s<=t0}).length};
+}
+/* cempasúchil (del carrusel de Día de Muertos) */
+function shMarigold(g,x,y,r,c1,c2){g.save();g.translate(x,y);const n=16;for(let ring=0;ring<3;ring++){const r0=r*(1-ring*0.27),pr=r*(0.34-ring*0.05);g.fillStyle=ring%2?c2:c1;for(let k=0;k<n;k++){const a=k/n*Math.PI*2+ring*0.2;g.beginPath();g.arc(Math.cos(a)*r0*0.72,Math.sin(a)*r0*0.72,pr,0,7);g.fill()}} g.fillStyle=c2;g.beginPath();g.arc(0,0,r*0.2,0,7);g.fill();g.restore()}
+/* altar de muertos minimalista: fondo con papel picado, retrato enmarcado, dos gradas con veladoras y flores de cempasúchil (color plano, trazo negro) */
+function shAltar(g,x,y,s,fill,ink,acc){g.save();g.translate(x,y);g.scale(s,s);g.lineJoin='round';g.lineWidth=4.4/s;g.strokeStyle=ink;
+ const R=(rx,ry,rw,rh,fc)=>{g.fillStyle=fc;g.beginPath();g.rect(rx,ry,rw,rh);g.fill();g.stroke()};
+ R(-50,-78,100,70,fill);                                                           // fondo del altar
+ ['#644DEF','#067DFF','#C8F34A','#EA663D','#644DEF'].forEach((c,i)=>{g.fillStyle=c;g.beginPath();g.moveTo(-50+i*20,-78);g.lineTo(-30+i*20,-78);g.lineTo(-30+i*20,-64);g.lineTo(-40+i*20,-58);g.lineTo(-50+i*20,-64);g.closePath();g.fill();g.stroke()}); // papel picado
+ R(-15,-52,30,36,acc); R(-10,-47,20,26,ink); g.fillStyle=fill;g.beginPath();g.arc(0,-38,6,0,7);g.fill();g.beginPath();g.ellipse(0,-22,11,7,0,Math.PI,0);g.fill(); // retrato
+ R(-62,-8,124,20,fill); R(-80,12,160,22,fill);                                      // gradas
+ [-40,40].forEach(cx=>{R(cx-4,-28,8,20,fill);g.fillStyle=acc;g.beginPath();g.moveTo(cx,-42);g.quadraticCurveTo(cx+7,-34,cx,-29);g.quadraticCurveTo(cx-7,-34,cx,-42);g.fill()});   // veladoras
+ g.fillStyle=acc;[-58,-29,0,29,58].forEach(px=>{g.beginPath();g.arc(px,23,6.5,0,7);g.fill();g.stroke()}); // cempasúchil
+ g.restore()}
+/* franja inferior: EN CURSO (izquierda) y la estadística del mes (derecha), en la misma fila */
+function shBottomH(C,hasPanel){return Math.max(176,28*2+(hasPanel?C.fairs.length*50+(C.exhib?34:0):0)+(C.fairs.length?0:20))}
+function shDrawMonthStat(g,st,x,y,w,H){
+  const en=LANG==='en', nov=st.m===10, mes=(en?MESES_L.en:MESES_L.es)[st.m].toUpperCase();
+  g.save(); rrect(g,x,y,w,H,26); g.fillStyle=nov?'#EA663D':SH_CREAM; g.fill(); g.clip();
+  let top=14;
+  if(nov){ // tira de papel picado del carrusel de Día de Muertos
+    const cols=['#F7D649','#644DEF','#067DFF','#F5F1F1','#C8F34A'], n=6, fw=w/n, fh=26; top=fh-4;
+    for(let k=0;k<n;k++){const xx=x+k*fw; g.fillStyle=cols[k%cols.length]; g.beginPath(); g.moveTo(xx,y); g.lineTo(xx+fw,y); g.lineTo(xx+fw,y+fh-9); for(let t=0;t<3;t++){g.lineTo(xx+fw-(t*2+1)*fw/6,y+fh); g.lineTo(xx+fw-(t*2+2)*fw/6,y+fh-9)} g.closePath(); g.fill()}
+  }
+  g.restore(); g.lineWidth=5; g.strokeStyle=SH_INK; rrect(g,x,y,w,H,26); g.stroke();
+  const ay=y+top, ah=H-top;
+  g.font='800 84px '+SF; g.fillStyle=SH_INK; g.textBaseline='alphabetic'; const nTxt=String(st.n), nw=g.measureText(nTxt).width;
+  const fx=x+34+30; if(nov)shAltar(g,x+w-76,ay+ah*0.30+22,0.66,'#F5F1F1',SH_INK,'#F7D649');
+  g.fillText(nTxt,x+30,ay+ah*0.34+30);
+  g.font='800 19px '+SH_MONO; const l1=en?'OPENINGS':'INAUGURACIONES', l2=en?'IN '+mes:'EN '+mes;
+  g.fillText(shEllipsis(g,l1,w-50),x+30,ay+ah*0.34+30+34); g.font='800 27px '+SF; g.fillText(shEllipsis(g,l2,w-50),x+30,ay+ah*0.34+30+34+30);
+}
+const SH_STRIP_H=92;
+function shDayTime(e,S){const en=LANG==='en', d=parse(e.inicio), tm=shareTime(e), dd=S.dd(e), day=dd===0?(en?'TODAY':'HOY'):(en?DIAS.en:DIAS.es)[d.getDay()].slice(0,3).toUpperCase()+' '+d.getDate(); return day+(tm?' · '+tm:'')}
+/* tira de la semana: un chip por día con su número de eventos; hoy en rojo */
+function shWeekStrip(g,y,S,dayN){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, gap=10, w=(TW-6*gap)/7;
+  for(let i=0;i<7;i++){
+    const d=new Date(S.ws.getTime()+i*DAY), x=M+i*(w+gap), tIdx=Math.round((S.t0-S.ws)/DAY), today=i===tIdx, n=dayN[i];
+    g.save(); if(!n||i<tIdx)g.globalAlpha=.6; rrect(g,x,y,w,SH_STRIP_H,20); g.fillStyle=today?SH_RED:'rgba(255,255,255,.92)'; g.fill(); g.lineWidth=4; g.strokeStyle=SH_INK; g.stroke();
+    g.textAlign='center'; g.textBaseline='alphabetic'; g.fillStyle=today?'#fff':SH_INK; g.font='800 18px '+SH_MONO; g.fillText((en?DIAS.en:DIAS.es)[d.getDay()].slice(0,3).toUpperCase(),x+w/2,y+26);
+    g.font='800 40px '+SF; g.fillText(String(d.getDate()),x+w/2,y+64); g.font='700 14px '+SH_MONO; g.fillText(n?n+' '+(en?(n===1?'EVENT':'EVENTS'):(n===1?'EVENTO':'EVENTOS')):'—',x+w/2,y+84); g.textAlign='left'; g.restore();
+  }
+}
+/* con más eventos de los que caben: primero lo especial, luego uno por día en rotación, y se muestra en orden cronológico */
+function shPickSpread(list,cap,S){
+  const pick=[], feat=list.filter(i=>i.feat).slice(0,Math.max(1,Math.ceil(cap/3))); feat.forEach(i=>pick.push(i));
+  const byDay=new Map(); list.filter(i=>!pick.includes(i)).forEach(i=>{const d=S.dd(i.e); if(!byDay.has(d))byDay.set(d,[]); byDay.get(d).push(i)});
+  const days=[...byDay.keys()].sort((a,b)=>((a<0)-(b<0))||a-b); /* primero hoy y lo que viene; lo ya pasado de la semana, al final */ let any=true;
+  while(pick.length<cap&&any){any=false; for(const d of days){const q=byDay.get(d); if(q.length&&pick.length<cap){pick.push(q.shift()); any=true}}}
+  return pick.sort((a,b)=>S.dd(a.e)-S.dd(b.e)||shareMin(a.e)-shareMin(b.e));
+}
+function shClosing(S,wk){
+  const t0=S.t0, running=wk?EVENTS.filter(e=>e.feria&&e.fin&&parse(e.inicio)<S.ws&&parse(e.fin)>=S.ws):S.big.filter(e=>e.feria&&parse(e.inicio)<t0);
+  const fairs=running.filter(e=>e.fin).map(e=>({e,d:Math.round((parse(e.fin)-t0)/DAY),name:String(L(e,'clausura')||'')})).sort((a,b)=>a.d-b.d).slice(0,3);
+  const lim=wk?S.we:t0, exhib=S.curso.filter(e=>e.fin&&!e.feria&&parse(e.fin)>=t0&&parse(e.fin)<=lim).length;
+  return {fairs,exhib,wk:!!wk,total:S.curso.length+fairs.filter(f=>f.d>=0).length};
+}
+function shDrawClosing(g,C,x,y,w,H){
+  const en=LANG==='en', NW=200, LINE='rgba(255,231,207,.28)';
+  g.fillStyle=SH_INK; rrect(g,x,y,w,H,30); g.fill();
+  g.font='800 104px '+SF; const blk=80+10+30+6+16, b0=y+(H-blk)/2;
+  g.fillStyle=SH_YEL; g.textBaseline='alphabetic'; g.fillText(String(C.total),x+28,b0+80);
+  g.fillStyle=SH_CREAM; g.font='800 30px '+SF; g.fillText(en?'ON NOW':'EN CURSO',x+28,b0+80+10+26);
+  g.font='700 16px '+SH_MONO; g.globalAlpha=.8; g.fillText(en?'STILL OPEN':'SIGUEN ABIERTOS',x+28,b0+80+10+30+6+13); g.globalAlpha=1;
+  g.fillStyle=LINE; g.fillRect(x+NW,y+26,3,H-52);
+  const x0=x+NW+22, w0=w-NW-22-18; let ry=y+(H-(C.fairs.length*50+(C.exhib?34:0)))/2;
+  if(!C.fairs.length&&!C.exhib){g.fillStyle=SH_CREAM; g.font='700 18px '+SH_MONO; g.fillText(shEllipsis(g,en?'ALL LIVE AT CUCOARTS.COM/MTY':'TODO EN CUCOARTS.COM/MTY',w0),x0,y+H/2+6); return}
+  C.fairs.forEach(f=>{
+    const fc=shareColor(f.e), tag=String((FERIAS[f.e.feria]&&(FERIAS[f.e.feria].corto||FERIAS[f.e.feria].nombre))||shareTag(f.e)||'').toUpperCase(); g.font='800 19px '+SH_MONO; const pw=Math.min(190,g.measureText(tag).width+26), ph=36, py=ry+7;
+    g.fillStyle=fc; rrect(g,x0,py,pw,ph,11); g.fill(); g.fillStyle=lumOf(fc)>.55?SH_INK:'#FFFFFF'; g.textBaseline='middle'; g.textAlign='center'; g.fillText(shEllipsis(g,tag,pw-14),x0+pw/2,py+ph/2+1); g.textAlign='left';
+    let sx=x0+pw+12; const until=(en?'UNTIL ':'HASTA ')+fmtShort(f.e.fin).toUpperCase();
+    if(f.d<0){g.font='700 19px '+SH_MONO; g.fillStyle=SH_CREAM; g.fillText(shEllipsis(g,(en?'CLOSED ':'CLAUSURÓ ')+fmtShort(f.e.fin).toUpperCase(),x0+w0-sx),sx,py+ph/2+1)}
+    else if(f.d===0){
+      const lbl=f.name?(en?'CLOSING · ':'CLAUSURA · ')+f.name.toUpperCase():(en?'CLOSING TODAY':'CLAUSURA HOY'); g.font='800 19px '+SH_MONO; const cw=Math.min(x0+w0-sx,g.measureText(lbl).width+26);
+      g.fillStyle=SH_RED; rrect(g,sx,py,cw,ph,11); g.fill(); g.fillStyle='#fff'; g.textAlign='center'; g.fillText(shEllipsis(g,lbl,cw-12),sx+cw/2,py+ph/2+1); g.textAlign='left';
+    }else{
+      g.font='700 19px '+SH_MONO; const one=f.d===1, pre=one?(en?'CLOSES TOMORROW':'CLAUSURA MAÑANA'):f.d<=3?(en?'LAST DAYS · ':'ÚLTIMOS DÍAS · '):'';
+      if(pre){g.fillStyle=SH_YEL; g.fillText(shEllipsis(g,pre,x0+w0-sx),sx,py+ph/2+1); sx+=g.measureText(pre).width}
+      if(!one){g.fillStyle=SH_CREAM; g.fillText(shEllipsis(g,until,x0+w0-sx),sx,py+ph/2+1)}
+    }
+    g.textBaseline='alphabetic'; ry+=50;
+  });
+  if(C.exhib){g.fillStyle=SH_CREAM; g.font='700 16px '+SH_MONO; g.globalAlpha=.9; const txt=C.wk?(en?'THIS WEEK '+C.exhib+(C.exhib===1?' EXHIBITION ENDS':' EXHIBITIONS END'):'ESTA SEMANA '+(C.exhib===1?'CIERRA 1 EXPOSICIÓN':'CIERRAN '+C.exhib+' EXPOSICIONES')):(en?'TODAY '+C.exhib+(C.exhib===1?' EXHIBITION ENDS':' EXHIBITIONS END')+' TOO':'HOY TAMBIÉN '+(C.exhib===1?'CIERRA 1 EXPOSICIÓN':'CIERRAN '+C.exhib+' EXPOSICIONES')); g.fillText(shEllipsis(g,txt,w0),x0,ry+24); g.globalAlpha=1}
+}
+async function drawDayStory(key){
+  const wk=key==='semana', en=LANG==='en', M=STORY.M, TW=SW-2*M, S=shareSet(key), c=document.createElement('canvas'); c.width=SW; c.height=SH; const g=c.getContext('2d');
+  const cs=getComputedStyle(document.documentElement), col=n=>cs.getPropertyValue(n).trim()||'#888';
+  if(SHARE_GROUND<0)SHARE_GROUND=0; const gr=AG_GROUNDS[SHARE_GROUND%AG_GROUNDS.length];
+  g.fillStyle=gr.bg; g.fillRect(0,0,SW,SH); g.textBaseline='alphabetic'; g.textAlign='left';
+  const [pv0,logo]=await Promise.all([loadImgSafe('/mty/img/pavo-mask.png'),loadImgSafe('/mty/img/logo-cuco-mask.png')]);
+  shRibbon(g,wk?(en?'THIS WEEK':'ESTA SEMANA'):(en?'TODAY':'HOY'),pv0);
+  const C=shClosing(S,wk), MS=shMonthStat(S), t0=S.t0;
+  let list=S.big.filter(e=>wk||!(e.feria&&parse(e.inicio)<t0)).map(e=>({e,feat:true})).concat(S.rows.map(e=>({e,feat:false})));
+  const totalAll=list.length, dayN=[0,0,0,0,0,0,0]; list.forEach(it=>{const d=S.dw(it.e); if(d>=0&&d<7)dayN[d]++});
+  let y=shHeader(g,gr,key,S,logo,totalAll);
+  if(wk){shWeekStrip(g,y+2,S,dayN); y+=2+SH_STRIP_H+14}
+  const LIMIT=STORY.LIMIT-40, hasPanel=C.total>0||C.fairs.length>0, hasStat=MS.n>0, PH=(hasPanel||hasStat)?shBottomH(C,hasPanel):0, GAP=12, GB=16;
+  const below=PH?PH+GB:0; let avail=LIMIT-y-below;
+  if(wk&&list.length>1){const cap=Math.max(1,Math.floor((avail-52+GAP)/(86+GAP))); if(list.length>cap)list=shPickSpread(list,cap,S)}
+  if(totalAll>list.length)avail-=58;   // lugar de la pastilla «+N más»
+  const n=list.length;
+  const kOf=h=>Math.max(.9,Math.min(1.42,h/112)), LEFT=22+14;
+  // plan de cada tarjeta para una altura base: título en 1 renglón (achicando) o en 2 si no cabe y hay espacio
+  const RB=wk?226:176;
+  const plan=(it,h0,allow2)=>{
+    const k=kOf(h0), kc=Math.min(k,1.2), RW=Math.round(RB*Math.min(k,1.15)), TH0=h0-Math.round(22*kc), ts=Math.round(34*k);
+    const maxW=TW-LEFT-TH0-16-RW-20-18-20, txt=(it.feat?'★ ':'')+eT(it.e); g.font='800 '+ts+'px '+SF;
+    let s2=ts; const lo=Math.round(ts*(allow2?0.8:0.66)); while(s2>lo){g.font='800 '+s2+'px '+SF; if(g.measureText(txt).width<=maxW)break; s2--} g.font='800 '+s2+'px '+SF;
+    if(g.measureText(txt).width<=maxW)return {lines:[txt],size:s2,h:h0};
+    if(allow2){const sz=Math.round(ts*0.9); g.font='800 '+sz+'px '+SF; return {lines:wrapLines(g,txt,maxW,2),size:sz,h:h0+Math.round(sz*1.04)}}
+    return {lines:[txt],size:s2,h:h0};
+  };
+  let rowH=92, allow2=false, plans=null, shown=n;
+  for(let h=168;h>=86;h-=2){const ps=list.map(it=>plan(it,h,true)); if(ps.reduce((a,p)=>a+p.h,0)+(n-1)*GAP<=avail){rowH=h; allow2=true; plans=ps; break}}
+  if(!plans){rowH=86; plans=list.map(it=>plan(it,86,false)); let used=0; shown=0; for(const p of plans){const need=p.h+(shown?GAP:0)+(shown<n-1?0:0); if(used+need>avail-(n>shown+1?52:0))break; used+=need; shown++} shown=Math.max(1,shown)}
+  const items=list.slice(0,shown), thumbs=await Promise.all(items.map(it=>shThumb(it.e)));
+  if(!n){g.fillStyle=SH_INK; rrect(g,M,y,TW,200,28); g.fill(); g.fillStyle=SH_CREAM; g.font='800 44px '+SF; wrapLines(g,en?'Nothing opens '+(wk?'this week':'today')+' yet.':'Aún no hay inauguraciones '+(wk?'esta semana':'hoy')+'.',TW-60,2).forEach((l,i)=>g.fillText(l,M+30,y+72+i*52)); g.font='700 22px '+SH_MONO; g.fillStyle=SH_YEL; g.fillText(shEllipsis(g,en?'SEE WHAT IS ON NOW BELOW':'MIRA LO QUE SIGUE EN CURSO ABAJO',TW-60),M+30,y+160); y+=220}
+  const k=kOf(rowH), kc=Math.min(k,1.2), RW=Math.round(RB*Math.min(k,1.15));
+  items.forEach((it,i)=>{
+    const e=it.e, P=plans[i], W=shareWhere(e), cat=CATS[e.cat]||CATS.pendiente, h=P.h, x=M, img=thumbs[i], TH=h-Math.round(22*kc);
+    g.save(); rrect(g,x,y,TW,h,20); g.fillStyle='rgba(255,255,255,.92)'; g.fill(); g.restore(); g.lineWidth=5; g.strokeStyle=SH_INK; rrect(g,x,y,TW,h,20); g.stroke();
+    g.save(); rrect(g,x,y,22,h,20); g.clip(); const zs=W.zs.length?W.zs.slice(0,4):[e.zona||'centro']; zs.forEach((z,j)=>{g.fillStyle=col((ZONES[z]||ZONES.centro).color); g.fillRect(x,y+j*h/zs.length,22,h/zs.length+1)}); g.restore(); g.fillStyle=SH_INK; g.fillRect(x+22,y+3,4,h-6);
+    const tx0=x+LEFT, ty0=y+(h-TH)/2, rr=Math.max(8,Math.round(TH*0.14));
+    g.save(); rrect(g,tx0,ty0,TH,TH,rr); g.clip(); g.fillStyle=cat.c; g.fillRect(tx0,ty0,TH,TH); if(img)coverImg(g,img,tx0,ty0,TH,TH); g.restore(); g.lineWidth=4; g.strokeStyle=SH_INK; rrect(g,tx0,ty0,TH,TH,rr); g.stroke();
+    // columna derecha: hora arriba, zona abajo
+    const rx1=x+TW-20, rx0=rx1-RW, tm=wk?shDayTime(e,S):(shareTime(e)||(it.feat&&e.fin&&e.fin!==e.inicio?(en?'UNTIL ':'HASTA ')+fmtShort(e.fin).toUpperCase():''));
+    const zFont=Math.round(17*kc), zH=Math.round(34*kc), zTxt=W.zone.toUpperCase(), tf=Math.round((wk?23:27)*kc);
+    const zc=W.zs.length===1?col(ZONES[W.zs[0]].color):'#FFFFFF', zon=W.zs.length===1?col(ZONES[W.zs[0]].on):SH_INK;
+    const colH=(tm?tf+10:0)+zH, cy0=y+(h-colH)/2;
+    if(tm){g.font='800 '+tf+'px '+SH_MONO; g.fillStyle=SH_INK; g.textAlign='right'; g.fillText(shEllipsis(g,tm,RW),rx1,cy0+tf*0.82); g.textAlign='left'}
+    g.font='800 '+zFont+'px '+SH_MONO; const zw=Math.min(RW+6,g.measureText(zTxt).width+24), zy=cy0+(tm?tf+10:0);
+    g.fillStyle=zc; rrect(g,rx1-zw,zy,zw,zH,zH/3); g.fill(); g.lineWidth=3; g.strokeStyle=SH_INK; g.stroke(); g.fillStyle=zon; g.textAlign='center'; g.textBaseline='middle'; g.fillText(shEllipsis(g,zTxt,zw-12),rx1-zw/2,zy+zH/2+1); g.textAlign='left'; g.textBaseline='alphabetic';
+    // texto: título, categoría + artista (más grandes), lugar si cabe
+    const tx=tx0+TH+16, maxW=rx0-tx-18, ts=P.size, cf=Math.round(23*Math.min(k,1.2)), chH=Math.round(38*Math.min(k,1.2)), place=h>=136, pf=Math.round(21*Math.min(k,1.2));
+    const lh=Math.round(ts*1.04), tH=P.lines.length*lh, blk=tH+8+chH+(place?8+pf:0), b0=y+(h-blk)/2;
+    g.font='800 '+ts+'px '+SF; g.fillStyle=SH_INK; P.lines.forEach((l,j)=>g.fillText(shEllipsis(g,l,maxW),tx,b0+ts*0.86+j*lh));
+    // etiqueta de categoría (estilo original aprobado): relleno del color de la categoría, borde negro, emoji + texto en Courier; más grande que antes
+    const cy=b0+tH+8, catTxt=(en?cat.s_en:cat.s).toUpperCase(); g.font='800 '+cf+'px '+SH_MONO; const ef=Math.round(cf*1.15), eW=Math.round(ef*1.3), cw=Math.min(maxW*.55,eW+g.measureText(catTxt).width+26);
+    g.fillStyle=cat.c; rrect(g,tx,cy,cw,chH,chH/3); g.fill(); g.lineWidth=3; g.strokeStyle=SH_INK; g.stroke();
+    g.font=ef+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textBaseline='middle'; g.fillStyle=SH_INK; g.fillText(cat.e,tx+9,cy+chH/2+1);
+    g.font='800 '+cf+'px '+SH_MONO; g.fillText(shEllipsis(g,catTxt,cw-eW-18),tx+9+eW+2,cy+chH/2+1);
+    const art=shArtist(e); if(art){g.font='700 '+Math.round(cf*1.04)+'px '+SH_MONO; g.fillStyle=SH_INK; g.fillText(shEllipsis(g,art,maxW-cw-14),tx+cw+14,cy+chH/2+1)}
+    g.textBaseline='alphabetic';
+    if(place){g.font='700 '+pf+'px '+SH_MONO; g.fillStyle='#4a4a45'; g.fillText(shEllipsis(g,shAbbr(W.place),maxW),tx,cy+chH+8+pf*0.85)}
+    y+=h+GAP;
+  });
+  if(totalAll>shown){const txt='+ '+(totalAll-shown)+' '+(en?(wk?'more this week':'more today'):(wk?'más esta semana':'más hoy')); g.font='800 28px '+SF; const w=g.measureText(txt).width+44; g.fillStyle=SH_INK; rrect(g,M,y,w,48,24); g.fill(); g.fillStyle=SH_YEL; g.textBaseline='middle'; g.fillText(txt,M+22,y+25); g.textBaseline='alphabetic'}
+  // abajo: estadística del mes y sección EN CURSO; pegadas al fondo si la lista llena el espacio, si no, justo debajo de la lista
+  let by=(totalAll>shown||y+below-GAP>LIMIT-6)?LIMIT-below+GB:Math.min(LIMIT-below+GB,y-GAP+GB+8);
+  const GW=14, PW=hasPanel&&hasStat?618:TW, CW=TW-PW-GW;
+  if(hasPanel)shDrawClosing(g,C,M,by,PW,PH);
+  if(hasStat)shDrawMonthStat(g,MS,hasPanel?M+PW+GW:M,by,hasPanel?CW:TW,PH);
+  g.fillStyle=gr.fg; g.font='700 21px '+SH_MONO; g.globalAlpha=.9; g.fillText(en?'EXPLORING LOCAL CULTURE THROUGH ART':'EXPLORANDO LA CULTURA LOCAL A TRAVÉS DEL ARTE',M,STORY.LIMIT-6); g.globalAlpha=1;
+  return c;
+}
+
 /* ---- pestañas, búsqueda y cambio de contenido dentro de la ventana ---- */
 function shareTabsHTML(){
   const tabs=[['agenda',t('sh_tab_agenda'),''],['hoy',t('sh_tab_hoy'),shareCount('hoy')],['semana',t('sh_tab_semana'),shareCount('semana')],['buscar',t('sh_tab_buscar'),'']];
@@ -7639,7 +8220,7 @@ async function shareSwitch(tab){
   if(tab===shareTab&&tab!=='buscar')return;
   shareTab=tab; STORY_IMG=0;
   if(tab==='buscar'){storyKey=shareEv||shareFirstEvent(); shareSetChrome(); buildStoryPick(storyKey); shareFind($('#shareQ').value); $('#shareQ').focus({preventScroll:true})}
-  else{storyKey=tab; SHARE_GROUND=-1; shareSetChrome(); buildStoryPick(storyKey)}
+  else{storyKey=tab; SHARE_GROUND=-1; SHARE_PHRASE=-1; shareSetChrome(); buildStoryPick(storyKey)}
   track('select_content',{content_type:'share_tab',item_id:tab});
   await shareRedraw();
 }
@@ -7666,6 +8247,164 @@ document.addEventListener('click',e=>{
 });
 $('#shareQ').addEventListener('input',e=>shareFind(e.target.value));
 $('#storyText').onclick=async()=>{const txt=shareCaption(shareTab); track('share',{method:'story_copy_text',content_type:storyType(shareTab),item_id:shareTab}); try{await navigator.clipboard.writeText(txt); $('#storyMsg').textContent=t('sh_text_copied')}catch(e){$('#storyMsg').textContent=t('story_err')}};
+
+/* ============ COMPARTIR: zoom «a detalle», respuesta de los botones y vibración (4-nov-2026) ============
+ * Tocar la imagen (o la lupa) la abre a tamaño grande dentro de la misma ventana: ahí se acerca con rueda del ratón, pellizco, doble toque o los botones +/−,
+ * y se mueve arrastrando. Los botones responden con movimiento y una vibración distinta según la acción. */
+(function(){
+  const $s=(q)=>document.querySelector(q);
+  const Z={s:1,x:0,y:0}, ZMAX=5, clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const modal=()=>$s('#storyModal'), wrap=()=>$s('#cvWrap'), stage=()=>$s('#storyPrev');
+  const inDetail=()=>modal().classList.contains('detail');
+
+  function apply(smooth){
+    const w=wrap(); if(!w)return;
+    w.classList.toggle('zanim',!!smooth);
+    w.style.transform=(Z.s===1&&!Z.x&&!Z.y)?'':'translate('+Z.x+'px,'+Z.y+'px) scale('+Z.s+')';
+    const p=$s('#zPct'); if(p)p.textContent=Math.round(Z.s*100)+'%';
+  }
+  function limit(){const w=wrap(), mx=(Z.s-1)*w.offsetWidth/2, my=(Z.s-1)*w.offsetHeight/2; Z.x=clamp(Z.x,-mx,mx); Z.y=clamp(Z.y,-my,my)}
+  function reset(smooth){Z.s=1;Z.x=0;Z.y=0;apply(smooth)}
+  /* acerca/aleja manteniendo fijo el punto (cx,cy) de la pantalla */
+  function zoomAt(f,cx,cy,smooth){
+    const r=stage().getBoundingClientRect(), ox=r.left+r.width/2, oy=r.top+r.height/2, ns=clamp(Z.s*f,1,ZMAX);
+    if(Math.abs(ns-Z.s)<1e-3){haptic('bump');return}
+    const k=ns/Z.s; Z.x=(cx-ox)-((cx-ox)-Z.x)*k; Z.y=(cy-oy)-((cy-oy)-Z.y)*k; Z.s=ns; limit(); apply(smooth);
+  }
+  function zoomCenter(f){const r=stage().getBoundingClientRect(); zoomAt(f,r.left+r.width/2,r.top+r.height/2,true)}
+  function enter(){
+    if(inDetail())return; reset(false); modal().classList.add('detail'); haptic('select'); track('select_content',{content_type:'story_zoom',item_id:String(storyKey)});
+  }
+  function exit(){if(!inDetail())return; modal().classList.remove('detail'); reset(false); haptic('tap')}
+  window.storyDetailExit=exit;
+
+  /* gestos: arrastrar, pellizcar, doble toque, tocar para abrir */
+  const P=new Map(); let moved=0, t0=0, lastTap=0, lastTapXY=null, d0=0, s0=1;
+  const dist=()=>{const a=[...P.values()]; return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)};
+  const mid=()=>{const a=[...P.values()]; return {x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2}};
+  document.addEventListener('pointerdown',e=>{
+    const st=stage(); if(!st||!st.contains(e.target)||e.target.closest('.zbar,.zopen'))return;
+    try{st.setPointerCapture(e.pointerId)}catch(x){}
+    P.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(P.size===1){moved=0;t0=performance.now()}
+    if(P.size===2){d0=dist(); s0=Z.s; wrap().classList.remove('zanim')}
+    st.classList.add('drag');
+  });
+  document.addEventListener('pointermove',e=>{
+    const p=P.get(e.pointerId); if(!p)return;
+    const dx=e.clientX-p.x, dy=e.clientY-p.y; moved+=Math.abs(dx)+Math.abs(dy);
+    if(P.size===2){
+      const m0=mid(); p.x=e.clientX; p.y=e.clientY; const m1=mid(), f=(dist()/d0*s0)/Z.s;
+      if(isFinite(f)&&inDetail()){zoomAt(f,m1.x,m1.y,false); Z.x+=m1.x-m0.x; Z.y+=m1.y-m0.y; limit(); apply(false)}
+      return;
+    }
+    p.x=e.clientX; p.y=e.clientY;
+    if(inDetail()&&Z.s>1){Z.x+=dx; Z.y+=dy; limit(); apply(false)}
+  });
+  const up=e=>{
+    if(!P.has(e.pointerId))return; P.delete(e.pointerId);
+    if(P.size===0){
+      const st=stage(); st&&st.classList.remove('drag');
+      const now=performance.now();
+      if(e.type==='pointerup'&&moved<10&&now-t0<400){        // fue un toque, no un arrastre
+        if(!inDetail()){enter(); lastTap=0}
+        else if(now-lastTap<320&&lastTapXY&&Math.hypot(e.clientX-lastTapXY.x,e.clientY-lastTapXY.y)<40){   // doble toque: alterna 1× / 2.6×
+          if(Z.s>1.05){reset(true); haptic('tap')} else {zoomAt(2.6,e.clientX,e.clientY,true); haptic('select')} lastTap=0;
+        }else{lastTap=now; lastTapXY={x:e.clientX,y:e.clientY}}
+      }
+    }
+  };
+  document.addEventListener('pointerup',up); document.addEventListener('pointercancel',up);
+  document.addEventListener('wheel',e=>{
+    if(!inDetail()||!stage().contains(e.target))return;
+    e.preventDefault(); zoomAt(Math.exp(-e.deltaY*(e.ctrlKey?0.012:0.002)),e.clientX,e.clientY,false);
+  },{passive:false});
+  document.addEventListener('keydown',e=>{
+    if(!inDetail())return;
+    if(e.key==='Escape'){e.stopPropagation(); exit(); return}
+    if(e.key==='+'||e.key==='='){e.preventDefault(); zoomCenter(1.4)}
+    else if(e.key==='-'||e.key==='_'){e.preventDefault(); zoomCenter(1/1.4)}
+    else if(e.key==='0'){reset(true)}
+    else if(e.key.startsWith('Arrow')&&Z.s>1){e.preventDefault(); const st=60; if(e.key==='ArrowLeft')Z.x+=st; if(e.key==='ArrowRight')Z.x-=st; if(e.key==='ArrowUp')Z.y+=st; if(e.key==='ArrowDown')Z.y-=st; limit(); apply(true)}
+  },true);
+
+
+  /* ====== paneles dentro de la misma ventana: instructivo (paso a paso) y QR para impresos ====== */
+  const stp=()=>$s('#stPanel');
+  let GD={i:0,steps:[]};
+  function guideRender(dir){
+    const s=GD.steps[GD.i]; if(!s)return; const n=GD.steps.length, last=GD.i===n-1;
+    const card=document.createElement('div'); card.className='gd-card '+(dir>0?'in-r':dir<0?'in-l':'in-f');
+    card.innerHTML='<span class="gd-num">'+esc(t('st_step'))+' '+(GD.i+1)+' / '+n+'</span><div class="gd-ico" aria-hidden="true">'+s[0]+'</div><h4>'+esc(s[1])+'</h4><p>'+s[2]+'</p>'+(s[3]?'<div class="gd-vis">'+s[3]+'</div>':'')+(last?'<div class="gd-tip">💡 '+esc(t('sg_tip'))+'</div>':'<div class="gd-up">'+esc(t('st_next'))+': <b>'+esc(GD.steps[GD.i+1][1])+'</b></div>');
+    const st=$s('#gdStage'); st.innerHTML=''; st.appendChild(card);
+    $s('#gdDots').innerHTML=GD.steps.map((_,k)=>'<button type="button" class="gd-dot'+(k===GD.i?' on':'')+'" data-g="'+k+'" aria-label="'+esc(t('st_step'))+' '+(k+1)+'"></button>').join('');
+    GD.seen=GD.seen||new Set(); GD.seen.add(GD.i);
+    $s('#gdRail').innerHTML=GD.steps.map((x,k)=>'<li><button type="button" class="gd-r'+(k===GD.i?' on':(GD.seen.has(k)?' done':''))+'" data-g="'+k+'"><span class="gn" aria-hidden="true">'+(GD.seen.has(k)&&k!==GD.i?'✓':(k+1))+'</span><span class="gt">'+esc(x[1])+'</span></button></li>').join('');
+    $s('#gdPrev').disabled=GD.i===0; $s('#gdNextLbl').textContent=last?t('st_done'):t('st_next'); $s('#gdNextIco').textContent=last?'✅':'→';
+  }
+  function guideGo(k,dir){ if(k<0||k>=GD.steps.length)return; const d=dir==null?(k>GD.i?1:-1):dir; GD.i=k; guideRender(d); haptic('select') }
+  function guideNext(){ if(GD.i>=GD.steps.length-1){haptic('success'); showPanel(null); return} guideGo(GD.i+1,1) }
+  function showPanel(name){
+    const m=modal(), p=stp(); if(!m||!p)return;
+    if(inDetail())exit();
+    m.classList.remove('view-guide','view-qr');
+    if(!name){p.hidden=true; $s('#pnGuide').hidden=true; $s('#pnQr').hidden=true; return}
+    m.classList.add('view-'+name); p.hidden=false;
+    $s('#pnGuide').hidden=name!=='guide'; $s('#pnQr').hidden=name!=='qr';
+    $s('#pnTitle').textContent=name==='guide'?t('sg_h'):t('qr_title');
+    $s('#qrRight').classList.remove('info'); $s('#qrInfoBtn').setAttribute('aria-expanded','false');
+    if(name==='guide'){GD={i:0,steps:storyGuideSteps(),seen:new Set()}; guideRender(0); track('select_content',{content_type:'story_guide',item_id:String(storyKey)})}
+    if(name==='qr'){$s('#qrUrl')&&qrBuild()}
+    $s('#pnBack').focus({preventScroll:true});
+  }
+  window.stShowPanel=function(name){const was=!stp().hidden; showPanel(name); if(name)haptic('select'); else if(was)haptic('tap')};
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#pnBack')){window.stShowPanel(null); return}
+    if(e.target.closest('#gdNext')){guideNext(); return}
+    if(e.target.closest('#gdPrev')){guideGo(GD.i-1,-1); return}
+    const dt=e.target.closest('.gd-dot,.gd-r'); if(dt){guideGo(+dt.dataset.g); return}
+    if(e.target.closest('#qrInfoBtn')){const r=$s('#qrRight'), on=!r.classList.contains('info'); r.classList.toggle('info',on); $s('#qrInfoBtn').setAttribute('aria-expanded',on); haptic('tap')}
+  });
+  /* deslizar para cambiar de paso */
+  let gx=null;
+  document.addEventListener('pointerdown',e=>{gx=e.target.closest&&e.target.closest('#gdStage')?e.clientX:null});
+  document.addEventListener('pointerup',e=>{if(gx==null)return; const dx=e.clientX-gx; gx=null; if(Math.abs(dx)>50){ if(dx<0)guideNext(); else guideGo(GD.i-1,-1) }});
+  document.addEventListener('keydown',e=>{
+    if(stp()&&!stp().hidden){
+      if(e.key==='Escape'){e.stopPropagation(); window.stShowPanel(null); return}
+      if($s('#pnGuide')&&!$s('#pnGuide').hidden){ if(e.key==='ArrowRight'){e.preventDefault(); guideNext()} else if(e.key==='ArrowLeft'){e.preventDefault(); guideGo(GD.i-1,-1)} }
+    }
+  },true);
+
+  /* botones: vibración y movimiento propio de cada acción */
+  const OK=/✓|copiad|copied|guardad|saved/i;
+  const HAP_BY={qrDl:'success',qrDlF:'success',qrCopy:'success',storyShare:'press',storyDl:'success',storyCopy:'success',storyText:'success',storyShuffle:'select',storyClose:'tap',zOpen:'select'};
+  function play(b){b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); setTimeout(()=>b.classList.remove('go'),700)}
+  function confirmBtn(b){
+    const lbl=b.querySelector('.lbl'); if(!lbl||b.classList.contains('done'))return;
+    const old=lbl.textContent, oi=b.querySelector('.ico'), oldIco=oi&&oi.textContent;
+    b.classList.add('done'); lbl.textContent=t('st_done'); if(oi)oi.textContent='✅';
+    setTimeout(()=>{b.classList.remove('done'); lbl.textContent=old; if(oi)oi.textContent=oldIco},1600);
+  }
+  document.addEventListener('click',e=>{
+    const b=e.target.closest&&e.target.closest('#storyModal button'); if(!b)return;
+    if(b.id==='zIn'){zoomCenter(1.5); haptic('tick'); return}
+    if(b.id==='zOut'){zoomCenter(1/1.5); haptic('tick'); return}
+    if(b.id==='zReset'){reset(true); haptic('tap'); return}
+    if(b.id==='zClose'){exit(); return}
+    if(b.id==='zOpen'){enter(); return}
+    if(b.classList.contains('shtab')){haptic('select'); return}
+    const h=HAP_BY[b.id]; if(h)haptic(h);
+    if(b.classList.contains('sa')||b.classList.contains('sbp'))play(b);
+    if(b.id==='storyDl'||b.id==='storyCopy'||b.id==='storyText'){
+      setTimeout(()=>{const m=($s('#storyMsg')||{}).textContent||''; if(OK.test(m))confirmBtn(b)},420);
+    }
+    if(b.id==='qrDl'||b.id==='qrDlF'||b.id==='qrCopy'){
+      setTimeout(()=>{const m=($s('#qrMsg')||{}).textContent||''; if(OK.test(m))confirmBtn(b)},600);
+    }
+  });
+  /* al cerrar la ventana (por cualquier vía) se sale del modo detalle */
+  new MutationObserver(()=>{const o=$s('#storyOverlay'); if(o&&!o.classList.contains('open')){if(inDetail()){modal().classList.remove('detail'); reset(false)} if(stp()&&!stp().hidden)showPanel(null)}}).observe($s('#storyOverlay'),{attributes:true,attributeFilter:['class']});
+})();
 
 /* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
 /* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
