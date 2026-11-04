@@ -46,3 +46,4 @@ los cambios en `frontend/public/` salen con `serverless s3sync` + invalidación 
 
 - `musica-eventos`: músicos y agrupaciones que tocan en eventos (primer uso: Blue Wave).
 - `trayectoria-artista`: artistas visuales (formación, exposiciones, premios, proyectos, prensa, clases, cómo trabajan, lado humano). Primer uso: `?a=eliezer-blanco`. Sus respuestas alimentan el perfil de artista con `PERFILES_ARTISTAS\herramientas\importar_trayectoria.js`.
+- `diseno-creativo`: diseñadores gráficos e ilustradores con lado artístico (servicios en paquetes, proyectos, productos, cómo trabajan, conexión con lugares/eventos/zonas, ideas para CUCO ARTS). Piloto de "creadores que ofrecen productos y servicios que CUCO ARTS conecta con lugares y eventos". Primer uso: `?a=carmen`.

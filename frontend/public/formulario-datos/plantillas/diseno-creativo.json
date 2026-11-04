@@ -1,0 +1,625 @@
+{
+ "plantilla": "diseno-creativo",
+ "descripcion": "Perfil creativo de diseñadores gráficos e ilustradores con lado artístico: quiénes son, qué servicios y productos ofrecen, cómo trabajan y con qué lugares, eventos y zonas culturales les gustaría colaborar. Piloto para conectar creadores con lugares y eventos desde CUCO ARTS.",
+ "secciones": [
+  {
+   "id": "basicos",
+   "titulo": "Tus datos",
+   "intro": "Cómo quieres que te conozcan.",
+   "campos": [
+    {
+     "id": "nombre",
+     "label": "Nombre artístico o de tu estudio",
+     "type": "text",
+     "help": "Tal como quieres que aparezca en tu perfil"
+    },
+    {
+     "id": "nombre_legal",
+     "label": "Nombre completo (opcional)",
+     "type": "text"
+    },
+    {
+     "id": "ciudad",
+     "label": "Ciudad donde trabajas",
+     "type": "text"
+    },
+    {
+     "id": "anios",
+     "label": "¿Desde qué año te dedicas al diseño o a la ilustración?",
+     "type": "text"
+    },
+    {
+     "id": "redes",
+     "label": "Instagram y otras redes",
+     "type": "area",
+     "help": "Behance, Pinterest, TikTok, YouTube…"
+    },
+    {
+     "id": "portafolio",
+     "label": "Enlace a tu portafolio (Behance, Drive, sitio web)",
+     "type": "url"
+    },
+    {
+     "id": "contacto",
+     "label": "Contacto de trabajo",
+     "type": "area",
+     "help": "WhatsApp y/o correo donde quieres recibir clientes"
+    }
+   ]
+  },
+  {
+   "id": "quien",
+   "titulo": "Quién eres",
+   "intro": "Aquí va tu lado humano y tu manera de ver el diseño. No tiene que sonar formal.",
+   "campos": [
+    {
+     "id": "frase",
+     "label": "Tu oficio en una frase",
+     "type": "text",
+     "help": "Ej. “Diseño identidades con sabor local”"
+    },
+    {
+     "id": "historia",
+     "label": "Cuéntanos tu historia",
+     "type": "area",
+     "help": "Cómo empezaste, qué estudiaste, con quién aprendiste, qué te hizo dedicarte a esto."
+    },
+    {
+     "id": "estilo",
+     "label": "Describe tu estilo",
+     "type": "area",
+     "help": "Colores, formas, tipografías, atmósferas que se repiten en tu trabajo."
+    },
+    {
+     "id": "influencias",
+     "label": "Referencias que te inspiran",
+     "type": "area",
+     "help": "Artistas, diseñadores, movimientos, épocas, ciudades, cuentas de Instagram."
+    },
+    {
+     "id": "diferencia",
+     "label": "¿Qué te hace distinta o distinto de otros diseñadores?",
+     "type": "area",
+     "help": "Lo que un cliente debe saber para elegirte."
+    },
+    {
+     "id": "sabes",
+     "label": "Si la gente supiera una sola cosa de ti, ¿cuál sería?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "servicios",
+   "titulo": "Servicios que ofreces",
+   "intro": "Marca lo que haces y, abajo, arma tus servicios como “paquetes” para que un cliente entienda qué compra.",
+   "campos": [
+    {
+     "id": "servicios",
+     "label": "¿Qué servicios ofreces?",
+     "type": "opts",
+     "opts": [
+      "Branding e identidad visual",
+      "Manejo y diseño para redes sociales",
+      "Diseño editorial (libros, revistas, zines)",
+      "Packaging y etiquetas",
+      "Carteles, flyers y material para eventos",
+      "Ilustración por encargo",
+      "Retratos o ilustración personalizada",
+      "Lettering y tipografía",
+      "Merch y estampados (playeras, tote bags, stickers)",
+      "Fotografía, retoque o composición",
+      "Motion graphics o animación",
+      "Diseño web / UI",
+      "Murales o arte a gran formato",
+      "Clases o talleres",
+      "Otro"
+     ],
+     "help": "Marca todos los que aplican"
+    },
+    {
+     "id": "otros_servicios",
+     "label": "Si marcaste “Otro”, ¿cuál?",
+     "type": "area"
+    },
+    {
+     "id": "no",
+     "label": "¿Hay trabajos que NO tomas?",
+     "type": "area",
+     "help": "Ej. logos express sin proceso, trabajos sin tiempo de entrega razonable…"
+    }
+   ],
+   "repetible": {
+    "id": "paquetes",
+    "etiqueta": "Servicio o paquete",
+    "max": 12,
+    "campos": [
+     {
+      "id": "nom",
+      "label": "Nombre del servicio o paquete",
+      "type": "text",
+      "help": "Ej. Identidad básica, Pack de 12 posts, Ilustración de mascota"
+     },
+     {
+      "id": "incluye",
+      "label": "Qué incluye",
+      "type": "area",
+      "help": "Entregables, número de propuestas, rondas de cambios, formatos de archivo."
+     },
+     {
+      "id": "para",
+      "label": "Ideal para quién",
+      "type": "text",
+      "help": "Ej. cafeterías nuevas, artistas, eventos, marcas personales"
+     },
+     {
+      "id": "precio",
+      "label": "Precio “desde” (opcional)",
+      "type": "text",
+      "help": "Puede ser un rango. Si aún no lo defines, escribe “por definir”."
+     },
+     {
+      "id": "tiempo",
+      "label": "Tiempo de entrega aproximado",
+      "type": "text"
+     }
+    ]
+   }
+  },
+  {
+   "id": "proyectos",
+   "titulo": "Proyectos que has hecho",
+   "intro": "Los trabajos que mejor te representan. Dinos si podemos nombrar al cliente.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Proyecto",
+    "max": 30,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Nombre del proyecto",
+      "type": "text"
+     },
+     {
+      "id": "para",
+      "label": "Para quién (cliente, marca, evento, lugar)",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text"
+     },
+     {
+      "id": "detalle",
+      "label": "Qué hiciste y cuál era el reto",
+      "type": "area",
+      "help": "Qué pedía el cliente, qué propusiste, cómo quedó."
+     },
+     {
+      "id": "permiso",
+      "label": "¿Podemos nombrar al cliente?",
+      "type": "sel",
+      "opts": [
+       "Sí",
+       "No",
+       "No sé"
+      ],
+      "help": "Si dudas, elige “No sé”; lo confirmamos contigo."
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (opcional)",
+      "type": "url",
+      "help": "Behance, Instagram, nota de prensa…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "arte",
+   "titulo": "Tu lado artístico y tus productos",
+   "intro": "Más allá del diseño para clientes: tu obra propia, series, ilustraciones o productos que ya vendes o podrías vender.",
+   "campos": [
+    {
+     "id": "obra_propia",
+     "label": "¿Qué haces por gusto propio?",
+     "type": "area",
+     "help": "Ilustración personal, collage, pintura, fotografía, series, zines…"
+    },
+    {
+     "id": "series",
+     "label": "¿Tienes series o proyectos personales?",
+     "type": "area",
+     "help": "Nombre, de qué tratan y desde cuándo."
+    },
+    {
+     "id": "productos_tipo",
+     "label": "¿Qué productos tienes o podrías tener?",
+     "type": "opts",
+     "opts": [
+      "Prints o láminas",
+      "Stickers",
+      "Playeras o ropa",
+      "Tote bags",
+      "Postales o cartas",
+      "Zines o libros",
+      "Tazas u objetos",
+      "Pines, llaveros o parches",
+      "Obra original",
+      "Ninguno por ahora",
+      "Otro"
+     ]
+    },
+    {
+     "id": "vende",
+     "label": "¿Dónde vendes hoy?",
+     "type": "area",
+     "help": "Instagram, tienda en línea, tianguis, ferias, por encargo… Si no vendes todavía, dilo así."
+    }
+   ],
+   "repetible": {
+    "id": "productos",
+    "etiqueta": "Producto",
+    "max": 20,
+    "campos": [
+     {
+      "id": "nom",
+      "label": "Nombre del producto",
+      "type": "text"
+     },
+     {
+      "id": "tipo",
+      "label": "Tipo y medidas",
+      "type": "text"
+     },
+     {
+      "id": "precio",
+      "label": "Precio aproximado",
+      "type": "text"
+     },
+     {
+      "id": "disp",
+      "label": "Disponibilidad",
+      "type": "sel",
+      "opts": [
+       "Ya lo tengo listo",
+       "Lo hago bajo pedido",
+       "Es una idea por producir"
+      ]
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace o foto (opcional)",
+      "type": "url"
+     }
+    ]
+   }
+  },
+  {
+   "id": "proceso",
+   "titulo": "Cómo trabajas",
+   "intro": "Que tus clientes sepan qué esperar.",
+   "campos": [
+    {
+     "id": "proceso",
+     "label": "Tu proceso paso a paso",
+     "type": "area",
+     "help": "Desde que alguien te escribe hasta que entregas."
+    },
+    {
+     "id": "herramientas",
+     "label": "Herramientas y software que usas",
+     "type": "area",
+     "help": "Photoshop, Illustrator, Procreate, Figma, cámara, técnicas manuales…"
+    },
+    {
+     "id": "revisiones",
+     "label": "Rondas de cambios",
+     "type": "area",
+     "help": "Cuántas incluyes y qué pasa si el cliente pide más."
+    },
+    {
+     "id": "anticipo",
+     "label": "Anticipo y formas de pago",
+     "type": "area"
+    },
+    {
+     "id": "factura",
+     "label": "¿Emites factura?",
+     "type": "sel",
+     "opts": [
+      "Sí",
+      "No",
+      "Depende del proyecto",
+      "Aún no lo sé"
+     ]
+    },
+    {
+     "id": "urgentes",
+     "label": "¿Aceptas trabajos urgentes?",
+     "type": "area",
+     "help": "Condiciones o recargo, si lo hay."
+    },
+    {
+     "id": "zona",
+     "label": "¿Trabajas a distancia, presencial o ambas?",
+     "type": "text"
+    }
+   ]
+  },
+  {
+   "id": "conexiones",
+   "titulo": "Conectar con lugares, eventos y zonas culturales",
+   "intro": "Este es un piloto: CUCO ARTS podría conectarte con negocios, eventos y barrios de Monterrey que necesiten lo que haces. Aquí nos dices dónde te gustaría estar.",
+   "campos": [
+    {
+     "id": "lugares",
+     "label": "¿Con qué tipo de lugares te gustaría colaborar?",
+     "type": "opts",
+     "opts": [
+      "Cafeterías",
+      "Restaurantes y bares",
+      "Tiendas y boutiques",
+      "Galerías y museos",
+      "Hoteles y hostales",
+      "Gimnasios y estudios",
+      "Coworkings y oficinas",
+      "Escuelas y universidades",
+      "Marcas emergentes",
+      "Otro"
+     ]
+    },
+    {
+     "id": "eventos",
+     "label": "¿En qué tipo de eventos te gustaría participar?",
+     "type": "opts",
+     "opts": [
+      "Cartel o identidad de un evento",
+      "Live painting o ilustración en vivo",
+      "Mural o intervención en el lugar",
+      "Taller o clase",
+      "Tienda o stand de productos",
+      "Exposición",
+      "Merch del evento",
+      "Contenido para redes del evento",
+      "Otro"
+     ]
+    },
+    {
+     "id": "zonas",
+     "label": "¿En qué zonas de Monterrey te mueves o te gustaría estar?",
+     "type": "opts",
+     "opts": [
+      "Centro",
+      "Barrio Antiguo",
+      "Obispado",
+      "San Pedro",
+      "Santiago",
+      "Guadalupe",
+      "San Nicolás",
+      "Apodaca",
+      "Escobedo",
+      "Fuera de Monterrey",
+      "Me da igual"
+     ],
+     "help": "Marca todas las que aplican."
+    },
+    {
+     "id": "lugares_favoritos",
+     "label": "Lugares o espacios de Monterrey que admires",
+     "type": "area",
+     "help": "Y por qué te gustaría trabajar con ellos."
+    },
+    {
+     "id": "ideal",
+     "label": "Tu colaboración ideal",
+     "type": "area",
+     "help": "Describe cómo sería: con quién, dónde, qué harías."
+    },
+    {
+     "id": "disponibilidad",
+     "label": "Disponibilidad",
+     "type": "area",
+     "help": "Días, horarios o temporadas en que puedes colaborar, y cuántos proyectos a la vez."
+    },
+    {
+     "id": "condiciones",
+     "label": "Condiciones para colaborar",
+     "type": "area",
+     "help": "Qué necesitas para decir que sí (pago, crédito, difusión, materiales). Aún no hay términos fijos entre CUCO ARTS y los creadores: aquí nos dices lo que tú consideras justo."
+    },
+    {
+     "id": "leads",
+     "label": "¿Te parece bien que CUCO ARTS reciba las solicitudes de clientes por ti y te las pase?",
+     "type": "sel",
+     "opts": [
+      "Sí",
+      "Sí, pero quiero ver cada solicitud antes",
+      "Prefiero que me contacten directo",
+      "Lo platicamos"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "intercambio",
+   "titulo": "Ideas para CUCO ARTS",
+   "intro": "Nuestro trueque: tu perfil a cambio de tu creatividad. Esto es opcional y lo seguimos en las reuniones de los sábados.",
+   "campos": [
+    {
+     "id": "ideas",
+     "label": "Ideas de posts o contenido que te gustaría ver en CUCO ARTS",
+     "type": "area"
+    },
+    {
+     "id": "formatos",
+     "label": "Formatos que se te antojan",
+     "type": "area",
+     "help": "Carruseles, historias, reels, carteles, series, colaboraciones con artistas…"
+    },
+    {
+     "id": "refs",
+     "label": "Cuentas, marcas o piezas que te sirvan de referencia",
+     "type": "area",
+     "help": "Enlaces o nombres. Qué te gusta de cada una."
+    },
+    {
+     "id": "mejoras",
+     "label": "¿Qué cambiarías o mejorarías de la imagen de CUCO ARTS hoy?",
+     "type": "area",
+     "help": "Lo que ves con ojo de diseñadora o diseñador."
+    },
+    {
+     "id": "sabado",
+     "label": "¿Cómo te gustaría que sean las reuniones de los sábados?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "persona",
+   "titulo": "Tu lado humano",
+   "intro": "Para que la gente conecte contigo antes de contratarte.",
+   "campos": [
+    {
+     "id": "recuerdo",
+     "label": "Un momento que explique por qué haces lo que haces",
+     "type": "area"
+    },
+    {
+     "id": "entrega",
+     "label": "¿Qué sientes cuando un cliente ama lo que le diseñaste?",
+     "type": "area"
+    },
+    {
+     "id": "espacio",
+     "label": "¿Dónde y cómo trabajas?",
+     "type": "area",
+     "help": "Tu estudio, tu mesa, tu música, tus rituales."
+    },
+    {
+     "id": "causas",
+     "label": "Causas o proyectos comunitarios en los que participas",
+     "type": "area"
+    },
+    {
+     "id": "fotos",
+     "label": "¿Podemos usar fotos tuyas trabajando?",
+     "type": "sel",
+     "opts": [
+      "Sí",
+      "Solo algunas, las reviso antes",
+      "No por ahora"
+     ]
+    },
+    {
+     "id": "algo_mas",
+     "label": "¿Algo más que quieras que sepamos?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "archivos",
+   "titulo": "Archivos y material",
+   "intro": "Marca lo que tienes. Los archivos los puedes mandar por una carpeta de Drive o por WhatsApp; abajo puedes adjuntar hasta 4 al final.",
+   "archivos": true,
+   "campos": [
+    {
+     "id": "carpeta",
+     "label": "Enlace a una carpeta con tu material",
+     "type": "url",
+     "help": "Drive, Dropbox o WeTransfer. Revisa que cualquiera con el enlace pueda verla."
+    },
+    {
+     "id": "creditos",
+     "label": "Créditos obligatorios",
+     "type": "area",
+     "help": "Fotógrafos, modelos o colaboradores que aparecen en tu material."
+    },
+    {
+     "id": "colores",
+     "label": "Colores y tipografías de tu marca personal, si existen",
+     "type": "text"
+    }
+   ]
+  },
+  {
+   "id": "autoriza",
+   "titulo": "Autorización",
+   "intro": "Para publicar el perfil.",
+   "autorizacion": true,
+   "campos": [
+    {
+     "id": "c_uso",
+     "label": "Autorizo a CUCO ARTS a usar mis textos, imágenes y videos en mi perfil creativo.",
+     "type": "chk"
+    },
+    {
+     "id": "c_terceros",
+     "label": "Confirmo que tengo permiso o los créditos de los materiales que no son míos.",
+     "type": "chk"
+    },
+    {
+     "id": "c_datos",
+     "label": "Entiendo que mis respuestas se usarán solo para armar y mantener mi perfil.",
+     "type": "chk"
+    }
+   ]
+  }
+ ],
+ "archivos": [
+  {
+   "id": "logo",
+   "label": "Tu logo o marca personal (vectorial y PNG)",
+   "help": "Versión para fondo claro y oscuro, si existen"
+  },
+  {
+   "id": "retrato",
+   "label": "Retratos tuyos (alta resolución)",
+   "help": "Trabajando o en tu espacio"
+  },
+  {
+   "id": "portafolio",
+   "label": "Mejores 10–15 piezas de tu portafolio",
+   "help": "Imágenes en alta resolución, de preferencia con mockups limpios"
+  },
+  {
+   "id": "procesos",
+   "label": "Proceso: bocetos, antes y después",
+   "help": "Muestran cómo piensas"
+  },
+  {
+   "id": "arte",
+   "label": "Piezas de tu lado artístico",
+   "help": "Obra personal, series, ilustraciones"
+  },
+  {
+   "id": "productos",
+   "label": "Fotos de tus productos",
+   "help": "Prints, stickers, merch, etc."
+  },
+  {
+   "id": "branding_cuco",
+   "label": "Material de la identidad de CUCO ARTS",
+   "help": "Manual, variantes de logo, paleta y tipografías originales"
+  },
+  {
+   "id": "videos",
+   "label": "Videos o reels de tu proceso",
+   "help": "Enlaces o archivos"
+  },
+  {
+   "id": "testimonios",
+   "label": "Testimonios de clientes",
+   "help": "Texto o captura, con permiso para publicar"
+  },
+  {
+   "id": "cotizacion",
+   "label": "Lista de precios o cotizaciones que ya uses",
+   "help": "Para ver cómo presentas hoy tus servicios"
+  }
+ ]
+}
