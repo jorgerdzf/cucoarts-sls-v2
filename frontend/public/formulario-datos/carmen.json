@@ -1,0 +1,25 @@
+{
+ "plantilla": "diseno-creativo",
+ "titulo": "Carmen · Chicagráfica",
+ "intro": "Con estas respuestas armamos tu perfil creativo en CUCO ARTS: quién eres, qué servicios y productos ofreces, cómo trabajas y con qué lugares, eventos y zonas de Monterrey te gustaría colaborar. Es un piloto y empezamos sencillo: lo que no sepas todavía, déjalo vacío o escribe “por definir”. Nada es obligatorio y nada se publica sin tu aprobación. Tu avance se guarda solo: puedes cerrar y seguir después, incluso desde otro dispositivo, con tu enlace personal.",
+ "whatsapp": "528120321492",
+ "whatsapp_msg": "Hola Roberto, terminé el formulario de perfil creativo. ",
+ "prellenado": {
+  "basicos": {
+   "nombre": "Chicagráfica",
+   "redes": "@chicagrafica.psd (Instagram)"
+  },
+  "proyectos": {
+   "items": [
+    {
+     "titulo": "Identidad visual de CUCO ARTS",
+     "para": "CUCO ARTS",
+     "anio": "",
+     "detalle": "Ideaste el branding de CUCO ARTS. Cuéntanos cómo lo pensaste, qué querías transmitir y qué decisiones tomaste (colores, tipografía, logo).",
+     "permiso": "Sí",
+     "enlace": ""
+    }
+   ]
+  }
+ }
+}
