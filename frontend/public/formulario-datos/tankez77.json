@@ -1,0 +1,37 @@
+{
+ "plantilla": "trayectoria-artista",
+ "titulo": "Tankez77 · Trayectoria",
+ "intro": "Estamos armando tu perfil de artista en CUCO ARTS. Con lo que ya tenemos de la tienda, tus entrevistas y el podcast Resis77e, ya pusimos algunos datos: revísalos, corrígelos y complétalos con tu formación, exposiciones, premios, proyectos y cómo trabajas. Nada es obligatorio y nada se publica sin tu aprobación. Tu avance se guarda solo: puedes cerrar y seguir después, incluso desde otro dispositivo, con tu enlace personal.",
+ "whatsapp": "528120321492",
+ "whatsapp_msg": "Hola Roberto, terminé el formulario de trayectoria. ",
+ "prellenado": {
+  "basicos": {
+   "nombre": "Tankez77",
+   "ciudad": "Monterrey, Nuevo León (Centro)",
+   "redes": "@tankez77 (Instagram)"
+  },
+  "colectivas": {
+   "items": [
+    {
+     "titulo": "Expo-venta CUCO ARTS × HUSKY",
+     "lugar": "HUSKY Coffee Shop, Santiago, N.L.",
+     "anio": "2026",
+     "detalle": "Participación con obra. ¿Qué piezas llevaste y en qué fechas?",
+     "enlace": ""
+    }
+   ]
+  },
+  "proyectos": {
+   "items": [
+    {
+     "titulo": "Resis77e (podcast)",
+     "para": "CUCO ARTS",
+     "anio": "2026",
+     "detalle": "Serie grabada en tu estudio con invitados de otras ciudades (Marion VE, Smuter). ¿Cómo la describirías tú y cuál es tu papel?",
+     "permiso": "Sí",
+     "enlace": ""
+    }
+   ]
+  }
+ }
+}
