@@ -1655,6 +1655,57 @@ body:has(#mapa:not([hidden])){overflow:hidden}
 @media(max-width:380px){#mapa .mapsorp span:last-child{display:none}}
 @media(prefers-reduced-motion:reduce){#mapa .zone.sorp{filter:none}}
 
+/* tarjeta MTY VS ART (evento y feria) */
+.mvsa-card{display:flex;align-items:center;gap:14px;margin:16px 0;padding:14px 16px;background:#F7D649;color:#232322;border:4px solid #232322;border-radius:22px;box-shadow:4px 4px 0 #232322}
+.mvsa-ico{font-size:30px;line-height:1}.mvsa-tx{flex:1;display:flex;flex-direction:column;gap:2px;font-size:15px;line-height:1.3}.mvsa-tx b{font:800 15px "Courier Prime","Courier New",monospace;letter-spacing:.12em}
+.mvsa-btn{white-space:nowrap;background:#232322!important;color:#F7D649!important;border:3px solid #232322;border-radius:999px;padding:9px 18px;font-weight:800;text-decoration:none}
+@media(max-width:560px){.mvsa-card{flex-wrap:wrap}.mvsa-btn{width:100%;text-align:center}}
+
+/* botones de feria y juego dentro de la fila de iconos del evento; al tocarlos abren una descripción corta */
+.sbtn.ibtn[data-info]{border-width:3px}
+.sbtn.ibtn.info-fer{background:#644DEF;color:#fff}.sbtn.ibtn.info-game{background:#F7D649;color:#232322}.sbtn.ibtn.info-husky{background:#FFE7CF;color:#232322}
+.sbtn.ibtn[data-info][aria-expanded="true"]{box-shadow:3px 3px 0 #232322;transform:translate(-1px,-1px)}
+.sbtn.ibtn.info-fer:hover,.sbtn.ibtn.info-fer:focus-visible{background:#7d69f2;color:#fff}.sbtn.ibtn.info-game:hover,.sbtn.ibtn.info-game:focus-visible{background:#ffe27a;color:#232322}
+.infopanel{display:flex;align-items:center;gap:12px;margin:10px 0 4px;padding:12px 14px;border:3px solid #232322;border-radius:18px;box-shadow:4px 4px 0 #232322;max-width:640px}
+.infopanel[hidden]{display:none}
+.infopanel.fer{background:#644DEF;color:#fff}.infopanel.game{background:#F7D649;color:#232322}.infopanel.husky{background:#FFE7CF;color:#232322}
+.infopanel .ip-ic{font-size:26px;line-height:1}.infopanel .ip-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.3}
+.infopanel .ip-tx b{font-size:15px;letter-spacing:-.01em}.infopanel.game .ip-tx b{font:800 13px "Courier Prime","Courier New",monospace;letter-spacing:.12em}
+.infopanel .ip-go{white-space:nowrap;font-weight:800;font-size:14px;text-decoration:none;color:inherit;border:2px solid currentColor;border-radius:999px;padding:6px 14px}
+.infopanel .ip-go:hover{background:#232322;color:#F7D649;border-color:#232322}
+@media(max-width:560px){.infopanel{flex-wrap:wrap}.infopanel .ip-go{width:100%;text-align:center}}
+/* tarjetas de comunidad: texto acotado y sin hueco cuando no hay foto */
+.cp-noimg{aspect-ratio:auto!important;display:block!important;padding:46px 16px 16px!important;min-height:0}
+.cp-quote{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.cpiece:has(.cp-noimg) .cp-cap{display:none}
+.cp-cap{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* aviso y sección del juego en la portada de /mty */
+.mvsa-bar{display:inline-flex;align-items:center;gap:10px;margin:14px 0 0 10px;padding:7px 16px;background:#F7D649;color:#232322;border:3px solid #232322;border-radius:999px;box-shadow:3px 3px 0 #232322;text-decoration:none;font-weight:800;font-size:14px;vertical-align:middle}
+.mvsa-bar b{font:800 12px "Courier Prime","Courier New",monospace;letter-spacing:.12em}.mvsa-bar:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #232322}
+.mvsa-home{margin:26px 0;padding:22px 24px;background:#F7D649;color:#232322;border:4px solid #232322;border-radius:28px;box-shadow:6px 6px 0 #232322;display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.mvsa-home .mh-ic{font-size:46px;line-height:1}.mvsa-home .mh-tx{flex:1;min-width:240px}.mvsa-home h2{margin:0 0 4px;font:800 28px/1 "Courier Prime","Courier New",monospace;letter-spacing:.06em}
+.mvsa-home p{margin:0;font-size:16px;line-height:1.4}.mvsa-home .mh-btns{display:flex;gap:10px;flex-wrap:wrap}
+.mvsa-home .btn{background:#232322;color:#F7D649}.mvsa-home .btn.alt{background:#fff;color:#232322}
+
+/* ===== primera pantalla /mty: composición ordenada (9-nov-2026) ===== */
+/* Escritorio/tableta: bloque a la izquierda; fecha y título en su renglón, y Compartir + juego en una sola fila con el mismo espacio */
+.hero.compact{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:16px 0 8px}
+.hero.compact .today-tag{margin-bottom:0}
+.hero.compact h1{flex:0 0 100%;margin:8px 0 8px}
+.hero.compact .agbtn{margin-top:0}
+.hero.compact .mvsa-bar{margin:0;min-height:44px;padding:8px 16px}
+/* Celular: todo el encabezado al centro, en una sola columna de 343 px alineada a la cuadrícula de los accesos */
+@media(max-width:560px){
+  .hero.compact{flex-direction:column;align-items:stretch;text-align:center;gap:8px;padding:16px 0 8px}
+  .hero.compact .today-tag{align-self:center}
+  .hero.compact h1{flex:none;margin:8px 0 8px;text-align:center}
+  .hero.compact .mvsa-bar{order:3;justify-content:center;width:100%;min-height:48px;box-sizing:border-box;padding:8px 12px}
+  .hero.compact .agbtn{order:4;align-self:center;margin:0}
+  .ctrl{margin-top:16px}
+  .bar{gap:8px}
+}
+@media(max-width:360px){.hero.compact .mvsa-bar{font-size:13px;gap:8px}}
+
 /* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
 .cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
   border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 #EA663D}
@@ -5442,8 +5493,60 @@ const COMUNIDAD=[
   {id:'fb-elsa-reza-madonari',ev:'tisanicolas-gis-pastel',tipo:'foto',red:'facebook',creador:'Elsa Reza',user:null,url:'https://www.facebook.com/share/p/1Dr7mZkNTp/',img:'/mty/img/g-elsa-1.jpg',fotos:['/mty/img/g-elsa-1.jpg','/mty/img/g-elsa-2.jpg','/mty/img/g-elsa-3.jpg'],texto:'TiSanicolás 2026: Arte Madonari por Arte Urbano San Nicolás, a cargo de Carlos Robledo y Aron Garza, en la Plaza Principal. Más de 20 artistas.',texto_en:'TiSanicolás 2026: Madonnari art by Arte Urbano San Nicolás, led by Carlos Robledo and Aron Garza, at the Plaza Principal. More than 20 artists.',fecha:'2026-11-02',permiso:'enlace'},
   {id:'fb-robledo-participacion',ev:'tisanicolas-gis-pastel',tipo:'foto',red:'facebook',creador:'Carlos Robledo',user:null,fb:'maistrorobledo',url:'https://www.facebook.com/share/p/1DXz4t1WZF/',img:'/mty/img/g-robledop-1.jpg',fotos:['/mty/img/g-robledop-1.jpg','/mty/img/g-robledop-2.jpg','/mty/img/g-robledop-3.jpg'],texto:'Mi participación en TiSaNicolás “Día de Muertos”.',texto_en:'My participation in TiSaNicolás “Day of the Dead”.',fecha:null,permiso:'enlace'},
   {id:'fb-robledo-caras-b',ev:'tisanicolas-gis-pastel',tipo:'foto',red:'facebook',creador:'Carlos Robledo',user:null,fb:'maistrorobledo',url:'https://www.facebook.com/share/p/14u3vZoJhTr/',img:'/mty/img/g-robledob-1.jpg',fotos:['/mty/img/g-robledob-1.jpg','/mty/img/g-robledob-2.jpg','/mty/img/g-robledob-3.jpg'],texto:'Caras B del TiSaNicolás 2026 “Día de Muertos”: arte urbano de San Nicolás de los Garza.',texto_en:'B-sides of TiSaNicolás 2026 “Day of the Dead”: street art from San Nicolás de los Garza.',fecha:null,permiso:'enlace'},
-  {id:'fb-dahilo-tisarte',ev:'tisanicolas-gis-pastel',tipo:'foto',red:'facebook',creador:'Dahilo',user:'dahiloart',fb:'dahiloart',url:'https://www.facebook.com/share/p/184z3Zgfdc/',img:'/mty/img/g-dahilo-1.jpg',fotos:['/mty/img/g-dahilo-1.jpg','/mty/img/g-dahilo-2.jpg','/mty/img/g-dahilo-3.jpg'],texto:'Tisarte 2026 Día de Muertos, en la Plaza Principal Bernardo Reyes, San Nicolás de los Garza (álbum de fotos).',texto_en:'Tisarte 2026 Day of the Dead, at Plaza Principal Bernardo Reyes, San Nicolás de los Garza (photo album).',fecha:'2026-11-02',permiso:'enlace'}
+  {id:'fb-dahilo-tisarte',ev:'tisanicolas-gis-pastel',tipo:'foto',red:'facebook',creador:'Dahilo',user:'dahiloart',fb:'dahiloart',url:'https://www.facebook.com/share/p/184z3Zgfdc/',img:'/mty/img/g-dahilo-1.jpg',fotos:['/mty/img/g-dahilo-1.jpg','/mty/img/g-dahilo-2.jpg','/mty/img/g-dahilo-3.jpg'],texto:'Tisarte 2026 Día de Muertos, en la Plaza Principal Bernardo Reyes, San Nicolás de los Garza (álbum de fotos).',texto_en:'Tisarte 2026 Day of the Dead, at Plaza Principal Bernardo Reyes, San Nicolás de los Garza (photo album).',fecha:'2026-11-02',permiso:'enlace'},
+  {id:'ig-siberiarch-dfeaw2g1s1',ev:'habitar-pabellon-arquitectas',tipo:'foto',red:'instagram',creador:'@siberiarch',user:'siberiarch',url:'https://www.instagram.com/p/Dfea_w2G1S1/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-08',permiso:'enlace'},
+  {id:'ig-brandondlg-dfgofklff86',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@brandondlg',user:'brandondlg',url:'https://www.instagram.com/p/DfgOfkLFF86/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-09',permiso:'enlace'},
+  {id:'ig-ghovann4-dfgjp2bgw6g',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@ghovann4',user:'ghovann4',url:'https://www.instagram.com/p/DfgJP2BGw6g/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-09',permiso:'enlace'},
+  {id:'ig-gatonegrogaleriamonterrey-dfffoz4kxcl',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@gatonegrogaleriamonterrey',user:'gatonegrogaleriamonterrey',url:'https://www.instagram.com/p/DffFoz4kXCL/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-08',permiso:'enlace'},
+  {id:'ig-chic-mty-dfdygfozgi1',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@chic_mty',user:'chic_mty',url:'https://www.instagram.com/reel/DfdygfOzgI1/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-08',permiso:'enlace'},
+  {id:'ig-raulmenadlg-dfdshtggym',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@raulmenadlg',user:'raulmenadlg',url:'https://www.instagram.com/p/DfdshtgGy-m/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-08',permiso:'enlace'},
+  {id:'ig-quiencom-dfdapn0cwil',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@quiencom',user:'quiencom',url:'https://www.instagram.com/p/DfdApN0CWiL/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-07',permiso:'enlace'},
+  {id:'ig-banregio-dfc9opcg6b',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@banregio',user:'banregio',url:'https://www.instagram.com/reel/Dfc9oP_CG6B/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-07',permiso:'enlace',socio:true},
+  {id:'ig-albertorzam-dfc8s73oais',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@albertorzam',user:'albertorzam',url:'https://www.instagram.com/p/Dfc8s73oAiS/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-07',permiso:'enlace'},
+  {id:'ig-atlasdesign-shop-dfcneaabohq',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@atlasdesign.shop',user:'atlasdesign.shop',url:'https://www.instagram.com/p/DfcneAaBohq/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-07',permiso:'enlace'},
+  {id:'ig-antonio-pichardo-dfbbmoyg9d',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@_antonio_pichardo',user:'_antonio_pichardo',url:'https://www.instagram.com/p/DfbBmOyG9-D/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-07',permiso:'enlace'},
+  {id:'ig-jonathantoubin-dfa1buls5st',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@jonathantoubin',user:'jonathantoubin',url:'https://www.instagram.com/p/Dfa1Buls5St/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-nefespino-dfajxqpgyjb',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@nefespino',user:'nefespino',url:'https://www.instagram.com/p/DfajXQPGyjB/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-n-i-x-x-x-o-n-dfaa1j1mih',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@n.i.x.x.x.o.n',user:'n.i.x.x.x.o.n',url:'https://www.instagram.com/p/Dfaa1J1miH-/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-banregio-dfayuncxku',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@banregio',user:'banregio',url:'https://www.instagram.com/reel/DfaY-uNCxKu/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace',socio:true},
+  {id:'ig-still-life-mty-dfyauhgbcgw',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@still.life.mty',user:'still.life.mty',url:'https://www.instagram.com/p/DfYAUhgBCGw/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-05',permiso:'enlace'},
+  {id:'ig-tthhiis-dfapfzhoqmq',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@tthhiis',user:'tthhiis',url:'https://www.instagram.com/reel/DfaPfzHOQMQ/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-monumento-co-dfaowowmumb',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@monumento.co',user:'monumento.co',url:'https://www.instagram.com/p/DfaOWoWmuMb/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace',socio:true},
+  {id:'ig-mexbest-mx-dfaeqx2lmqb',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@mexbest.mx',user:'mexbest.mx',url:'https://www.instagram.com/p/DfaEQX2lmQB/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-jalvarogutierrez-dfz0ynrs352',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@jalvarogutierrez',user:'jalvarogutierrez',url:'https://www.instagram.com/reel/DfZ0yNrS352/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-06',permiso:'enlace'},
+  {id:'ig-entre-tejidas-dfwhdbstvhr',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@_entre_tejidas',user:'_entre_tejidas',url:'https://www.instagram.com/reel/DfWHdBstvHR/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-05',permiso:'enlace'},
+  {id:'ig-lina-garsali-dfvkvxdfjoa',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@lina.garsali',user:'lina.garsali',url:'https://www.instagram.com/p/DfVKVXDFjOa/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-04',permiso:'enlace'},
+  {id:'ig-rosta-mx-dfu8l5vohq',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@rosta.mx',user:'rosta.mx',url:'https://www.instagram.com/reel/DfU_8l5vOHQ/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-04',permiso:'enlace'},
+  {id:'ig-parquearboledamx-dftp8qt7w6',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@parquearboledamx',user:'parquearboledamx',url:'https://www.instagram.com/reel/DfTP8-qt7w6/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-04',permiso:'enlace',socio:true},
+  {id:'ig-acecimtz-dftleipxbcc',ev:'fama-26',tipo:'reel',red:'instagram',creador:'@acecimtz',user:'acecimtz',url:'https://www.instagram.com/reel/DfTLEIPxBcC/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-04',permiso:'enlace'},
+  {id:'ig-kitty-ramos-dfssb31h8vp',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@kitty.ramos_',user:'kitty.ramos_',url:'https://www.instagram.com/p/DfSsb31H8vP/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-03',permiso:'enlace'},
+  {id:'ig-onofre-estudio-dfgrhl2fmbw',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@onofre.estudio',user:'onofre.estudio',url:'https://www.instagram.com/p/DfGRhl2FMBw/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-30',permiso:'enlace'},
+  {id:'ig-arquitectas-mx-dfqoikhsnuq',ev:'habitar-pabellon-arquitectas',tipo:'reel',red:'instagram',creador:'@arquitectas.mx',user:'arquitectas.mx',url:'https://www.instagram.com/reel/DfQOikHSNuq/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-02',permiso:'enlace',socio:true},
+  {id:'ig-lapugamaria-dfpy8pgeff1',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@lapugamaria',user:'lapugamaria',url:'https://www.instagram.com/p/DfPy8PGEfF1/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-11-02',permiso:'enlace'},
+  {id:'ig-arhatgea-dfd4lebjpuz',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@arhatgea',user:'arhatgea',url:'https://www.instagram.com/p/DfD4lebjPUz/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-29',permiso:'enlace'},
+  {id:'ig-nefespino-dfdnpjzmeyx',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@nefespino',user:'nefespino',url:'https://www.instagram.com/p/DfDNpJZmEyX/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-28',permiso:'enlace'},
+  {id:'ig-arquitectas-mx-dfaxikwlkpn',ev:'habitar-pabellon-arquitectas',tipo:'foto',red:'instagram',creador:'@arquitectas.mx',user:'arquitectas.mx',url:'https://www.instagram.com/p/DfAxikWlKPN/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-27',permiso:'enlace',socio:true},
+  {id:'ig-lapugamaria-dfavyxxkxh',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@lapugamaria',user:'lapugamaria',url:'https://www.instagram.com/p/DfAVYxxkX-h/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-27',permiso:'enlace'},
+  {id:'ig-arhatgea-dex2hg6mnvx',ev:'fama-fiesta-2026',tipo:'reel',red:'instagram',creador:'@arhatgea',user:'arhatgea',url:'https://www.instagram.com/reel/Dex2hG6MnvX/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-22',permiso:'enlace'},
+  {id:'ig-inside-bythebond-dexl8izhte',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/Dexl8iZhTE_/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-21',permiso:'enlace',socio:true},
+  {id:'ig-inside-bythebond-deuefmoya7',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/Deu_EFMOYa7/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-20',permiso:'enlace',socio:true},
+  {id:'ig-inside-bythebond-deo25ntuvjj',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/Deo25nTuvJj/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-18',permiso:'enlace',socio:true},
+  {id:'ig-inside-bythebond-ddon7qahemz',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/Ddon7qahEmZ/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-09-23',permiso:'enlace',socio:true},
+  {id:'ig-inside-bythebond-ddlg4kabho',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/DdlG4_KABhO/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-09-22',permiso:'enlace',socio:true},
+  {id:'ig-inside-bythebond-ddkduuoh0k9',ev:'fama-26',tipo:'foto',red:'instagram',creador:'@inside_bythebond',user:'inside_bythebond',url:'https://www.instagram.com/p/DdkDUuoh0k9/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-09-21',permiso:'enlace',socio:true},
+  {id:'ig-infaaaaame-dewvbuocs',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@infaaaaame',user:'infaaaaame',url:'https://www.instagram.com/p/Dew-vBuOc_S/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-21',permiso:'enlace',socio:true},
+  {id:'ig-infaaaaame-desb6kmuf5y',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@infaaaaame',user:'infaaaaame',url:'https://www.instagram.com/p/DesB6kmuF5Y/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-19',permiso:'enlace',socio:true},
+  {id:'ig-infaaaaame-dekv9xup8q',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@infaaaaame',user:'infaaaaame',url:'https://www.instagram.com/p/DekV9-xup8Q/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-16',permiso:'enlace',socio:true},
+  {id:'ig-jonathantoubin-despmswuc7',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@jonathantoubin',user:'jonathantoubin',url:'https://www.instagram.com/p/DeSPmsWuC-7/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-09',permiso:'enlace'},
+  {id:'ig-infaaaaame-deib1tcops2',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@infaaaaame',user:'infaaaaame',url:'https://www.instagram.com/p/DeIB1tcOPS2/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-10-05',permiso:'enlace',socio:true},
+  {id:'ig-jonathantoubin-dddetkito0e',ev:'fama-fiesta-2026',tipo:'foto',red:'instagram',creador:'@jonathantoubin',user:'jonathantoubin',url:'https://www.instagram.com/p/DdDETKIto0e/',texto:'Publicación sobre FAMA ’26 (etiquetó a @famamonterrey).',texto_en:'Post about FAMA ’26 (tagged @famamonterrey).',fecha:'2026-09-09',permiso:'enlace'},
 ];
+
+/* GENERADO por herramientas\aplicar_metricas.js desde data\metricas_comunidad.json — no editar a mano. */
+const COM_METRICAS={"lectura":"2026-11-09","piezas":{"ig-noticias28-escultores":{"f":"2026-11-09","l":268,"c":7,"r":24,"s":74},"ig-ucafarq-escultores-inauguracion":{"f":"2026-11-09","l":74,"c":1},"ig-conarte-resolana-inauguracion":{"f":"2026-11-09","l":131,"c":2,"r":11,"s":11},"ig-morris-nos-vemos-pronto":{"f":"2026-11-09","l":246,"c":1,"r":18,"s":0},"ig-m1881-inauguracion":{"f":"2026-11-09","l":52,"c":0,"r":0,"s":11},"ig-vina-ser-calavera":{"f":"2026-11-09","l":517,"c":33,"r":11,"s":7},"fb-clara-tamez-homenaje":{"f":"2026-11-09","l":33,"c":3},"fb-dahilo-tisarte":{"f":"2026-11-09","l":25,"c":1},"ig-siberiarch-dfeaw2g1s1":{"f":"2026-11-09","l":79,"c":4,"r":3,"s":0},"ig-brandondlg-dfgofklff86":{"f":"2026-11-09","l":null,"c":3,"r":2,"s":0},"ig-ghovann4-dfgjp2bgw6g":{"f":"2026-11-09","l":27,"c":0,"r":0,"s":0},"ig-gatonegrogaleriamonterrey-dfffoz4kxcl":{"f":"2026-11-09","l":18,"c":2,"r":1,"s":0},"ig-chic-mty-dfdygfozgi1":{"f":"2026-11-09","l":366,"c":23,"r":10,"s":58},"ig-raulmenadlg-dfdshtggym":{"f":"2026-11-09","l":null,"c":22,"r":3,"s":0},"ig-quiencom-dfdapn0cwil":{"f":"2026-11-09","l":null,"c":4,"r":5,"s":0},"ig-banregio-dfc9opcg6b":{"f":"2026-11-09","l":42,"c":2,"r":2,"s":6},"ig-albertorzam-dfc8s73oais":{"f":"2026-11-09","l":91,"c":19,"r":6,"s":0},"ig-atlasdesign-shop-dfcneaabohq":{"f":"2026-11-09","l":38,"c":1,"r":0,"s":0},"ig-antonio-pichardo-dfbbmoyg9d":{"f":"2026-11-09","l":12,"c":2,"r":1,"s":0},"ig-jonathantoubin-dfa1buls5st":{"f":"2026-11-09","l":60,"c":5,"r":5,"s":0},"ig-nefespino-dfajxqpgyjb":{"f":"2026-11-09","l":185,"c":17,"r":4,"s":0},"ig-n-i-x-x-x-o-n-dfaa1j1mih":{"f":"2026-11-09","l":173,"c":8,"r":5,"s":0},"ig-banregio-dfayuncxku":{"f":"2026-11-09","l":67,"c":1,"r":5,"s":13},"ig-still-life-mty-dfyauhgbcgw":{"f":"2026-11-09","l":17,"c":0,"r":3,"s":0},"ig-tthhiis-dfapfzhoqmq":{"f":"2026-11-09","l":null,"c":8,"r":6,"s":0},"ig-monumento-co-dfaowowmumb":{"f":"2026-11-09","l":270,"c":4,"r":7,"s":0},"ig-mexbest-mx-dfaeqx2lmqb":{"f":"2026-11-09","l":null,"c":2,"r":2,"s":0},"ig-jalvarogutierrez-dfz0ynrs352":{"f":"2026-11-09","l":42,"c":0,"r":0,"s":7},"ig-entre-tejidas-dfwhdbstvhr":{"f":"2026-11-09","l":16,"c":0,"r":1,"s":0},"ig-lina-garsali-dfvkvxdfjoa":{"f":"2026-11-09","l":82,"c":10,"r":1,"s":0},"ig-rosta-mx-dfu8l5vohq":{"f":"2026-11-09","l":32,"c":3,"r":1,"s":14},"ig-parquearboledamx-dftp8qt7w6":{"f":"2026-11-09","l":282,"c":303,"r":12,"s":0},"ig-acecimtz-dftleipxbcc":{"f":"2026-11-09","l":51,"c":6,"r":6,"s":4},"ig-kitty-ramos-dfssb31h8vp":{"f":"2026-11-09","l":192,"c":18,"r":0,"s":0},"ig-onofre-estudio-dfgrhl2fmbw":{"f":"2026-11-09","l":null,"c":19,"r":16,"s":0},"ig-arquitectas-mx-dfqoikhsnuq":{"f":"2026-11-09","l":69,"c":7,"r":9,"s":15},"ig-lapugamaria-dfpy8pgeff1":{"f":"2026-11-09","l":null,"c":3,"r":20,"s":0},"ig-arhatgea-dfd4lebjpuz":{"f":"2026-11-09","l":null,"c":16,"r":10,"s":0},"ig-nefespino-dfdnpjzmeyx":{"f":"2026-11-09","l":83,"c":17,"r":6,"s":0},"ig-arquitectas-mx-dfaxikwlkpn":{"f":"2026-11-09","l":238,"c":9,"r":33,"s":0},"ig-lapugamaria-dfavyxxkxh":{"f":"2026-11-09","l":null,"c":30,"r":9,"s":0},"ig-arhatgea-dex2hg6mnvx":{"f":"2026-11-09","l":null,"c":21,"r":16,"s":0},"ig-inside-bythebond-dexl8izhte":{"f":"2026-11-09","l":426,"c":44,"r":5,"s":0},"ig-inside-bythebond-deuefmoya7":{"f":"2026-11-09","l":447,"c":51,"r":5,"s":0},"ig-inside-bythebond-deo25ntuvjj":{"f":"2026-11-09","l":483,"c":13,"r":18,"s":0},"ig-inside-bythebond-ddon7qahemz":{"f":"2026-11-09","l":39,"c":6,"r":2,"s":0},"ig-inside-bythebond-ddlg4kabho":{"f":"2026-11-09","l":44,"c":7,"r":3,"s":0},"ig-inside-bythebond-ddkduuoh0k9":{"f":"2026-11-09","l":85,"c":17,"r":5,"s":0},"ig-infaaaaame-dewvbuocs":{"f":"2026-11-09","l":114,"c":8,"r":2,"s":0},"ig-infaaaaame-desb6kmuf5y":{"f":"2026-11-09","l":96,"c":7,"r":14,"s":0},"ig-infaaaaame-dekv9xup8q":{"f":"2026-11-09","l":66,"c":11,"r":13,"s":0},"ig-jonathantoubin-despmswuc7":{"f":"2026-11-09","l":150,"c":6,"r":6,"s":0},"ig-infaaaaame-deib1tcops2":{"f":"2026-11-09","l":222,"c":4,"r":5,"s":0},"ig-jonathantoubin-dddetkito0e":{"f":"2026-11-09","l":369,"c":21,"r":52,"s":0}},"prev":null};
+const COM_HISTORIAS=[];
+const COM_PTS_HIST=[{"fecha":"2026-11-09","total":7582,"semana":6770,"porEvento":{"fama-26":4661,"escultores-en-nuevo-leon":886,"tisanicolas-gis-pastel":804,"antes-todo-esto-era-monte":359,"habitar-pabellon-arquitectas":336,"resolana-juan-jose-ceron":257,"origenes-destino-m1881-2026":117,"fama-fiesta-2026":110,"homenaje-porfirio-tamez":52}}];
+const COM_REGIOS={"regios":[],"acciones":[]};
 
 /* ============ IDIOMA (español / English) ============ */
 let LANG=(()=>{try{const s=localStorage.getItem('cucoarts-lang');if(s==='es'||s==='en')return s}catch(e){}return ((navigator.language||'es').toLowerCase().indexOf('en')===0)?'en':'es'})();
@@ -5469,7 +5572,7 @@ es:{
  ex_date_h:'Busca por fecha', ex_date_sub:'Toca para elegir cuándo quieres salir.', ex_zone_h:'Busca por zona', ex_zone_sub:'Toca para elegir una zona y ver sus lugares.', ex_all:'Ver todos', ex_n:'{0} eventos', ex_n1:'1 evento', src_web:'Sitio oficial ↗', see_event:'Ver evento →', map_sec_h:'Mapa de zonas culturales',
  checkin:'Check in ✱', checkin_opens:'El check-in se abre cuando empieza el evento ({0}).',
  co_photos:'fotos', co_post:'publicación', co_posts:'publicaciones', co_tagged:'Etiquetados:', co_posted_on:'Publicado en {0}', co_part_more:'Cuentas tomadas de la publicación del evento.', co_gal_open:'Ver galería ({0} fotos)', co_h:'La comunidad lo vivió', co_sub:'Fotos, reels y videos de quienes estuvieron ahí: cada pieza con su creador, la red donde la subió y el enlace a la publicación original. Es el registro de lo que hacemos como ciudad.', co_creator:'creador', co_creators:'creadores', co_piece:'pieza', co_pieces:'piezas', co_event:'evento', co_events:'eventos', co_place:'lugar', co_places:'lugares', co_zone:'zona', co_zones:'zonas', co_tipo_foto:'Foto', co_tipo_reel:'Reel', co_tipo_video:'Video', co_tipo_carrusel:'Carrusel', co_tipo_historia:'Historia', co_tipo_post:'Publicación', co_view_on:'Ver en {0} ↗', co_note:'Cada pieza es de su autor y se muestra con crédito y enlace al original.', co_takedown:'¿Quieres que la quitemos?', co_more:'Mandar más contenido', co_empty_h:'Nadie ha subido contenido de este evento… todavía', co_empty_p:'Si estuviste ahí, mándanos la liga de tu publicación o tus archivos. Aparecerás aquí con tu nombre y la red donde lo publicaste.', co_ask_btn:'Mandar mi contenido', co_pl_h:'La comunidad en este lugar', co_pl_sub:'Lo que la gente ha creado en este espacio, a partir de los eventos que han pasado por aquí.', co_pl_evs:'Eventos con contenido', co_pl_empty_h:'Este lugar aún no tiene contenido de la comunidad', co_pl_empty_p:'Si hiciste fotos, un reel o un video aquí, mándanoslo: tu pieza queda en el registro del lugar y del evento, con tu crédito.', co_cr:'Creador', co_cr_sub:'Lo que {0} ha creado y compartido sobre el arte de Monterrey. Su registro en la ciudad.', co_year:'Registro {0}',
- sh_tab_agenda:'Agenda', sh_tab_hoy:'Hoy', sh_tab_semana:'Esta semana', sh_tab_buscar:'Un evento', sh_title_hoy:'Comparte lo de hoy', sh_title_semana:'Comparte la semana', sh_title_buscar:'Comparte un evento', sh_find_ph:'Busca un evento, artista o lugar', sh_find_special:'Ferias y eventos especiales', sh_find_next:'Próximos eventos', sh_find_none:'No encontramos eventos con eso. Prueba con otro nombre o lugar.', sh_copy_text:'📝 Copiar texto', sh_text_copied:'Texto copiado: pégalo en tu publicación o chat.',
+ sh_tab_agenda:'Agenda', sh_tab_hoy:'Hoy', sh_tab_semana:'Esta semana', sh_tab_buscar:'Un evento', sh_tab_lunes:'Lunes: en curso', sh_tab_lunesc:'Lunes: comunidad', sh_title_lunes:'Resumen del lunes', sh_title_lunesc:'La comunidad de la semana', sh_tab_lunesx:'Lunes: participa', sh_title_lunesx:'Invita a participar', sh_tab_lunesm:'Lunes: mes', sh_title_lunesm:'MTY VS ART del mes', sh_tab_lunesj:'Lunes: cómo jugar', sh_title_lunesj:'Cómo se juega', sh_title_hoy:'Comparte lo de hoy', sh_title_semana:'Comparte la semana', sh_title_buscar:'Comparte un evento', sh_find_ph:'Busca un evento, artista o lugar', sh_find_special:'Ferias y eventos especiales', sh_find_next:'Próximos eventos', sh_find_none:'No encontramos eventos con eso. Prueba con otro nombre o lugar.', sh_copy_text:'📝 Copiar texto', sh_text_copied:'Texto copiado: pégalo en tu publicación o chat.',
  story_ig:'Historia de Instagram', story_title:'Compártelo en tu historia', story_title_agenda:'Comparte la agenda', qr_btn:'▦ QR para impresos', qr_color:'Color del marco', qr_cn:['Amarillo','Lima','Celeste','Menta','Naranja','Azul','Violeta','Gris'], qr_title:'Código QR para impresos', qr_camp:'Nombre de la campaña', qr_camp_ph:'ej. cartel expo noviembre', qr_hint:'Cada escaneo se registra en Google Analytics como campaña con ese nombre (fuente “qr”, medio “print”). Usa un nombre distinto para cada impreso.', qr_size:'Para imprimir: mínimo 2.5 cm por lado y deja el margen blanco alrededor.', qr_dl:'⬇ PNG sin marco (alta calidad)', qr_dlf:'⬇ PNG con marco CUCO ARTS', qr_copy:'🔗 Copiar liga con medición', qr_copied:'Liga copiada.', qr_saved:'Imagen guardada.', qr_scan_agenda:'ESCANEA · AGENDA VIVA DE ARTES VISUALES', qr_scan_event:'ESCANEA PARA VER EL EVENTO', ag_btn:'📲 Compartir', ag_shuffle:'🔀 Otro diseño', ag_invite_h:'Invita a tu comunidad', ag_invite_p:'Si eres artista, organizas o vas a ir: comparte la agenda, lo de hoy, lo de la semana o un evento en tu historia. Las ferias y los eventos especiales salen destacados.', story_share:'📲 Compartir', st_share_s:'Compartir', mt_h:'Explora el arte por barrio', mt_s:'{0} eventos hoy en {1} zonas · toca el mapa', mt_s0:'{0} zonas culturales · toca y descubre', mt_go:'Abrir mapa', st_back_img:'Volver', st_prev:'Atrás', st_next:'Siguiente', st_step:'Paso', st_info:'Info', qr_dl_s:'Sin marco', qr_dlf_s:'Con marco', qr_copy_s:'Liga', st_dl_s:'Guardar', st_copy_s:'Liga', st_text_s:'Texto', st_shuffle_s:'Otro', st_qr_s:'QR', st_how_s:'📖 Paso a paso', st_how_back_s:'🖼️ Volver a la imagen', st_zoom:'Ver a detalle', st_zoom_hint:'Toca la imagen para verla a detalle', st_back:'Volver', st_zoom_in:'Acercar', st_zoom_out:'Alejar', st_zoom_reset:'Tamaño completo', st_done:'¡Listo!', story_dl:'⬇ Descargar', story_copy:'🔗 Copiar liga', story_how:'📖 ¿Cómo la comparto? Paso a paso', story_how_back:'🖼️ Volver a la imagen', sg_h:'Compártela en 5 pasos', sg_s1_h:'Mándala a Instagram', sg_s1_m:'Toca <b>COMPARTIR</b> y elige <b>Instagram › Tu historia</b>. ¿No aparece? Toca <b>DESCARGAR</b>, abre Instagram, desliza a la derecha y elige la imagen de tu galería.', sg_s1_d:'Desde la computadora: toca <b>DESCARGAR</b> y pásala a tu celular (AirDrop, WhatsApp o correo); luego ábrela en Instagram.', sg_s2_h:'Pon el enlace al evento', sg_s2_m:'Toca el sticker de la carita y elige <b>ENLACE</b>. Pega la liga (ya quedó copiada; si no, toca <b>COPIAR LIGA</b>) y acomódalo en el recuadro punteado. Así quien la vea llega directo a este evento.', sg_s3_h:'Agrega música', sg_s3_m:'Sticker de la carita › <b>MÚSICA</b>. Busca una canción y elige el fragmento que quieras.', sg_s4_h:'Etiquétanos', sg_s4_m:'Sticker <b>@MENCIÓN</b> › <b>@cucoarts</b>. Así la vemos y la compartimos.', sg_s5_h:'Publica', sg_s5_m:'Toca <b>Tu historia</b> y listo. El recuadro punteado de la vista previa no sale en la imagen.', sg_tip:'Tip: pon primero el enlace y luego la música y la mención, para que no se encimen.', sg_ig_link:'ENLACE', sg_ig_music:'MÚSICA', sg_ig_mention:'@MENCIÓN', story_sticker:'Aquí va tu sticker de enlace', story_hint:'Sube la imagen a tu historia de Instagram y agrega el sticker de enlace en el recuadro punteado (no sale en la imagen): la liga ya quedó copiada, solo pégala. Así quien la vea llegará directo a este evento en cucoarts.com/mty.', story_copied:'Liga copiada ✓', story_saved:'Imagen guardada ✓ (la liga también está copiada)', story_err:'No se pudo armar la imagen.', like_do:'Dale like a este espacio', like_thanks_h:'¡Gracias por tu like!', like_ok:'Seguir explorando', like_done:'Ya le diste like', like_lead:'Con tu like difundes la cultura local.', like_thanks:'¡Gracias! Tu like ya cuenta.', like_err:'No se pudo guardar. Intenta de nuevo.', like_limit:'Hay muchos likes desde esta red. Intenta más tarde.', pl_auto:'En CUCO ARTS hemos registrado aquí:', pl_about:'Sobre este espacio', pl_nodesc:'Todavía estamos documentando este espacio.', pl_desc_src:'Descripción basada en', srch_ph:'Busca un evento, lugar o artista', srch_hint:'Prueba con: Maser, FAMA, Arde Arte, fotografía…', srch_btn:'Buscar', srch_clear:'Borrar búsqueda', srch_ev:'Eventos', srch_pl:'Lugares', srch_ar:'Artistas', srch_fe:'Ferias y festivales', srch_zo:'Zonas', srch_none:'No encontramos nada para “{0}”.', srch_none_p:'Revisa la ortografía, prueba con una sola palabra, o cuéntanos qué buscabas.', srch_tell:'Cuéntanos qué buscabas', srch_ig:'Instagram ↗', srch_n_ev:'{0} en la agenda', srch_more:'Hay más resultados: afina la búsqueda.', f_open:'Abierto hoy', hero_open_more:'Además, hay {0} exposiciones o programas abiertos ahora.', hero_open_btn:'Ver todo lo abierto hoy', f_clear_all:'Quitar filtros', f_clear_zone:'Ver todas las zonas', none_zone:'Todavía no hay eventos cargados en esta zona con estos filtros.', f_today2:'Hoy', f_week2:'Esta semana', f_nextweek:'Próxima semana', f_month_btn:'Mes', f_all2:'Todo', where_h:'Dónde', map_btn:'Mapa', ctrl_h:'Buscar por fecha y zona', f_cat_btn:'Categoría', hint_abierto:'Lo que empieza hoy y lo que sigue abierto.', hint_sem:'Lo que empieza en los próximos 7 días.', hint_sem2:'Lo que empieza dentro de 8 a 14 días.', hint_todos:'Todo lo vigente: hoy, lo que sigue abierto y lo que viene.', hint_archivo:'Eventos que ya terminaron.', hint_mes:'Lo que está activo en {0}.', more_n:'Ver {0} más', less_ev:'Ver menos', vis_short:'Elige tus intereses y te decimos a dónde ir', com_short:'Recomienda artistas y cuenta tu experiencia', bar_search:'Buscar', bar_date:'Fecha', bar_zone:'Zona', bar_art:'Arte', bar_map:'Mapa', pop_close:'Cerrar', pop_done:'Listo', pop_clear:'Limpiar', pop_srch_h:'Buscar', pop_when_h:'¿Cuándo?', pop_where_h:'¿En qué zona? (puedes elegir varias)', pop_cat_h:'¿Qué tipo de arte? (puedes elegir varios)', pop_month_h:'Por mes', where_all:'Todas las zonas', pop_map:'Ver en el mapa', act_h:'Filtros activos', act_remove:'Quitar este filtro', clear_all:'Limpiar todo', zone_art_h:'Nuestros artistas en esta zona', view_work:'Ver su colección en la tienda', view_coll:'Ver colección', zart_alt:'Detalle de una obra de {0}', zone_spaces_h:'Espacios ({0})', n_zones:'zonas', n_arts:'tipos', multi_hint:'Puedes elegir varias', view_h:'Vista', view_grid:'Cuadrícula', view_list:'Lista', skip:'Ir al contenido', fer_home_h:'Ferias, festivales y movimientos', fer_home_sub:'Programas que reúnen varias exposiciones y sedes. Entra a cada uno para ver todo lo que pasa y dónde.', fer_home_go:'Ver programa', place_org_h:'Lo que organiza este espacio en otras sedes', place_none_h:'Aún no hemos cargado eventos de este espacio.', place_none_p:'Si sabes de una exposición o actividad aquí, cuéntanosla y la publicamos con crédito.', place_tell:'Contar un evento de este espacio', place_ig_first:'Mientras tanto, mira lo que publican en Instagram', fer_art_h:'Artistas participantes', fer_art_sub:'Cuentas de Instagram tomadas de las publicaciones “Conoce a…” de la propia feria. Toca un nombre para ver su perfil.', fer_art_more:'Ver todos los artistas y ediciones anteriores en la página de la feria', nav_start:'Inicio', nav_start_t:'Volver al principio de /mty', to_top:'Subir', pc_open:'Abrir la página del espacio', pc_events:'Ver eventos', pc_events_hide:'Ocultar eventos', pc_no_events:'Aún no hay eventos cargados en este espacio.', map_all:'Todo', fer_banner:'Esto es parte de {0}', fer_banner_main:'Ver la página de {0}', fer_banner_sub:'Qué es, sedes, programa y ediciones pasadas', husky_banner:'Ver la exposición completa en /husky', husky_banner_sub:'La colaboración de CUCO ARTS con HUSKY Coffee Shop →', sedes_h:'Sedes', sedes_n:'{0} sedes', fer_multi:'Esta feria tiene sedes en {0} zonas culturales. Toca una zona para ver todo lo que pasa ahí, o un lugar para ver su ficha.', fer_one:'Esta feria se vive en la zona {0}.', fer_otras:'Otras sedes que menciona el organizador (todavía sin ficha ni zona en nuestro catálogo)', cc_h:'Contenido de la comunidad', cc_sub:'Fotos, videos y publicaciones, siempre con su crédito.', cc_ask_h:'¿Tienes contenido de esto?', cc_ask_t:'Mándalo a hello@cucoarts.com (una liga o tus archivos) y lo publicamos aquí con tu crédito.', cc_ask_btn:'Mandar contenido', cc_year:'Edición {0}', cc_view_ig:'Ver en Instagram ↗', cc_view_yt:'Ver en YouTube ↗', fer_tag:'Feria', fer_view:'Ver la página de la feria', fer_part:'Parte de {0}', photo_takedown:'¿Eres titular y prefieres retirarla? Escríbenos', ph_what:'Sobre el lugar', ph_line:'Línea del tiempo', ph_src:'Fuentes', fer_what:'Qué es', fer_facts:'Datos clave', fer_curio:'Para saber', fer_where:'Dónde se vive', fer_where_sub:'Zonas culturales y lugares de esta feria en nuestro catálogo.', fer_prog:'Programa en nuestro calendario', fer_prog_sub:'Lo que ya tenemos de esta feria. La agenda completa es la del organizador.', fer_visual:'Artes visuales mencionadas', fer_past:'Ediciones pasadas', fer_official:'Agenda oficial ↗', fer_site:'Sitio oficial ↗', fer_ics:'Descargar calendario (.ics)', fer_print:'Imprimir o guardar PDF', fer_team:'Quién la organiza', fer_src:'Fuente', fer_photo_note:'Fotos con crédito de quienes las hicieron o publicaron. Si prefieres que alguna se retire, escríbenos a hello@cucoarts.com.', fer_all:'Ferias, festivales y movimientos', hype_ask:'🙋 ¿Vas a ir?', hype_go:'🙋 ¡Sí, voy!', hype_done:'🎉 ¡Ya vas!', hype_thanks:'¡Listo! Nos vemos ahí.', hype_title:'¿Vas a ir?', hype_one:'persona va a ir', hype_many:'personas van a ir', hype_was_one:'persona iba a asistir', hype_was_many:'personas iban a asistir', hype_sub:'Toca una vez para avisar que vas. Cuando empiece el evento podrás calificarlo y contar cómo te fue.', hype_err:'No se pudo registrar. Intenta de nuevo.', hype_limit:'Hay muchos registros desde esta red. Intenta más tarde.', people_say:'Lo que dice la gente', no_comments:'Todavía no hay comentarios. Sé la primera persona en hacer check-in.',
  visitor:'Visitante', see_post:'Ver su publicación ↗', initial:'inicial', ci_one:'check-in', ci_many:'check-ins', rec_one:'recomendación', rec_many:'recomendaciones',
  place_events:'Eventos en este espacio', place_events_sub:'Ordenados por fecha, con lo más cercano primero.', none_place_events:'Aún no hemos cargado eventos de este espacio.',
@@ -5518,7 +5621,7 @@ en:{
  ex_date_h:'Search by date', ex_date_sub:'Tap to pick when you want to go out.', ex_zone_h:'Search by zone', ex_zone_sub:'Tap to pick a zone and see its places.', ex_all:'See all', ex_n:'{0} events', ex_n1:'1 event', src_web:'Official website ↗', see_event:'View event →', map_sec_h:'Cultural zones map',
  checkin:'Check in ✱', checkin_opens:'Check-in opens when the event starts ({0}).',
  co_photos:'photos', co_post:'post', co_posts:'posts', co_tagged:'Tagged:', co_posted_on:'Posted on {0}', co_part_more:'Accounts taken from the event’s post.', co_gal_open:'Open gallery ({0} photos)', co_h:'The community lived it', co_sub:'Photos, reels and videos from people who were there: each piece with its creator, the network where it was posted and a link to the original post. It is the record of what we make as a city.', co_creator:'creator', co_creators:'creators', co_piece:'piece', co_pieces:'pieces', co_event:'event', co_events:'events', co_place:'place', co_places:'places', co_zone:'zone', co_zones:'zones', co_tipo_foto:'Photo', co_tipo_reel:'Reel', co_tipo_video:'Video', co_tipo_carrusel:'Carousel', co_tipo_historia:'Story', co_tipo_post:'Post', co_view_on:'View on {0} ↗', co_note:'Each piece belongs to its author and is shown with credit and a link to the original.', co_takedown:'Want us to remove it?', co_more:'Send more content', co_empty_h:'Nobody has shared content from this event… yet', co_empty_p:'If you were there, send us the link to your post or your files. You will appear here with your name and the network where you posted it.', co_ask_btn:'Send my content', co_pl_h:'The community at this place', co_pl_sub:'What people have created at this space, from the events that have passed through.', co_pl_evs:'Events with content', co_pl_empty_h:'This place has no community content yet', co_pl_empty_p:'If you took photos, a reel or a video here, send it to us: your piece joins the record of the place and the event, with your credit.', co_cr:'Creator', co_cr_sub:'What {0} has created and shared about Monterrey art. Their record in the city.', co_year:'{0} record',
- sh_tab_agenda:'Agenda', sh_tab_hoy:'Today', sh_tab_semana:'This week', sh_tab_buscar:'One event', sh_title_hoy:'Share today’s events', sh_title_semana:'Share this week', sh_title_buscar:'Share an event', sh_find_ph:'Search an event, artist or place', sh_find_special:'Fairs and special events', sh_find_next:'Upcoming events', sh_find_none:'No events match that. Try another name or place.', sh_copy_text:'📝 Copy text', sh_text_copied:'Text copied: paste it in your post or chat.',
+ sh_tab_agenda:'Agenda', sh_tab_hoy:'Today', sh_tab_semana:'This week', sh_tab_buscar:'One event', sh_tab_lunes:'Monday: on now', sh_tab_lunesc:'Monday: community', sh_title_lunes:'Monday recap', sh_title_lunesc:'The week’s community', sh_tab_lunesx:'Monday: join in', sh_title_lunesx:'Invite people to join', sh_tab_lunesm:'Monday: month', sh_title_lunesm:'MTY VS ART this month', sh_tab_lunesj:'Monday: how to play', sh_title_lunesj:'How to play', sh_title_hoy:'Share today’s events', sh_title_semana:'Share this week', sh_title_buscar:'Share an event', sh_find_ph:'Search an event, artist or place', sh_find_special:'Fairs and special events', sh_find_next:'Upcoming events', sh_find_none:'No events match that. Try another name or place.', sh_copy_text:'📝 Copy text', sh_text_copied:'Text copied: paste it in your post or chat.',
  story_ig:'Instagram story', story_title:'Share it in your story', story_title_agenda:'Share the agenda', qr_btn:'▦ QR for print', qr_color:'Frame color', qr_cn:['Yellow','Lime','Sky blue','Mint','Orange','Blue','Violet','Grey'], qr_title:'QR code for print', qr_camp:'Campaign name', qr_camp_ph:'e.g. november expo poster', qr_hint:'Every scan is recorded in Google Analytics as a campaign with that name (source “qr”, medium “print”). Use a different name for each printed piece.', qr_size:'For printing: at least 2.5 cm per side and keep the white margin around it.', qr_dl:'⬇ PNG without frame (high quality)', qr_dlf:'⬇ PNG with CUCO ARTS frame', qr_copy:'🔗 Copy tracked link', qr_copied:'Link copied.', qr_saved:'Image saved.', qr_scan_agenda:'SCAN · LIVE VISUAL ARTS AGENDA', qr_scan_event:'SCAN TO SEE THE EVENT', ag_btn:'📲 Share', ag_shuffle:'🔀 Another design', ag_invite_h:'Invite your community', ag_invite_p:'Whether you are an artist, an organizer or going: share the agenda, today’s events, this week or one event in your story. Fairs and special events stand out.', story_share:'📲 Share', st_share_s:'Share', mt_h:'Explore art by neighborhood', mt_s:'{0} events today in {1} zones · tap the map', mt_s0:'{0} cultural zones · tap to discover', mt_go:'Open map', st_back_img:'Back', st_prev:'Previous', st_next:'Next', st_step:'Step', st_info:'Info', qr_dl_s:'No frame', qr_dlf_s:'Framed', qr_copy_s:'Link', st_dl_s:'Save', st_copy_s:'Link', st_text_s:'Text', st_shuffle_s:'Remix', st_qr_s:'QR', st_how_s:'📖 Step by step', st_how_back_s:'🖼️ Back to the image', st_zoom:'Zoom in', st_zoom_hint:'Tap the image to see it in detail', st_back:'Back', st_zoom_in:'Zoom in', st_zoom_out:'Zoom out', st_zoom_reset:'Full size', st_done:'Done!', story_dl:'⬇ Download', story_copy:'🔗 Copy link', story_how:'📖 How do I share it? Step by step', story_how_back:'🖼️ Back to the image', sg_h:'Share it in 5 steps', sg_s1_h:'Send it to Instagram', sg_s1_m:'Tap <b>SHARE</b> and choose <b>Instagram › Your story</b>. Not there? Tap <b>DOWNLOAD</b>, open Instagram, swipe right and pick the image from your gallery.', sg_s1_d:'From a computer: tap <b>DOWNLOAD</b> and send it to your phone (AirDrop, WhatsApp or email); then open it in Instagram.', sg_s2_h:'Add the link to the event', sg_s2_m:'Tap the face sticker and choose <b>LINK</b>. Paste the link (it is already copied; if not, tap <b>COPY LINK</b>) and place it in the dotted box. Whoever sees it lands directly on this event.', sg_s3_h:'Add music', sg_s3_m:'Face sticker › <b>MUSIC</b>. Search a song and pick the clip you want.', sg_s4_h:'Tag us', sg_s4_m:'Sticker <b>@MENTION</b> › <b>@cucoarts</b>. That way we see it and share it.', sg_s5_h:'Post', sg_s5_m:'Tap <b>Your story</b> and done. The dotted box in the preview does not appear in the image.', sg_tip:'Tip: add the link first, then the music and the mention, so they do not overlap.', sg_ig_link:'LINK', sg_ig_music:'MUSIC', sg_ig_mention:'@MENTION', story_sticker:'Your link sticker goes here', story_hint:'Upload the image to your Instagram story and add the link sticker in the dotted box (it does not appear in the image): the link is already copied, just paste it. Whoever sees it will land directly on this event at cucoarts.com/mty.', story_copied:'Link copied ✓', story_saved:'Image saved ✓ (the link is copied too)', story_err:'Could not build the image.', like_do:'Like this venue', like_thanks_h:'Thanks for your like!', like_ok:'Keep exploring', like_done:'You liked this', like_lead:'With your like you help spread local culture.', like_thanks:'Thank you! Your like counts.', like_err:'Could not save. Please try again.', like_limit:'Too many likes from this network. Try again later.', pl_auto:'At CUCO ARTS we have listed here:', pl_about:'About this venue', pl_nodesc:'We are still documenting this venue.', pl_desc_src:'Description based on', srch_ph:'Search an event, place or artist', srch_hint:'Try: Maser, FAMA, Arde Arte, photography…', srch_btn:'Search', srch_clear:'Clear search', srch_ev:'Events', srch_pl:'Places', srch_ar:'Artists', srch_fe:'Fairs and festivals', srch_zo:'Zones', srch_none:'We found nothing for “{0}”.', srch_none_p:'Check the spelling, try a single word, or tell us what you were looking for.', srch_tell:'Tell us what you were looking for', srch_ig:'Instagram ↗', srch_n_ev:'{0} in the agenda', srch_more:'There are more results: refine your search.', f_open:'Open today', hero_open_more:'Also, {0} exhibitions or programs are open right now.', hero_open_btn:'See everything open today', f_clear_all:'Clear filters', f_clear_zone:'See all zones', none_zone:'There are no events loaded in this zone with these filters yet.', f_today2:'Today', f_week2:'This week', f_nextweek:'Next week', f_month_btn:'Month', f_all2:'All', where_h:'Where', map_btn:'Map', ctrl_h:'Browse by date and zone', f_cat_btn:'Category', hint_abierto:'What starts today and what is still open.', hint_sem:'What starts in the next 7 days.', hint_sem2:'What starts in 8 to 14 days.', hint_todos:'Everything current: today, still open and upcoming.', hint_archivo:'Events that have ended.', hint_mes:'What is active in {0}.', more_n:'See {0} more', less_ev:'See less', vis_short:'Pick your interests and we show you where to go', com_short:'Recommend artists and share your experience', bar_search:'Search', bar_date:'Date', bar_zone:'Zone', bar_art:'Art', bar_map:'Map', pop_close:'Close', pop_done:'Done', pop_clear:'Clear', pop_srch_h:'Search', pop_when_h:'When?', pop_where_h:'Which zone? (pick several)', pop_cat_h:'What kind of art? (pick several)', pop_month_h:'By month', where_all:'All zones', pop_map:'See on the map', act_h:'Active filters', act_remove:'Remove this filter', clear_all:'Clear all', zone_art_h:'Our artists in this zone', view_work:'See their collection in the store', view_coll:'See collection', zart_alt:'Close-up of a work by {0}', zone_spaces_h:'Spaces ({0})', n_zones:'zones', n_arts:'kinds', multi_hint:'You can pick several', view_h:'View', view_grid:'Grid', view_list:'List', skip:'Skip to content', fer_home_h:'Fairs, festivals and movements', fer_home_sub:'Programs that bring together several exhibitions and venues. Open each one to see everything that happens and where.', fer_home_go:'See program', place_org_h:'What this space organizes at other venues', place_none_h:"We haven't loaded events for this space yet.", place_none_p:'If you know of an exhibition or activity here, tell us and we will publish it with credit.', place_tell:'Tell us about an event here', place_ig_first:'Meanwhile, see what they post on Instagram', fer_art_h:'Participating artists', fer_art_sub:'Instagram accounts taken from the fair’s own “Meet…” posts. Tap a name to see their profile.', fer_art_more:'See all artists and past editions on the fair page', nav_start:'Start', nav_start_t:'Back to the start of /mty', to_top:'Top', pc_open:'Open the venue page', pc_events:'See events', pc_events_hide:'Hide events', pc_no_events:'No events loaded for this venue yet.', map_all:'All', fer_banner:'This is part of {0}', fer_banner_main:'See the {0} page', fer_banner_sub:'What it is, venues, program and past editions', husky_banner:'See the full exhibition at /husky', husky_banner_sub:'CUCO ARTS’ collaboration with HUSKY Coffee Shop →', sedes_h:'Venues', sedes_n:'{0} venues', fer_multi:'This fair has venues in {0} cultural zones. Tap a zone to see everything happening there, or a place for its profile.', fer_one:'This fair takes place in the {0} zone.', fer_otras:'Other venues mentioned by the organizer (not yet profiled or assigned to a zone in our catalog)', cc_h:'Community content', cc_sub:'Photos, videos and posts, always credited.', cc_ask_h:'Do you have content from this?', cc_ask_t:'Send it to hello@cucoarts.com (a link or your files) and we will publish it here with your credit.', cc_ask_btn:'Send content', cc_year:'{0} edition', cc_view_ig:'View on Instagram ↗', cc_view_yt:'View on YouTube ↗', fer_tag:'Fair', fer_view:'See the fair page', fer_part:'Part of {0}', photo_takedown:'Are you the rights holder and want it removed? Write to us', ph_what:'About the place', ph_line:'Timeline', ph_src:'Sources', fer_what:'What it is', fer_facts:'Key facts', fer_curio:'Good to know', fer_where:'Where it happens', fer_where_sub:'Cultural zones and venues of this fair in our catalog.', fer_prog:'Program in our calendar', fer_prog_sub:'What we already have from this fair. The full agenda is the organizer’s.', fer_visual:'Visual arts mentioned', fer_past:'Past editions', fer_official:'Official agenda ↗', fer_site:'Official site ↗', fer_ics:'Download calendar (.ics)', fer_print:'Print or save as PDF', fer_team:'Who runs it', fer_src:'Source', fer_photo_note:'Photos credited to whoever took or published them. If you would like one removed, write to hello@cucoarts.com.', fer_all:'Fairs, festivals and movements', hype_ask:'🙋 Are you going?', hype_go:"🙋 Yes, I'm going!", hype_done:"🎉 You're in!", hype_thanks:'Done! See you there.', hype_title:'Are you going?', hype_one:'person is going', hype_many:'people are going', hype_was_one:'person was going', hype_was_many:'people were going', hype_sub:'Tap once to say you are going. Once the event starts you can rate it and share how it went.', hype_err:'Could not register. Please try again.', hype_limit:'Too many registrations from this network. Try again later.', people_say:'What people say', no_comments:'No comments yet. Be the first to check in.',
  visitor:'Visitor', see_post:'See their post ↗', initial:'starting', ci_one:'check-in', ci_many:'check-ins', rec_one:'recommendation', rec_many:'recommendations',
  place_events:'Events at this space', place_events_sub:'Sorted by date, soonest first.', none_place_events:"We haven't loaded events for this space yet.",
@@ -5649,7 +5752,25 @@ const catTag=ev=>{const c=CATS[ev.cat];return `<span class="cat" style="--c:${c.
 const fmtTag=ev=>`<span class="fmt">${esc(L(ev,'formato'))}</span>`;
 const ferLabel=k=>t(FERIAS[k]&&FERIAS[k].tipo==='mov'?'mov_tag':'fer_tag');
 const feriaTag=ev=>ev.feria?`<span class="fertag">${esc(ferLabel(ev.feria))}</span>`:'';
-const freeTag=ev=>ev.gratis===true?`<span class="free">${esc(t('free'))}</span>`:(ev.costo?`<span class="cost">${esc(L(ev,'costo').split(' · ')[0])}</span>`:'');
+/* Etiquetas de costo (9-nov-2026): una cosa por etiqueta y lo más relevante primero. «Entrada general $150; entrada libre miércoles y domingos (…)» → [GRATIS MIÉ Y DOM] [$150].
+ * Reglas: días gratis (verde) · menores gratis (verde) · primer precio (amarillo; con «3 días» si es boleto de los tres días). Si el texto no se entiende, se corta el primer tramo. */
+const COST_DAYS={es:['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'],en:['SUN','MON','TUE','WED','THU','FRI','SAT']};
+function costTags(ev){
+  const raw=String(L(ev,'costo')||'').replace(/\s+/g,' ').trim(), en=LANG==='en', out=[]; if(!raw)return out;
+  const txt=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const dayRx=[/domingo|sunday/,/lunes|monday/,/martes|tuesday/,/miercoles|wednesday/,/jueves|thursday/,/viernes|friday/,/sabado|saturday/];
+  const free=/(entrada libre|gratis|gratuit[ao]|free)/.test(txt);
+  const m=txt.match(/(entrada libre|gratis|gratuit[ao]|free)[^;.·(]*/); let freeSeg=m?m[0]:'';
+  const days=[]; dayRx.forEach((r,i)=>{if(r.test(freeSeg))days.push(i)});
+  if(free&&days.length){const o=[1,2,3,4,5,6,0].filter(i=>days.includes(i)); out.push({k:'free',t:(en?'FREE ':'GRATIS ')+o.map(i=>COST_DAYS[en?'en':'es'][i]).join(en?' & ':' Y ')})}
+  const kids=txt.match(/(menores|ninos|children|kids|under)\D{0,12}(\d{1,2})[^;.·]*?(gratu|gratis|free|libre)/);
+  if(kids)out.push({k:'free',t:en?'UNDER '+kids[2]+': FREE':'MENORES '+kids[2]+': GRATIS'});
+  const pr=raw.match(/\$\s?[\d.,]+(?:\s?MXN)?/);
+  if(pr){const three=/tres dias|three-day|3 dias|3-day/.test(txt); out.push({k:'cost',t:pr[0].replace(/\s+/g,'').replace(/MXN/i,'')+(three?(en?' · 3 DAYS':' · 3 DÍAS'):'')})}
+  if(!out.length)out.push({k:'cost',t:raw.split(/ · |; /)[0].slice(0,24)});
+  return out.slice(0,3);
+}
+const freeTag=ev=>ev.gratis===true?`<span class="free">${esc(t('free'))}</span>`:(ev.costo?costTags(ev).map(x=>`<span class="${x.k}">${esc(x.t)}</span>`).join(''):'');
 
 /* ============ CHECK-INS / RECOMENDACIONES / SUGERENCIAS (solo prototipo: localStorage, con respaldo en memoria) ============ */
 const MEM={'mty-checkins':[],'mty-reco':[],'mty-sugerencias':[]};
@@ -5742,7 +5863,7 @@ function haptic(x){
     HAP_LAST=performance.now();
     pat=pat.map((v,i)=>i%2===0?Math.max(8,Math.round(v*HAP_GAIN)):v);
     if(navigator.vibrate){navigator.vibrate(pat);return}
-    let at=0; pat.forEach((v,i)=>{if(i%2===0)setTimeout(hapticIOS,at); at+=v});
+    let at=0; pat.forEach((v,i)=>{if(i%2===0){if(at===0)hapticIOS(); else setTimeout(hapticIOS,at)} at+=v});   // el primer toque va sin demora: iOS solo lo permite dentro del gesto
     if(pat[0]>=30)setTimeout(hapticIOS,70);   // nivel fuerte en iPhone: segundo toque
   }catch(e){}
 }
@@ -5769,6 +5890,7 @@ document.addEventListener('click',e=>{
   const el=e.target.closest&&e.target.closest(HAP_SEL);
   if(!el||el.closest('[data-like],#hypeBox,#hypeOpen,#storyModal')||el.matches('[data-like],#hypeOpen'))return;   // la ventana de compartir tiene sus propios niveles
   const name=hapticFor(el), t0=performance.now();
+  if(!navigator.vibrate){haptic(name);return}   // iPhone: tiene que sonar dentro del toque (con demora iOS lo ignora)
   setTimeout(()=>{if(HAP_LAST<t0)haptic(name)},0);   // si el propio botón ya vibró en este toque, no se suma
 },true);
 async function confirmHype(){
@@ -6573,6 +6695,7 @@ function viewHome(){
     <span class="mono today-tag">${esc(dateLabel)}</span>
     <h1>${esc(t('hero_h1a'))} <span>${esc(t('hero_hoy'))}</span></h1>
     <button class="sbtn agbtn" type="button" data-story="agenda">${esc(t('ag_btn'))}</button>
+    ${mvsaBar()}
   </section>
   <section class="ctrl" id="ctrl" aria-label="${esc(t('ctrl_h'))}"></section>
   <section class="block mapsec" id="mapa"${mapOpen?'':' hidden'} style="padding-top:8px">
@@ -6586,6 +6709,7 @@ function viewHome(){
   <section class="block" id="ferias"></section>
   <details class="coll" id="visitD"><summary><h2 class="sec">${esc(t('vis_h'))}</h2><span class="collsub">${esc(t('vis_short'))}</span></summary><section class="block" id="visit"></section></details>
   <details class="coll" id="comunidadD"><summary><h2 class="sec">${esc(t('com_h'))}</h2><span class="collsub">${esc(t('com_short'))}</span></summary><section class="block" id="comunidad"></section></details>
+  ${mvsaHome()}
   <section class="block aginvite" id="agInvite"><h2 class="sec">${esc(t('ag_invite_h'))}</h2><p class="sub">${esc(t('ag_invite_p'))}</p><button class="btn big" type="button" data-story="agenda" style="animation:none">${esc(t('ag_btn'))}</button></section>`;
   bindMap();
   { const mc=$('#mapClose'); if(mc)mc.onclick=()=>setMap(false,false); const ms=$('#mapSorp'); if(ms)ms.onclick=mapSurprise; }
@@ -6788,11 +6912,11 @@ function viewEvent(id){
       </div>
   </div>
   <div class="actions">
-    ${shareMenu(ev)}
+    ${eventInfoBtns(ev)}${shareMenu(ev)}
     ${(estado(ev).k==='archivo'||(estado(ev).k==='curso'&&ev.finIncierto&&!ev.fin))?'':`<a class="sbtn ibtn" href="${esc(calUrl(ev))}" target="_blank" rel="noopener" title="${esc(t('cal_add'))}" aria-label="${esc(t('cal_add'))}"><span aria-hidden="true">📅</span></a>`}
     <a class="sbtn ibtn" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener" title="${esc(t('directions'))}" aria-label="${esc(t('directions'))}"><span aria-hidden="true">📍</span></a>
   </div>
-  ${eventBanner(ev)}
+  ${eventInfoPanels(ev)}
   ${RO?'':hypeBox(ev)}
   <div class="evpage">
     <div class="evmedia">
@@ -6876,13 +7000,14 @@ function viewFeria(k){
     <div class="tags"><span class="fertag">${esc(ferLabel(k))}</span>${fmtTag(main)}${freeTag(main)}</div>
   </div></div>
   <div class="actions noprint">
-    ${shareMenu(pseudo)}
+    ${gameInfoBtn('feria-'+k)}${shareMenu(pseudo)}
     <a class="sbtn ibtn" href="${esc(calUrl(main))}" target="_blank" rel="noopener" title="${esc(t('cal_add'))}" aria-label="${esc(t('cal_add'))}"><span aria-hidden="true">📅</span></a>
     <button class="sbtn ibtn" type="button" id="ferIcs" title="${esc(t('fer_ics'))}" aria-label="${esc(t('fer_ics'))}"><span aria-hidden="true">📥</span></button>
     <button class="sbtn ibtn" type="button" id="ferPrint" title="${esc(t('fer_print'))}" aria-label="${esc(t('fer_print'))}"><span aria-hidden="true">🖨️</span></button>
     ${f.agenda?`<a class="sbtn ibtn" href="${esc(f.agenda)}" target="_blank" rel="noopener" title="${esc(t('fer_official'))}" aria-label="${esc(t('fer_official'))}"><span aria-hidden="true">🌐</span></a>`:''}
     <a class="sbtn ibtn" href="https://www.instagram.com/${esc(f.ig)}/" target="_blank" rel="noopener" title="@${esc(f.ig)}" aria-label="Instagram @${esc(f.ig)}"><span aria-hidden="true">📷</span></a>
   </div>
+  ${gameInfoPanel('feria-'+k)}
   <figure class="ferhero"${f.heroW?' data-w':''}>${f.heroW?`<picture><source media="(min-width:760px)" srcset="${esc(f.heroW)}"><img src="${esc(f.hero)}" alt="${esc(f.nombre)}"></picture>`:`<img src="${esc(f.hero)}" alt="${esc(f.nombre)}">`}<figcaption>${f.heroW?`<span class="cap-m">${esc(L(f,'heroc'))}</span><span class="cap-d">${esc(L(f,'herocW'))}</span>`:esc(L(f,'heroc'))}</figcaption></figure>
   ${regHTML}
   <div class="fercols">
@@ -7073,7 +7198,7 @@ function comuCard(c,o){
   const media=c.yt&&c.tipo==='video'
     ? `<div class="cp-media cp-vid">${videoHTML(c.yt,c.img,L(c,'texto')||who)}</div>`
     : fotos.length>1 ? `<button type="button" class="cp-media cp-galbtn" data-gal="${esc(c.id)}" aria-label="${esc(t('co_gal_open',Math.min(fotos.length,GAL_MAX)))}"><img src="${esc(fotos[0].s)}" alt="${esc(L(c,'texto')||who)}" loading="lazy"><span class="cp-plat" style="--pc:${P.c}"><i aria-hidden="true"></i>${esc(P.n)}</span><span class="cp-type">${esc(cuTipo(c))}</span><span class="cp-count">▦ ${Math.min(fotos.length,GAL_MAX)}</span></button>`
-    : !fotos.length ? `<a class="cp-media cp-noimg" href="${esc(c.url)}" target="_blank" rel="noopener nofollow" style="--pc:${P.c}" aria-label="${esc(t('co_view_on',P.n))}"><span class="cp-quote">“${esc(excerpt(L(c,'texto')||'',140))}”</span><span class="cp-plat" style="--pc:${P.c}"><i aria-hidden="true"></i>${esc(P.n)}</span><span class="cp-type">${esc(cuTipo(c))}</span></a>`
+    : !fotos.length ? `<a class="cp-media cp-noimg" href="${esc(c.url)}" target="_blank" rel="noopener nofollow" style="--pc:${P.c}" aria-label="${esc(t('co_view_on',P.n))}"><span class="cp-quote">“${esc(excerpt(L(c,'texto')||'',110))}”</span><span class="cp-plat" style="--pc:${P.c}"><i aria-hidden="true"></i>${esc(P.n)}</span><span class="cp-type">${esc(cuTipo(c))}</span></a>`
     : `<a class="cp-media" href="${esc(c.url)}" target="_blank" rel="noopener nofollow" aria-label="${esc(t('co_view_on',P.n))}"><img src="${esc(fotos[0].s)}" alt="${esc(L(c,'texto')||who)}" loading="lazy"><span class="cp-plat" style="--pc:${P.c}"><i aria-hidden="true"></i>${esc(P.n)}</span><span class="cp-type">${esc(cuTipo(c))}</span></a>`;
   const ev=o.showEv&&c.ev?EVENTS.find(e=>e.id===c.ev):null;
   return `<article class="cpiece">${media}
@@ -7591,7 +7716,7 @@ function storyLabel(ev){
 }
 function storyTarget(key){
   if(key==='agenda')return {ev:null,fk:null,url:SHARE_BASE};
-  if(key==='hoy'||key==='semana')return {ev:null,fk:null,url:SHARE_BASE+'?utm_source=share&utm_content='+key};
+  if(key==='hoy'||key==='semana'||key==='lunes'||key==='lunesc'||key==='lunesm'||key==='lunesj'||key==='lunesx')return {ev:null,fk:null,url:SHARE_BASE+'?utm_source=share&utm_content='+key};
   if(String(key).startsWith('f:')){const fk=key.slice(2), f=FERIAS[fk]; return {ev:EVENTS.find(e=>e.id===f.evId),fk,url:shareUrl(Object.assign({},EVENTS.find(e=>e.id===f.evId),{_f:fk}))}}
   const ev=EVENTS.find(e=>e.id===key); return {ev,fk:ev.feria||null,url:shareUrl(ev)};
 }
@@ -7631,6 +7756,11 @@ async function drawStory(key){
   await loadStoryFonts();
   if(key==='agenda')return drawAgendaStory();
   if(key==='hoy'||key==='semana')return drawListStory(key);
+  if(key==='lunes')return drawLunesStory();
+  if(key==='lunesc')return drawLunesComunidad();
+  if(key==='lunesm')return drawLunesMes();
+  if(key==='lunesj')return drawLunesJugar();
+  if(key==='lunesx')return drawLunesCTA();
   return (await drawStoryPass(key)).c;
 }
 
@@ -7903,7 +8033,7 @@ document.addEventListener('click',async e=>{
   try{const c=await drawStory(storyKey); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(err){$('#storyMsg').textContent=t('story_err')}
   track('select_content',{content_type:'story_design',item_id:String(storyKey)+'#'+(STORY_IMG+1)});
 });
-async function storyReroll(){const cv=$('#storyCanvas'); cv.style.opacity='.35'; const rk=(storyKey==='hoy'||storyKey==='semana')?storyKey:'agenda'; if(rk!=='agenda'){SHARE_GROUND=((SHARE_GROUND<0?0:SHARE_GROUND)+1)%AG_GROUNDS.length; SHARE_PHRASE=-1} try{const c=await drawStory(rk); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')} haptic(10)}
+async function storyReroll(){const cv=$('#storyCanvas'); cv.style.opacity='.35'; const rk=(storyKey==='hoy'||storyKey==='semana'||storyKey==='lunes'||storyKey==='lunesc'||storyKey==='lunesm'||storyKey==='lunesj'||storyKey==='lunesx')?storyKey:'agenda'; if(rk!=='agenda'){SHARE_GROUND=((SHARE_GROUND<0?0:SHARE_GROUND)+1)%AG_GROUNDS.length; SHARE_PHRASE=-1} try{const c=await drawStory(rk); cv.getContext('2d').drawImage(c,0,0); cv.style.opacity='1'}catch(e){$('#storyMsg').textContent=t('story_err')} haptic(10)}
 $('#storyShuffle').onclick=storyReroll;
 $('#storyClose').onclick=closeStory; $('#storyShare').onclick=storyShare; $('#storyDl').onclick=storyDownload; $('#storyCopy').onclick=storyCopy;
 $('#storyOverlay').addEventListener('mousedown',e=>{if(e.target.id==='storyOverlay')closeStory()});
@@ -8029,8 +8159,8 @@ async function qrToServer(key,camp,framed,ci){qrKey=key;$('#qrCamp').value=camp|
  * (1080×1920) con el mismo lenguaje de marca: fondo plano de la paleta, listón oscuro arriba, titular en Montreal y datos en Courier.
  * Las ferias y los eventos especiales (marcados) llevan su propia tarjeta con foto y el color de la feria, antes del resto de la lista.
  * El espacio se aprovecha: la lista elige la densidad más cómoda que quepa y, si no cabe todo, dice cuántos faltan. */
-const HOME_KEYS=['agenda','hoy','semana','buscar'];
-const storyType=k=>k==='agenda'?'agenda':k==='hoy'?'today':k==='semana'?'week':'event';
+const HOME_KEYS=['agenda','hoy','semana','buscar','lunes','lunesc','lunesm','lunesj','lunesx'];
+const storyType=k=>k==='agenda'?'agenda':k==='hoy'?'today':k==='semana'?'week':(k==='lunes'||k==='lunesc'||k==='lunesm'||k==='lunesj'||k==='lunesx')?'monday':'event';
 let shareTab='agenda', shareEv=null, SHARE_GROUND=-1;
 const nz=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const lumOf=hex=>{const h=hex.replace('#',''),n=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);return (0.2126*(n>>16&255)+0.7152*(n>>8&255)+0.0722*(n&255))/255};
@@ -8413,15 +8543,16 @@ async function drawDayStory(key){
 /* ---- pestañas, búsqueda y cambio de contenido dentro de la ventana ---- */
 function shareTabsHTML(){
   const tabs=[['agenda',t('sh_tab_agenda'),''],['hoy',t('sh_tab_hoy'),shareCount('hoy')],['semana',t('sh_tab_semana'),shareCount('semana')],['buscar',t('sh_tab_buscar'),'']];
+  if(SH_LUNES)tabs.push(['lunes',t('sh_tab_lunes'),''],['lunesc',t('sh_tab_lunesc'),''],['lunesm',t('sh_tab_lunesm'),''],['lunesj',t('sh_tab_lunesj'),''],['lunesx',t('sh_tab_lunesx'),'']);
   return tabs.map(([k,l,n])=>`<button type="button" role="tab" class="shtab${k===shareTab?' on':''}" aria-selected="${k===shareTab}" data-shtab="${k}"><span>${esc(l)}</span>${n!==''?`<i>${n}</i>`:''}</button>`).join('');
 }
 function shareSetChrome(){
   const hub=shareTab!=='evento', m=$('#storyModal'); m.classList.toggle('hub',hub);
   $('#shareTabs').hidden=!hub; if(hub)$('#shareTabs').innerHTML=shareTabsHTML();
   $('#shareFind').hidden=!(hub&&shareTab==='buscar');
-  const cap=$('#storyText'); if(cap)cap.hidden=!(hub&&(shareTab==='hoy'||shareTab==='semana'));
-  $('#storyShuffle').hidden=!(hub&&(shareTab==='agenda'||shareTab==='hoy'||shareTab==='semana'));
-  $('#stTitle').textContent=t(shareTab==='hoy'?'sh_title_hoy':shareTab==='semana'?'sh_title_semana':shareTab==='buscar'?'sh_title_buscar':hub?'story_title_agenda':'story_title');
+  const cap=$('#storyText'); if(cap)cap.hidden=!(hub&&(shareTab==='hoy'||shareTab==='semana'||LUNES_KEYS.includes(shareTab)));
+  $('#storyShuffle').hidden=!(hub&&(shareTab==='agenda'||shareTab==='hoy'||shareTab==='semana'||LUNES_KEYS.includes(shareTab)));
+  $('#stTitle').textContent=t(shareTab==='hoy'?'sh_title_hoy':shareTab==='semana'?'sh_title_semana':LUNES_KEYS.includes(shareTab)?'sh_title_'+shareTab:shareTab==='buscar'?'sh_title_buscar':hub?'story_title_agenda':'story_title');
 }
 async function shareRedraw(){
   const cv=$('#storyCanvas'); cv.style.opacity='.35';
@@ -8458,7 +8589,441 @@ document.addEventListener('click',e=>{
   const rs=e.target.closest('[data-shev]'); if(rs){storyKey=rs.dataset.shev; shareEv=storyKey; STORY_IMG=0; buildStoryPick(storyKey); $$('#shareRes .shres').forEach(x=>x.classList.toggle('on',x===rs)); shareRedraw(); const pv=$('.storyprev'); if(pv&&innerWidth<900)pv.scrollIntoView({block:'nearest',behavior:'smooth'})}
 });
 $('#shareQ').addEventListener('input',e=>shareFind(e.target.value));
-$('#storyText').onclick=async()=>{const txt=shareCaption(shareTab); track('share',{method:'story_copy_text',content_type:storyType(shareTab),item_id:shareTab}); try{await navigator.clipboard.writeText(txt); $('#storyMsg').textContent=t('sh_text_copied')}catch(e){$('#storyMsg').textContent=t('story_err')}};
+$('#storyText').onclick=async()=>{const txt=LUNES_KEYS.includes(shareTab)?lunesCaption(shareTab):shareCaption(shareTab); track('share',{method:'story_copy_text',content_type:storyType(shareTab),item_id:shareTab}); try{await navigator.clipboard.writeText(txt); $('#storyMsg').textContent=t('sh_text_copied')}catch(e){$('#storyMsg').textContent=t('story_err')}};
+
+/* ============ HISTORIAS DEL LUNES (9-nov-2026) — uso interno de CUCO ARTS ============
+ * Dos historias 1080×1920 que se generan cada lunes (script herramientas\generar_historias_lunes.js):
+ *   'lunes'  → EN CURSO AHORA: cuántos eventos siguen abiertos + inauguraciones de la semana pasada (lun–dom), con lo de vie–dom resaltado.
+ *   'lunesc' → COMUNIDAD: posts de la comunidad de esa semana y sus interacciones (me gusta y comentarios), por evento.
+ * La "semana pasada" es siempre la semana lunes–domingo anterior a la semana en curso.
+ * Las interacciones salen de COM_METRICAS (08b_metricas.js, generado desde data\metricas_comunidad.json): si una pieza no tiene lectura, se cuenta el post
+ * pero no se inventan me gusta; la historia dice cuántos posts están medidos.
+ * Se ve en el botón Compartir solo con ?lunes en la dirección (no es una pestaña pública). */
+const SH_LUNES=/[?&]lunes\b/.test(location.search);
+const LUNES_KEYS=['lunes','lunesc','lunesm','lunesj','lunesx'];
+function lunesSet(){
+  const t0=today(), cw=new Date(t0.getTime()-((t0.getDay()+6)%7)*DAY), ws=new Date(cw.getTime()-7*DAY), we=new Date(ws.getTime()+6*DAY), dw=e=>Math.round((parse(e.inicio)-ws)/DAY);
+  const open=EVENTS.filter(e=>{const d=dw(e); return d>=0&&d<=6});
+  const finde=open.filter(e=>dw(e)>=4), entre=open.filter(e=>dw(e)<4);
+  const curso=EVENTS.filter(e=>{const k=estado(e).k; return k==='curso'||k==='hoy'});
+  const posts=comuAll().filter(c=>c.fecha&&c.fecha>=iso(ws)&&c.fecha<=iso(we));
+  const dayN=[0,0,0,0,0,0,0]; open.forEach(e=>dayN[dw(e)]++);
+  return {t0,ws,we,dw,open,finde,entre,curso,posts,dayN};
+}
+/* interacciones de una pieza: {l,c,ok} (ok=false si no hay lectura) */
+function lunesMet(c){const m=typeof COM_METRICAS!=='undefined'&&COM_METRICAS.piezas&&COM_METRICAS.piezas[c.id]; return m&&m.l!=null?{l:m.l||0,c:m.c||0,ok:true}:{l:0,c:0,ok:false}}
+function lunesMetPrev(c){const m=typeof COM_METRICAS!=='undefined'&&COM_METRICAS.prev&&COM_METRICAS.prev.piezas&&COM_METRICAS.prev.piezas[c.id]; return m&&m.l!=null?{l:m.l||0,c:m.c||0}:null}
+function lunesComunidad(S){
+  const per=new Map();
+  S.posts.forEach(p=>{const ev=EVENTS.find(e=>e.id===p.ev); if(!ev)return; if(!per.has(ev.id))per.set(ev.id,{e:ev,posts:[],cre:new Set(),redes:new Set(),l:0,c:0,medidos:0}); const r=per.get(ev.id), m=lunesMet(p);
+    r.posts.push(p); r.cre.add(cuKey(p)); r.redes.add(p.red); if(m.ok){r.l+=m.l; r.c+=m.c; r.medidos++}});
+  const rows=[...per.values()].sort((a,b)=>(b.l+b.c*3)-(a.l+a.c*3)||b.posts.length-a.posts.length||eT(a.e).localeCompare(eT(b.e)));
+  const tot={posts:S.posts.length,cre:new Set(S.posts.map(cuKey)).size,l:0,c:0,medidos:0,dl:0,dc:0,prevOk:false};
+  S.posts.forEach(p=>{const m=lunesMet(p); if(m.ok){tot.l+=m.l; tot.c+=m.c; tot.medidos++; const pv=lunesMetPrev(p); if(pv){tot.prevOk=true; tot.dl+=m.l-pv.l; tot.dc+=m.c-pv.c}}});
+  return {rows,tot};
+}
+function lunesRango(S){const en=LANG==='en', a=S.ws, b=S.we, M=(en?MESES.en:MESES.es); return a.getMonth()===b.getMonth()?a.getDate()+' → '+b.getDate()+' '+M[b.getMonth()].toUpperCase():a.getDate()+' '+M[a.getMonth()].toUpperCase()+' → '+b.getDate()+' '+M[b.getMonth()].toUpperCase()}
+function lunesCaption(key){
+  const en=LANG==='en', S=lunesSet(), lines=[];
+  if(key==='lunes'){
+    lines.push((en?'🎨 On now in Monterrey: ':'🎨 En curso en Monterrey: ')+S.curso.length+(en?' exhibitions and events':' exposiciones y eventos'),'');
+    lines.push((en?'Last week ':'La semana pasada ')+'('+lunesRango(S)+') '+(en?'opened ':'inauguraron ')+S.open.length+' — '+S.finde.length+(en?' from Friday to Sunday.':' de viernes a domingo.'),'');
+    S.finde.slice().sort((a,b)=>S.dw(a)-S.dw(b)).slice(0,8).forEach(e=>lines.push('• '+eT(e)+' · '+pC(PLACES[e.lugar])));
+  }else if(key==='lunesx'){
+    lines.push(en?'🎨 Help us discover Monterrey’s art':'🎨 Ayúdanos a descubrir el arte de Monterrey','',en?'Send us your event (poster, date, time, place, cost and your Instagram) at hello@cucoarts.com or by DM to @cucoarts.':'Mándanos tu evento (cartel, fecha, hora, lugar, costo y tu Instagram) a hello@cucoarts.com o por DM a @cucoarts.','',en?'Know a local visual artist from the Monterrey metro area we should meet? Tag them and tag @cucoarts.':'¿Conoces a un artista visual local de la zona metropolitana de Monterrey que debamos conocer? Etiquétalo y etiqueta a @cucoarts.');
+  }else if(key==='lunesj'){
+    lines.push('🎮 MTY VS ART — '+(en?'how to play':'cómo se juega'),'','1. CREATE · '+(en?'make your own post about local art':'crea tu propio post de arte local'),'2. EXPERIMENT · '+(en?'try a new event, artist or zone':'prueba un evento, artista o zona nueva'),'3. SHARE · '+(en?'post, tag the event and @cucoarts, share from cucoarts.com':'publica, etiqueta al evento y a @cucoarts, comparte desde cucoarts.com'),'4. REPEAT · '+(en?'every week you earn points and rank up':'cada semana sumas puntos y subes de rango'),'',en?'Points: post +10 · like +1 · comment +3 · share +5 · story tagging the event +20 · recommend a local artist tagging us +15':'Puntos: post +10 · like +1 · comentario +3 · compartir +5 · historia etiquetando al evento +20 · recomendar a un artista local etiquetándonos +15');
+  }else{
+    const P=lunesPuntos(S);
+    if(key==='lunesm'){
+      lines.push('🎮 MTY VS ART · '+P.mes.nombre,'','LV '+(P.nivel+1)+' '+P.lvA[1]+' '+P.lvA[2]+' · '+P.total+' XP','');
+      P.ev.filter(r=>r.pts>0).slice(0,5).forEach((r,i)=>lines.push((i+1)+'. '+eT(r.e)+' · '+r.pts+' pts'));
+      lines.push('',(en?'Top '+USER_NAME+': ':'Top '+USER_NAME+': ')+P.users.slice(0,3).map(u=>'@'+u.ig+' ('+u.rank.a[1]+')').join(' · '));
+    }else{
+      lines.push('🎮 MTY VS ART · '+(en?'week ':'semana ')+lunesRango(S),'','+'+P.semana+(en?' points this week':' puntos esta semana'),'');
+      P.ev.filter(r=>r.sem>0).sort((a,b)=>b.sem-a.sem).slice(0,6).forEach((r,i)=>lines.push((i+1)+'. '+eT(r.e)+' · '+r.sem+' pts'));
+    }
+  }
+  lines.push('',(en?'The full live agenda: ':'La agenda completa: ')+SHARE_BASE+'?utm_source=share&utm_content='+key);
+  return lines.join('\n');
+}
+
+/* ---------- utilidades de dibujo de las historias del lunes (v2, 9-nov-2026): sin listón, el contenido arranca justo debajo de la zona que tapa Instagram ---------- */
+const LUN_TOP=262;
+const lcol=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';
+function lunesBase(key,ground){
+  const c=document.createElement('canvas'); c.width=SW; c.height=SH; const g=c.getContext('2d');
+  const gr=AG_GROUNDS[(SHARE_GROUND<0?ground:SHARE_GROUND)%AG_GROUNDS.length];
+  g.fillStyle=gr.bg; g.fillRect(0,0,SW,SH); g.textBaseline='alphabetic'; g.textAlign='left';
+  return {c,g,gr};
+}
+function lunesPill(g,txt,x,y,h,bg,fg,font){g.font=font; const w=g.measureText(txt).width+h*0.9; g.fillStyle=bg; rrect(g,x,y,w,h,h/2); g.fill(); g.fillStyle=fg; g.textBaseline='middle'; g.fillText(txt,x+h*0.45,y+h/2+1); g.textBaseline='alphabetic'; return w}
+/* encabezado: fecha/semana a la izquierda y logo a la derecha, arriba (debajo de lo que tapa Instagram) */
+function lunesTop(g,gr,logo,line){
+  g.fillStyle=gr.fg; g.font='700 24px '+SH_MONO; g.fillText(line,STORY.M,LUN_TOP+30);
+  if(logo){const lw=150, lh=Math.round(lw*logo.naturalHeight/logo.naturalWidth); g.drawImage(tintImg(logo,gr.fg===SH_INK?SH_INK:'#FFFFFF',lw,lh),SW-STORY.M-lw,LUN_TOP,lw,lh)}
+}
+function lunesFoot(g,gr,txt){g.fillStyle=gr.fg; g.font='700 21px '+SH_MONO; g.globalAlpha=.9; g.fillText(txt,STORY.M,STORY.LIMIT-6); g.globalAlpha=1}
+/* zona más activa: inauguraciones de la semana por zona cultural (un evento en varias zonas cuenta en cada una) */
+function lunesZonas(S){
+  const n={centro:0,norte:0,oriente:0,sur:0,poniente:0}; S.open.forEach(e=>evZones(e).forEach(z=>{if(z in n)n[z]++}));
+  const arr=Object.entries(n).sort((a,b)=>b[1]-a[1]), max=arr[0][1], top=arr.filter(a=>a[1]===max&&max>0).map(a=>a[0]);
+  return {n,arr,max,top};
+}
+/* estado de un evento hoy: ¿sigue abierto? */
+function lunesEstado(e){
+  const en=LANG==='en', t0=today(), k=estado(e).k, until=e.fin?(en?'UNTIL ':'HASTA ')+fmtShort(e.fin).toUpperCase():'';
+  if(k==='curso'||k==='hoy'){
+    if(!e.fin)return {t:en?'OPEN NOW':'SIGUE ABIERTA',k:'open'};
+    const d=Math.round((parse(e.fin)-t0)/DAY);
+    if(d<=0)return {t:en?'LAST DAY TODAY':'ÚLTIMO DÍA HOY',k:'last'};
+    if(d===1)return {t:en?'CLOSES TOMORROW':'CIERRA MAÑANA',k:'last'};
+    if(d<=7)return {t:(en?'LAST DAYS · ':'ÚLTIMOS DÍAS · ')+until,k:'last'};
+    return {t:(en?'OPEN · ':'ABIERTA · ')+until,k:'open'};
+  }
+  if(parse(e.inicio)>t0)return {t:(en?'STARTS ':'EMPIEZA ')+fmtShort(e.inicio).toUpperCase(),k:'soon'};
+  return {t:en?'ENDED':'YA TERMINÓ',k:'done'};
+}
+const lunesCita=e=>/previa cita|cita previa|con cita|reservaci|registro previo|registro obligatorio/i.test(String(L(e,'hora')||'')+' '+String(L(e,'costo')||''));
+/* ---------- historia 1: EN CURSO + inauguraciones de la semana pasada (más eventos, zona más activa) ---------- */
+async function drawLunesStory(){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, S=lunesSet(), Z=lunesZonas(S), {c,g,gr}=lunesBase('lunes',2);
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png'), t0=S.t0;
+  lunesTop(g,gr,logo,(en?DIAS.en:DIAS.es)[t0.getDay()].toUpperCase().slice(0,3)+' '+t0.getDate()+' '+(en?MESES.en:MESES.es)[t0.getMonth()].toUpperCase()+' '+t0.getFullYear());
+  let y=LUN_TOP+82;
+  // número en curso
+  const nFer=S.curso.filter(e=>e.feria).length, PH=170;
+  g.fillStyle=SH_INK; rrect(g,M,y,TW,PH,30); g.fill();
+  g.font='800 150px '+SF; g.fillStyle=SH_YEL; const numTxt=String(S.curso.length), nw=g.measureText(numTxt).width; g.fillText(numTxt,M+32,y+PH-26);
+  const tx=M+32+nw+30; g.fillStyle=SH_CREAM; g.font='800 46px '+SF; g.fillText(en?'ON NOW':'EN CURSO',tx,y+66); g.fillText(en?'IN MONTERREY':'EN MONTERREY',tx,y+114);
+  g.font='700 19px '+SH_MONO; g.globalAlpha=.85; g.fillText(shEllipsis(g,(en?'EXHIBITIONS, EVENTS & FAIRS':'EXPOSICIONES, EVENTOS Y FERIAS')+(nFer?' · '+nFer+(en?' FAIRS':' FERIAS'):''),M+TW-24-tx),tx,y+148); g.globalAlpha=1;
+  y+=PH+14;
+  // zona más activa
+  const ZH=172; g.fillStyle='rgba(255,255,255,.94)'; rrect(g,M,y,TW,ZH,28); g.fill(); g.lineWidth=5; g.strokeStyle=SH_INK; g.stroke();
+  const zTop=Z.top.length===1?Z.top[0]:null, zc=zTop?lcol(ZONES[zTop].color):'#FFFFFF', zon=zTop?lcol(ZONES[zTop].on):SH_INK;
+  g.fillStyle=SH_INK; g.font='800 17px '+SH_MONO; g.fillText(en?'MOST ACTIVE ZONE':'ZONA MÁS ACTIVA',M+28,y+38);
+  const zName=zTop?L(ZONES[zTop],'corto'):Z.top.map(z=>L(ZONES[z],'corto')).join(' + ');
+  let zs=44; g.font='800 '+zs+'px '+SF; while(g.measureText((zTop?zEmo(ZONES[zTop])+' ':'')+zName).width>300&&zs>28){zs-=2; g.font='800 '+zs+'px '+SF}
+  const zl=(zTop?zEmo(ZONES[zTop])+' ':'')+zName, zw=g.measureText(zl).width+40; g.fillStyle=zc; rrect(g,M+28,y+54,zw,62,20); g.fill(); g.lineWidth=4; g.strokeStyle=SH_INK; g.stroke(); g.fillStyle=zon; g.textBaseline='middle'; g.fillText(zl,M+48,y+86); g.textBaseline='alphabetic';
+  g.fillStyle=SH_INK; g.font='700 21px '+SH_MONO; g.fillText(Z.max+(en?(Z.max===1?' OPENING':' OPENINGS'):(Z.max===1?' INAUGURACIÓN':' INAUGURACIONES')),M+28,y+ZH-24);
+  // barras de las 5 zonas
+  const bx=M+28+Math.max(zw,250)+40, bw=M+TW-28-bx, rowH=28;
+  Z.arr.forEach(([z,n],i)=>{const by=y+22+i*rowH, lw2=118, wmax=bw-lw2-44, w=Math.max(8,Z.max?wmax*n/Z.max:8);
+    g.font='800 16px '+SH_MONO; g.fillStyle=SH_INK; g.fillText(L(ZONES[z],'corto').toUpperCase().slice(0,10),bx,by+19);
+    g.fillStyle=lcol(ZONES[z].color); rrect(g,bx+lw2,by+3,w,20,6); g.fill(); g.lineWidth=2.5; g.strokeStyle=SH_INK; g.stroke(); g.fillStyle=SH_INK; g.font='800 18px '+SH_MONO; g.fillText(String(n),bx+lw2+w+10,by+19)});
+  y+=ZH+14;
+  // tira lun–dom
+  const gap=8, w=(TW-6*gap)/7, SHh=82;
+  for(let i=0;i<7;i++){
+    const d=new Date(S.ws.getTime()+i*DAY), x=M+i*(w+gap), n=S.dayN[i], fin=i>=4;
+    g.save(); if(!n)g.globalAlpha=.55; rrect(g,x,y,w,SHh,18); g.fillStyle=fin?SH_RED:'rgba(255,255,255,.94)'; g.fill(); g.lineWidth=4; g.strokeStyle=SH_INK; g.stroke();
+    g.textAlign='center'; g.fillStyle=fin?'#fff':SH_INK; g.font='800 17px '+SH_MONO; g.fillText((en?DIAS.en:DIAS.es)[d.getDay()].slice(0,3).toUpperCase(),x+w/2,y+24); g.font='800 36px '+SF; g.fillText(String(d.getDate()),x+w/2,y+58); g.font='800 15px '+SH_MONO; g.fillText(n?String(n):'—',x+w/2,y+76); g.textAlign='left'; g.restore();
+  }
+  y+=SHh+14;
+  const hw=lunesPill(g,(en?'OPENED LAST WEEK · ':'INAUGURARON LA SEMANA PASADA · ')+S.open.length,M,y,42,SH_INK,SH_CREAM,'800 25px '+SF);
+  g.font='800 18px '+SH_MONO; g.fillStyle=gr.fg; g.fillText(shEllipsis(g,'★ '+(en?'FRI–SUN, THE LATEST':'VIE–DOM, LO MÁS RECIENTE'),TW-hw-14),M+hw+14,y+28);
+  y+=42+12;
+  // tarjetas: 3 destacadas a lo ancho y el resto en cuadrícula de 2 columnas, tantas como quepan
+  const score=e=>((estado(e).k==='curso'||estado(e).k==='hoy')?4:0)+(shareSpecial(e)?2:0)+Math.min(3,comuEvento(e.id).length)+(e.imgs&&e.imgs.length?1:0);
+  const byScore=l=>l.slice().sort((a,b)=>score(b)-score(a)||S.dw(b)-S.dw(a)||eT(a).localeCompare(eT(b)));
+  // ferias y encuentros con varias inauguraciones esta semana se resumen en UNA tarjeta (arriba); lo demás va como evento suelto
+  const groups=new Map(); S.open.forEach(e=>{const fk=e.feria||e.parte; if(fk&&FERIAS[fk]){if(!groups.has(fk))groups.set(fk,[]); groups.get(fk).push(e)}});
+  const fer=[]; groups.forEach((l,fk)=>{if(l.length>=2){const main=EVENTS.find(x=>x.id===FERIAS[fk].evId)||l[0]; fer.push({kind:'f',fk,e:main,n:l.length,list:l})}});
+  fer.sort((a,b)=>b.n-a.n);
+  const inFer=new Set(); fer.forEach(it=>it.list.forEach(e=>inFer.add(e)));
+  const evs=byScore(S.open.filter(e=>!inFer.has(e))).map(e=>({kind:'e',e}));
+  const LIMIT=STORY.LIMIT-34, FH=104, GH=96, G=10, FF=Math.min(2,fer.length), NF=Math.min(Math.max(3,FF+1),FF+evs.length);
+  const wide=fer.slice(0,FF).concat(evs.slice(0,NF-FF)), restPool=evs.slice(NF-FF);
+  const gridAvail=LIMIT-y-wide.length*(FH+G)-52, rows=Math.max(0,Math.floor((gridAvail+G)/(GH+G))), grid=restPool.slice(0,rows*2);
+  const shownIt=wide.concat(grid), thumbs=await Promise.all(shownIt.map(it=>shThumb(it.e))), th=new Map(shownIt.map((it,i)=>[it,thumbs[i]]));
+  // ferias primero; luego los eventos de vie–dom más recientes arriba
+  const ord=l=>l.slice().sort((a,b)=>(b.kind==='f')-(a.kind==='f')||S.dw(b.e)-S.dw(a.e)||score(b.e)-score(a.e));
+  ord(wide.filter(it=>it.kind==='f')).concat(ord(wide.filter(it=>it.kind==='e'))).forEach(it=>{(it.kind==='f'?lunesCardFeria:lunesCardWide)(g,it.kind==='f'?it:it.e,M,y,TW,FH,th.get(it)); y+=FH+G});
+  const cw=(TW-G)/2; ord(grid).forEach((it,i)=>{lunesCardTile(g,it.e,M+(i%2)*(cw+G),y+Math.floor(i/2)*(GH+G),cw,GH,th.get(it))});
+  y+=Math.ceil(grid.length/2)*(GH+G);
+  const covered=shownIt.reduce((n,it)=>n+(it.kind==='f'?it.n:1),0), rest=S.open.length-covered; if(rest>0)lunesPill(g,'+ '+rest+' '+(en?'more last week':'más la semana pasada'),M,y+2,44,SH_INK,SH_YEL,'800 26px '+SF);
+  lunesFoot(g,gr,en?'CUCOARTS.COM/MTY · LOCAL ART, EVERY WEEK':'CUCOARTS.COM/MTY · ARTE LOCAL, CADA SEMANA');
+  return c;
+}
+function lunesStripe(g,e,x,y,h){const W=shareWhere(e); g.save(); rrect(g,x,y,18,h,18); g.clip(); const zs=W.zs.length?W.zs.slice(0,4):[e.zona||'centro']; zs.forEach((z,j)=>{g.fillStyle=lcol((ZONES[z]||ZONES.centro).color); g.fillRect(x,y+j*h/zs.length,18,h/zs.length+1)}); g.restore(); g.fillStyle=SH_INK; g.fillRect(x+18,y+3,4,h-6)}
+function lunesThumb(g,e,img,x,y,s){const cat=CATS[e.cat]||CATS.pendiente; g.save(); rrect(g,x,y,s,s,12); g.clip(); g.fillStyle=cat.c; g.fillRect(x,y,s,s); if(img)coverImg(g,img,x,y,s,s); g.restore(); g.lineWidth=4; g.strokeStyle=SH_INK; rrect(g,x,y,s,s,12); g.stroke()}
+function lunesDay(e){const d=parse(e.inicio); return ((LANG==='en'?DIAS.en:DIAS.es)[d.getDay()].slice(0,3)+' '+d.getDate()).toUpperCase()}
+function lunesCardWide(g,e,x,y,w,h,img){
+  const en=LANG==='en', cat=CATS[e.cat]||CATS.pendiente, W=shareWhere(e), st=lunesEstado(e);
+  g.save(); rrect(g,x,y,w,h,20); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=5; g.strokeStyle=SH_INK; rrect(g,x,y,w,h,20); g.stroke(); lunesStripe(g,e,x,y,h);
+  const TH=h-20, tx0=x+32; lunesThumb(g,e,img,tx0,y+10,TH);
+  const rx1=x+w-18, RW=290, tx=tx0+TH+14, maxW=rx1-RW-tx-8;
+  g.font='800 30px '+SH_MONO; g.fillStyle=SH_INK; g.textAlign='right'; g.fillText(lunesDay(e),rx1,y+44); g.textAlign='left';
+  g.font='800 17px '+SH_MONO; const sw=Math.min(RW+6,g.measureText(st.t).width+22); g.fillStyle=st.k==='last'?SH_RED:st.k==='open'?SH_YEL:'#FFFFFF'; rrect(g,rx1-sw,y+h-48,sw,32,10); g.fill(); g.lineWidth=3; g.strokeStyle=SH_INK; g.stroke(); g.fillStyle=st.k==='last'?'#fff':SH_INK; g.textAlign='center'; g.textBaseline='middle'; g.fillText(shEllipsis(g,st.t,sw-10),rx1-sw/2,y+h-31); g.textAlign='left'; g.textBaseline='alphabetic';
+  let ts=32; g.font='800 '+ts+'px '+SF; let tl=wrapLines(g,eT(e),maxW,2); if(tl.length>1){ts=27; g.font='800 '+ts+'px '+SF; tl=wrapLines(g,eT(e),maxW,2)}
+  const lh=Math.round(ts*1.04), cf=17, chH=30, blk=tl.length*lh+6+chH, b0=y+(h-blk)/2; g.fillStyle=SH_INK; tl.forEach((l,i)=>g.fillText(shEllipsis(g,l,maxW),tx,b0+ts*0.86+i*lh));
+  const cy=b0+tl.length*lh+6, catTxt=(en?cat.s_en:cat.s).toUpperCase(); g.font='800 '+cf+'px '+SH_MONO; const eW=30, cw=Math.min(maxW*.5,eW+g.measureText(catTxt).width+18);
+  g.fillStyle=cat.c; rrect(g,tx,cy,cw,chH,10); g.fill(); g.lineWidth=3; g.strokeStyle=SH_INK; g.stroke(); g.font='19px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textBaseline='middle'; g.fillStyle=SH_INK; g.fillText(cat.e,tx+7,cy+chH/2+1); g.font='800 '+cf+'px '+SH_MONO; g.fillText(shEllipsis(g,catTxt,cw-eW-10),tx+7+eW-4,cy+chH/2+1);
+  g.font='700 18px '+SH_MONO; g.fillStyle='#4a4a45'; g.fillText(shEllipsis(g,shAbbr(W.place),maxW-cw-12),tx+cw+12,cy+chH/2+1); g.textBaseline='alphabetic';
+}
+function lunesCardFeria(g,it,x,y,w,h,img){
+  const en=LANG==='en', e=it.e, F=FERIAS[it.fk], bg=(F&&F.color)||'#FFE7CF', fg=lumOf(bg)>.55?SH_INK:'#FFFFFF', st=lunesEstado(e), tag=(SELLOS[it.fk]&&SELLOS[it.fk][en?1:0])||(en?'FAIR':'FERIA');
+  g.save(); rrect(g,x,y,w,h,20); g.fillStyle=bg; g.fill(); g.restore(); g.lineWidth=5; g.strokeStyle=SH_INK; rrect(g,x,y,w,h,20); g.stroke();
+  const TH=h-20, tx0=x+18; lunesThumb(g,e,img,tx0,y+10,TH);
+  const rx1=x+w-18, RW=250, tx=tx0+TH+16, maxW=rx1-RW-tx-8, name=String((F&&(F.corto||F.nombre))||eT(e));
+  let ts=40; g.font='800 '+ts+'px '+SF; while(g.measureText('★ '+name).width>maxW&&ts>26){ts-=2; g.font='800 '+ts+'px '+SF}
+  g.fillStyle=fg; g.fillText(shEllipsis(g,'★ '+name,maxW),tx,y+48);
+  g.font='800 21px '+SH_MONO; g.fillText(shEllipsis(g,it.n+' '+(en?'OPENINGS THIS WEEK':'INAUGURACIONES ESTA SEMANA'),maxW),tx,y+80);
+  const d1=fmtShort(e.inicio).toUpperCase(), rng=e.fin&&e.fin!==e.inicio?d1+' → '+fmtShort(e.fin).toUpperCase():d1;
+  g.font='800 21px '+SH_MONO; g.fillStyle=fg; g.textAlign='right'; g.fillText(shEllipsis(g,rng,RW),rx1,y+40); g.textAlign='left';
+  g.font='800 17px '+SH_MONO; const sw=Math.min(RW+6,g.measureText(st.t).width+22); g.fillStyle=st.k==='last'?SH_RED:st.k==='open'?SH_YEL:'#FFFFFF'; rrect(g,rx1-sw,y+h-48,sw,32,10); g.fill(); g.lineWidth=3; g.strokeStyle=SH_INK; g.stroke(); g.fillStyle=st.k==='last'?'#fff':SH_INK; g.textAlign='center'; g.textBaseline='middle'; g.fillText(shEllipsis(g,st.t,sw-10),rx1-sw/2,y+h-31); g.textAlign='left'; g.textBaseline='alphabetic';
+}
+function lunesCardTile(g,e,x,y,w,h,img){
+  const en=LANG==='en', cat=CATS[e.cat]||CATS.pendiente, W=shareWhere(e), st=lunesEstado(e);
+  g.save(); rrect(g,x,y,w,h,18); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=4.5; g.strokeStyle=SH_INK; rrect(g,x,y,w,h,18); g.stroke(); lunesStripe(g,e,x,y,h);
+  const TH=h-18, tx0=x+30; lunesThumb(g,e,img,tx0,y+9,TH);
+  const er=13, ex=tx0+TH-er*0.5, ey=y+9+TH-er*0.5; g.beginPath(); g.arc(ex,ey,er,0,7); g.fillStyle='#fff'; g.fill(); g.lineWidth=2.5; g.strokeStyle=SH_INK; g.stroke(); g.font='15px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillStyle=SH_INK; g.fillText(cat.e,ex,ey+1); g.textAlign='left'; g.textBaseline='alphabetic';
+  const tx=tx0+TH+12, maxW=x+w-14-tx; let ts=25; g.font='800 '+ts+'px '+SF; let tl=wrapLines(g,eT(e),maxW,2); if(tl.length>1){ts=22; g.font='800 '+ts+'px '+SF; tl=wrapLines(g,eT(e),maxW,2)}
+  const lh=Math.round(ts*1.04), blk=tl.length*lh+6+18, b0=y+(h-blk)/2; g.fillStyle=SH_INK; tl.forEach((l,i)=>g.fillText(shEllipsis(g,l,maxW),tx,b0+ts*0.86+i*lh));
+  g.font='800 16px '+SH_MONO; g.fillStyle=st.k==='last'?SH_RED:'#4a4a45'; g.fillText(shEllipsis(g,lunesDay(e)+' · '+(st.k==='done'?shAbbr(W.place):st.t.replace(/^(ABIERTA|OPEN|ÚLTIMOS DÍAS|LAST DAYS) · /,'')),maxW),tx,b0+tl.length*lh+6+14);
+}
+/* ============ MTY VS ART — sistema de puntos de la comunidad (v2, 9-nov-2026) ============
+ * Temporada MENSUAL que arranca el 1-nov-2026: solo cuentan los posts, historias y acciones con fecha desde el día 1 del mes (el registro previo de FAMA y otros
+ * anteriores a esa fecha queda fuera). La historia semanal usa solo los puntos de lo fechado en la semana; la mensual acumula desde el día 1 hasta hoy.
+ * Puntos: post publicado +10 · me gusta +1 · comentario +3 · compartido (republicado o enviado) +5 · historia de IG que etiqueta al evento, a su organizador o a @cucoarts +20
+ *   · recomendar a un artista visual local etiquetándolo y etiquetándonos +15 (suma al usuario y a MTY, sin evento).
+ * ETAPAS del evento (cada post cae en una; el reporte siempre dice cuántos puntos vienen de cada una):
+ *   PRE-LAUNCH 🔥 = hasta 14 días antes de abrir (no cuenta nada más antiguo) · OPENING 🎉 = día de apertura y el siguiente · LIVE 🎨 = el resto de la vigencia
+ *   · FINALE 🏁 = últimos 2 días (eventos de 3 días o más) · ACTIVATION ⚡ = actividad específica marcada a mano (etapa:'activ').
+ *   Un día después del cierre todavía cuenta; después, no.
+ * FUENTE de cada punto: COMUNIDAD (público, creadores) o ALIADOS (socio:true: patrocinadores, diseño, programas y fiestas oficiales); ambas suman y se muestran separadas.
+ * Cifras: solo las que se vieron en pantalla (COM_METRICAS: l me gusta, c comentarios, r republicaciones, s envíos; l:null = IG oculta los me gusta). Sin lectura = solo los +10 del post.
+ * Rangos: de la comunidad (GUILD, por XP del mes) y de cada usuario (RANKS, por sus XP). Los usuarios de MTY llevan un nombre provisional (USER_NAME). */
+const PTS={post:10,like:1,comment:3,share:5,story:20};
+const PREVIA_DIAS=14, MTY_TEMPORADA_INICIO='2026-11-01', USER_NAME='ART PEOPLE';
+const PTS_NIVELES=[[0,'CAMPFIRE','🏕️'],[30000,'VILLAGE','🏘️'],[75000,'TOWN','🏰'],[150000,'CITADEL','🗼'],[300000,'KINGDOM','👑'],[600000,'EMPIRE','🐉']];
+const PTS_ETAPAS={previa:['PRE-LAUNCH','🔥'],inaug:['OPENING','🎉'],curso:['LIVE','🎨'],cierre:['FINALE','🏁'],activ:['ACTIVATION','⚡']};
+const REGIO_PTS={registro:25,compartir:10,compartirEvento:10,artista:15};   // artista: recomendar a un artista visual local etiquetándolo y etiquetándonos (+15 al usuario y +15 a MTY)
+const REGIO_NIVELES=[[0,'NOOB','🐣'],[100,'INITIATE','🕯️'],[250,'STUDENT','📜'],[500,'APPRENTICE','🛠️'],[1000,'ADEPT','🔮'],[2000,'RANGER','🏹'],[3500,'SORCERER','🧙'],[6000,'PALADIN','🛡️'],[10000,'ARCHMAGE','🌟'],[20000,'LEGEND','🏆']];
+const regioKey=x=>String(x||'').toLowerCase().replace(/^@/,'').trim();
+function regioNivel(xp){let i=0; REGIO_NIVELES.forEach((n,k)=>{if(xp>=n[0])i=k}); const a=REGIO_NIVELES[i], b=REGIO_NIVELES[i+1]||null; return {i,a,b,prog:b?(xp-a[0])/(b[0]-a[0]):1}}
+function ptsEtapa(item,ev){
+  if(item.etapa&&PTS_ETAPAS[item.etapa])return item.etapa;
+  if(!item.fecha)return 'curso';   // sin fecha: se cuenta como LIVE en el mes, no en la semana (aviso en el reporte)
+  const f=parse(item.fecha), a=parse(ev.inicio), b=ev.fin?parse(ev.fin):null;
+  if(f<a)return f>=new Date(a.getTime()-PREVIA_DIAS*DAY)?'previa':'antes';
+  if(b&&f>new Date(b.getTime()+DAY))return 'despues';
+  if(f<=new Date(a.getTime()+DAY))return 'inaug';
+  if(b&&b-a>=3*DAY&&f>=new Date(b.getTime()-DAY))return 'cierre';
+  return 'curso';
+}
+const ptsMet=c=>{const m=typeof COM_METRICAS!=='undefined'&&COM_METRICAS.piezas&&COM_METRICAS.piezas[c.id]; return m&&(m.l!=null||m.c!=null||m.r!=null)?{l:m.l||0,c:m.c||0,sh:(m.r||0)+(m.s||0),ok:true,hid:m.l==null}:{l:0,c:0,sh:0,ok:false}};
+const E0=()=>({previa:0,inaug:0,curso:0,cierre:0,activ:0});
+function lunesPuntos(S){
+  const t0s=iso(S.t0), mIni=(()=>{const d=iso(new Date(S.we.getFullYear(),S.we.getMonth(),1)); return d<MTY_TEMPORADA_INICIO?MTY_TEMPORADA_INICIO:d})();
+  const mes={ini:mIni,fin:t0s,nombre:(LANG==='en'?MESES_L.en:MESES_L.es)[parse(mIni).getMonth()].toUpperCase()+' '+parse(mIni).getFullYear()};
+  const inMes=f=>!f||(f>=mIni&&f<=t0s), inSem=f=>f&&f>=iso(S.ws)&&f<=iso(S.we);
+  const out={mes,total:0,semana:0,posts:0,postsSem:0,hist:0,fuera:0,antes:0,sinFecha:0,medidos:0,ocultos:0,src:{com:0,ali:0},srcS:{com:0,ali:0},et:E0(),etS:E0(),ev:[],general:0};
+  const per=new Map(), RG=new Map(), rget=k=>{if(!RG.has(k))RG.set(k,{ig:k,xp:0,xpS:0,posts:0,hist:0,acc:0,registrado:false}); return RG.get(k)};
+  const get=ev=>{if(!per.has(ev.id))per.set(ev.id,{e:ev,pts:0,sem:0,posts:0,postsS:0,hist:0,et:E0(),etS:E0(),src:{com:0,ali:0},srcS:{com:0,ali:0},cre:new Set(),medidos:0}); return per.get(ev.id)};
+  const add=(r,et,pts,f,ali)=>{const w=inSem(f), s=ali?'ali':'com'; r.pts+=pts; r.et[et]+=pts; r.src[s]+=pts; out.total+=pts; out.et[et]+=pts; out.src[s]+=pts; if(w){r.sem+=pts; r.etS[et]+=pts; r.srcS[s]+=pts; out.semana+=pts; out.etS[et]+=pts; out.srcS[s]+=pts}};
+  comuAll().forEach(p=>{
+    const ev=EVENTS.find(e=>e.id===p.ev); if(!ev||!inMes(p.fecha)){if(ev)out.fuera++; return}
+    const et=ptsEtapa(p,ev); if(!PTS_ETAPAS[et]){out[et==='antes'?'antes':'fuera']++; return}
+    const m=ptsMet(p), pts=PTS.post+m.l*PTS.like+m.c*PTS.comment+m.sh*PTS.share, r=get(ev), ali=!!p.socio;
+    add(r,et,pts,p.fecha,ali); r.posts++; r.cre.add(cuKey(p)); out.posts++; if(inSem(p.fecha)){r.postsS++; out.postsSem++} if(m.ok){r.medidos++; out.medidos++; if(m.hid)out.ocultos++} if(!p.fecha)out.sinFecha++;
+    if(!ali){const rg=rget(regioKey(p.user||p.creador)); rg.xp+=pts; rg.posts++; if(inSem(p.fecha))rg.xpS+=pts}
+  });
+  (typeof COM_HISTORIAS!=='undefined'?COM_HISTORIAS:[]).forEach(h=>{
+    if(!inMes(h.fecha))return; const ev=EVENTS.find(e=>e.id===h.ev);
+    if(!ev){out.general+=PTS.story; out.total+=PTS.story; out.src.com+=PTS.story; if(inSem(h.fecha)){out.semana+=PTS.story; out.srcS.com+=PTS.story} out.hist++; return}
+    const et=ptsEtapa(h,ev); if(!PTS_ETAPAS[et]){out.fuera++; return}
+    const r=get(ev); add(r,et,PTS.story,h.fecha,false); r.hist++; out.hist++;
+    if(h.quien){const rg=rget(regioKey(h.quien)); rg.xp+=PTS.story; rg.hist++; if(inSem(h.fecha))rg.xpS+=PTS.story}
+  });
+  (typeof COM_REGIOS!=='undefined'?COM_REGIOS.acciones:[]).forEach(a=>{
+    if(!inMes(a.fecha))return; const rg=rget(regioKey(a.ig)); rg.registrado=true; rg.acc++;
+    if(a.tipo==='registro'){rg.xp+=REGIO_PTS.registro; if(inSem(a.fecha))rg.xpS+=REGIO_PTS.registro; return}
+    if(a.tipo==='artista'){rg.xp+=REGIO_PTS.artista; rg.art=(rg.art||0)+1; if(inSem(a.fecha))rg.xpS+=REGIO_PTS.artista; out.total+=REGIO_PTS.artista; out.src.com+=REGIO_PTS.artista; out.general+=REGIO_PTS.artista; out.artistas=(out.artistas||0)+1; if(inSem(a.fecha)){out.semana+=REGIO_PTS.artista; out.srcS.com+=REGIO_PTS.artista} return}
+    if(a.tipo==='compartir'){rg.xp+=REGIO_PTS.compartir; if(inSem(a.fecha))rg.xpS+=REGIO_PTS.compartir; const ev=EVENTS.find(e=>e.id===a.ev); if(ev){const et=ptsEtapa(a,ev); if(PTS_ETAPAS[et])add(get(ev),et,REGIO_PTS.compartirEvento,a.fecha,false)}}
+  });
+  (typeof COM_REGIOS!=='undefined'?COM_REGIOS.regios:[]).forEach(x=>{const rg=rget(regioKey(x.ig)); rg.registrado=true; rg.nombre=x.nombre||''});
+  out.users=[...RG.values()].map(x=>Object.assign(x,{rank:regioNivel(x.xp)})).sort((a,b)=>b.xp-a.xp||a.ig.localeCompare(b.ig));
+  out.ev=[...per.values()].sort((a,b)=>b.pts-a.pts||eT(a.e).localeCompare(eT(b.e)));
+  let lv=0; PTS_NIVELES.forEach((n,i)=>{if(out.total>=n[0])lv=i}); out.nivel=lv; out.lvA=PTS_NIVELES[lv]; out.lvB=PTS_NIVELES[lv+1]||null;
+  out.prog=out.lvB?(out.total-out.lvA[0])/(out.lvB[0]-out.lvA[0]):1;
+  return out;
+}
+
+/* ---------- estética arcade: letra de pixeles (5×7) y sprites dibujados con código, sin archivos ---------- */
+const PXF={A:'0E,11,11,1F,11,11,11',B:'1E,11,11,1E,11,11,1E',C:'0E,11,10,10,10,11,0E',D:'1E,11,11,11,11,11,1E',E:'1F,10,10,1E,10,10,1F',F:'1F,10,10,1E,10,10,10',G:'0E,11,10,17,11,11,0F',H:'11,11,11,1F,11,11,11',I:'0E,04,04,04,04,04,0E',J:'07,02,02,02,02,12,0C',K:'11,12,14,18,14,12,11',L:'10,10,10,10,10,10,1F',M:'11,1B,15,15,11,11,11',N:'11,11,19,15,13,11,11',O:'0E,11,11,11,11,11,0E',P:'1E,11,11,1E,10,10,10',Q:'0E,11,11,11,15,12,0D',R:'1E,11,11,1E,14,12,11',S:'0F,10,10,0E,01,01,1E',T:'1F,04,04,04,04,04,04',U:'11,11,11,11,11,11,0E',V:'11,11,11,11,11,0A,04',W:'11,11,11,15,15,15,0A',X:'11,11,0A,04,0A,11,11',Y:'11,11,0A,04,04,04,04',Z:'1F,01,02,04,08,10,1F',
+ 0:'0E,11,13,15,19,11,0E',1:'04,0C,04,04,04,04,0E',2:'0E,11,01,02,04,08,1F',3:'1F,02,04,02,01,11,0E',4:'02,06,0A,12,1F,02,02',5:'1F,10,1E,01,01,11,0E',6:'06,08,10,1E,11,11,0E',7:'1F,01,02,04,08,08,08',8:'0E,11,11,0E,11,11,0E',9:'0E,11,11,0F,01,02,0C',
+ '+':'00,04,04,1F,04,04,00','-':'00,00,00,1F,00,00,00',':':'00,0C,0C,00,0C,0C,00','.':'00,00,00,00,00,0C,0C',',':'00,00,00,00,0C,04,08','!':'04,04,04,04,04,00,04','?':'0E,11,01,02,04,00,04','/':'01,01,02,04,08,10,10','#':'0A,0A,1F,0A,1F,0A,0A','¡':'04,00,04,04,04,04,04','>':'08,0C,0E,0F,0E,0C,08','*':'00,15,0E,1F,0E,15,00',' ':'00,00,00,00,00,00,00'};
+const PXG={};Object.keys(PXF).forEach(k=>{PXG[k]=PXF[k].split(',').map(h=>parseInt(h,16))});
+function pxWidth(txt,s){return Math.max(0,String(txt).length*6*s-s)}
+/* texto de pixeles: (x,y) = esquina superior izquierda (o derecha/centro según align); s = tamaño del pixel */
+function pxText(g,txt,x,y,s,color,align){
+  txt=String(txt).toUpperCase(); const w=pxWidth(txt,s); let cx=align==='right'?x-w:align==='center'?x-w/2:x; g.fillStyle=color;
+  for(const ch of txt){
+    const d=(ch==='¡'?ch:ch.normalize('NFD')), base=d[0], mark=d[1], rows=PXG[base]||PXG['?'];
+    rows.forEach((bits,r)=>{for(let c=0;c<5;c++)if(bits&(16>>c))g.fillRect(cx+c*s,y+r*s,s,s)});
+    if(mark==='́'){g.fillRect(cx+3*s,y-2*s,s,s);g.fillRect(cx+2*s,y-s,s,s)}      // acento
+    if(mark==='̃'){g.fillRect(cx+s,y-2*s,s,s);g.fillRect(cx+2*s,y-2*s,s,s);g.fillRect(cx+3*s,y-s*2,s,s)}   // tilde de la Ñ
+    cx+=6*s;
+  }
+  return w;
+}
+const PXS={heart:['.##.##.','#######','#######','.#####.','..###..','...#...'],star:['...#...','...#...','#######','.#####.','..###..','.##.##.','##...##'],coin:['..####..','.######.','########','###..###','###..###','########','.######.','..####..'],bolt:['...##','..##.','.##..','#####','..##.','.##..','##...']};
+function pxSprite(g,name,x,y,s,color,hi){const rows=PXS[name]; rows.forEach((r,j)=>{for(let i=0;i<r.length;i++)if(r[i]==='#'){g.fillStyle=color;g.fillRect(x+i*s,y+j*s,s,s)}}); if(hi&&name==='coin'){g.fillStyle=hi;g.fillRect(x+2*s,y+2*s,s,s);g.fillRect(x+2*s,y+3*s,s,s)} return rows[0].length*s}
+
+
+/* ---------- historias de MTY VS ART: semanal, mensual acumulada y cómo jugar ---------- */
+const MED=['#F7D649','#D9DEE3','#CD7F32'];
+const fmtN=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+/* fila de un evento con su puntaje (pts) y las etapas de donde vienen (et) */
+function lunesFilaEvento(g,r,i,thumb,x,y,RH,pts,et,TW){
+  const en=LANG==='en', e=r.e, W=shareWhere(e), st=lunesEstado(e), INK=SH_INK, TH=RH-20, tx0=x+18;
+  g.save(); rrect(g,x,y,TW,RH,22); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=5; g.strokeStyle=INK; rrect(g,x,y,TW,RH,22); g.stroke();
+  lunesThumb(g,e,thumb,tx0,y+10,TH);
+  const bx=tx0-6, byy=y+4, bs=3, bwid=pxWidth('#'+(i+1),bs)+14; g.fillStyle=MED[i]||'#FFFFFF'; g.fillRect(bx,byy,bwid,7*bs+12); g.lineWidth=3; g.strokeStyle=INK; g.strokeRect(bx,byy,bwid,7*bs+12); pxText(g,'#'+(i+1),bx+7,byy+6,bs,INK);
+  const tx=tx0+TH+16, rx1=x+TW-18, RW=206, maxW=rx1-RW-tx;
+  let ts=29; g.font='800 '+ts+'px '+SF; let tl=wrapLines(g,eT(e),maxW,2); if(tl.length>1){ts=25; g.font='800 '+ts+'px '+SF; tl=wrapLines(g,eT(e),maxW,2)}
+  const lh=Math.round(ts*1.04); g.fillStyle=INK; tl.forEach((l,k)=>g.fillText(shEllipsis(g,l,maxW),tx,y+10+ts*0.86+k*lh));
+  let cy=y+14+tl.length*lh+6, cx=tx; g.font='800 16px '+SH_MONO; const sw=Math.min(maxW,g.measureText(st.t).width+20);
+  g.fillStyle=st.k==='last'?SH_RED:st.k==='open'||st.k==='soon'?SH_YEL:'#FFFFFF'; rrect(g,cx,cy,sw,30,10); g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke(); g.fillStyle=st.k==='last'?'#fff':INK; g.textBaseline='middle'; g.fillText(shEllipsis(g,st.t,sw-12),cx+10,cy+16); cx+=sw+8;
+  const zTxt=W.zone.toUpperCase(), zc=W.zs.length===1?lcol(ZONES[W.zs[0]].color):'#FFFFFF', zon=W.zs.length===1?lcol(ZONES[W.zs[0]].on):INK, zw=Math.min(rx1-RW-cx,g.measureText(zTxt).width+20);
+  if(zw>40){g.fillStyle=zc; rrect(g,cx,cy,zw,30,10); g.fill(); g.lineWidth=3; g.strokeStyle=INK; g.stroke(); g.fillStyle=zon; g.fillText(shEllipsis(g,zTxt,zw-12),cx+10,cy+16)}
+  const hor=st.k==='done'?'':String(L(e,'hora')||'').replace(/\s+/g,' ').trim(), acc=[]; if(e.gratis===true)acc.push(en?'FREE':'ENTRADA LIBRE'); if(lunesCita(e))acc.push(en?'BY APPOINTMENT':'CON CITA');
+  g.font='700 17px '+SH_MONO; g.fillStyle='#4a4a45'; const line=[hor,acc.join(' · ')].filter(Boolean).join(' · ')||shAbbr(W.place); if(tl.length===1)g.fillText(shEllipsis(g,line,maxW),tx,y+RH-16);
+  g.textBaseline='alphabetic'; pxText(g,fmtN(pts),rx1,y+12,5,INK,'right'); pxText(g,'PTS',rx1,y+12+7*5+6,3,'#4a4a45','right');
+  const ets=Object.keys(PTS_ETAPAS).filter(k=>et[k]>0); g.textAlign='right'; let ex=rx1, ey=y+RH-14;
+  ets.slice().reverse().forEach(k=>{const t=fmtN(et[k]); g.font='800 16px '+SH_MONO; g.fillStyle=INK; g.fillText(t,ex,ey); ex-=g.measureText(t).width+4; g.font='17px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillText(PTS_ETAPAS[k][1],ex,ey); ex-=26}); g.textAlign='left';
+}
+/* tira de etapas (emoji, nombre, puntos, % del total) */
+function lunesBarrasEtapas(g,x,y,w,et,fg,bar){
+  const tot=Object.values(et).reduce((a,b)=>a+b,0)||1, keys=Object.keys(PTS_ETAPAS), RHh=40; g.textBaseline='alphabetic';
+  keys.forEach((k,i)=>{const yy=y+i*RHh, v=et[k], pw=Math.max(v?6:0,(w-330)*v/tot);
+    g.font='24px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillStyle=fg; g.fillText(PTS_ETAPAS[k][1],x,yy+28);
+    g.font='800 17px '+SH_MONO; g.fillText(PTS_ETAPAS[k][0],x+38,yy+26);
+    g.fillStyle=bar; g.fillRect(x+190,yy+6,pw,22); g.fillStyle=fg; g.font='800 17px '+SH_MONO; g.fillText(fmtN(v)+(v?' · '+Math.round(100*v/tot)+'%':''),x+190+pw+10,yy+25)});
+  return keys.length*RHh;
+}
+/* barra apilada comunidad vs aliados */
+function lunesBarraFuentes(g,x,y,w,src,fg){
+  const tot=(src.com+src.ali)||1, wc=w*src.com/tot; g.lineWidth=4; g.strokeStyle=SH_INK;
+  g.fillStyle='#F7D649'; g.fillRect(x,y,wc,34); g.fillStyle='#644DEF'; g.fillRect(x+wc,y,w-wc,34); g.strokeRect(x,y,w,34);
+  g.font='800 17px '+SH_MONO; g.fillStyle=fg; g.textBaseline='alphabetic';
+  g.fillText('👥 '+(LANG==='en'?'COMMUNITY ':'COMUNIDAD ')+fmtN(src.com)+' ('+Math.round(100*src.com/tot)+'%)',x,y+62); g.textAlign='right'; g.fillText('🤝 '+(LANG==='en'?'ALLIES ':'ALIADOS ')+fmtN(src.ali)+' ('+Math.round(100*src.ali/tot)+'%)',x+w,y+62); g.textAlign='left';
+}
+/* ---------- 1) PERFORMANCE SEMANAL ---------- */
+async function drawLunesComunidad(){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, S=lunesSet(), P=lunesPuntos(S), {c,g,gr}=lunesBase('lunesc',3), INK=SH_INK;
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
+  lunesTop(g,gr,logo,(en?'WEEK ':'SEMANA ')+lunesRango(S)+' '+S.we.getFullYear());
+  let y=LUN_TOP+56; pxText(g,'> MTY VS ART',M,y,7,gr.fg); y+=7*7+22;
+  // panel: puntos de la semana
+  const PH=236; g.fillStyle=INK; rrect(g,M,y,TW,PH,28); g.fill();
+  pxText(g,en?'WEEKLY SCORE':'PUNTAJE SEMANAL',M+28,y+24,4,SH_CREAM); pxText(g,'+'+fmtN(P.semana),M+28,y+68,10,SH_YEL); pxText(g,en?'XP THIS WEEK':'XP ESTA SEMANA',M+28,y+68+70+10,3,SH_CREAM);
+  const rx=M+TW-28; g.textAlign='right'; g.fillStyle=SH_CREAM; g.font='800 17px '+SH_MONO;
+  g.fillText('👥 '+(en?'COMMUNITY ':'COMUNIDAD ')+fmtN(P.srcS.com),rx,y+44); g.fillText('🤝 '+(en?'ALLIES ':'ALIADOS ')+fmtN(P.srcS.ali),rx,y+72);
+  let ey=y+110; Object.keys(PTS_ETAPAS).filter(k=>P.etS[k]>0).forEach(k=>{g.font='800 17px '+SH_MONO; g.fillStyle=SH_CREAM; g.fillText(PTS_ETAPAS[k][0]+' '+fmtN(P.etS[k]),rx-30,ey); g.font='20px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillText(PTS_ETAPAS[k][1],rx,ey); ey+=28}); g.textAlign='left';
+  g.font='700 16px '+SH_MONO; g.fillStyle=SH_CREAM; g.globalAlpha=.8; g.fillText(shEllipsis(g,(en?'SEASON ':'TEMPORADA ')+P.mes.nombre+' · LV '+(P.nivel+1)+' '+P.lvA[1]+' · '+fmtN(P.total)+' XP',TW-56),M+28,y+PH-18); g.globalAlpha=1;
+  y+=PH+14;
+  const hw=lunesPill(g,'🏆 '+(en?'WEEK LEADERBOARD':'POSICIONES DE LA SEMANA'),M,y,42,INK,SH_CREAM,'800 25px '+SF); g.font='800 18px '+SH_MONO; g.fillStyle=gr.fg; g.fillText(shEllipsis(g,en?'ONLY THIS WEEK’S POINTS':'SOLO PUNTOS DE LA SEMANA',TW-hw-14),M+hw+14,y+28); y+=42+12;
+  const rows=P.ev.filter(r=>r.sem>0).sort((a,b)=>b.sem-a.sem||b.pts-a.pts), CTAH=150, LIMIT=1660, RH=108, GAP=8, cap=Math.max(1,Math.floor((LIMIT-y-CTAH-12+GAP)/(RH+GAP))), shown=rows.slice(0,cap), thumbs=await Promise.all(shown.map(r=>shThumb(r.e)));
+  shown.forEach((r,i)=>{lunesFilaEvento(g,r,i,thumbs[i],M,y,RH,r.sem,r.etS,TW); y+=RH+GAP});
+  if(rows.length>shown.length)lunesPill(g,'+ '+(rows.length-shown.length)+' '+(en?'more events':'eventos más'),M,y,38,INK,SH_YEL,'800 22px '+SF);
+  lunesCTAJugar(g,M,LIMIT-CTAH,TW,CTAH);
+  return c;
+}
+/* franja inferior de las historias de puntaje: acciones y su valor */
+function lunesCTAJugar(g,M,cy0,TW,CTAH){
+  const en=LANG==='en', INK=SH_INK; g.fillStyle=INK; rrect(g,M,cy0,TW,CTAH,28); g.fill();
+  pxText(g,en?'LEVEL UP!':'¡SUBE DE NIVEL!',M+26,cy0+20,4,SH_YEL); g.fillStyle=SH_CREAM; g.font='700 18px '+SH_MONO; g.textAlign='right'; g.fillText(en?'EVERY ACTION ADDS POINTS':'CADA ACCIÓN SUMA PUNTOS',M+TW-26,cy0+42); g.textAlign='left';
+  const acts=[['❤','LIKE','+'+PTS.like],['💬',en?'COMMENT':'COMENTA','+'+PTS.comment],['↗',en?'SHARE':'COMPARTE','+'+PTS.share],['📱',en?'STORY':'HISTORIA','+'+PTS.story]], gp=8, aw=(TW-52-3*gp)/4;
+  acts.forEach((a,i)=>{const ax=M+26+i*(aw+gp); g.fillStyle=i===3?SH_YEL:SH_CREAM; rrect(g,ax,cy0+58,aw,58,16); g.fill(); g.fillStyle=INK; g.font='22px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textBaseline='middle'; g.fillText(a[0],ax+10,cy0+87); g.font='800 14px '+SH_MONO; g.fillText(a[1],ax+42,cy0+80); pxText(g,a[2],ax+42,cy0+89,2,INK); g.textBaseline='alphabetic'});
+  g.fillStyle=SH_CREAM; g.font='700 15px '+SH_MONO; g.globalAlpha=.85; g.fillText(en?'TAG THE EVENT AND @cucoarts IN YOUR STORY · +20':'ETIQUETA AL EVENTO Y A @cucoarts EN TU HISTORIA · +20',M+26,cy0+CTAH-14); g.globalAlpha=1;
+}
+/* ---------- 2) MENSUAL ACUMULADO ---------- */
+async function drawLunesMes(){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, S=lunesSet(), P=lunesPuntos(S), {c,g,gr}=lunesBase('lunesm',1), INK=SH_INK;
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
+  lunesTop(g,gr,logo,(en?'SEASON ':'TEMPORADA ')+P.mes.nombre+' · '+fmtShort(P.mes.ini).toUpperCase()+' → '+fmtShort(P.mes.fin).toUpperCase());
+  let y=LUN_TOP+56; pxText(g,'> MTY VS ART',M,y,7,gr.fg); y+=7*7+22;
+  // nivel de la comunidad
+  const PH=196; g.fillStyle=INK; rrect(g,M,y,TW,PH,28); g.fill();
+  pxText(g,'LV',M+28,y+22,4,SH_CREAM); pxText(g,String(P.nivel+1),M+28+pxWidth('LV',4)+16,y+14,8,SH_YEL);
+  g.font='800 40px '+SF; g.fillStyle=SH_CREAM; g.fillText(P.lvA[1]+' '+P.lvA[2],M+28,y+108);
+  const rx=M+TW-28; pxText(g,en?'MONTH XP':'XP DEL MES',rx,y+22,3,SH_CREAM,'right'); pxText(g,fmtN(P.total),rx,y+52,8,SH_YEL,'right');
+  const nb=24, bw=(TW-56-(nb-1)*4)/nb, by=y+126, filled=Math.round(nb*P.prog); for(let i=0;i<nb;i++){g.fillStyle=i<filled?SH_YEL:'rgba(255,231,207,.18)'; g.fillRect(M+28+i*(bw+4),by,bw,22)}
+  pxText(g,P.lvB?(en?'NEXT: ':'SIGUE: ')+P.lvB[1]+' '+fmtN(P.lvB[0]):'MAX',M+28,by+34,3,SH_CREAM);
+  y+=PH+14;
+  // etapas
+  const SH2=40*5+58; g.fillStyle='rgba(255,255,255,.94)'; rrect(g,M,y,TW,SH2,24); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke();
+  g.fillStyle=INK; g.font='800 26px '+SF; g.fillText(en?'Points by event stage':'Puntos por etapa del evento',M+26,y+38);
+  lunesBarrasEtapas(g,M+26,y+48,TW-52,P.et,INK,'#EA663D'); y+=SH2+14;
+  // fuentes
+  const FH=102; g.fillStyle='rgba(255,255,255,.94)'; rrect(g,M,y,TW,FH,24); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke(); lunesBarraFuentes(g,M+26,y+14,TW-52,P.src,INK); y+=FH+14;
+  // top eventos
+  lunesPill(g,'🏆 '+(en?'TOP EVENTS OF THE MONTH':'TOP EVENTOS DEL MES'),M,y,40,INK,SH_CREAM,'800 24px '+SF); y+=40+10;
+  const evs=P.ev.slice(0,4), thumbs=await Promise.all(evs.map(r=>shThumb(r.e)));
+  evs.forEach((r,i)=>{const h=70, x=M; g.save(); rrect(g,x,y,TW,h,18); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=4; g.strokeStyle=INK; rrect(g,x,y,TW,h,18); g.stroke();
+    lunesThumb(g,r.e,thumbs[i],x+12,y+8,h-16); pxText(g,'#'+(i+1),x+h+8,y+h/2-10,3,INK);
+    let ts=27; g.font='800 '+ts+'px '+SF; const mw=TW-h-70-210; g.fillStyle=INK; g.fillText(shEllipsis(g,eT(r.e),mw),x+h+70,y+h/2+9);
+    pxText(g,fmtN(r.pts),x+TW-18,y+h/2-14,4,INK,'right'); y+=h+8});
+  // top usuarios
+  y+=4; lunesPill(g,'⚔️ TOP '+USER_NAME,M,y,40,INK,SH_CREAM,'800 24px '+SF); y+=40+10;
+  const us=P.users.slice(0,Math.max(0,Math.min(5,Math.floor((1660-y+8)/62))));
+  us.forEach((u,i)=>{const h=54, x=M; g.save(); rrect(g,x,y,TW,h,16); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=4; g.strokeStyle=INK; rrect(g,x,y,TW,h,16); g.stroke();
+    pxText(g,'#'+(i+1),x+16,y+h/2-8,3,INK); g.font='800 24px '+SF; g.fillStyle=INK; g.fillText(shEllipsis(g,'@'+u.ig,TW-460),x+86,y+h/2+8);
+    g.font='800 18px '+SH_MONO; g.textAlign='right'; g.fillText(u.rank.a[1]+' '+u.rank.a[2],x+TW-170,y+h/2+6); g.textAlign='left'; pxText(g,fmtN(u.xp),x+TW-16,y+h/2-8,3,INK,'right'); y+=h+8});
+  return c;
+}
+/* ---------- 3) CÓMO JUGAR ---------- */
+async function drawLunesJugar(){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, {c,g,gr}=lunesBase('lunesj',0), INK=SH_INK;
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
+  lunesTop(g,gr,logo,en?'ART-PLAYING IN THE CITY':'JUEGA ARTE EN LA CIUDAD');
+  let y=LUN_TOP+56; pxText(g,'HOW TO PLAY',M,y,9,gr.fg); y+=7*9+14; pxText(g,'> MTY VS ART',M,y,5,gr.fg); y+=7*5+30;
+  const steps=[['CREATE',en?'Make your own post about local art: a photo, video or drawing of what you see at an event.':'Crea tu propio post de arte local: foto, video o dibujo de lo que ves en un evento.','#FFFFFF'],
+    ['EXPERIMENT',en?'Try something new: an event, an artist or a zone of Monterrey you have never visited.':'Experimenta: prueba un evento, un artista o una zona de Monterrey que no conocías.',SH_YEL],
+    ['SHARE',en?'Post and tag the event and @cucoarts, or share it from cucoarts.com. Every like and comment counts.':'Comparte: publica y etiqueta al evento y a @cucoarts, o compártelo desde cucoarts.com. Cada like y comentario cuenta.','#FFFFFF'],
+    ['REPEAT',en?'Do it every week: your points add up, you rank up and the community levels up.':'Repite cada semana: tus puntos se acumulan, subes de rango y la comunidad sube de nivel.',SH_YEL]];
+  const CH=176, G=12;
+  steps.forEach((s,i)=>{g.fillStyle=s[2]; rrect(g,M,y,TW,CH,26); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke();
+    g.fillStyle=INK; g.beginPath(); g.arc(M+54,y+56,34,0,7); g.fill(); pxText(g,String(i+1),M+54,y+56-14,4,SH_YEL,'center');
+    pxText(g,s[0],M+110,y+34,5,INK); g.font='700 23px '+SH_MONO; g.fillStyle=INK; wrapLines(g,s[1],TW-130,3).forEach((l,k)=>g.fillText(l,M+110,y+96+k*30)); y+=CH+G});
+  // tabla de puntos
+  const TH=108; g.fillStyle=INK; rrect(g,M,y,TW,TH,26); g.fill(); pxText(g,'POINTS',M+24,y+16,3,SH_YEL);
+  const pts=[['📸','POST','+'+PTS.post],['❤','LIKE','+'+PTS.like],['💬',en?'COMMENT':'COMENT.','+'+PTS.comment],['↗',en?'SHARE':'COMPART.','+'+PTS.share],['📱',en?'STORY':'HISTORIA','+'+PTS.story],['🎨',en?'ARTIST':'ARTISTA','+'+REGIO_PTS.artista]], pw=(TW-48)/6;
+  pts.forEach((p,i)=>{const px=M+24+i*pw; g.font='24px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillStyle=SH_CREAM; g.textBaseline='middle'; g.fillText(p[0],px,y+70); g.font='800 13px '+SH_MONO; g.fillText(p[1],px+34,y+62); pxText(g,p[2],px+34,y+73,2,SH_YEL); g.textBaseline='alphabetic'}); y+=TH+G;
+  // etapas
+  const EH=116; g.fillStyle='rgba(255,255,255,.95)'; rrect(g,M,y,TW,EH,26); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font='800 20px '+SH_MONO; g.fillText(en?'EVENT STAGES':'ETAPAS DEL EVENTO',M+24,y+34);
+  const et=[['🔥','PRE-LAUNCH',en?'14 days before':'14 días antes'],['🎉','OPENING',en?'opening + 1 day':'apertura + 1 día'],['🎨','LIVE',en?'while it runs':'mientras dura'],['🏁','FINALE',en?'last 2 days':'últimos 2 días'],['⚡','ACTIVATION',en?'special activity':'actividad especial']], ew=(TW-48)/5;
+  et.forEach((e,i)=>{const ex=M+24+i*ew; g.font='26px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillText(e[0],ex,y+74); g.font='800 13px '+SH_MONO; g.fillStyle=INK; g.fillText(e[1],ex+34,y+66); g.font='700 12px '+SH_MONO; g.fillText(e[2],ex+34,y+84)}); y+=EH+G;
+  // rangos
+  const RHh=Math.max(100,1656-y), rr=REGIO_NIVELES; g.fillStyle=SH_YEL; rrect(g,M,y,TW,RHh,26); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke(); g.fillStyle=INK; g.font='800 20px '+SH_MONO; g.fillText((en?'RANKS · ':'RANGOS · ')+USER_NAME,M+24,y+34);
+  const cw=(TW-48)/5; rr.forEach((r,i)=>{const cx=M+24+(i%5)*cw, cyy=y+58+Math.floor(i/5)*Math.min(46,(RHh-70)/2); g.font='24px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillText(r[2],cx,cyy+22); g.font='800 14px '+SH_MONO; g.fillText(r[1],cx+32,cyy+18)});
+  return c;
+}
+
+/* ---------- historia 3: CTA para que manden su evento o recomienden a un artista visual local ---------- */
+async function drawLunesCTA(){
+  const en=LANG==='en', M=STORY.M, TW=SW-2*M, {c,g,gr}=lunesBase('lunesx',0);
+  const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
+  lunesTop(g,gr,logo,en?'YOUR TURN':'AHORA TÚ');
+  let y=LUN_TOP+70; g.fillStyle=gr.fg; g.font='800 66px '+SF;
+  const hl=wrapLines(g,en?'Help us discover Monterrey’s art':'Ayúdanos a descubrir el arte de Monterrey',TW-200,3); hl.forEach((l,i)=>g.fillText(l,M,y+80+i*70)); y+=80+(hl.length-1)*70+50;
+  g.font='700 26px '+SH_MONO; g.fillText(en?'METROPOLITAN AREA OF MONTERREY':'ZONA METROPOLITANA DE MONTERREY',M,y+10); y+=54;
+  const block=(n,title,lines,bg,h)=>{
+    g.fillStyle=bg; rrect(g,M,y,TW,h,30); g.fill(); g.lineWidth=5; g.strokeStyle=SH_INK; g.stroke();
+    g.fillStyle=SH_INK; g.beginPath(); g.arc(M+54,y+58,32,0,7); g.fill(); g.fillStyle=SH_YEL; g.font='800 36px '+SF; g.textAlign='center'; g.textBaseline='middle'; g.fillText(String(n),M+54,y+60); g.textAlign='left';
+    g.fillStyle=SH_INK; g.font='800 38px '+SF; g.fillText(shEllipsis(g,title,TW-170),M+104,y+60); g.textBaseline='alphabetic';
+    g.font='700 27px '+SH_MONO; lines.forEach((l,i)=>g.fillText(shEllipsis(g,l,TW-60),M+34,y+132+i*44)); y+=h+18;
+  };
+  block(1,en?'Send us your event':'Mándanos tu evento',en?['• Poster in good quality','• Date, time and place','• Cost and your Instagram','→ hello@cucoarts.com or DM @cucoarts']:['• Cartel en buena calidad','• Fecha, hora y lugar','• Costo y tu Instagram','→ hello@cucoarts.com o DM a @cucoarts'],'rgba(255,255,255,.95)',340);
+  block(2,en?'Recommend a local visual artist':'Recomienda a un artista visual',en?['Who should we know in the metro area?','Painter, sculptor, photographer, muralist…','Tag them and tag @cucoarts: +15 pts for you and MTY']:['¿A quién debemos conocer en la zona','metropolitana? Pintura, escultura, foto,','muralismo… Etiquétalo y etiquétanos: +15 pts','para ti y para MTY'],SH_YEL,300);
+  // etiqueta destacada
+  const h3=200; g.fillStyle=SH_INK; rrect(g,M,y,TW,h3,30); g.fill(); g.fillStyle=SH_CREAM; g.font='700 22px '+SH_MONO; g.fillText(en?'TAG US IN YOUR STORY OR COMMENT':'ETIQUÉTANOS EN TU HISTORIA O COMENTA',M+34,y+54);
+  g.fillStyle=SH_YEL; g.font='800 92px '+SF; g.fillText('@cucoarts',M+34,y+152); g.fillStyle=SH_CREAM; g.font='700 20px '+SH_MONO; g.textAlign='right'; g.fillText(en?'we read every one':'las leemos todas',M+TW-34,y+152); g.textAlign='left'; y+=h3+16;
+  lunesFoot(g,gr,en?'CUCOARTS.COM/MTY · THE CITY’S ART, TOGETHER':'CUCOARTS.COM/MTY · EL ARTE DE LA CIUDAD, ENTRE TODOS');
+  return c;
+}
 
 /* ============ COMPARTIR: zoom «a detalle», respuesta de los botones y vibración (4-nov-2026) ============
  * Tocar la imagen (o la lupa) la abre a tamaño grande dentro de la misma ventana: ahí se acerca con rueda del ratón, pellizco, doble toque o los botones +/−,
@@ -8618,13 +9183,56 @@ $('#storyText').onclick=async()=>{const txt=shareCaption(shareTab); track('share
   new MutationObserver(()=>{const o=$s('#storyOverlay'); if(o&&!o.classList.contains('open')){if(inDetail()){modal().classList.remove('detail'); reset(false)} if(stp()&&!stp().hidden)showPanel(null)}}).observe($s('#storyOverlay'),{attributes:true,attributeFilter:['class']});
 })();
 
+/* ============ MTY VS ART dentro de /mty (9-nov-2026) ============
+ * 1) Botones de feria y de juego (🎪 🎮) en la fila de iconos de cada evento: al tocarlos abren una descripción corta con su enlace a cucoarts.com/mty_vs_art; aviso y sección del juego en la portada.
+ * 2) Si la persona ya reclamó su usuario (localStorage mty_player, lo guarda la página del juego), cada vez que comparte un evento desde aquí
+ *    se avisa al servidor (tipo 'compartir'): el evento y su usuario suman puntos. Una vez por usuario y evento; el servidor lo valida y los
+ *    puntos solo se cuentan cuando el usuario ya está verificado. Sin usuario reclamado no se envía nada. */
+const MVSA_T={es:{h:'MTY VS ART',p:'Comparte este evento, deja tu post o etiquétanos: el evento y tú suman puntos.',b:'Jugar',claim:'Reclama tu usuario'},en:{h:'MTY VS ART',p:'Share this event, post about it or tag us: the event and you both earn points.',b:'Play',claim:'Claim your handle'}};
+function mvsaPlayer(){try{const p=JSON.parse(localStorage.getItem('mty_player')||'null'); return p&&p.ig?p:null}catch(e){return null}}
+const MVSA_H={es:{bar:'Nuevo: juega arte local',bh:'Juega arte local en Monterrey',bp:'Crea, experimenta, comparte y repite. Cada evento, post e historia suma puntos para ti y para toda la ciudad.',play:'Jugar',claim:'Reclama tu usuario',more:'Ver más'},en:{bar:'New: play local art',bh:'Play local art in Monterrey',bp:'Create, experiment, share and repeat. Every event, post and story earns points for you and the whole city.',play:'Play',claim:'Claim your handle',more:'See more'}};
+/* información corta de un evento que se abre al tocar su botón: feria o evento de CUCO ARTS (si aplica) y el juego */
+function eventInfos(ev){
+  const out=[], fk=ev.feria||ev.parte, T=MVSA_T[LANG]||MVSA_T.es, H=MVSA_H[LANG]||MVSA_H.es, pl=mvsaPlayer();
+  if(fk&&FERIAS[fk]){const f=FERIAS[fk], name=f.corto||f.nombre; out.push({id:'feria',ico:'🎪',cls:'fer',title:ev.feria?t('fer_banner_main',name):t('fer_banner',name),sub:t('fer_banner_sub'),href:'#/feria/'+fk,cta:H.more})}
+  else if(ev.id==='husky-expo'){const h=PLACES.husky&&PLACES.husky.cucoEvento; out.push({id:'husky',ico:'🐕',cls:'husky',title:t('husky_banner'),sub:t('husky_banner_sub').replace(/\s*→\s*$/,''),href:h?(LANG==='en'?h.href_en:h.href):'/husky',cta:H.more})}
+  out.push({id:'game',ico:'🎮',cls:'game',title:T.h,sub:T.p,href:'/mty_vs_art?utm_source=evento&utm_content='+(ev&&ev.id||'')+(pl?'':'#unete'),cta:pl?T.b:T.claim});
+  return out;
+}
+/* solo el juego (páginas de feria, que ya son la página de la feria) */
+const gameInfoBtn=id=>{const T=MVSA_T[LANG]||MVSA_T.es; return '<button type="button" class="sbtn ibtn info-game" data-info="game" aria-expanded="false" aria-controls="info-game" title="'+esc(T.h)+'" aria-label="'+esc(T.h)+'"><span aria-hidden="true">🎮</span></button>'};
+const gameInfoPanel=id=>{const T=MVSA_T[LANG]||MVSA_T.es, pl=mvsaPlayer(); return '<div class="infopanels"><div class="infopanel game" id="info-game" hidden><span class="ip-ic" aria-hidden="true">🎮</span><div class="ip-tx"><b>'+esc(T.h)+'</b><span>'+esc(T.p)+'</span></div><a class="ip-go" href="/mty_vs_art?utm_source=feria&utm_content='+esc(id)+(pl?'':'#unete')+'">'+esc(pl?T.b:T.claim)+' →</a></div></div>'};
+const eventInfoBtns=ev=>eventInfos(ev).map(i=>'<button type="button" class="sbtn ibtn info-'+i.cls+'" data-info="'+i.id+'" aria-expanded="false" aria-controls="info-'+i.id+'" title="'+esc(i.title)+'" aria-label="'+esc(i.title)+'"><span aria-hidden="true">'+i.ico+'</span></button>').join('');
+const eventInfoPanels=ev=>'<div class="infopanels">'+eventInfos(ev).map(i=>'<div class="infopanel '+i.cls+'" id="info-'+i.id+'" hidden><span class="ip-ic" aria-hidden="true">'+i.ico+'</span><div class="ip-tx"><b>'+esc(i.title)+'</b><span>'+esc(i.sub)+'</span></div><a class="ip-go" href="'+esc(i.href)+'">'+esc(i.cta)+' →</a></div>').join('')+'</div>';
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-info]'); if(!b)return; const p=document.getElementById('info-'+b.dataset.info); if(!p)return;
+  const open=p.hidden; document.querySelectorAll('.infopanel').forEach(x=>{x.hidden=true}); document.querySelectorAll('[data-info]').forEach(x=>x.setAttribute('aria-expanded','false'));
+  if(open){p.hidden=false; b.setAttribute('aria-expanded','true')}
+});
+/* portada de /mty: aviso junto al título y sección propia */
+const mvsaBar=()=>{const H=MVSA_H[LANG]||MVSA_H.es; return '<a class="mvsa-bar" href="/mty_vs_art?utm_source=mty_home"><span aria-hidden="true">🎮</span><b>MTY VS ART</b> '+esc(H.bar)+' →</a>'};
+const mvsaHome=()=>{const H=MVSA_H[LANG]||MVSA_H.es, pl=mvsaPlayer(); return '<section class="mvsa-home" aria-label="MTY VS ART"><span class="mh-ic" aria-hidden="true">🎮</span><div class="mh-tx"><h2>MTY VS ART</h2><p><b>'+esc(H.bh)+'.</b> '+esc(H.bp)+'</p></div><div class="mh-btns"><a class="btn" href="/mty_vs_art?utm_source=mty_home">'+esc(H.play)+'</a>'+(pl?'':'<a class="btn alt" href="/mty_vs_art?utm_source=mty_home#unete">'+esc(H.claim)+'</a>')+'</div></section>'};
+/* avisar al servidor cuando un jugador comparte un evento (una vez por evento en este navegador) */
+function mvsaShared(evId){
+  const pl=mvsaPlayer(); if(!pl||!evId||typeof API==='undefined'||!API||!EVENTS.find(e=>e.id===evId))return;
+  const k='mvsa_sh_'+evId; try{if(localStorage.getItem(k))return; localStorage.setItem(k,'1')}catch(e){}
+  apiCall('POST','/mty/submit',{tipo:'compartir',ig:pl.ig,ev:'evento:'+evId}).catch(()=>{});
+}
+document.addEventListener('click',e=>{
+  const el=e.target.closest('.sharemenu a, .sharemenu button, #storyShare, #storyDl, #storyCopy'); if(!el)return;
+  if(el.matches('[data-story],[data-qr]'))return;                       // abrir la ventana de historia aún no es compartir
+  let id=null; const m=/^#\/evento\/([a-z0-9-]+)/.exec(location.hash||''); if(m)id=m[1];
+  if(el.matches('#storyShare,#storyDl,#storyCopy')&&typeof storyKey!=='undefined'&&typeof HOME_KEYS!=='undefined'&&!HOME_KEYS.includes(storyKey)&&!String(storyKey).startsWith('f:'))id=storyKey;
+  mvsaShared(id);
+});
+
 /* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
 /* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
 (function(){
   if(!window.MTY_RO)return;
   const TXT={
-    es:{menu:'Menú',close:'Cerrar menú',home:'Inicio',here:'estás aquí',label:'Menú principal',connect:'Escríbenos',store:'Tienda',murals:'Murales',art:'Arte por encargo',sell:'Vende tu obra',expo:'Expo en Santiago',events:'Eventos',fresh:'Nuevo',live:'Activa'},
-    en:{menu:'Menu',close:'Close menu',home:'Home',here:'you are here',label:'Main menu',connect:'Write to us',store:'Store',murals:'Murals',art:'Custom art',sell:'Sell your art',expo:'Expo in Santiago',events:'Events',fresh:'New',live:'Live'}
+    es:{mvsa:'MTY vs ART',menu:'Menú',close:'Cerrar menú',home:'Inicio',here:'estás aquí',label:'Menú principal',connect:'Escríbenos',store:'Tienda',murals:'Murales',art:'Arte por encargo',sell:'Vende tu obra',expo:'Expo en Santiago',events:'Eventos',fresh:'Nuevo',live:'Activa'},
+    en:{mvsa:'MTY vs ART',menu:'Menu',close:'Close menu',home:'Home',here:'you are here',label:'Main menu',connect:'Write to us',store:'Store',murals:'Murals',art:'Custom art',sell:'Sell your art',expo:'Expo in Santiago',events:'Events',fresh:'New',live:'Live'}
   };
   const lp=(en,p)=>en?(p==='/'?'/en':'/en'+({'/murales':'/murals','/arte-por-encargo':'/custom-art'}[p]||p)):p;
   function items(){
@@ -8636,7 +9244,8 @@ $('#storyText').onclick=async()=>{const txt=shareCaption(shareTab); track('share
       {id:'arte',label:t.art,href:lp(en,'/arte-por-encargo'),badge:t.fresh},
       {id:'sell',label:t.sell,href:lp(en,'/')+'#vende'},
       {id:'husky',label:t.expo,href:lp(en,'/husky'),badge:t.live},
-      {id:'events',label:t.events,href:'/mty',badge:t.fresh,current:true}
+      {id:'events',label:t.events,href:'/mty',badge:t.fresh,current:true},
+      {id:'mvsa',label:t.mvsa,href:'/mty_vs_art',badge:t.fresh}
     ];
   }
   const nav=document.querySelector('.top .nav'); if(!nav)return;

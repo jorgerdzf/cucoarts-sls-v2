@@ -462,6 +462,11 @@ export default function Landing() {
               <span className="cl-rt"><b>{c.cards.events.h} <span className="cl-live">{c.nav.fresh}</span></b><i>{c.cards.events.p}</i></span>
               <span className="cl-go">{c.cards.events.cta} →</span>
             </a></li>
+            <li><a className="cl-row" href="/mty_vs_art">
+              <span className="cl-n">06</span>
+              <span className="cl-rt"><b>{c.cards.mvsa.h} <span className="cl-live">{c.nav.fresh}</span></b><i>{c.cards.mvsa.p}</i></span>
+              <span className="cl-go">{c.cards.mvsa.cta} →</span>
+            </a></li>
           </ol>
         </div>
       </section>
@@ -547,7 +552,8 @@ export default function Landing() {
             <span className="cl-label">{c.events.label}</span>
             <h2 id="eventos-h">{c.events.title}</h2>
             <p>{c.events.text}</p>
-            <a className="cl-btn cl-primary" href="/mty">{c.events.stampFull} →</a>
+            <a className="cl-btn cl-primary" href="/mty">{c.events.stampFull} →</a>{' '}
+            <a className="cl-btn" href="/mty_vs_art">🎮 {c.events.game} →</a>
           </div>
         </div>
       </section>

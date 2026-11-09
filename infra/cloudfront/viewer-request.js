@@ -19,7 +19,8 @@ var KNOWN = {
   '/arte-por-encargo': '/arte-por-encargo/index.html',
   '/en/custom-art': '/en/custom-art/index.html',
   '/privacidad': '/privacidad/index.html',
-  '/mty': '/mty/index.html'
+  '/mty': '/mty/index.html',
+  '/mty_vs_art': '/mty_vs_art/index.html'
 };
 
 var LEGACY = {

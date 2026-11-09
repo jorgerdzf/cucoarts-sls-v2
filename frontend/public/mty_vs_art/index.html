@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MTY VS ART · el juego del arte local de Monterrey · CUCO ARTS</title>
+<meta name="description" content="Juega arte local: crea, experimenta, comparte y repite. Suma puntos para ti y para Monterrey con cada evento, post e historia. / Play local art: create, experiment, share, repeat.">
+<link rel="canonical" href="https://cucoarts.com/mty_vs_art">
+<meta property="og:type" content="website"><meta property="og:title" content="MTY VS ART · CUCO ARTS"><meta property="og:description" content="El juego del arte local de Monterrey: crea, experimenta, comparte, repite."><meta property="og:url" content="https://cucoarts.com/mty_vs_art"><meta property="og:image" content="https://cucoarts.com/mty_vs_art/img/lunes-3-mensual.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script>window.MVSA_RO=true;window.MTY_RO=true;try{var _th=localStorage.getItem("cucoarts-theme");if(_th==="dark"||_th==="light")document.documentElement.setAttribute("data-theme",_th)}catch(e){}</script>
+<style>
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Regular.otf);font-weight:400}@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Bold.otf);font-weight:700}@font-face{font-family:"Courier Prime";src:url(/mty/fonts/CourierPrime-Bold.ttf);font-weight:700}
+:root{--dk:#232322;--ink:#232322;--bg:#F5F1F1;--surf:#fff;--mut:#4a4a45;--yellow:#F7D649;--cream:#FFE7CF;--yel:#F7D649;--red:#FA2713;--lime:#C8F34A;--blue:#067DFF;--vio:#644DEF;--ora:#EA663D;--cel:#ABCFDD;--mint:#CDE8D8;--mono:"Courier Prime","Courier New",Courier,monospace;--sans:"Neue Montreal","Hanken Grotesk","Helvetica Neue",Arial,sans-serif}
+/* tema: mismo que el sitio (cucoarts-theme). Los bloques de color de marca conservan tinta oscura */
+:root[data-theme="dark"]{--ink:#F5F1F1;--bg:#171716;--surf:#232322;--mut:#B8B8A8;--line:#3A3A37;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#F5F1F1;--bg:#171716;--surf:#232322;--mut:#B8B8A8;--line:#3A3A37;color-scheme:dark}}
+.hero,#unete,#historias,.soon,.yl,.lt{--ink:#232322;--surf:#fff;--mut:#4a4a45;color:#232322}
+*{box-sizing:border-box}button{font:inherit;color:inherit}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--sans)}
+a{color:inherit}.w{max-width:1040px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left))}
+.hero{background:var(--yel);border-bottom:5px solid var(--ink);padding:44px 0 36px}
+.hero canvas{display:block;max-width:100%;image-rendering:pixelated}
+.hero p.lead{font:800 clamp(26px,4.4vw,42px)/1.08 var(--sans);letter-spacing:-.03em;margin:18px 0 6px;max-width:20ch}
+.hero p.sub{font:700 16px var(--mono);max-width:60ch;margin:6px 0 22px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-block;font:800 17px var(--sans);text-decoration:none;border:4px solid var(--ink);border-radius:999px;padding:13px 26px;background:var(--dk);color:var(--yel);cursor:pointer}
+.btn.alt{background:var(--surf);color:var(--ink)}.btn.red{background:var(--red);color:#fff}.btn:hover{transform:translateY(-2px)}
+section{padding:40px 0}section h2{font:800 clamp(26px,4vw,38px)/1.05 var(--sans);letter-spacing:-.03em;margin:0 0 6px}section .k{font:700 13px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.card{background:var(--surf);border:5px solid var(--ink);border-radius:28px;padding:20px 22px}.dark{background:var(--dk);color:var(--cream)}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}.g4.keep{grid-template-columns:repeat(2,1fr)}}
+.lvl{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;justify-content:space-between}.lvl canvas{image-rendering:pixelated;max-width:100%}
+.bar{display:grid;grid-template-columns:repeat(24,1fr);gap:4px;margin:14px 0 8px}.bar i{height:20px;background:rgba(255,231,207,.18)}.bar i.f{background:var(--yel)}
+.mono{font-family:var(--mono)}.sm{font:700 13px var(--mono);letter-spacing:.04em}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:2px dashed rgba(35,35,34,.25)}.row:first-child{border-top:0}
+.rk{font:800 15px var(--mono);min-width:34px;text-align:center;border:3px solid var(--ink);border-radius:8px;padding:2px 4px;background:var(--yel);color:var(--dk);border-color:var(--dk)}.row .t{flex:1;font-weight:800;letter-spacing:-.01em;line-height:1.15}.row .t small{display:block;font:700 12px var(--mono);color:var(--mut);letter-spacing:.03em;font-weight:700}
+.pts{font:800 22px var(--mono)}
+.seg{height:34px;display:flex;border:4px solid var(--ink)}.seg b{display:block;height:100%}
+.step{position:relative;padding-top:6px}.step .n{width:46px;height:46px;border-radius:50%;background:var(--dk);color:var(--yel);box-shadow:0 0 0 3px var(--ink);display:grid;place-items:center;font:800 20px var(--mono);margin-bottom:10px}
+.step h3{margin:0 0 4px}.step canvas{display:block;image-rendering:pixelated;margin-bottom:8px}.step p{margin:0;font:700 15px/1.45 var(--mono)}
+table{border-collapse:collapse;width:100%}td,th{padding:9px 6px;border-top:2px dashed rgba(35,35,34,.25);text-align:left;vertical-align:top}th{font:800 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;border:0}td.v{font:800 20px var(--mono);white-space:nowrap}
+.ranks{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.ranks div{border:3px solid var(--ink);border-radius:16px;padding:10px;text-align:center;background:var(--surf);font:800 12px var(--mono);letter-spacing:.04em}.ranks div b{display:block;font-size:26px}.ranks small{display:block;font-weight:700;color:var(--mut)}
+@media(max-width:760px){.ranks{grid-template-columns:repeat(2,1fr)}}
+form{display:grid;gap:12px}label{display:block;font:800 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],select{width:100%;font:600 18px var(--sans);padding:12px 14px;border:4px solid var(--ink);border-radius:16px;background:var(--surf);color:var(--ink)}
+.opt{display:flex;gap:8px;flex-wrap:wrap}.opt label{margin:0;display:flex;align-items:center;gap:6px;border:3px solid var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer;background:var(--surf);font-size:12px}.opt input{accent-color:var(--ink)}
+.opt label:has(input:checked){background:var(--yel);color:var(--dk)}.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.ck{display:flex;gap:10px;align-items:flex-start;font:600 15px/1.4 var(--sans);text-transform:none;letter-spacing:0}.ck input{width:22px;height:22px;margin-top:2px;accent-color:var(--ink)}
+.msg{font:700 15px var(--mono);padding:12px 14px;border:4px solid var(--ink);border-radius:16px}.msg.ok{background:var(--lime);color:var(--dk)}.msg.err{background:var(--red);color:#fff}
+.code{font:800 36px var(--mono);letter-spacing:.12em;background:var(--surf);border:4px dashed var(--ink);border-radius:16px;padding:10px 18px;display:inline-block}
+.shots{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.shots a{display:block;border:4px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--ink);text-decoration:none}.shots img{display:block;width:100%;height:auto}.shots span{display:block;font:800 12px var(--mono);padding:6px 8px;color:var(--cream);text-transform:uppercase}
+@media(max-width:900px){.shots{grid-template-columns:repeat(2,1fr)}}
+footer{background:var(--dk);border-top:4px solid var(--ink);color:var(--cream);padding:34px 0 50px;font:600 15px/1.5 var(--sans)}footer a{color:var(--yel)}
+.yl{background:var(--yel)}
+.hide{display:none!important}
+section{scroll-margin-top:66px}
+.btn{min-height:48px}
+.hero{padding:28px 0 24px}
+.hero p.lead{margin:14px 0 4px}
+.hero p.sub{margin:4px 0 18px}
+/* estado de la ciudad */
+.stat{padding:18px 20px}
+.stat .top2{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.stat .xpb{text-align:right}
+#lv-name{font:800 26px/1.1 var(--sans);margin-top:6px}
+.stat .wk{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:2px dashed rgba(255,231,207,.35);margin-top:12px;padding-top:12px}
+.stat .wk .sm{text-align:right}
+.bar{margin:12px 0 8px}.bar i{height:16px}
+#marcador{padding:28px 0}
+.mh{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.mh h2{font-size:clamp(22px,4vw,30px);margin:0}.mh .k{margin:0}
+/* carrusel de historias */
+.cwrap{margin-top:14px}
+.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 6px 12px;scrollbar-width:thin}
+.sl{flex:0 0 min(46%,190px);scroll-snap-align:start;border:4px solid var(--ink);border-radius:20px;background:var(--surf);overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+.sl .cat{display:block;font:800 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;background:var(--dk);color:var(--yel)}
+.sl img{display:block;width:100%;height:auto}
+.sl .dl{display:flex;align-items:center;justify-content:center;min-height:44px;font:800 13px var(--mono);text-decoration:none;border-top:4px solid var(--ink);background:var(--yel);color:var(--dk)}
+.dots{display:flex;align-items:center;justify-content:center;gap:0;margin-top:2px}
+.dots button{width:44px;height:44px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.dots button i{display:block;width:14px;height:14px;border-radius:50%;border:3px solid var(--ink);background:var(--surf)}
+.dots button.on i{background:var(--ink)}
+.cnt{text-align:center;font:700 13px var(--mono);letter-spacing:.04em}
+/* reglas plegables */
+details.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;font:800 16px var(--sans);border:4px solid var(--ink);border-radius:999px;padding:8px 20px;background:var(--surf);box-shadow:4px 4px 0 var(--ink)}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"+";font:800 22px var(--mono)}
+details.fold[open]>summary::after{content:"–"}
+details.fold[open]>summary{margin-bottom:14px}
+/* proximamente y colaboracion */
+.soon{background:var(--lime);color:var(--dk);box-shadow:6px 6px 0 var(--ink)}
+.soon h2{margin-bottom:8px}
+textarea{width:100%;font:600 18px/1.4 var(--sans);padding:12px 14px;border:4px solid var(--ink);border-radius:16px;background:var(--surf);color:var(--ink);min-height:120px;resize:vertical}
+#collab-card{margin-top:14px}
+.cc{font:700 12px var(--mono);text-align:right;margin-top:4px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,.btn:focus-visible,.backbtn:focus-visible,.pill:focus-visible,.cl-menubtn:focus-visible,summary:focus-visible,.dots button:focus-visible,.sl .dl:focus-visible{outline:4px solid var(--blue);outline-offset:2px}
+.opt label{min-height:44px;font-size:13px}
+@media(max-width:760px){
+  section{padding:28px 0}
+  .hero{padding:18px 0 18px}
+  .hero p.lead{font-size:23px;max-width:none;margin:12px 0 2px}
+  .hero p.sub{font-size:14px;margin:2px 0 14px}
+  .btns.c{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btns.c .btn{padding:10px 8px;font-size:15px;text-align:center;line-height:1.15;display:flex;align-items:center;justify-content:center;min-height:52px}
+  .stat{padding:14px 16px;border-radius:24px}
+  #marcador{padding:20px 0 24px}
+  .card{padding:16px 16px;border-radius:24px}
+  .shots,.ranks{gap:8px}
+  .sl{flex-basis:50%}
+}
+@media(min-width:761px){.sl{flex-basis:calc(20% - 10px);max-width:none}.dots{display:none}.car{overflow-x:visible}}
+/* ---- cabecera del sitio (CSS real de /mty, inyectado al armar) ---- */
+header.top{position:relative;border-bottom:2px solid var(--ink)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.nav{display:flex;gap:8px;align-items:center}
+.pill{border:2px solid var(--ink);background:transparent;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-block}
+.pill:hover{background:var(--ink);color:var(--bg)}
+/* ===== Encabezado homologado con cucoarts.com: logo + pastillas de icono y texto + Menú; la etiqueta /mty y la barra de la agenda debajo ===== */
+header.top{border-bottom:0}
+header.top .wrap{padding-top:18px;padding-bottom:18px;gap:16px 28px}
+.top .cl-logo{display:block;flex:0 0 auto;width:76px;aspect-ratio:480/248;background:var(--ink);-webkit-mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;box-sizing:content-box;margin:-8px -6px;padding:8px 6px;background-clip:content-box;-webkit-mask-clip:content-box;mask-clip:content-box;-webkit-mask-origin:content-box;mask-origin:content-box;text-decoration:none}
+.top .cl-logo:hover{background:#EA663D;background-clip:content-box}
+.top .cl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.mtytag{margin-right:auto;margin-left:-6px;font:700 12px/1 "Courier Prime","Courier New",monospace;letter-spacing:.08em;text-transform:uppercase;background:var(--yellow);color:#232322;padding:6px 9px;border-radius:3px;transform:rotate(-3deg);text-decoration:none;box-shadow:2px 2px 0 var(--ink);white-space:nowrap}
+.mtytag:hover{background:#EA663D}
+header.top .nav{gap:8px}
+header.top .nav .pill{display:inline-flex;align-items:center;gap:8px;font:700 12px "Courier Prime","Courier New",monospace;letter-spacing:.06em;padding:7px 13px;border:2px solid var(--ink);line-height:1.2}
+header.top .nav .pill svg{width:16px;height:16px}
+.subbar{border-bottom:2px solid var(--ink)}
+header.top .subbar .wrap{display:flex;justify-content:flex-start;gap:8px;align-items:center;padding-top:4px;padding-bottom:14px}
+@media(max-width:760px){
+  .top .cl-logo{width:60px}
+  header.top .nav .pill{height:42px;min-width:42px;padding:0 12px;justify-content:center;font-size:12px}
+  header.top .nav .cl-hide-s{display:none}
+}
+@media(max-width:360px){.mtytag{font-size:11px;padding:5px 7px}}
+
+/* botón doble del encabezado: lupa | mapa (una sola pastilla, cada mitad lleva a su función) */
+header.top .nav .pill.seg{padding:0;gap:0;overflow:hidden;height:auto;min-width:0}
+header.top .nav .pill.seg:hover{background:transparent;color:var(--ink)}
+header.top .nav .seg .segb{display:grid;place-items:center;height:38px;min-width:44px;padding:0 11px;background:transparent;border:0;color:inherit;cursor:pointer;text-decoration:none;line-height:0}
+header.top .nav .seg .segb+.segb{border-left:2px solid var(--ink)}
+header.top .nav .seg .segb svg{width:18px;height:18px}
+header.top .nav .seg .segb:hover,header.top .nav .seg .segb.on{background:var(--ink);color:var(--bg)}
+@media(max-width:760px){header.top .nav .pill.seg{height:42px;min-width:0;padding:0}header.top .nav .seg .segb{height:38px;min-width:40px;padding:0 9px}}
+/* teléfonos angostos: todo el encabezado cabe en una fila (logo + etiqueta + lupa|mapa + EN + modo + menú) */
+@media(max-width:420px){
+  .top .cl-logo{width:52px}
+  .mtytag{font-size:11px;padding:5px 7px;margin-left:-8px}
+  header.top .wrap{gap:8px}
+  header.top .nav{gap:6px}
+  header.top .nav .pill{height:40px;min-width:40px;padding:0 10px}
+  header.top .nav #langBtn svg{display:none}
+  header.top .nav .pill.seg{height:40px;padding:0}
+  header.top .nav .seg .segb{min-width:36px;height:36px;padding:0 8px}
+  header.top .nav .cl-menubtn{min-width:40px;height:40px;padding:0 10px}
+}
+@media(max-width:350px){
+  .top .cl-logo{width:44px}
+  .mtytag{font-size:10px;padding:4px 6px;margin-left:0}
+  header.top .wrap{gap:6px}
+  header.top .nav{gap:4px}
+  header.top .nav .pill{height:36px;min-width:36px;padding:0 8px}
+  header.top .nav .pill.seg{height:36px}
+  header.top .nav .seg .segb{min-width:32px;height:32px;padding:0 6px}
+  header.top .nav .cl-menubtn{min-width:36px;height:36px;padding:0 8px}
+}
+
+
+/* volver y acciones */
+.backbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);border-radius:999px;background:transparent;padding:7px 16px 7px 12px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:18px 0 0}
+.backbtn:hover{background:var(--ink);color:var(--bg)}
+.backbtn svg{width:16px;height:16px}
+
+.navrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* Menú de cucoarts.com para la página pública /mty. Mismo contenido y mismo comportamiento que SiteMenu.tsx de la landing. */
+.cl-menubtn{display:inline-flex;align-items:center;gap:10px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--bg);background:var(--ink);
+  border:2px solid var(--ink);border-radius:999px;padding:7px 15px 7px 13px;cursor:pointer;position:relative;transition:background .2s,color .2s,translate .15s,box-shadow .15s;box-shadow:3px 3px 0 #EA663D}
+.cl-menubtn:hover{translate:-1px -2px;box-shadow:5px 5px 0 #EA663D}
+.cl-menubtn:active{translate:2px 2px;box-shadow:1px 1px 0 #EA663D}
+.cl-menubtn.is-open{background:#F7D649;color:#232322;border-color:#232322;box-shadow:3px 3px 0 #232322}
+.cl-menutxt{min-width:5.2ch;text-align:left}
+@media (max-width:420px){.cl-menutxt{display:none}.cl-menubtn{padding:9px 11px}}
+.cl-menuicon{position:relative;width:18px;height:14px;display:block}
+.cl-menuicon i{position:absolute;left:0;width:100%;height:2.5px;background:currentColor;border-radius:2px;transition:transform .35s cubic-bezier(.7,0,.2,1),opacity .2s,top .35s cubic-bezier(.7,0,.2,1)}
+.cl-menuicon i:nth-child(1){top:0}
+.cl-menuicon i:nth-child(2){top:5.75px;width:70%}
+.cl-menuicon i:nth-child(3){top:11.5px}
+.cl-menubtn:hover .cl-menuicon i:nth-child(2){width:100%}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(1){top:5.75px;transform:rotate(45deg)}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(2){opacity:0;transform:translateX(-8px)}
+.cl-menubtn.is-open .cl-menuicon i:nth-child(3){top:5.75px;transform:rotate(-45deg)}
+
+.cl-menu:focus{outline:none}
+.cl-menu:not(.is-ready) .cl-menu-list{pointer-events:none}
+.cl-menu{position:fixed;overflow-x:hidden;inset:0;z-index:2150;background:#232322;color:#FFE7CF;overflow-y:auto;overscroll-behavior:contain;font-family:"Neue Montreal","Helvetica Neue",Arial,sans-serif;
+  clip-path:circle(0 at var(--ox,calc(100% - 60px)) var(--oy,40px));visibility:hidden;
+  transition:clip-path .65s cubic-bezier(.7,0,.2,1),visibility 0s .65s}
+.cl-menu.is-open{clip-path:circle(160% at var(--ox,calc(100% - 60px)) var(--oy,40px));visibility:visible;transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s}
+:root[data-theme="dark"] .cl-menu{background:#111110}
+.cl-menu-in{max-width:1180px;margin:0 auto;min-height:100%;padding:18px clamp(16px,4vw,48px) clamp(20px,4vh,40px);padding-top:max(18px,env(safe-area-inset-top,0px));display:grid;grid-template-rows:auto 1fr auto;gap:clamp(8px,2vh,24px)}
+.cl-menu-top{display:flex;align-items:center;justify-content:space-between}
+.cl-menu-logo{width:76px;aspect-ratio:480/248;background:#FFE7CF;-webkit-mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat}
+.cl-menu-x{width:46px;height:46px;border-radius:50%;border:2px solid #FFE7CF;background:transparent;color:#FFE7CF;font-size:18px;cursor:pointer;display:grid;place-items:center;transition:rotate .35s,background .2s,color .2s}
+.cl-menu-x:hover{background:#EA663D;border-color:#EA663D;color:#232322;rotate:90deg}
+.cl-menu-list{list-style:none;margin:0;padding:0;align-self:center;border-top:2px solid rgb(255 231 207 / .28)}
+.cl-menu-list li{border-bottom:2px solid rgb(255 231 207 / .28);overflow:hidden;--i:0}
+.cl-mi{display:flex;align-items:center;gap:clamp(10px,2.4vw,28px);padding:clamp(6px,1.3vh,18px) clamp(4px,1.2vw,14px);color:inherit;text-decoration:none;font:inherit;transition:background .2s,color .2s,padding .3s cubic-bezier(.2,.8,.2,1);opacity:0;transform:translateY(60%)}
+.cl-menu.is-open .cl-mi{opacity:1;transform:none;transition:opacity .45s ease calc(.22s + var(--i) * 65ms),transform .6s cubic-bezier(.2,.8,.2,1) calc(.22s + var(--i) * 65ms),background .2s,color .2s,padding .3s cubic-bezier(.2,.8,.2,1)}
+.cl-mi-n{font:700 clamp(12px,1.6vw,16px) "Courier New",Courier,monospace;letter-spacing:.08em;opacity:.7;min-width:2.4ch}
+.cl-mi-t{flex:1;min-width:0;font:700 clamp(28px,min(5.6vw,6.4vh),72px)/.95 "Neue Montreal","Helvetica Neue",Arial,sans-serif;letter-spacing:-.045em;text-transform:uppercase}
+.cl-mi-go{font:700 clamp(20px,3vw,34px) "Neue Montreal","Helvetica Neue",Arial,sans-serif;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.cl-live{display:inline-flex;align-items:center;gap:6px;font:700 10px/1 "Courier New",Courier,monospace;letter-spacing:.1em;text-transform:uppercase;vertical-align:middle;background:#F7D649;color:#232322;border:2px solid #232322;border-radius:999px;padding:5px 10px;rotate:-3deg}
+.cl-live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#EA663D}
+.cl-mi-b{margin:0}
+a.cl-mi:hover,a.cl-mi:focus-visible{background:#EA663D;color:#232322;padding-left:clamp(14px,3vw,40px)}
+a.cl-mi:hover .cl-mi-go,a.cl-mi:focus-visible .cl-mi-go{transform:translateX(8px)}
+a.cl-mi:focus-visible{outline:3px solid #F7D649;outline-offset:-3px}
+a.cl-mi.is-current .cl-mi-t,a.cl-mi.is-current .cl-mi-n{color:#F7D649}
+a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl-mi.is-current:hover .cl-mi-t,a.cl-mi.is-current:focus-visible .cl-mi-t{color:#232322}
+.cl-menu-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font:700 12px "Courier New",Courier,monospace;letter-spacing:.08em;text-transform:uppercase;opacity:0}
+.cl-menu.is-open .cl-menu-foot{opacity:1;transition:opacity .5s ease .75s}
+.cl-menu-foot span{opacity:.65}
+.cl-menu-foot a{color:#FFE7CF;text-underline-offset:4px}
+.cl-menu-foot a:hover{color:#F7D649}
+@media (prefers-reduced-motion:reduce){
+  .cl-menu{clip-path:none;opacity:0;transition:opacity .2s,visibility 0s .2s}
+  .cl-menu.is-open{opacity:1;transition:opacity .2s,visibility 0s}
+  .cl-mi,.cl-menu-foot{opacity:1;transform:none;transition:none}
+  .cl-menuicon i,.cl-menubtn,.cl-menu-x{transition:none}
+}
+@media (max-width:520px){.cl-mi{display:grid;grid-template-columns:auto minmax(0,1fr);row-gap:6px;padding-block:clamp(8px,1.7vh,18px)}.cl-mi-go{display:none}.cl-mi-b{grid-column:2;justify-self:start}.cl-mi-t{font-size:clamp(28px,9vw,44px)}}
+
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--bg);color:var(--ink);position:relative;z-index:20}
+header.top .wrap{padding-top:14px;padding-bottom:14px}
+/* fila de juego bajo el cabezal: volver + PRESS START + sprites */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.hud .backbtn{margin:0;min-height:44px;padding:0 16px 0 12px;font-family:var(--mono);background:rgba(255,255,255,.55)}
+.hud .backbtn:hover{background:var(--ink);color:var(--yel)}
+.hud canvas{display:block;image-rendering:pixelated;max-width:100%}
+.hud .ps{margin-left:auto}
+.hud .spr4{display:none}
+@media(min-width:761px){.hud .spr4{display:block}}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.15}}
+.blink{animation:blink 1.2s steps(1) infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.bob{animation:bob 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.blink,.bob,.bar i.nx{animation:none!important}}
+/* fechas */
+.dates{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.dchip{display:inline-flex;align-items:center;gap:6px;min-height:34px;border:3px solid var(--ink);border-radius:999px;padding:3px 12px;background:var(--surf);font:700 13px var(--mono);white-space:nowrap}
+/* barra XP cargando */
+.bar i.nx{animation:blink 1s steps(1) infinite;background:rgba(247,214,73,.55)}
+.xpl{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.xpl b{font:800 13px var(--mono);color:var(--yel);letter-spacing:.06em}
+/* sellos de rangos y niveles */
+.step .nr{display:flex;align-items:center;gap:12px;margin-bottom:10px}.step .nr .n{margin:0}.step canvas.spr{margin:0}
+.ranks .sg{position:relative}
+.sello{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 8px;border:3px solid var(--ink);border-radius:50%;background:var(--sc,var(--cream));color:var(--dk);font-style:normal;font-size:26px;line-height:1;box-shadow:3px 3px 0 var(--ink)}
+.sg .nn{position:absolute;top:6px;left:8px;font:800 11px var(--mono);color:var(--mut)}
+.sg.off{opacity:.6}.sg.off::after{content:"🔒";position:absolute;top:4px;right:8px;font-size:13px}
+.sg.on::after{content:"✓";position:absolute;top:4px;right:8px;font:800 15px var(--mono);color:var(--ink)}
+.sg.here{border-color:var(--blue)!important;box-shadow:4px 4px 0 var(--blue)}
+.sg.here::after{content:"📍";position:absolute;top:4px;right:8px;font-size:14px}
+.sg .tag{display:block;margin-top:4px;font:800 10px var(--mono);color:var(--blue);letter-spacing:.08em}
+/* emojis en rótulos */
+#jugar .k::before{content:"🎮 "}#unete .k::before{content:"👾 "}#historias .k::before{content:"🎨 "}#comparte .k::before{content:"⭐ "}#reglas .w>.k::before{content:"🕹️ "}.soon .k::before{content:"🪙 "}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="cl-logo" id="logo" href="/mty" aria-label="CUCO ARTS · /mty"><span class="cl-sr">CUCO ARTS</span></a>
+  <a class="mtytag" href="/mty" aria-label="/mty">/mty</a>
+  <nav class="nav" aria-label="Main"><button class="pill" type="button" id="langBtn"></button><button class="pill" type="button" id="themeBtn"></button></nav>
+</div></header>
+
+<div class="hero"><div class="w">
+  <div class="hud"><button class="backbtn" type="button" id="backBtn"></button><canvas class="spr4" id="spr4" aria-hidden="true"></canvas><canvas class="ps blink" id="ps" aria-hidden="true"></canvas></div>
+  <canvas id="hero-px" aria-label="MTY VS ART"></canvas>
+  <p class="lead" data-i="hero_lead">Juega arte local en Monterrey.</p>
+  <p class="sub" data-i="hero_sub">Crea · experimenta · comparte · repite. Cada evento, post e historia suma puntos para ti y para toda la ciudad.</p>
+  <div class="btns c"><a class="btn" href="#unete" data-i="cta_claim">Reclama tu usuario</a><a class="btn alt" href="/mty" data-i="cta_share">Elige un evento y compártelo</a></div>
+</div></div>
+
+<section id="marcador"><div class="w">
+  <div class="mh"><h2 data-i="board_h">La comunidad de Monterrey</h2><div class="k" id="season-k"></div></div>
+  <div class="card dark stat"><div class="top2">
+    <div><canvas id="lv-px"></canvas><div id="lv-name"></div></div>
+    <div class="xpb"><div class="sm">🪙 <span data-i="xp_month">XP DEL MES</span></div><canvas id="xp-px" style="margin-left:auto"></canvas></div>
+  </div><div class="bar" id="lv-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div><div class="sm xpl"><span id="lv-next"></span><b id="lv-pct"></b></div>
+  <div class="wk"><canvas id="wk-px"></canvas><div class="sm"><span data-i="wk_sub">⚡ PUNTOS DE LA SEMANA</span><br><span id="wk-sub"></span></div></div></div>
+  <div class="dates" id="dates"></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="k" data-i="top_ev">🏆 TOP EVENTOS DEL MES</div><div id="ev-list"></div></div>
+    <div class="card"><div class="k" id="top-u">⚔️ TOP ART PEOPLE</div><div id="u-list"></div><p class="sm" id="claimed" style="margin:12px 0 0"></p></div>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="k" data-i="src_k">QUIÉN SUMA</div><div class="seg" id="seg-src"></div><div class="sm" id="src-l" style="margin-top:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"></div><div class="k" style="margin-top:14px" data-i="stage_k">POR ETAPA DEL EVENTO</div><div class="seg" id="seg-et"></div><div class="sm" id="et-l" style="margin-top:8px;display:flex;gap:6px 14px;flex-wrap:wrap"></div></div>
+</div></section>
+
+<section style="background:var(--surf);border-block:5px solid var(--ink)" id="jugar"><div class="w">
+  <div class="k" data-i="how_k">Cómo se juega</div><h2 data-i="how_h">Cuatro pasos, una ciudad.</h2>
+  <div class="grid g4" style="margin-top:16px">
+    <div class="card step"><div class="nr"><div class="n">1</div><canvas class="spr" data-spr="star" data-c="#EA663D" data-s="3" aria-hidden="true"></canvas></div><canvas data-px="CREATE" data-s="3"></canvas><p data-i="s1">Crea tu propio post de arte local: foto, video o dibujo de lo que ves en un evento.</p></div>
+    <div class="card step yl"><div class="nr"><div class="n">2</div><canvas class="spr" data-spr="bolt" data-c="#067DFF" data-s="3" aria-hidden="true"></canvas></div><canvas data-px="EXPERIMENT" data-s="3"></canvas><p data-i="s2">Experimenta: prueba un evento, un artista o una zona de Monterrey que no conocías.</p></div>
+    <div class="card step"><div class="nr"><div class="n">3</div><canvas class="spr" data-spr="heart" data-c="#FA2713" data-s="3" aria-hidden="true"></canvas></div><canvas data-px="SHARE" data-s="3"></canvas><p data-i="s3">Comparte: publica y etiqueta al evento y a @cucoarts, o compártelo desde cucoarts.com.</p></div>
+    <div class="card step yl"><div class="nr"><div class="n">4</div><canvas class="spr" data-spr="coin" data-c="#EA663D" data-s="3" aria-hidden="true"></canvas></div><canvas data-px="REPEAT" data-s="3"></canvas><p data-i="s4">Repite cada semana: tus puntos se acumulan, subes de rango y la ciudad sube de nivel.</p></div>
+  </div>
+</div></section>
+
+<section id="unete" style="background:var(--cel);border-block:5px solid var(--ink)"><div class="w">
+  <div class="grid g2" style="align-items:start">
+    <div>
+      <div class="k" data-i="join_k">Únete</div><h2 data-i="join_h">Reclama tu usuario.</h2>
+      <p data-i="join_p">Registra tu usuario de Instagram en ART PEOPLE. Todos los puntos que ya hayas sumado con posts, historias y eventos compartidos pasan a tu perfil.</p>
+      <p class="sm" data-i="join_how">1) Llena el formulario → 2) te damos un código → 3) mándalo por mensaje directo a @cucoarts desde tu cuenta → 4) lo verificamos y tu usuario queda reclamado.</p>
+      <p class="sm" data-i="join_priv">Tu correo o WhatsApp es opcional, nunca se publica y solo lo usaremos, con tu permiso, para invitaciones y recomendaciones de eventos y artes visuales.</p>
+    </div>
+    <div class="card" id="claim-card">
+      <form id="claim" novalidate>
+        <div><label for="ig" data-i="f_ig">Tu usuario de Instagram</label><input id="ig" name="ig" type="text" placeholder="@tu.usuario" autocomplete="off" inputmode="text" required></div>
+        <div><label data-i="f_via">Cómo quieres que te escribamos (opcional)</label>
+          <div class="opt"><label><input type="radio" name="via" value="ig" checked> <span data-i="v_ig">Solo por Instagram</span></label><label><input type="radio" name="via" value="correo"> <span data-i="v_mail">Correo</span></label><label><input type="radio" name="via" value="whatsapp"> WhatsApp</label></div></div>
+        <div id="contact-box" class="hide"><label for="contacto" id="contact-l">Correo</label><input id="contacto" name="contacto" type="text" autocomplete="off"></div>
+        <div><label for="alias" data-i="f_alias">Nombre público (opcional)</label><input id="alias" name="alias" type="text" maxlength="30" autocomplete="off"></div>
+        <div class="hp" aria-hidden="true"><label>Website</label><input name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <label class="ck"><input type="checkbox" name="consent" id="consent"><span data-i="f_consent">Acepto que CUCO ARTS guarde estos datos para verificar mi usuario y, si lo indico, contactarme con invitaciones y recomendaciones. Mi correo o WhatsApp no se publica. Puedo pedir que me quiten en cualquier momento (hello@cucoarts.com).</span></label>
+        <button class="btn red" type="submit" id="go" data-i="f_go">Reclamar mi usuario</button>
+        <div class="msg err hide" id="err"></div>
+      </form>
+      <div id="done" class="hide">
+        <div class="msg ok" id="done-t"></div>
+        <p style="margin:16px 0 6px" data-i="done_code">Tu código:</p><div class="code" id="code"></div>
+        <div class="btns" style="margin-top:14px"><button class="btn alt" type="button" id="copy" data-i="done_copy">Copiar código</button><a class="btn" id="dm" href="https://ig.me/m/cucoarts" target="_blank" rel="noopener" data-i="done_dm">Abrir mensaje a @cucoarts</a></div>
+        <p class="sm" style="margin-top:14px" data-i="done_how">Manda el código por mensaje directo a @cucoarts desde tu cuenta. En cuanto lo veamos, tu usuario queda verificado.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="historias" style="background:var(--cream);border-block:5px solid var(--ink)"><div class="w">
+  <div class="k" data-i="shots_k">Las historias de la semana</div><h2 data-i="shots_h">Descárgalas y compártelas.</h2>
+  <div class="cwrap"><div class="car" id="shots" tabindex="0" role="region" aria-label="Historias"></div><div class="dots" id="dots"></div><div class="cnt" id="cnt"></div></div>
+</div></section>
+
+<section id="comparte"><div class="w">
+  <div class="k" data-i="share_k">Comparte arte local</div><h2 data-i="share_h">Cada evento compartido suma.</h2>
+  <div class="grid g3" style="margin-top:16px">
+    <div class="card"><h3 style="margin:0 0 6px" data-i="sh1_h">Comparte un evento</h3><p data-i="sh1_p">Elige un evento en la agenda y comparte su historia o enlace. El evento gana puntos y tu usuario también.</p><a class="btn" href="/mty" data-i="sh1_b">Ver la agenda</a></div>
+    <div class="card yl"><h3 style="margin:0 0 6px" data-i="sh2_h">Etiquétanos en tu historia</h3><p data-i="sh2_p">Si publicas una historia etiquetando al evento, a su organizador o a @cucoarts, sumas +20.</p><a class="btn alt" href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener">@cucoarts</a></div>
+    <div class="card"><h3 style="margin:0 0 6px" data-i="sh3_h">Recomienda a un artista</h3><p data-i="sh3_p">¿Conoces a un artista visual de la zona metropolitana de Monterrey? Etiquétalo y etiquétanos: +15 para ti y para MTY.</p><a class="btn alt" href="https://ig.me/m/cucoarts" target="_blank" rel="noopener" data-i="sh3_b">Escribir a @cucoarts</a></div>
+  </div>
+</div></section>
+
+<section id="reglas"><div class="w">
+  <div class="k" data-i="rules_k">Las reglas</div><h2 data-i="rules_h">Puntos, etapas y rangos</h2>
+  <details class="fold" id="rdet" style="margin-top:14px"><summary data-i="rules_open">Ver puntos, etapas y rangos</summary>
+  <div class="grid g2">
+    <div class="card"><table><thead><tr><th data-i="t_act">Acción</th><th data-i="t_pts">Puntos</th></tr></thead><tbody id="tb-pts"></tbody></table></div>
+    <div class="card"><table><thead><tr><th data-i="t_stage">Etapa del evento</th><th data-i="t_when">Cuándo</th></tr></thead><tbody id="tb-et"></tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="k" id="rk-k">RANGOS ART PEOPLE</div><div class="ranks" id="ranks"></div></div>
+  <div class="card" style="margin-top:14px"><div class="k" data-i="lv_k">NIVELES DE LA CIUDAD (SE REINICIAN CADA MES)</div><div class="ranks" id="lvls"></div></div>
+  <p class="sm" style="margin-top:14px" data-i="rules_note">Solo cuentan posts, historias y acciones con fecha desde el día 1 del mes. Las cuentas aliadas (patrocinadores, programas y fiestas oficiales) suman, pero se muestran aparte. Las cifras son las que se ven en pantalla; si Instagram oculta los me gusta, no se inventan.</p>
+  </details>
+</div></section>
+
+<section id="proximamente"><div class="w">
+  <div class="card soon"><div class="k" data-i="soon_k">PRÓXIMAMENTE</div><h2 data-i="soon_h">Retos y recompensas de la comunidad.</h2>
+  <p data-i="soon_p" style="margin:0 0 14px">Vienen retos comunitarios y recompensas, en colaboración con organizadores, artistas y venues de artes visuales de Monterrey. Aún no hay fechas ni premios: lo iremos anunciando aquí y en @cucoarts.</p>
+  <div class="btns"><button class="btn" type="button" id="collab-open" aria-expanded="false" aria-controls="collab-card" data-i="collab_b">Propón una colaboración</button></div></div>
+  <div class="card hide" id="collab-card">
+    <form id="collab" novalidate>
+      <div class="k" style="margin:0" data-i="collab_t">Organizadores, artistas y venues de artes visuales</div>
+      <div><label data-i="c_tipo">Eres</label><div class="opt"><label><input type="radio" name="ctipo" value="org" checked> <span data-i="c_org">Organizador</span></label><label><input type="radio" name="ctipo" value="art"> <span data-i="c_art">Artista</span></label><label><input type="radio" name="ctipo" value="venue"> <span data-i="c_ven">Venue</span></label></div></div>
+      <div><label for="cnom" data-i="c_nom">Nombre</label><input id="cnom" type="text" maxlength="80" autocomplete="name"></div>
+      <div><label for="cig" data-i="c_ig">Usuario de Instagram o sitio</label><input id="cig" type="text" maxlength="120" placeholder="@usuario · sitio.com" autocomplete="off"></div>
+      <div><label for="cmsg" data-i="c_msg">Tu propuesta (máx. 400 caracteres)</label><textarea id="cmsg" maxlength="400"></textarea><div class="cc" id="ccount">0/400</div></div>
+      <label class="ck"><input type="checkbox" id="cconsent"><span data-i="c_consent">Acepto que CUCO ARTS use estos datos solo para responder a mi propuesta.</span></label>
+      <button class="btn red" type="submit" data-i="c_go">Preparar correo</button>
+      <p class="sm" style="margin:0" data-i="c_note">Se abre tu app de correo con el mensaje listo para hello@cucoarts.com. Respondemos por correo o Instagram.</p>
+      <div class="msg err hide" id="cerr"></div><div class="msg ok hide" id="cok"></div>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="w">
+  <b>MTY VS ART</b> · CUCO ARTS<br><span data-i="foot_p">Un juego para descubrir, visitar y compartir el arte local de Monterrey.</span><br>
+  <a href="/mty">Eventos /mty</a> · <a href="/privacidad" data-i="foot_priv">Aviso de privacidad</a> · <a href="mailto:hello@cucoarts.com">hello@cucoarts.com</a> · <a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener">@cucoarts</a>
+</div></footer>
+
+<script>
+/* ---------- datos (los pone build_mvsa.js desde la última corrida del lunes) ---------- */
+const MVSA={"fecha":"2026-11-09","semana":{"ini":"2026-11-02","fin":"2026-11-08"},"mes":{"ini":"2026-11-01","fin":"2026-11-09","nombre":"NOVIEMBRE 2026"},"total":7582,"semanaPts":6770,"nivel":{"n":1,"nombre":"CAMPFIRE","emoji":"🏕️","prog":0.2527333333333333,"sig":{"nombre":"VILLAGE","xp":30000}},"src":{"com":5506,"ali":2076},"srcS":{"com":4694,"ali":2076},"et":{"previa":2770,"inaug":3685,"curso":1127,"cierre":0,"activ":0},"etS":{"previa":2770,"inaug":2959,"curso":1041,"cierre":0,"activ":0},"eventosMes":[{"id":"fama-26","es":"FAMA 2026","en":"FAMA 2026","pts":4661,"sem":4595,"et":{"previa":2091,"inaug":1589,"curso":981,"cierre":0,"activ":0},"etS":{"previa":2091,"inaug":1589,"curso":915,"cierre":0,"activ":0},"src":{"com":2805,"ali":1856},"estado":"done","fin":"2026-11-08"},{"id":"escultores-en-nuevo-leon","es":"Escultores en Nuevo León, 1945–1995","en":"Sculptors in Nuevo León, 1945–1995","pts":886,"sem":886,"et":{"previa":0,"inaug":886,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":886,"curso":0,"cierre":0,"activ":0},"src":{"com":886,"ali":0},"estado":"open","fin":"2026-11-27"},{"id":"tisanicolas-gis-pastel","es":"TiSaNicolás: muestra de gis pastel sobre pavimento","en":"TiSaNicolás: chalk pastel on pavement showcase","pts":804,"sem":58,"et":{"previa":0,"inaug":784,"curso":20,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":58,"curso":0,"cierre":0,"activ":0},"src":{"com":804,"ali":0},"estado":"done","fin":null},{"id":"antes-todo-esto-era-monte","es":"antes todo esto era monte","en":"this was all hills before","pts":359,"sem":359,"et":{"previa":349,"inaug":0,"curso":10,"cierre":0,"activ":0},"etS":{"previa":349,"inaug":0,"curso":10,"cierre":0,"activ":0},"src":{"com":359,"ali":0},"estado":"open","fin":"2026-11-20"},{"id":"habitar-pabellon-arquitectas","es":"HA BI TAR · Pabellón Arquitectas","en":"HA BI TAR · Arquitectas Pavilion","pts":336,"sem":336,"et":{"previa":220,"inaug":0,"curso":116,"cierre":0,"activ":0},"etS":{"previa":220,"inaug":0,"curso":116,"cierre":0,"activ":0},"src":{"com":116,"ali":220},"estado":"done","fin":"2026-11-08"},{"id":"resolana-juan-jose-ceron","es":"Resolana. Retrospectiva de Juan José Cerón","en":"Resolana. Juan José Cerón retrospective","pts":257,"sem":257,"et":{"previa":0,"inaug":257,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":257,"curso":0,"cierre":0,"activ":0},"src":{"com":257,"ali":0},"estado":"open","fin":"2027-02-28"},{"id":"origenes-destino-m1881-2026","es":"Orígenes Destino","en":"Orígenes Destino","pts":117,"sem":117,"et":{"previa":0,"inaug":117,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":117,"curso":0,"cierre":0,"activ":0},"src":{"com":117,"ali":0},"estado":"open","fin":null},{"id":"fama-fiesta-2026","es":"Fiesta oficial de FAMA 2026 · Soul Clap and Dance-Off","en":"FAMA 2026 official party · Soul Clap and Dance-Off","pts":110,"sem":110,"et":{"previa":110,"inaug":0,"curso":0,"cierre":0,"activ":0},"etS":{"previa":110,"inaug":0,"curso":0,"cierre":0,"activ":0},"src":{"com":110,"ali":0},"estado":"done","fin":null}],"eventosSem":[{"id":"fama-26","es":"FAMA 2026","en":"FAMA 2026","pts":4661,"sem":4595,"et":{"previa":2091,"inaug":1589,"curso":981,"cierre":0,"activ":0},"etS":{"previa":2091,"inaug":1589,"curso":915,"cierre":0,"activ":0},"src":{"com":2805,"ali":1856},"estado":"done","fin":"2026-11-08"},{"id":"escultores-en-nuevo-leon","es":"Escultores en Nuevo León, 1945–1995","en":"Sculptors in Nuevo León, 1945–1995","pts":886,"sem":886,"et":{"previa":0,"inaug":886,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":886,"curso":0,"cierre":0,"activ":0},"src":{"com":886,"ali":0},"estado":"open","fin":"2026-11-27"},{"id":"antes-todo-esto-era-monte","es":"antes todo esto era monte","en":"this was all hills before","pts":359,"sem":359,"et":{"previa":349,"inaug":0,"curso":10,"cierre":0,"activ":0},"etS":{"previa":349,"inaug":0,"curso":10,"cierre":0,"activ":0},"src":{"com":359,"ali":0},"estado":"open","fin":"2026-11-20"},{"id":"habitar-pabellon-arquitectas","es":"HA BI TAR · Pabellón Arquitectas","en":"HA BI TAR · Arquitectas Pavilion","pts":336,"sem":336,"et":{"previa":220,"inaug":0,"curso":116,"cierre":0,"activ":0},"etS":{"previa":220,"inaug":0,"curso":116,"cierre":0,"activ":0},"src":{"com":116,"ali":220},"estado":"done","fin":"2026-11-08"},{"id":"resolana-juan-jose-ceron","es":"Resolana. Retrospectiva de Juan José Cerón","en":"Resolana. Juan José Cerón retrospective","pts":257,"sem":257,"et":{"previa":0,"inaug":257,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":257,"curso":0,"cierre":0,"activ":0},"src":{"com":257,"ali":0},"estado":"open","fin":"2027-02-28"},{"id":"origenes-destino-m1881-2026","es":"Orígenes Destino","en":"Orígenes Destino","pts":117,"sem":117,"et":{"previa":0,"inaug":117,"curso":0,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":117,"curso":0,"cierre":0,"activ":0},"src":{"com":117,"ali":0},"estado":"open","fin":null},{"id":"fama-fiesta-2026","es":"Fiesta oficial de FAMA 2026 · Soul Clap and Dance-Off","en":"FAMA 2026 official party · Soul Clap and Dance-Off","pts":110,"sem":110,"et":{"previa":110,"inaug":0,"curso":0,"cierre":0,"activ":0},"etS":{"previa":110,"inaug":0,"curso":0,"cierre":0,"activ":0},"src":{"com":110,"ali":0},"estado":"done","fin":null},{"id":"tisanicolas-gis-pastel","es":"TiSaNicolás: muestra de gis pastel sobre pavimento","en":"TiSaNicolás: chalk pastel on pavement showcase","pts":804,"sem":58,"et":{"previa":0,"inaug":784,"curso":20,"cierre":0,"activ":0},"etS":{"previa":0,"inaug":58,"curso":0,"cierre":0,"activ":0},"src":{"com":804,"ali":0},"estado":"done","fin":null}],"users":[{"ig":"noticias28nl","xp":789,"rank":"APPRENTICE","emoji":"🛠️"},{"ig":"chic_mty","xp":785,"rank":"APPRENTICE","emoji":"🛠️"},{"ig":"vinalay_bp","xp":716,"rank":"APPRENTICE","emoji":"🛠️"},{"ig":"morris._.cj","xp":359,"rank":"STUDENT","emoji":"📜"},{"ig":"nefespino","xp":266,"rank":"STUDENT","emoji":"📜"},{"ig":"conartenl","xp":257,"rank":"STUDENT","emoji":"📜"},{"ig":"kitty.ramos_","xp":256,"rank":"STUDENT","emoji":"📜"},{"ig":"n.i.x.x.x.o.n","xp":232,"rank":"INITIATE","emoji":"🕯️"},{"ig":"albertorzam","xp":188,"rank":"INITIATE","emoji":"🕯️"},{"ig":"acecimtz","xp":129,"rank":"INITIATE","emoji":"🕯️"}],"conteos":{"posts":43,"usuarios":34,"historias":0,"artistas":0},"reglas":{"PTS":{"post":10,"like":1,"comment":3,"share":5,"story":20},"REGIO_PTS":{"registro":25,"compartir":10,"compartirEvento":10,"artista":15},"PREVIA_DIAS":14},"etapas":{"previa":["PRE-LAUNCH","🔥"],"inaug":["OPENING","🎉"],"curso":["LIVE","🎨"],"cierre":["FINALE","🏁"],"activ":["ACTIVATION","⚡"]},"niveles":[[0,"CAMPFIRE","🏕️"],[30000,"VILLAGE","🏘️"],[75000,"TOWN","🏰"],[150000,"CITADEL","🗼"],[300000,"KINGDOM","👑"],[600000,"EMPIRE","🐉"]],"rangos":[[0,"NOOB","🐣"],[100,"INITIATE","🕯️"],[250,"STUDENT","📜"],[500,"APPRENTICE","🛠️"],[1000,"ADEPT","🔮"],[2000,"RANGER","🏹"],[3500,"SORCERER","🧙"],[6000,"PALADIN","🛡️"],[10000,"ARCHMAGE","🌟"],[20000,"LEGEND","🏆"]],"usuarioNombre":"ART PEOPLE"};
+const API=window.MTY_API||null;
+/* ---------- letra de pixeles (5×7) ---------- */
+const PXF={A:'0E,11,11,1F,11,11,11',B:'1E,11,11,1E,11,11,1E',C:'0E,11,10,10,10,11,0E',D:'1E,11,11,11,11,11,1E',E:'1F,10,10,1E,10,10,1F',F:'1F,10,10,1E,10,10,10',G:'0E,11,10,17,11,11,0F',H:'11,11,11,1F,11,11,11',I:'0E,04,04,04,04,04,0E',J:'07,02,02,02,02,12,0C',K:'11,12,14,18,14,12,11',L:'10,10,10,10,10,10,1F',M:'11,1B,15,15,11,11,11',N:'11,11,19,15,13,11,11',O:'0E,11,11,11,11,11,0E',P:'1E,11,11,1E,10,10,10',Q:'0E,11,11,11,15,12,0D',R:'1E,11,11,1E,14,12,11',S:'0F,10,10,0E,01,01,1E',T:'1F,04,04,04,04,04,04',U:'11,11,11,11,11,11,0E',V:'11,11,11,11,11,0A,04',W:'11,11,11,15,15,15,0A',X:'11,11,0A,04,0A,11,11',Y:'11,11,0A,04,04,04,04',Z:'1F,01,02,04,08,10,1F',0:'0E,11,13,15,19,11,0E',1:'04,0C,04,04,04,04,0E',2:'0E,11,01,02,04,08,1F',3:'1F,02,04,02,01,11,0E',4:'02,06,0A,12,1F,02,02',5:'1F,10,1E,01,01,11,0E',6:'06,08,10,1E,11,11,0E',7:'1F,01,02,04,08,08,08',8:'0E,11,11,0E,11,11,0E',9:'0E,11,11,0F,01,02,0C','+':'00,04,04,1F,04,04,00','-':'00,00,00,1F,00,00,00',':':'00,0C,0C,00,0C,0C,00','.':'00,00,00,00,00,0C,0C',',':'00,00,00,00,0C,04,08','!':'04,04,04,04,04,00,04','?':'0E,11,01,02,04,00,04','/':'01,01,02,04,08,10,10','>':'08,0C,0E,0F,0E,0C,08',' ':'00,00,00,00,00,00,00'};
+const PXG={};Object.keys(PXF).forEach(k=>{PXG[k]=PXF[k].split(',').map(h=>parseInt(h,16))});
+function px(cv,txt,s,color,align){txt=String(txt).toUpperCase();const w=Math.max(1,txt.length*6*s-s),h=7*s;cv.width=w;cv.height=h+s*0;cv.style.width=w+'px';cv.style.maxWidth='100%';cv.style.height='auto';const g=cv.getContext('2d');g.clearRect(0,0,w,h);g.fillStyle=color||'#232322';let cx=0;for(const ch of txt){const rows=PXG[ch]||PXG['?'];rows.forEach((b,r)=>{for(let c=0;c<5;c++)if(b&(16>>c))g.fillRect(cx+c*s,r*s,s,s)});cx+=6*s}}
+/* ---------- textos ES / EN ---------- */
+const T={es:{nav_events:'Eventos',nav_join:'Únete',back:'Volver',lang_btn:'EN',th_day:'Modo día',th_night:'Modo noche',theme_to_light:'Cambiar a modo día',theme_to_dark:'Cambiar a modo noche',lang_title:'Cambiar idioma',d_season:'Temporada',d_data:'Datos al',d_week:'Semana',loading:'CARGANDO',hero_lead:'Juega arte local en Monterrey.',hero_sub:'Crea · experimenta · comparte · repite. Suma puntos para ti y para la ciudad.',cta_claim:'Reclama tu usuario',cta_share:'Comparte un evento',board_h:'La comunidad de Monterrey',xp_month:'XP DEL MES',week_k:'ESTA SEMANA',src_k:'QUIÉN SUMA',stage_k:'POR ETAPA DEL EVENTO',top_ev:'🏆 TOP EVENTOS DEL MES',how_k:'Cómo se juega',how_h:'Cuatro pasos, una ciudad.',s1:'Crea tu propio post de arte local: foto, video o dibujo de lo que ves en un evento.',s2:'Experimenta: prueba un evento, un artista o una zona de Monterrey que no conocías.',s3:'Comparte: publica y etiqueta al evento y a @cucoarts, o compártelo desde cucoarts.com.',s4:'Repite cada semana: tus puntos se acumulan, subes de rango y la ciudad sube de nivel.',rules_k:'Las reglas',rules_h:'Puntos, etapas y rangos',t_act:'Acción',t_pts:'Puntos',t_stage:'Etapa del evento',t_when:'Cuándo',lv_k:'NIVELES DE LA CIUDAD (SE REINICIAN CADA MES)',rules_note:'Solo cuentan posts, historias y acciones con fecha desde el día 1 del mes. Las cuentas aliadas (patrocinadores, programas y fiestas oficiales) suman, pero se muestran aparte. Las cifras son las que se ven en pantalla; si Instagram oculta los me gusta, no se inventan.',join_k:'Únete',join_h:'Reclama tu usuario.',join_p:'Registra tu usuario de Instagram en ART PEOPLE. Todos los puntos que ya hayas sumado con posts, historias y eventos compartidos pasan a tu perfil.',join_how:'1) Llena el formulario → 2) te damos un código → 3) mándalo por mensaje directo a @cucoarts desde tu cuenta → 4) lo verificamos y tu usuario queda reclamado.',join_priv:'Tu correo o WhatsApp es opcional, nunca se publica y solo lo usaremos, con tu permiso, para invitaciones y recomendaciones de eventos y artes visuales.',f_ig:'Tu usuario de Instagram',f_via:'Cómo quieres que te escribamos (opcional)',v_ig:'Solo por Instagram',v_mail:'Correo',f_alias:'Nombre público (opcional)',f_consent:'Acepto que CUCO ARTS guarde estos datos para verificar mi usuario y, si lo indico, contactarme con invitaciones y recomendaciones. Mi correo o WhatsApp no se publica. Puedo pedir que me quiten en cualquier momento (hello@cucoarts.com).',f_go:'Reclamar mi usuario',done_code:'Tu código:',done_copy:'Copiar código',done_dm:'Abrir mensaje a @cucoarts',done_how:'Manda el código por mensaje directo a @cucoarts desde tu cuenta. En cuanto lo veamos, tu usuario queda verificado.',share_k:'Comparte arte local',share_h:'Cada evento compartido suma.',sh1_h:'Comparte un evento',sh1_p:'Elige un evento en la agenda y comparte su historia o enlace. El evento gana puntos y tu usuario también.',sh1_b:'Ver la agenda',sh2_h:'Etiquétanos en tu historia',sh2_p:'Si publicas una historia etiquetando al evento, a su organizador o a @cucoarts, sumas +20.',sh3_h:'Recomienda a un artista',sh3_p:'¿Conoces a un artista visual de la zona metropolitana de Monterrey? Etiquétalo y etiquétanos: +15 para ti y para MTY.',sh3_b:'Escribir a @cucoarts',shots_k:'Las historias de la semana',shots_h:'Descárgalas y compártelas.',foot_p:'Un juego para descubrir, visitar y compartir el arte local de Monterrey.',foot_priv:'Aviso de privacidad',rules_open:'Ver puntos, etapas y rangos',soon_k:'PRÓXIMAMENTE',soon_h:'Retos y recompensas de la comunidad.',soon_p:'Vienen retos comunitarios y recompensas, en colaboración con organizadores, artistas y venues de artes visuales de Monterrey. Aún no hay fechas ni premios: lo iremos anunciando aquí y en @cucoarts.',collab_b:'Propón una colaboración',collab_t:'Organizadores, artistas y venues de artes visuales',c_tipo:'Eres',c_org:'Organizador',c_art:'Artista',c_ven:'Venue',c_nom:'Nombre',c_ig:'Usuario de Instagram o sitio',c_msg:'Tu propuesta (máx. 400 caracteres)',c_consent:'Acepto que CUCO ARTS use estos datos solo para responder a mi propuesta.',c_go:'Preparar correo',c_note:'Se abre tu app de correo con el mensaje listo para hello@cucoarts.com. Respondemos por correo o Instagram.',c_e_nom:'Escribe tu nombre.',c_e_ig:'Escribe tu usuario de Instagram o tu sitio.',c_e_msg:'Cuéntanos tu propuesta en pocas palabras.',c_e_consent:'Marca la casilla para continuar.',c_ok:'Se abrió tu app de correo. Si no pasó nada, escríbenos a hello@cucoarts.com.',c_l_tipo:'Tipo',c_l_nom:'Nombre',c_l_ig:'Instagram o sitio',c_l_msg:'Propuesta',c_tipos:{org:'Organizador',art:'Artista',venue:'Venue'},cats:{'lunes-1-en-curso':'EN CURSO','lunes-2-semanal':'SEMANAL','lunes-3-mensual':'MENSUAL','lunes-4-como-jugar':'CÓMO JUGAR','lunes-5-participa':'PARTICIPA'},dl:'⬇ Descargar',
+  season:'TEMPORADA',updated:'Actualizado',next:'SIGUE',max:'NIVEL MÁXIMO',wk_sub:'⚡ PUNTOS DE LA SEMANA',com:'COMUNIDAD',ali:'ALIADOS',claimed:'usuarios ya reclamados',claimed1:'usuario ya reclamado',none:'Aún no hay datos.',a_post:'Post publicado',a_like:'Me gusta',a_comment:'Comentario',a_share:'Compartido (republicado o enviado)',a_story:'Historia que etiqueta al evento, a su organizador o a @cucoarts',a_artist:'Recomendar a un artista visual local etiquetándolo y etiquetándonos',a_reg:'Reclamar tu usuario (una vez)',a_cshare:'Compartir un evento desde cucoarts.com (también suma +10 al evento)',e_previa:'Hasta 14 días antes de abrir',e_inaug:'Día de apertura y el siguiente',e_curso:'Mientras dura',e_cierre:'Últimos 2 días',e_activ:'Actividad especial',stage_names:{previa:'PRE-LAUNCH',inaug:'OPENING',curso:'LIVE',cierre:'FINALE',activ:'ACTIVATION'},errs:{ig:'Escribe tu usuario de Instagram (solo letras, números, punto y guion bajo).',contacto:'Revisa tu correo o WhatsApp.',consent:'Marca la casilla para continuar.',duplicate:'Ese usuario ya fue reclamado o está en revisión. Si es tuyo, escríbenos a @cucoarts.',net:'No pudimos conectar. Intenta de nuevo en un momento.',off:'El registro abre muy pronto.',generic:'No pudimos registrarte. Intenta de nuevo.'},ok:'¡Listo! Ya casi: solo falta verificar que la cuenta es tuya.',mail:'Correo',wa:'WhatsApp',copied:'¡Copiado!'},
+en:{nav_events:'Events',nav_join:'Join',back:'Back',lang_btn:'ES',th_day:'Day mode',th_night:'Night mode',theme_to_light:'Switch to light mode',theme_to_dark:'Switch to dark mode',lang_title:'Change language',d_season:'Season',d_data:'Data as of',d_week:'Week',loading:'LOADING',hero_lead:'Play local art in Monterrey.',hero_sub:'Create · experiment · share · repeat. Earn points for you and the city.',cta_claim:'Claim your handle',cta_share:'Share an event',board_h:'Monterrey’s community',xp_month:'MONTH XP',week_k:'THIS WEEK',src_k:'WHO SCORES',stage_k:'BY EVENT STAGE',top_ev:'🏆 TOP EVENTS OF THE MONTH',how_k:'How to play',how_h:'Four steps, one city.',s1:'Create your own post about local art: a photo, video or drawing of what you see at an event.',s2:'Experiment: try an event, an artist or a zone of Monterrey you have never visited.',s3:'Share: post and tag the event and @cucoarts, or share it from cucoarts.com.',s4:'Repeat every week: your points add up, you rank up and the city levels up.',rules_k:'The rules',rules_h:'Points, stages and ranks',t_act:'Action',t_pts:'Points',t_stage:'Event stage',t_when:'When',lv_k:'CITY LEVELS (RESET EVERY MONTH)',rules_note:'Only posts, stories and actions dated from day 1 of the month count. Allied accounts (sponsors, programs and official parties) score too, but are shown separately. Numbers are the ones visible on screen; if Instagram hides likes, we do not make them up.',join_k:'Join',join_h:'Claim your handle.',join_p:'Register your Instagram handle in ART PEOPLE. All the points you have already earned with posts, stories and shared events move to your profile.',join_how:'1) Fill in the form → 2) we give you a code → 3) send it as a direct message to @cucoarts from your account → 4) we verify it and your handle is claimed.',join_priv:'Your email or WhatsApp is optional, is never published and will only be used, with your permission, for event and visual-art invitations and recommendations.',f_ig:'Your Instagram handle',f_via:'How should we reach you (optional)',v_ig:'Instagram only',v_mail:'Email',f_alias:'Public name (optional)',f_consent:'I agree that CUCO ARTS stores this data to verify my handle and, if I choose, to contact me with invitations and recommendations. My email or WhatsApp is never published. I can ask to be removed at any time (hello@cucoarts.com).',f_go:'Claim my handle',done_code:'Your code:',done_copy:'Copy code',done_dm:'Message @cucoarts',done_how:'Send the code as a direct message to @cucoarts from your account. Once we see it, your handle is verified.',share_k:'Share local art',share_h:'Every shared event counts.',sh1_h:'Share an event',sh1_p:'Pick an event in the agenda and share its story or link. The event earns points and so do you.',sh1_b:'See the agenda',sh2_h:'Tag us in your story',sh2_p:'Post a story tagging the event, its organizer or @cucoarts and earn +20.',sh3_h:'Recommend an artist',sh3_p:'Know a visual artist in the Monterrey metro area? Tag them and tag us: +15 for you and for MTY.',sh3_b:'Message @cucoarts',shots_k:'This week’s stories',shots_h:'Download and share them.',foot_p:'A game to discover, visit and share Monterrey’s local art.',foot_priv:'Privacy notice',rules_open:'See points, stages and ranks',soon_k:'COMING SOON',soon_h:'Community challenges and rewards.',soon_p:'Community challenges and rewards are coming, built with organizers, artists and visual-art venues in Monterrey. No dates or prizes yet: we will announce them here and on @cucoarts.',collab_b:'Propose a collaboration',collab_t:'Organizers, artists and visual-art venues',c_tipo:'You are',c_org:'Organizer',c_art:'Artist',c_ven:'Venue',c_nom:'Name',c_ig:'Instagram handle or website',c_msg:'Your proposal (max. 400 characters)',c_consent:'I agree that CUCO ARTS uses this data only to reply to my proposal.',c_go:'Prepare email',c_note:'Your email app opens with the message ready for hello@cucoarts.com. We reply by email or Instagram.',c_e_nom:'Enter your name.',c_e_ig:'Enter your Instagram handle or website.',c_e_msg:'Tell us your proposal in a few words.',c_e_consent:'Tick the box to continue.',c_ok:'Your email app opened. If nothing happened, write to hello@cucoarts.com.',c_l_tipo:'Type',c_l_nom:'Name',c_l_ig:'Instagram or website',c_l_msg:'Proposal',c_tipos:{org:'Organizer',art:'Artist',venue:'Venue'},cats:{'lunes-1-en-curso':'LIVE','lunes-2-semanal':'WEEKLY','lunes-3-mensual':'MONTHLY','lunes-4-como-jugar':'HOW TO PLAY','lunes-5-participa':'JOIN'},dl:'⬇ Download',
+  season:'SEASON',updated:'Updated',next:'NEXT',max:'MAX LEVEL',wk_sub:'⚡ POINTS THIS WEEK',com:'COMMUNITY',ali:'ALLIES',claimed:'handles already claimed',claimed1:'handle already claimed',none:'No data yet.',a_post:'Post published',a_like:'Like',a_comment:'Comment',a_share:'Share (reposted or sent)',a_story:'Story tagging the event, its organizer or @cucoarts',a_artist:'Recommend a local visual artist tagging them and us',a_reg:'Claim your handle (once)',a_cshare:'Share an event from cucoarts.com (also +10 for the event)',e_previa:'Up to 14 days before opening',e_inaug:'Opening day and the next',e_curso:'While it runs',e_cierre:'Last 2 days',e_activ:'Special activity',stage_names:{previa:'PRE-LAUNCH',inaug:'OPENING',curso:'LIVE',cierre:'FINALE',activ:'ACTIVATION'},errs:{ig:'Enter your Instagram handle (letters, numbers, dots and underscores only).',contacto:'Check your email or WhatsApp.',consent:'Tick the box to continue.',duplicate:'That handle is already claimed or under review. If it is yours, message us at @cucoarts.',net:'We could not connect. Try again in a moment.',off:'Sign-up opens very soon.',generic:'We could not register you. Try again.'},ok:'Done! Almost there: we just need to verify the account is yours.',mail:'Email',wa:'WhatsApp',copied:'Copied!'}};
+let LANG=(()=>{try{const s=localStorage.getItem('cucoarts-lang')||localStorage.getItem('mvsa-lang');if(s==='es'||s==='en')return s}catch(e){}return /^en/i.test(navigator.language||'')?'en':'es'})();
+const t=k=>(T[LANG]||T.es)[k]||T.es[k]||k, esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtN=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+/* ---------- cabecera: iconos, tema, volver, fechas, sprites ---------- */
+const ICON_GLOBE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"></path></svg>';
+const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>';
+const ICON_MOON='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a.7.7 0 0 0-.9-.9A9.8 9.8 0 1 0 21.4 15.5a.7.7 0 0 0-.9-.9z"/></svg>';
+const ICON_BACK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+const isDark=()=>{const th=document.documentElement.getAttribute('data-theme');return (th||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))==='dark'};
+function applyTheme(th){const r=document.documentElement;if(th)r.setAttribute('data-theme',th);else r.removeAttribute('data-theme');const d=isDark();
+  $('#themeBtn').innerHTML=(d?ICON_SUN:ICON_MOON)+'<span class="cl-hide-s">'+esc(t(d?'th_day':'th_night'))+'</span>';const l=t(d?'theme_to_light':'theme_to_dark');$('#themeBtn').title=l;$('#themeBtn').setAttribute('aria-label',l)}
+$('#themeBtn').onclick=()=>{const n=isDark()?'light':'dark';try{localStorage.setItem('cucoarts-theme',n)}catch(e){}applyTheme(n);render()};
+addEventListener('storage',e=>{if(e.key==='cucoarts-theme'){applyTheme(e.newValue);render()}if(e.key==='cucoarts-lang'&&(e.newValue==='es'||e.newValue==='en')&&e.newValue!==LANG){LANG=e.newValue;render();showClaimed()}});
+/* volver: historial si la persona viene de una página de este mismo sitio; si no, a /mty */
+$('#backBtn').onclick=()=>{let same=false;try{same=!!document.referrer&&new URL(document.referrer).origin===location.origin}catch(e){}if(same&&history.length>1)history.back();else location.href='/mty'};
+/* fechas en lenguaje humano */
+const MESES={es:['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],en:['January','February','March','April','May','June','July','August','September','October','November','December']};
+const MES3={es:['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
+const DIAS={es:['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']};
+const pd=s=>{const a=String(s).split('-').map(Number);return new Date(a[0],a[1]-1,a[2])};
+function dRange(a,b){const m=MES3[LANG];if(LANG==='es')return a.getMonth()===b.getMonth()?'del '+a.getDate()+' al '+b.getDate()+' de '+m[b.getMonth()]:'del '+a.getDate()+' de '+m[a.getMonth()]+' al '+b.getDate()+' de '+m[b.getMonth()];
+  return a.getMonth()===b.getMonth()?m[a.getMonth()]+' '+a.getDate()+'–'+b.getDate():m[a.getMonth()]+' '+a.getDate()+' – '+m[b.getMonth()]+' '+b.getDate()}
+const dDay=d=>LANG==='es'?DIAS.es[d.getDay()]+' '+d.getDate()+' de '+MES3.es[d.getMonth()]:DIAS.en[d.getDay()]+', '+MES3.en[d.getMonth()]+' '+d.getDate();
+/* sprites de pixeles (mismos dibujos que las historias) */
+const PXS={heart:['.##.##.','#######','#######','.#####.','..###..','...#...'],star:['...#...','...#...','#######','.#####.','..###..','.##.##.','##...##'],coin:['..####..','.######.','########','###..###','###..###','########','.######.','..####..'],bolt:['...##','..##.','.##..','#####','..##.','.##..','##...']};
+const SPC={heart:'#FA2713',star:'#644DEF',coin:'#EA663D',bolt:'#067DFF'};
+function sprite(g,name,x,y,s,color,hi){const rows=PXS[name];rows.forEach((r,j)=>{for(let i=0;i<r.length;i++)if(r[i]==='#'){g.fillStyle=color;g.fillRect(x+i*s,y+j*s,s,s)}});if(hi&&name==='coin'){g.fillStyle=hi;g.fillRect(x+2*s,y+2*s,s,s);g.fillRect(x+2*s,y+3*s,s,s)}return rows[0].length*s}
+function drawSpr(cv,names,s,col){const W=names.reduce((a,n)=>a+PXS[n][0].length*s+s*2,-s*2),H=8*s;cv.width=W;cv.height=H;cv.style.width=W+'px';cv.style.height=H+'px';const g=cv.getContext('2d');g.clearRect(0,0,W,H);let x=0;names.forEach(n=>{const r=PXS[n],y=Math.floor((8-r.length)*s/2);x+=sprite(g,n,x,y,s,(col&&col[n])||SPC[n],'#FFE7CF')+s*2})}
+const STAGE_COL={previa:'#EA663D',inaug:'#FA2713',curso:'#067DFF',cierre:'#644DEF',activ:'#C8F34A'};
+function render(){
+  document.documentElement.lang=LANG; $('#langBtn').innerHTML=ICON_GLOBE+'<span>'+esc(t('lang_btn'))+'</span>';$('#langBtn').title=t('lang_title');$('#langBtn').setAttribute('aria-label',t('lang_title'));applyTheme(document.documentElement.getAttribute('data-theme'));$('#backBtn').innerHTML=ICON_BACK+esc(t('back'));
+  document.querySelectorAll('[data-i]').forEach(el=>{const v=t(el.dataset.i); if(v&&typeof v==='string')el.textContent=v});
+  const M=window.MVSA||MVSA; const mob=innerWidth<=760; px($('#hero-px'),'MTY VS ART',mob?Math.max(3,Math.min(5,Math.floor((innerWidth-32)/62))):Math.max(5,Math.min(9,Math.floor((Math.min(innerWidth,1040)-32)/70))),'#232322');
+  document.querySelectorAll('canvas[data-px]').forEach(c=>px(c,c.dataset.px,+c.dataset.s,(isDark()&&!c.closest('.yl'))?'#F5F1F1':'#232322'));
+  document.querySelectorAll('canvas[data-spr]').forEach(c=>drawSpr(c,[c.dataset.spr],+c.dataset.s,{[c.dataset.spr]:c.dataset.c}));
+  px($('#ps'),'> PRESS START',2,'#232322'); drawSpr($('#spr4'),['heart','star','coin','bolt'],3);
+  if(!M){$('#season-k').textContent=t('none');return}
+  const nm=M.usuarioNombre||'ART PEOPLE'; $('#top-u').textContent='⚔️ TOP '+nm; $('#rk-k').textContent=(LANG==='es'?'RANGOS ':'RANKS ')+nm;
+  {const ini=pd(M.mes.ini),fin=new Date(ini.getFullYear(),ini.getMonth()+1,0),dt=pd(M.fecha);
+    $('#season-k').textContent=MESES[LANG][ini.getMonth()]+' '+ini.getFullYear();
+    $('#dates').innerHTML='<span class="dchip">🗓️ '+esc(t('d_season'))+': '+esc(dRange(ini,fin))+'</span><span class="dchip">📡 '+esc(t('d_data'))+' '+esc(dDay(dt))+'</span>'}
+  const S=mob?4:7; px($('#lv-px'),'LV '+M.nivel.n,S,'#F7D649'); $('#lv-name').textContent=M.nivel.nombre+' '+M.nivel.emoji; px($('#xp-px'),fmtN(M.total),S,'#F7D649');
+  const nb=24,f=Math.round(nb*M.nivel.prog); $('#lv-bar').innerHTML=Array.from({length:nb},(_,i)=>'<i class="'+(i<f?'f':(i===f?'nx':''))+'"></i>').join('');
+  $('#lv-next').textContent=M.nivel.sig?t('next')+': '+M.nivel.sig.nombre+' · '+fmtN(M.nivel.sig.xp)+' XP':t('max'); {const pc=Math.round(M.nivel.prog*100);$('#lv-pct').textContent='▮ '+t('loading')+' '+pc+'%';$('#lv-bar').setAttribute('aria-valuenow',pc);$('#lv-bar').setAttribute('aria-label',t('loading')+' '+pc+'%')}
+  px($('#wk-px'),'+'+fmtN(M.semanaPts),mob?3:5,'#FFE7CF'); $('#wk-sub').textContent=dRange(pd(M.semana.ini),pd(M.semana.fin));
+  const sT=(M.src.com+M.src.ali)||1; $('#seg-src').innerHTML='<b style="width:'+(100*M.src.com/sT)+'%;background:#F7D649"></b><b style="width:'+(100*M.src.ali/sT)+'%;background:#644DEF"></b>';
+  $('#src-l').innerHTML='<span>👥 '+t('com')+' '+fmtN(M.src.com)+' ('+Math.round(100*M.src.com/sT)+'%)</span><span>🤝 '+t('ali')+' '+fmtN(M.src.ali)+' ('+Math.round(100*M.src.ali/sT)+'%)</span>';
+  const eT=Object.values(M.et).reduce((a,b)=>a+b,0)||1, keys=Object.keys(M.etapas);
+  $('#seg-et').innerHTML=keys.map(k=>'<b style="width:'+(100*M.et[k]/eT)+'%;background:'+STAGE_COL[k]+'"></b>').join('');
+  $('#et-l').innerHTML=keys.map(k=>'<span>'+M.etapas[k][1]+' '+M.etapas[k][0]+' '+fmtN(M.et[k])+(M.et[k]?' ('+Math.round(100*M.et[k]/eT)+'%)':'')+'</span>').join('');
+  $('#ev-list').innerHTML=M.eventosMes.length?M.eventosMes.slice(0,6).map((e,i)=>'<div class="row"><span class="rk">'+(['🥇','🥈','🥉'][i]||'#'+(i+1))+'</span><span class="t"><a href="/mty/e/'+esc(e.id)+'.html">'+esc(LANG==='en'?e.en:e.es)+'</a><small>'+['previa','inaug','curso','cierre','activ'].filter(k=>e.et[k]>0).map(k=>M.etapas[k][1]+' '+fmtN(e.et[k])).join(' · ')+'</small></span><span class="pts">'+fmtN(e.pts)+'</span></div>').join(''):'<p class="sm">'+t('none')+'</p>';
+  $('#u-list').innerHTML=M.users.length?M.users.slice(0,6).map((u,i)=>'<div class="row"><span class="rk">'+(['🥇','🥈','🥉'][i]||'#'+(i+1))+'</span><span class="t"><a href="https://www.instagram.com/'+esc(u.ig)+'/" target="_blank" rel="noopener">@'+esc(u.ig)+'</a><small>'+esc(u.rank)+' '+u.emoji+'</small></span><span class="pts">'+fmtN(u.xp)+'</span></div>').join(''):'<p class="sm">'+t('none')+'</p>';
+  const P=M.reglas.PTS, R=M.reglas.REGIO_PTS;
+  $('#tb-pts').innerHTML=[['📸',t('a_post'),P.post],['❤',t('a_like'),P.like],['💬',t('a_comment'),P.comment],['↗',t('a_share'),P.share],['📱',t('a_story'),P.story],['🎨',t('a_artist'),R.artista],['✅',t('a_reg'),R.registro],['📤',t('a_cshare'),R.compartir]].map(r=>'<tr><td>'+r[0]+' '+esc(r[1])+'</td><td class="v">+'+r[2]+'</td></tr>').join('');
+  $('#tb-et').innerHTML=keys.map(k=>'<tr><td>'+M.etapas[k][1]+' <b>'+t('stage_names')[k]+'</b></td><td>'+esc(t('e_'+k))+'</td></tr>').join('');
+  const SC=['#FFE7CF','#CDE8D8','#ABCFDD','#F7D649','#C8F34A','#EA663D','#644DEF','#067DFF','#FA2713','#F7D649'];
+  $('#ranks').innerHTML=M.rangos.map((r,i)=>'<div class="sg"><span class="nn">'+(i+1)+'</span><i class="sello" style="--sc:'+SC[i%SC.length]+'">'+r[2]+'</i>'+esc(r[1])+'<small>'+(i?fmtN(r[0])+' XP':'0 XP')+'</small></div>').join('');
+  $('#lvls').innerHTML=M.niveles.map((r,i)=>{const cur=M.nivel.n-1,st=i<cur?'on':i===cur?'here':'off';return '<div class="sg '+st+'"><i class="sello" style="--sc:'+SC[(i*2)%SC.length]+'">'+r[2]+'</i>LV '+(i+1)+' '+esc(r[1])+'<small>'+fmtN(r[0])+' XP</small>'+(st==='here'?'<span class="tag">'+(LANG==='es'?'ESTÁS AQUÍ':'YOU ARE HERE')+'</span>':'')+'</div>'}).join('');
+  $('#contact-l').textContent=(document.querySelector('input[name=via]:checked').value==='whatsapp')?'WhatsApp':t('mail');
+  $('#shots').innerHTML=SH.map((s,i)=>'<div class="sl"><span class="cat">'+(i+1)+' · '+esc(t('cats')[s])+'</span><img src="/mty_vs_art/img/'+s+'.png" loading="lazy" alt="'+esc(t('cats')[s])+'"><a class="dl" href="/mty_vs_art/img/'+s+'.png" download>'+t('dl')+'</a></div>').join(''); buildDots();
+  if(!window.__rd){window.__rd=1;$('#rdet').open=!mob}
+}
+function $(s){return document.querySelector(s)}
+/* ---------- carrusel de historias ---------- */
+const SH=['lunes-1-en-curso','lunes-2-semanal','lunes-3-mensual','lunes-4-como-jugar','lunes-5-participa'];
+function buildDots(){const car=$('#shots'),sl=[...car.children];$('#dots').innerHTML=sl.map((_,i)=>'<button type="button" aria-label="'+(i+1)+'/'+sl.length+'"><i></i></button>').join('');$('#dots').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>car.scrollTo({left:sl[i].offsetLeft-car.offsetLeft-6,behavior:'smooth'}));markDot(Math.min(window.__slide||0,sl.length-1))}
+function markDot(i){window.__slide=i;$('#dots').querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k===i));$('#cnt').textContent=(i+1)+'/'+SH.length+' · '+t('cats')[SH[i]]}
+(function(){const car=document.getElementById('shots');let tm;car.addEventListener('scroll',()=>{clearTimeout(tm);tm=setTimeout(()=>{const sl=[...car.children];if(!sl.length)return;let best=0,d=1e9;sl.forEach((s,i)=>{const x=Math.abs(s.offsetLeft-car.offsetLeft-6-car.scrollLeft);if(x<d){d=x;best=i}});if(car.scrollLeft+car.clientWidth>=car.scrollWidth-4)best=sl.length-1;markDot(best)},60)},{passive:true})})();
+/* ---------- proponer colaboración (mailto) ---------- */
+$('#collab-open').onclick=()=>{const c=$('#collab-card'),open=c.classList.contains('hide');c.classList.toggle('hide',!open);$('#collab-open').setAttribute('aria-expanded',open);if(open){c.scrollIntoView({block:'nearest',behavior:'smooth'});setTimeout(()=>$('#cnom').focus({preventScroll:true}),250)}};
+$('#cmsg').addEventListener('input',()=>{$('#ccount').textContent=$('#cmsg').value.length+'/400'});
+$('#collab').addEventListener('submit',ev=>{ev.preventDefault();show('#cerr',false);show('#cok',false);
+  const v=id=>$(id).value.trim(),tipo=document.querySelector('input[name=ctipo]:checked').value,fail=k=>{const e=$('#cerr');e.textContent=t(k);show('#cerr',true)};
+  if(!v('#cnom'))return fail('c_e_nom'); if(!v('#cig'))return fail('c_e_ig'); if(!v('#cmsg'))return fail('c_e_msg'); if(!$('#cconsent').checked)return fail('c_e_consent');
+  const body=[t('c_l_tipo')+': '+t('c_tipos')[tipo],t('c_l_nom')+': '+v('#cnom'),t('c_l_ig')+': '+v('#cig'),'',t('c_l_msg')+':',v('#cmsg').slice(0,400),'','—','MTY VS ART · cucoarts.com/mty_vs_art'].join('\n');
+  $('#cok').textContent=t('c_ok');show('#cok',true);
+  location.href='mailto:hello@cucoarts.com?subject='+encodeURIComponent('MTY VS ART · colaboración')+'&body='+encodeURIComponent(body);
+});
+$('#langBtn').onclick=()=>{LANG=LANG==='es'?'en':'es';try{localStorage.setItem('cucoarts-lang',LANG);localStorage.setItem('mvsa-lang',LANG)}catch(e){} render(); showClaimed()};
+addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(render,150)});
+document.querySelectorAll('input[name=via]').forEach(r=>r.onchange=()=>{const v=document.querySelector('input[name=via]:checked').value; $('#contact-box').classList.toggle('hide',v==='ig'); $('#contact-l').textContent=v==='whatsapp'?'WhatsApp':t('mail'); $('#contacto').type=v==='whatsapp'?'tel':'email'; $('#contacto').value=''});
+/* ---------- usuarios ya reclamados (lista pública: solo usuario de IG y nombre) ---------- */
+async function showClaimed(){
+  if(!API)return; try{const r=await fetch(API.base+'/mty/public?ref=jugador',{headers:{'x-api-key':API.key}}); const j=await r.json(); const n=(j.items||[]).length; $('#claimed').textContent=n?('✅ '+n+' '+(n===1?t('claimed1'):t('claimed'))):''}catch(e){}
+}
+/* ---------- registro: reclamar usuario ---------- */
+const show=(id,on)=>$(id).classList.toggle('hide',!on);
+$('#claim').addEventListener('submit',async ev=>{
+  ev.preventDefault(); show('#err',false);
+  const f=new FormData($('#claim')), via=f.get('via'), body={tipo:'jugador',ig:String(f.get('ig')||''),via,contacto:via==='ig'?'':String(f.get('contacto')||''),alias:String(f.get('alias')||''),consent:$('#consent').checked?'on':'',website:String(f.get('website')||''),lang:LANG};
+  const fail=k=>{const e=$('#err');e.textContent=(t('errs')[k]||t('errs').generic);show('#err',true);e.scrollIntoView({block:'nearest'})};
+  if(!/^@?[A-Za-z0-9._]{2,30}$/.test(body.ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/[\/?#].*$/,'')))return fail('ig');
+  if(!body.consent)return fail('consent');
+  if(!API)return fail('off');
+  $('#go').disabled=true;
+  try{
+    const r=await fetch(API.base+'/mty/submit',{method:'POST',headers:{'x-api-key':API.key,'Content-Type':'application/json'},body:JSON.stringify(body)}); const j=await r.json().catch(()=>({}));
+    if(r.status===200&&j.ok&&j.codigo){ try{localStorage.setItem('mty_player',JSON.stringify({ig:body.ig.replace(/^@/,'').toLowerCase(),codigo:j.codigo,estado:'pendiente',fecha:new Date().toISOString().slice(0,10)}))}catch(e){}
+      show('#claim',false); show('#done',true); $('#done-t').textContent=t('ok'); $('#code').textContent=j.codigo; $('#dm').href='https://ig.me/m/cucoarts'; }
+    else if(r.status===409)fail('duplicate'); else if(r.status===400&&j.fields&&j.fields[0])fail(j.fields[0]); else fail('generic');
+  }catch(e){fail('net')} finally{$('#go').disabled=false}
+});
+$('#copy').onclick=async()=>{try{await navigator.clipboard.writeText($('#code').textContent); $('#copy').textContent=t('copied'); setTimeout(()=>$('#copy').textContent=t('done_copy'),1500)}catch(e){}};
+/* usuario ya registrado en este navegador: se muestra su código pendiente */
+try{const p=JSON.parse(localStorage.getItem('mty_player')||'null'); if(p&&p.codigo){show('#claim',false);show('#done',true);$('#done-t').textContent='@'+p.ig+' · '+(p.estado==='pendiente'?'⏳':'✅');$('#code').textContent=p.codigo}}catch(e){}
+/* sin servidor (etapa 1): el formulario queda apagado con un aviso claro, en vez de fallar al enviar */
+if(!API){const f=$('#claim'); if(f){f.querySelectorAll('input,select,button').forEach(x=>{x.disabled=true}); const n=document.createElement('div'); n.className='msg'; n.id='off-note'; n.style.background='#F7D649'; f.prepend(n); const upd=()=>{n.textContent=(LANG==='es'?'🔒 El registro abre muy pronto. Mientras tanto ya puedes jugar: crea, comparte y etiquétanos.':'🔒 Sign-up opens very soon. Meanwhile you can already play: create, share and tag us.')}; upd(); const l=$('#lang'); if(l)l.addEventListener('click',()=>setTimeout(upd,0))}}
+render(); showClaimed();
+</script>
+<script>/* ============ MENÚ DE CUCOARTS.COM (solo en la página pública) ============ */
+/* Mismas secciones, orden y etiquetas que SiteMenu.tsx de la landing. "Eventos" es esta página. */
+(function(){
+  if(!window.MTY_RO)return;
+  const TXT={
+    es:{mvsa:'MTY vs ART',menu:'Menú',close:'Cerrar menú',home:'Inicio',here:'estás aquí',label:'Menú principal',connect:'Escríbenos',store:'Tienda',murals:'Murales',art:'Arte por encargo',sell:'Vende tu obra',expo:'Expo en Santiago',events:'Eventos',fresh:'Nuevo',live:'Activa'},
+    en:{mvsa:'MTY vs ART',menu:'Menu',close:'Close menu',home:'Home',here:'you are here',label:'Main menu',connect:'Write to us',store:'Store',murals:'Murals',art:'Custom art',sell:'Sell your art',expo:'Expo in Santiago',events:'Events',fresh:'New',live:'Live'}
+  };
+  const lp=(en,p)=>en?(p==='/'?'/en':'/en'+({'/murales':'/murals','/arte-por-encargo':'/custom-art'}[p]||p)):p;
+  function items(){
+    const en=LANG==='en', t=TXT[LANG];
+    return [
+      {id:'home',label:t.home,href:lp(en,'/')},
+      {id:'store',label:t.store,href:'https://store.cucoarts.com',ext:true},
+      {id:'murales',label:t.murals,href:lp(en,'/murales'),badge:t.fresh},
+      {id:'arte',label:t.art,href:lp(en,'/arte-por-encargo'),badge:t.fresh},
+      {id:'sell',label:t.sell,href:lp(en,'/')+'#vende'},
+      {id:'husky',label:t.expo,href:lp(en,'/husky'),badge:t.live},
+      {id:'events',label:t.events,href:'/mty',badge:t.fresh},
+      {id:'mvsa',label:t.mvsa,href:'/mty_vs_art',badge:t.fresh,current:true}
+    ];
+  }
+  const nav=document.querySelector('.top .nav'); if(!nav)return;
+  const btn=document.createElement('button'); btn.type='button'; btn.className='cl-menubtn'; btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-controls','site-menu');
+  btn.innerHTML='<span class="cl-menuicon" aria-hidden="true"><i></i><i></i><i></i></span><span class="cl-menutxt"></span>';
+  nav.appendChild(btn);
+  const panel=document.createElement('div'); panel.id='site-menu'; panel.className='cl-menu'; panel.tabIndex=-1; panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-hidden','true');
+  document.body.appendChild(panel);
+  let open=false, lastFocus=null, rt=null;
+  const esc2=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function label(){btn.querySelector('.cl-menutxt').textContent=open?TXT[LANG].close:TXT[LANG].menu}
+  function render(){
+    const t=TXT[LANG];
+    panel.setAttribute('aria-label',t.label);
+    panel.innerHTML='<div class="cl-menu-in"><div class="cl-menu-top"><span class="cl-menu-logo" aria-hidden="true"></span><button type="button" class="cl-menu-x" aria-label="'+esc2(t.close)+'"><span aria-hidden="true">✕</span></button></div>'+
+      '<ol class="cl-menu-list">'+items().map((it,i)=>'<li style="--i:'+i+'"><a class="cl-mi'+(it.current?' is-current':'')+'" href="'+esc2(it.href)+'"'+(it.ext?' rel="noopener"':'')+(it.current?' aria-current="page" title="'+esc2(t.here)+'"':'')+' tabindex="'+(open?0:-1)+'">'+
+        '<span class="cl-mi-n">'+(it.current?'●':String(i+1).padStart(2,'0'))+'</span><span class="cl-mi-t">'+esc2(it.label)+'</span>'+(it.badge?'<span class="cl-live cl-mi-b">'+esc2(it.badge)+'</span>':'')+'<span class="cl-mi-go" aria-hidden="true">'+(it.ext?'↗':'→')+'</span></a></li>').join('')+'</ol>'+
+      '<div class="cl-menu-foot"><span>'+esc2(t.connect)+'</span><a href="mailto:hello@cucoarts.com">hello@cucoarts.com</a><a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div>';
+    panel.querySelector('.cl-menu-x').onclick=close;
+    panel.querySelectorAll('a').forEach(a=>a.onclick=()=>{if(a.getAttribute('aria-current')==='page')close()});
+  }
+  function setOpen(o){
+    open=o; btn.classList.toggle('is-open',o); btn.setAttribute('aria-expanded',String(o)); panel.classList.toggle('is-open',o); panel.setAttribute('aria-hidden',String(!o)); label();
+    panel.querySelectorAll('a,button').forEach(el=>el.tabIndex=o?0:-1);
+    document.body.style.overflow=o?'hidden':'';
+    clearTimeout(rt); panel.classList.remove('is-ready');
+    if(o){rt=setTimeout(()=>panel.classList.add('is-ready'),1000);setTimeout(()=>panel.focus({preventScroll:true}),120)}
+  }
+  function close(){setOpen(false);if(lastFocus)btn.focus()}
+  btn.onclick=()=>{
+    if(!open){
+      render(); lastFocus=btn;
+      const r=btn.getBoundingClientRect();
+      panel.style.setProperty('--ox',(r.left+r.width/2)+'px'); panel.style.setProperty('--oy',(r.top+r.height/2)+'px');
+      requestAnimationFrame(()=>setOpen(true));
+    } else close();
+  };
+  document.addEventListener('keydown',e=>{if(open&&e.key==='Escape'){e.preventDefault();close()}});
+  window.addEventListener('orientationchange',()=>{if(open)close()});
+  label();
+  /* el botón sigue el idioma: se actualiza cuando cambia (el menú se vuelve a dibujar al abrir) */
+  const langBtn=document.getElementById('langBtn'); if(langBtn)langBtn.addEventListener('click',()=>setTimeout(label,0));
+})();
+</script>
+</body>
+</html>
