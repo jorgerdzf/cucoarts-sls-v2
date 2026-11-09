@@ -62,7 +62,7 @@ const PAGES = {
   },
   murales: {
     paths: { es: '/murales', en: '/en/murals' },
-    image: '/og-cucoarts.png',
+    image: '/og-murales.png',
     es: {
       title: 'Crea tu mural en Monterrey · CUCO ARTS',
       description: 'Cuéntanos tu idea en unos pasos y te conectamos con artistas locales para tu mural. Nosotros administramos boceto, tiempos, materiales y entrega.',
@@ -82,7 +82,7 @@ const PAGES = {
   },
   arte: {
     paths: { es: '/arte-por-encargo', en: '/en/custom-art' },
-    image: '/og-cucoarts.png',
+    image: '/og-arte-por-encargo.png',
     es: {
       title: 'Arte por encargo en Monterrey · CUCO ARTS',
       description: 'Encarga una pintura, dibujo o ilustración a artistas de Monterrey. Cuéntanos tu idea y te conectamos con el artista ideal; nosotros administramos el proyecto hasta la entrega.',
