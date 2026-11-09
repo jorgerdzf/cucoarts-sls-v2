@@ -66,6 +66,8 @@ a.cl-mi.is-current:hover .cl-mi-here{color:#232322}
 .cl-menu-foot span{opacity:.65}
 .cl-menu-foot a{color:#FFE7CF;text-underline-offset:4px}
 .cl-menu-foot a:hover{color:var(--yellow)}
+.cl-menu-foot .cl-copy{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:0;padding:0;color:#FFE7CF;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.cl-menu-foot .cl-copy:hover,.cl-menu-foot .cl-copy:focus-visible{color:var(--yellow)}
 
 /* menos movimiento: sin círculo ni entradas escalonadas, solo aparece */
 @media (prefers-reduced-motion:reduce){
@@ -100,4 +102,4 @@ a.cl-mi.is-current:hover .cl-mi-here{color:#232322}
 /* botón de menú: mínimo 44 px de alto y de ancho (auditoría del 3-nov-2026) */
 .cl-menubtn{min-height:44px;min-width:44px;justify-content:center}
 
-.cl-menu-foot a{display:block;padding:11px 0}
+.cl-menu-foot a,.cl-menu-foot .cl-copy{display:block;padding:11px 0}

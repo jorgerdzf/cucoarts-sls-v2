@@ -1756,6 +1756,8 @@ a.cl-mi.is-current:hover .cl-mi-n,a.cl-mi.is-current:focus-visible .cl-mi-n,a.cl
 .cl-menu-foot span{opacity:.65}
 .cl-menu-foot a{color:#FFE7CF;text-underline-offset:4px}
 .cl-menu-foot a:hover{color:#F7D649}
+.cl-menu-foot .cl-copy{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:0;padding:0;color:#FFE7CF;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.cl-menu-foot .cl-copy:hover,.cl-menu-foot .cl-copy:focus-visible{color:#F7D649}
 @media (prefers-reduced-motion:reduce){
   .cl-menu{clip-path:none;opacity:0;transition:opacity .2s,visibility 0s .2s}
   .cl-menu.is-open{opacity:1;transition:opacity .2s,visibility 0s}
@@ -9252,8 +9254,8 @@ document.addEventListener('click',e=>{
 (function(){
   if(!window.MTY_RO)return;
   const TXT={
-    es:{mvsa:'MTY vs ART',menu:'Menú',close:'Cerrar menú',home:'Inicio',here:'estás aquí',label:'Menú principal',connect:'Escríbenos',store:'Tienda',murals:'Murales',art:'Arte por encargo',sell:'Vende tu obra',expo:'Expo en Santiago',events:'Eventos',fresh:'Nuevo',live:'Activa'},
-    en:{mvsa:'MTY vs ART',menu:'Menu',close:'Close menu',home:'Home',here:'you are here',label:'Main menu',connect:'Write to us',store:'Store',murals:'Murals',art:'Custom art',sell:'Sell your art',expo:'Expo in Santiago',events:'Events',fresh:'New',live:'Live'}
+    es:{mvsa:'MTY vs ART',menu:'Menú',close:'Cerrar menú',home:'Inicio',here:'estás aquí',label:'Menú principal',connect:'Escríbenos',store:'Tienda',murals:'Murales',art:'Arte por encargo',sell:'Vende tu obra',expo:'Expo en Santiago',events:'Eventos',fresh:'Nuevo',live:'Activa',copy:'Copiar enlace',copied:'¡Enlace copiado!'},
+    en:{mvsa:'MTY vs ART',menu:'Menu',close:'Close menu',home:'Home',here:'you are here',label:'Main menu',connect:'Write to us',store:'Store',murals:'Murals',art:'Custom art',sell:'Sell your art',expo:'Expo in Santiago',events:'Events',fresh:'New',live:'Live',copy:'Copy link',copied:'Link copied!'}
   };
   const lp=(en,p)=>en?(p==='/'?'/en':'/en'+({'/murales':'/murals','/arte-por-encargo':'/custom-art'}[p]||p)):p;
   function items(){
@@ -9284,8 +9286,14 @@ document.addEventListener('click',e=>{
     panel.innerHTML='<div class="cl-menu-in"><div class="cl-menu-top"><span class="cl-menu-logo" aria-hidden="true"></span><button type="button" class="cl-menu-x" aria-label="'+esc2(t.close)+'"><span aria-hidden="true">✕</span></button></div>'+
       '<ol class="cl-menu-list">'+items().map((it,i)=>'<li style="--i:'+i+'"><a class="cl-mi'+(it.current?' is-current':'')+'" href="'+esc2(it.href)+'"'+(it.ext?' rel="noopener"':'')+(it.current?' aria-current="page" title="'+esc2(t.here)+'"':'')+' tabindex="'+(open?0:-1)+'">'+
         '<span class="cl-mi-n">'+(it.current?'●':String(i+1).padStart(2,'0'))+'</span><span class="cl-mi-t">'+esc2(it.label)+'</span>'+(it.badge?'<span class="cl-live cl-mi-b">'+esc2(it.badge)+'</span>':'')+'<span class="cl-mi-go" aria-hidden="true">'+(it.ext?'↗':'→')+'</span></a></li>').join('')+'</ol>'+
-      '<div class="cl-menu-foot"><span>'+esc2(t.connect)+'</span><a href="mailto:hello@cucoarts.com">hello@cucoarts.com</a><a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div>';
+      '<div class="cl-menu-foot"><span>'+esc2(t.connect)+'</span><a href="mailto:hello@cucoarts.com">hello@cucoarts.com</a><a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><button type="button" class="cl-copy" aria-live="polite" tabindex="'+(open?0:-1)+'">'+esc2(t.copy)+'</button></div></div>';
     panel.querySelector('.cl-menu-x').onclick=close;
+    /* copia la dirección completa de esta página (con https://) para pegarla en WhatsApp y que salga la vista previa */
+    const cp=panel.querySelector('.cl-copy'); if(cp)cp.onclick=async()=>{
+      const link=location.origin+location.pathname;
+      try{await navigator.clipboard.writeText(link)}catch(e){const ta=document.createElement('textarea');ta.value=link;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e2){}document.body.removeChild(ta)}
+      cp.textContent=t.copied; setTimeout(()=>{cp.textContent=t.copy},1800);
+    };
     panel.querySelectorAll('a').forEach(a=>a.onclick=()=>{if(a.getAttribute('aria-current')==='page')close()});
   }
   function setOpen(o){

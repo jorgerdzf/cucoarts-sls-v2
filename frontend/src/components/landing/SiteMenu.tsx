@@ -9,8 +9,8 @@ import './assets/styles/menu.css';
 
 const STORE = 'https://store.cucoarts.com';
 const TXT = {
-  es: { menu: 'Menú', close: 'Cerrar menú', home: 'Inicio', here: 'estás aquí', soon: 'Próximamente', label: 'Menú principal', connect: 'Escríbenos', top: 'Arriba', topLabel: 'Volver al menú superior' },
-  en: { menu: 'Menu', close: 'Close menu', home: 'Home', here: 'you are here', soon: 'Coming soon', label: 'Main menu', connect: 'Write to us', top: 'Top', topLabel: 'Back to the top menu' },
+  es: { menu: 'Menú', close: 'Cerrar menú', home: 'Inicio', here: 'estás aquí', soon: 'Próximamente', label: 'Menú principal', connect: 'Escríbenos', top: 'Arriba', topLabel: 'Volver al menú superior', copy: 'Copiar enlace', copied: '¡Enlace copiado!' },
+  en: { menu: 'Menu', close: 'Close menu', home: 'Home', here: 'you are here', soon: 'Coming soon', label: 'Main menu', connect: 'Write to us', top: 'Top', topLabel: 'Back to the top menu', copy: 'Copy link', copied: 'Link copied!' },
 };
 
 export type MenuItem = { id: string; label: string; href?: string; onClick?: () => void; badge?: string; disabled?: boolean; current?: boolean; external?: boolean };
@@ -36,6 +36,7 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
   const t = TXT[lang];
   const [open, setOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [ready, setReady] = useState(false);   // true cuando terminó la animación de entrada: antes, el cursor no activa las filas que se mueven debajo de él
   const btn = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -52,6 +53,19 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
     });
   }, []);
   const close = useCallback(() => { setOpen(false); btn.current?.focus(); }, []);
+
+  // Copia la dirección completa de esta página (con https://) para pegarla en WhatsApp y que salga la vista previa
+  const copyLink = async () => {
+    const link = window.location.origin + window.location.pathname;
+    try { await navigator.clipboard.writeText(link); } catch (e) {
+      const ta = document.createElement('textarea'); ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e2) { /* sin portapapeles */ }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -120,6 +134,7 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
             <span>{t.connect}</span>
             <a href="mailto:hello@cucoarts.com" tabIndex={open ? 0 : -1}>hello@cucoarts.com</a>
             <a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer" tabIndex={open ? 0 : -1}>Instagram ↗</a>
+            <button type="button" className="cl-copy" onClick={copyLink} tabIndex={open ? 0 : -1} aria-live="polite">{copied ? t.copied : t.copy}</button>
           </div>
         </div>
       </div>
