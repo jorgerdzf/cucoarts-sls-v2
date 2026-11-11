@@ -566,7 +566,6 @@ section .w>.k,section .w>h2,.mh{text-align:center;justify-content:center}
 .spstrip{display:block;width:100%;max-width:640px;height:auto;margin:0 auto;image-rendering:pixelated}
 .spwrap{padding:28px 16px 0;background:var(--bg)}
 /* ventanas: animacion al abrir y anillos de onda */
-dialog.dlg[open]{animation:rpPop .34s cubic-bezier(.2,1.25,.3,1)}
 @keyframes rpPop{0%{transform:scale(.8) translateY(18px);opacity:0}100%{transform:none;opacity:1}}
 .rpring{position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border:5px solid #EA663D;border-radius:50%;pointer-events:none;z-index:-1;animation:rpRing .7s ease-out forwards}
 .rpring.b{border-color:#067DFF;animation-delay:.09s}.rpring.c{border-color:#ABCFDD;animation-delay:.18s}
@@ -575,9 +574,9 @@ dialog.dlg[open]{animation:rpPop .34s cubic-bezier(.2,1.25,.3,1)}
 @media(prefers-reduced-motion:reduce){.hero .hud .backbtn,.mbar .ib,.hero .hud .backbtn svg{transition:none}dialog.dlg[open]{animation:none}.rpring{display:none}}
 
 /* ===== historias: tarjetas grandes con la imagen completa y botones de icono ===== */
-.hc-rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 6px 20px;margin:14px -6px 0;-webkit-overflow-scrolling:touch;text-align:left;scrollbar-width:thin}
+.hc-rail{overscroll-behavior-x:contain;touch-action:pan-x pan-y;display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 6px 20px;margin:14px -6px 0;-webkit-overflow-scrolling:touch;text-align:left;scrollbar-width:thin}
 .hc{flex:0 0 min(64vw,256px);scroll-snap-align:center;border:4px solid var(--ink);border-radius:24px;background:var(--surf);box-shadow:5px 5px 0 #EA663D;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s ease,box-shadow .15s ease}
-.hc:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #EA663D}
+@media(hover:hover){.hc:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #EA663D}}
 .hcimg{position:relative;border-bottom:4px solid var(--ink);background:#ABCFDD}
 .hc .hth{display:block;border:0;border-radius:0;background:#ABCFDD}.hc .hth img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover}
 .hc .hn{position:absolute;left:8px;top:8px;margin:0;background:#232322;color:#F5F1F1;border-radius:999px;padding:3px 10px;font:800 11px var(--mono);letter-spacing:.06em;box-shadow:2px 2px 0 #EA663D;max-width:calc(100% - 16px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -922,7 +921,7 @@ const VT={es:{
   g_org:'🏢 Organización',g_persona:'🙋 Persona',reg:'Registrado',
   priv:'Sin registro, sales como alias (ANON-XXXX). Solo cuentas registradas y aliadas salen con @. Los aliados suman a los eventos, no al ranking.',
   rules:'📸 post +10 · ❤ me gusta +1 · 💬 comentario +3 · ↗ compartido +5 · 📱 historia +20 · 🎨 artista +15 · ✅ registro +25 · 📤 compartir +10',
-  sx_share:'Compartir en Instagram',sx_save:'Guardar',sx_text:'Texto',sx_done:'¡Listo!',sx_when:'Actualizado el {d}',sx_saved:'Imagen guardada y texto copiado ✓ En Instagram: Historia → galería → elige la imagen, pega el texto y etiqueta a @cucoarts (+20 puntos).',sx_copied:'Texto copiado ✓ Pégalo en tu publicación o chat.',sx_err:'No pudimos preparar la imagen. Inténtalo de nuevo.',
+  sx_share:'Compartir en Instagram',sx_save:'Guardar',sx_text:'Texto',sx_done:'¡Listo!',sx_when:'Actualizado el {d}',sx_saved:'Imagen guardada y texto copiado ✓ En Instagram: Historia → galería → elige la imagen, pega el texto y etiqueta a @cucoarts (+20 puntos).',sx_hold:'Mantén presionada la imagen para guardarla. El texto ya se copió.',sx_copied:'Texto copiado ✓ Pégalo en tu publicación o chat.',sx_err:'No pudimos preparar la imagen. Inténtalo de nuevo.',
   sx_cap:['🎮 RIPPLE · {t}','Estado actual de esta semana · actualizado el {d} (se actualiza cada lunes).','Juega arte local en Monterrey: crea, comparte y suma puntos.','Súbela a tu historia y etiqueta a @cucoarts: +20 puntos.','cucoarts.com/ripple/mty','@cucoarts #RippleMTY'],
   hero_l1:'Juega arte local en Monterrey',hero_l2:'crea · experimenta · comparte · repite',hero_l3:'Suma puntos para ti y para la comunidad de arte local',hw_btn:'¿Cómo jugar?',upd_every:'Se actualiza cada lunes',upd_next:'próxima actualización',how_read:'¿Cómo se lee?',cm_h1:'% de las cuentas',cm_h2:'% del XP',
   ln_p:'Usamos tus datos para verificar y mostrar tu usuario con tu puntaje. Tu correo o WhatsApp es opcional y no se publica.',join_age:'Solo para mayores de 18 años.',ln_a:'Aviso de privacidad',ln_more:'Ver aviso completo',
@@ -954,7 +953,7 @@ const VT={es:{
   g_org:'🏢 Organization',g_persona:'🙋 Person',reg:'Registered',
   priv:'Unregistered people show as an alias (ANON-XXXX). Only registered and ally accounts show with @. Allies score for events, not the ranking.',
   rules:'📸 post +10 · ❤ like +1 · 💬 comment +3 · ↗ share +5 · 📱 story +20 · 🎨 artist +15 · ✅ sign-up +25 · 📤 share +10',
-  sx_share:'Share on Instagram',sx_save:'Save',sx_text:'Text',sx_done:'Done!',sx_when:'Updated {d}',sx_saved:'Image saved and text copied ✓ On Instagram: Story → gallery → pick the image, paste the text and tag @cucoarts (+20 points).',sx_copied:'Text copied ✓ Paste it in your post or chat.',sx_err:'We could not prepare the image. Try again.',
+  sx_share:'Share on Instagram',sx_save:'Save',sx_text:'Text',sx_done:'Done!',sx_when:'Updated {d}',sx_saved:'Image saved and text copied ✓ On Instagram: Story → gallery → pick the image, paste the text and tag @cucoarts (+20 points).',sx_hold:'Press and hold the image to save it. The text is copied.',sx_copied:'Text copied ✓ Paste it in your post or chat.',sx_err:'We could not prepare the image. Try again.',
   sx_cap:['🎮 RIPPLE · {t}','Current state this week · updated {d} (refreshed every Monday).','Play local art in Monterrey: create, share and earn points.','Post it to your story and tag @cucoarts: +20 points.','cucoarts.com/ripple/mty','@cucoarts #RippleMTY'],
   hero_l1:'Play local art in Monterrey',hero_l2:'create · experiment · share · repeat',hero_l3:'Earn points for yourself and for the local art community',hw_btn:'How to play',upd_every:'Updated every Monday',upd_next:'next update',how_read:'How to read this',cm_h1:'% of accounts',cm_h2:'% of XP',
   ln_p:'We use your data to verify and show your handle with your score. Your email or WhatsApp is optional and never published.',join_age:'18+ only.',ln_a:'Privacy notice',ln_more:'See full notice',
@@ -1274,21 +1273,32 @@ const sxCaption=i=>{const M=window.MVSA||MVSA; return vt('sx_cap').map(l=>l.repl
 async function sxFile(i){const r=await fetch('/ripple/mty/img/'+SH[i]+'.png',{cache:'no-store'}); if(!r.ok)throw new Error('img'); const b=await r.blob(); return new File([b],'ripple-'+SH[i]+'.png',{type:'image/png'})}
 function sxPlay(b){b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); setTimeout(()=>b.classList.remove('go'),700)}
 function sxDone(b){const lbl=b.querySelector('.lbl'),oi=b.querySelector('.ico'); if(!lbl||b.classList.contains('done'))return; const old=lbl.textContent,oic=oi&&oi.textContent; b.classList.add('done'); lbl.textContent=vt('sx_done'); if(oi)oi.textContent='✅'; setTimeout(()=>{b.classList.remove('done'); lbl.textContent=old; if(oi)oi.textContent=oic},1600)}
-const hsList=()=>SH.map((s,i)=>'<div class="hc" role="listitem"><div class="hcimg"><a class="hth" data-lb="'+i+'" href="/ripple/mty/img/'+s+'.png" aria-label="'+esc(t('cats')[s])+'"><img src="/ripple/mty/img/'+s+'.png" loading="lazy" alt="'+esc(t('cats')[s])+'"></a><span class="hn">'+(i+1)+' · '+esc(t('cats')[s])+'</span></div>'+sxBtns(i)+'</div>').join('');
-const hsWinHtml=()=>'<p class="sm" style="margin:0 0 6px;text-align:center">'+esc($('#shots-when').textContent)+'</p><div class="hc-rail rail-only">'+hsList()+'</div><p class="msg shmsg" role="status" hidden></p>';
+const hsList=eager=>SH.map((s,i)=>'<div class="hc" role="listitem"><div class="hcimg"><a class="hth" data-lb="'+i+'" href="/ripple/mty/img/'+s+'.png" aria-label="'+esc(t('cats')[s])+'"><img src="/ripple/mty/img/'+s+'.png" loading="'+(eager?'eager':'lazy')+'" alt="'+esc(t('cats')[s])+'"></a><span class="hn">'+(i+1)+' · '+esc(t('cats')[s])+'</span></div>'+sxBtns(i)+'</div>').join('');
+const hsWinHtml=()=>'<p class="sm" style="margin:0 0 6px;text-align:center">'+esc($('#shots-when').textContent)+'</p><div class="hc-rail rail-only">'+hsList(true)+'</div><p class="msg shmsg" role="status" hidden></p>';
 function lbOpen(i){const d=document.createElement('dialog'); d.className='dlg vt-w lb-w'; d.setAttribute('aria-label',t('cats')[SH[i]]);
   d.innerHTML='<div class="dlg-h"><div><h2 tabindex="-1">'+(i+1)+' · '+esc(t('cats')[SH[i]])+'</h2></div><button class="dlg-x" type="button" data-lbx aria-label="'+esc(vt('x'))+'">✕</button></div><div class="dlg-b lb-b"><img src="/ripple/mty/img/'+SH[i]+'.png" alt="'+esc(t('cats')[SH[i]])+'"><p class="msg shmsg" role="status" hidden></p></div><div class="dlg-f lb-f">'+sxBtns(i)+'</div>';
   document.body.appendChild(d); d.addEventListener('close',()=>{d.remove(); if(!document.querySelector('dialog[open]'))document.body.style.overflow=''});
   d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-lbx]'))d.close()}); openDlg(d); d.querySelector('h2').focus({preventScroll:true})}
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[data-lb]'); if(!a)return; e.preventDefault(); lbOpen(+a.dataset.lb)});
 function sxMsg(k,b,raw){const w=b&&b.closest('.vt-w'), m=(w&&w.querySelector('.shmsg'))||$('#shmsg'); m.textContent=raw||vt(k); m.hidden=false}
+const SXF={}; const sxPre=async i=>{if(SXF[i])return SXF[i]; try{return SXF[i]=await sxFile(i)}catch(_){return null}};
+['pointerdown','touchstart','scroll'].forEach(ev=>addEventListener(ev,()=>{SH.forEach((_,i)=>sxPre(i))},{once:true,passive:true,capture:true}));
+const SX_INAPP=/Instagram|FBAN|FBAV|FB_IAB|MicroMessenger|WhatsApp|Line\//i.test(navigator.userAgent);
 document.addEventListener('click',async e=>{
   const b=e.target.closest&&e.target.closest('[data-sx]'); if(!b)return; const i=+b.dataset.i, k=b.dataset.sx, cap=sxCaption(i);
   sxPlay(b); haptic(k==='share'?'press':'success');
   if(k==='text'){try{await navigator.clipboard.writeText(cap); sxMsg('sx_copied',b); sxDone(b)}catch(_){sxMsg('',b,cap)} return}
-  let file; try{file=await sxFile(i)}catch(_){sxMsg('sx_err',b); return}
+  let file=SXF[i];
+  const canShare=f=>!!(f&&navigator.share&&navigator.canShare&&navigator.canShare({files:[f]}));
+  if(k==='share'&&canShare(file)){ /* sin esperas antes de abrir la hoja de compartir */
+    try{navigator.clipboard&&navigator.clipboard.writeText(cap).catch(()=>{})}catch(_){}
+    try{await navigator.share({files:[file],text:cap}); sxDone(b); return}catch(err){if(err&&err.name==='AbortError')return}
+  }
+  if(!file){file=await sxPre(i); if(!file){sxMsg('sx_err',b); return}}
   try{await navigator.clipboard.writeText(cap)}catch(_){}
-  if(k==='share'&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:cap}); return}catch(err){if(err&&err.name==='AbortError')return}}
+  if(k==='share'&&canShare(file)){try{await navigator.share({files:[file],text:cap}); sxDone(b); return}catch(err){if(err&&err.name==='AbortError')return}}
+  if(SX_INAPP){ /* los navegadores integrados no descargan archivos: se abre el visor para guardar con pulsacion larga */
+    if(!b.closest('.lb-w'))lbOpen(i); const m=document.querySelector('dialog.lb-w[open] .shmsg'); if(m){m.textContent=vt('sx_hold'); m.hidden=false} return}
   const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=file.name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
   sxMsg('sx_saved',b); sxDone(b);
 });
@@ -1370,7 +1380,7 @@ const cv=document.getElementById('mp'),g=cv.getContext('2d'),W=200;let H=110;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');
 const COL={bg:'#D5E8EF',blk:'#FFE7CF',blkSh:'#F2C9A0',ink:'#232322',ora:'#EA663D',blue:'#067DFF',cel:'#ABCFDD',cream:'#FFE7CF',hi:'#F7A07F',road:'#D5E8EF',river:'#8EC3EA',park:'#CDE8D8'};
 const PAL={k:'#5A544C',o:'#EA663D',y:'#F7D649',b:'#067DFF',w:'#FFE7CF',g:'#5FA57C',n:'#8B5A3C',r:'#D8392B',t:'#EFCB8A',u:'#C79A55',q:'#C96A1B',h:'#FFF3D6',d:'#454A52',e:'#6E7681',s:'#F5A33B',z:'#EAF4FA',v:'#3E8E52',V:'#276B37',j:'#6DB57C',p:'#E85C9A',a:'#9AA3AB',Y:'#E7B93B',X:'#C48A1F',G:'#2E8B57',W:'#FFFFFF',L:'#D8D2C6',M:'#A9A194',D:'#6B655B'};
-const STR={es:{hint:'Toca uno de los lugares.',all:'¡Ruta completa! Seis olas.',names:['Cerro de la Silla','Museo del Obispado','La Paloma (MARCO)','Sombrero','El Avionsito','La Huasteca'],mk:' marcado',aria:'Mapa de ejemplo con 5 lugares para marcar. Demo: las marcas no se guardan.',snd:'Sonido',rst:'Borrar marcas',how:'¿Cómo jugar?',shr:'Compartir RIPPLE',stx:'Marca tu lugar. Haz olas. #RippleMTY'},
+const STR={es:{hint:'Toca uno de los lugares.',all:'¡Ruta completa! Seis olas.',names:['Cerro de la Silla','Museo del Obispado','La Paloma (MARCO)','Sombrero','El Avionsito','La Huasteca'],mk:' marcado',aria:'Mapa de ejemplo con 6 lugares para marcar. Demo: las marcas no se guardan.',snd:'Sonido',rst:'Borrar marcas',how:'¿Cómo jugar?',shr:'Compartir RIPPLE',stx:'Marca tu lugar. Haz olas. #RippleMTY'},
  en:{hint:'Tap one of the spots.',all:'Route complete! Six waves.',names:['Cerro de la Silla','Museo del Obispado','La Paloma (MARCO)','Sombrero','El Avionsito','La Huasteca'],mk:' marked',aria:'Sample map with 6 places to mark. Demo: marks are not saved.',snd:'Sound',rst:'Clear marks',how:'How to play',shr:'Share RIPPLE',stx:'Mark a place. Make waves. #RippleMTY'}};
 const L=()=>(document.documentElement.lang==='en'?'en':'es');
 /* ---- sprites ---- */
@@ -1528,7 +1538,7 @@ addEventListener('pointerdown',()=>ensure(),{capture:true,passive:true});
 new MutationObserver(()=>ui()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 setup();ui('');frame(performance.now());MQ.addEventListener('change',()=>{PL.forEach(p=>p.on=false);setup();ui('');frame(performance.now())});
 /* ---- ventanas del desglose: mismo sonido + anillos de onda ---- */
-window.__rpOpen=function(d){if(!RM.matches){['','b','c'].forEach(c=>{const r=document.createElement('div');r.className='rpring '+c;d.appendChild(r);setTimeout(()=>r.remove(),1100)})}
+window.__rpOpen=function(d){if(!RM.matches){try{const an=d.animate([{transform:'scale(.92) translateY(14px)',opacity:.5},{transform:'none',opacity:1}],{duration:260,easing:'cubic-bezier(.2,1.1,.3,1)'});setTimeout(()=>{try{an.cancel()}catch(e){}d.style.transform='';d.style.opacity=''},420)}catch(e){}['','b','c'].forEach(c=>{const r=document.createElement('div');r.className='rpring '+c;d.appendChild(r);setTimeout(()=>r.remove(),1100)})}
  if(AU.on&&ensure()){VAR[CUR].snd(AU.ctx.currentTime+.004,(Math.random()*3)|0)}};
 document.addEventListener('close',e=>{if(e.target&&e.target.tagName==='DIALOG'&&AU.on&&ensure()){const T=AU.ctx.currentTime+.004;note(T,1046.5,.06,.4,'triangle',523);note(T+.06,659.25,.08,.35,'triangle',392)}},true);
 /* ---- titulo RIPPLE: ola armonica por letras; al tocarlo, la animacion oficial ---- */
