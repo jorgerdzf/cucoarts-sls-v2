@@ -1,6 +1,7 @@
 // CloudFront Function (runtime cloudfront-js-2.0), evento "viewer-request" de la distribución E3G9CP7MGP91LC (cucoarts.com).
 // Hace cuatro cosas, en este orden:
 //   1. www.cucoarts.com  → 301 a https://cucoarts.com (una sola dirección por página, sin contenido duplicado).
+//   2a. Rutas renombradas (/mty_vs_art → /ripple/mty, con sus archivos y la consulta ?utm_…) → 301 a la nueva.
 //   2. Páginas retiradas (/Cities, /Services, /Faq…) → 301 a la portada (o a /privacidad).
 //   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad, /mty) → sirve el HTML prerenderizado de esa ruta
 //      (build/<ruta>/index.html, generado por frontend/scripts/prerender.js). Mayúsculas o barra final → 301 a la forma canónica.
@@ -20,7 +21,13 @@ var KNOWN = {
   '/en/custom-art': '/en/custom-art/index.html',
   '/privacidad': '/privacidad/index.html',
   '/mty': '/mty/index.html',
-  '/mty_vs_art': '/mty_vs_art/index.html'
+  '/ripple': '/ripple/index.html',
+  '/ripple/mty': '/ripple/mty/index.html'
+};
+
+// Rutas que cambiaron de nombre: 301 a la nueva conservando el resto de la ruta y la consulta (los enlaces ya compartidos siguen funcionando).
+var RENAMED = {
+  '/mty_vs_art': '/ripple/mty'
 };
 
 var LEGACY = {
@@ -75,6 +82,13 @@ function handler(event) {
   // forma normalizada: minúsculas y sin barra final
   var base = uri.length > 1 ? uri.replace(/\/+$/, '') : uri;
   var key = base.toLowerCase();
+
+  // 2a. rutas renombradas (también sus archivos: /mty_vs_art/img/…)
+  for (var old in RENAMED) {
+    if (Object.prototype.hasOwnProperty.call(RENAMED, old) && (key === old || key.indexOf(old + '/') === 0)) {
+      return redirect(APEX + RENAMED[old] + base.slice(old.length) + query);
+    }
+  }
 
   // 2. páginas retiradas
   if (Object.prototype.hasOwnProperty.call(LEGACY, key)) {

@@ -3,7 +3,7 @@ export type Lang = 'es' | 'en';
 
 const es = {
   htmlTitle: 'CUCO ARTS · Arte y cultura de Monterrey',
-  nav: { store: 'Tienda', quote: 'Cotizador', murals: 'Murales', art: 'Arte por encargo', mvsa: 'MTY vs ART', fresh: 'Nuevo', sell: 'Vende tu obra', expo: 'Expo en Santiago', live: 'Activa', events: 'Eventos', label: 'Secciones' },
+  nav: { store: 'Tienda', quote: 'Cotizador', murals: 'Murales', art: 'Arte por encargo', mvsa: 'RIPPLE', fresh: 'Nuevo', sell: 'Vende tu obra', expo: 'Expo en Santiago', live: 'Activa', events: 'Eventos', label: 'Secciones' },
   theme: { toDark: 'Modo noche', toLight: 'Modo día' },
   langBtn: { label: 'Switch to English', short: 'EN' },
   hero: {
@@ -54,7 +54,7 @@ const es = {
     sell: { h: '¿Quieres vender tu obra en store.cucoarts.com?', p: 'Envíanos tu catálogo y tus datos para contactarte.', cta: 'Ver cómo entrar' },
     expo: { h: 'Expo activa en Santiago', p: 'CUCO ARTS × HUSKY Coffee Shop: una exposición temporal de arte local. Conoce el proyecto, a los artistas y la obra que puedes llevarte.', cta: 'Ver la expo' },
     events: { h: 'Eventos y cultura viva en MTY', p: 'Qué pasa hoy en las artes visuales de Monterrey: agenda, mapa por zonas y espacios.', cta: 'Ver agenda' },
-    mvsa: { h: 'MTY vs ART', p: 'El juego del arte local: crea, experimenta, comparte y repite. Suma puntos para ti y para Monterrey.', cta: 'Jugar' },
+    mvsa: { h: 'RIPPLE', p: 'El juego del arte local: crea, experimenta, comparte y repite. Suma puntos para ti y para Monterrey.', cta: 'Jugar' },
   },
   sell: {
     label: 'Para artistas',
@@ -162,7 +162,7 @@ const es = {
     text: 'Qué pasa hoy en las artes visuales de Monterrey: eventos de la semana, del mes y del año, un mapa de zonas culturales y el perfil de cada espacio. La agenda crece cada semana y siempre da el crédito a quien la publica.',
     stamp: ['AGENDA', 'VIVA'],
     stampFull: 'Abrir la agenda',
-    game: 'Jugar MTY vs ART',
+    game: 'Jugar RIPPLE',
   },
   done: { wa: 'Enviar por WhatsApp', mail: 'Enviar por correo', copy: 'Copiar texto', copied: 'Copiado', edit: 'Editar', close: 'Cerrar' },
   privacy: 'aviso de privacidad',
@@ -183,7 +183,7 @@ type Copy = typeof es;
 
 const en: Copy = {
   htmlTitle: 'CUCO ARTS · Art and culture from Monterrey',
-  nav: { store: 'Store', quote: 'Quote', murals: 'Murals', art: 'Custom art', mvsa: 'MTY vs ART', fresh: 'New', sell: 'Sell your art', expo: 'Expo in Santiago', live: 'Live', events: 'Events', label: 'Sections' },
+  nav: { store: 'Store', quote: 'Quote', murals: 'Murals', art: 'Custom art', mvsa: 'RIPPLE', fresh: 'New', sell: 'Sell your art', expo: 'Expo in Santiago', live: 'Live', events: 'Events', label: 'Sections' },
   theme: { toDark: 'Night mode', toLight: 'Day mode' },
   langBtn: { label: 'Cambiar a español', short: 'ES' },
   hero: {
@@ -234,7 +234,7 @@ const en: Copy = {
     sell: { h: 'Want to sell your art at store.cucoarts.com?', p: 'Send us your catalog and your details so we can contact you.', cta: 'See how to join' },
     expo: { h: 'Live expo in Santiago', p: 'CUCO ARTS × HUSKY Coffee Shop: a temporary exhibition of local art. Discover the project, the artists, and the work you can take home.', cta: 'See the expo' },
     events: { h: 'Events and living culture in MTY', p: "What's on in Monterrey visual arts today: agenda, zone map and venues.", cta: 'See the agenda' },
-    mvsa: { h: 'MTY vs ART', p: 'The local-art game: create, experiment, share and repeat. Earn points for you and for Monterrey.', cta: 'Play' },
+    mvsa: { h: 'RIPPLE', p: 'The local-art game: create, experiment, share and repeat. Earn points for you and for Monterrey.', cta: 'Play' },
   },
   sell: {
     label: 'For artists',
@@ -342,7 +342,7 @@ const en: Copy = {
     text: "What's on in Monterrey visual arts today: events this week, this month and this year, a map of cultural zones and a profile of each venue. The agenda grows every week and always credits whoever publishes it.",
     stamp: ['LIVE', 'AGENDA'],
     stampFull: 'Open the agenda',
-    game: 'Play MTY vs ART',
+    game: 'Play RIPPLE',
   },
   done: { wa: 'Send via WhatsApp', mail: 'Send by email', copy: 'Copy text', copied: 'Copied', edit: 'Edit', close: 'Close' },
   privacy: 'privacy notice',
