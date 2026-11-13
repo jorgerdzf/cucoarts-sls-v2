@@ -211,7 +211,7 @@ const contactHashJ = (secret, item) => (item.tipo === 'jugador' ? crypto.createH
 function confirmPageJ(a) {
   if (a.item.tipo !== 'jugador') return _O.confirmPage(a);
   const ok = a.action === 'ok', hidden = ['k', 's', 'a', 'e', 't'].map((n) => '<input type="hidden" name="' + n + '" value="' + esc(a.params[n]) + '">').join('');
-  return shell(ok ? 'Aprobar' : 'Rechazar', '<div class="k">MTY VS ART · registro de jugador</div><h1>' + (ok ? '¿Verificar a @' + esc(a.item.ig) + '?' : '¿Rechazar este registro?') + '</h1>'
+  return shell(ok ? 'Aprobar' : 'Rechazar', '<div class="k">RIPPLE · registro de jugador</div><h1>' + (ok ? '¿Verificar a @' + esc(a.item.ig) + '?' : '¿Rechazar este registro?') + '</h1>'
     + '<div class="box">Código: <b>' + esc(a.item.codigo) + '</b><br>Apruébalo solo si ese código llegó por mensaje directo a @cucoarts DESDE la cuenta @' + esc(a.item.ig) + '.</div>'
     + (a.item.alias ? '<small>Nombre público: ' + esc(a.item.alias) + '</small><br>' : '') + '<small>Contacto (no se publica): ' + esc(a.item.via) + (a.item.contacto ? ' · ' + esc(a.item.contacto) : '') + '</small>'
     + '<form method="post">' + hidden + '<button class="' + (ok ? 'ok' : 'no') + '" type="submit">' + (ok ? 'Sí, verificar' : 'Sí, rechazar') + '</button></form>'
@@ -221,9 +221,9 @@ function emailPendingJ(a) {
   if (a.item.tipo !== 'jugador') return _O.emailPending(a);
   const it = a.item, text = ['JUGADOR PENDIENTE · @' + it.ig, 'Folio: ' + a.id, '', 'Código de verificación: ' + it.codigo, 'Aprueba SOLO si ese código te llegó por mensaje directo a @cucoarts desde la cuenta @' + it.ig + '.', 'Contacto (no se publica): ' + it.via + (it.contacto ? ' ' + it.contacto : ''), it.alias ? 'Nombre público: ' + it.alias : null, '', 'APROBAR: ' + a.approveUrl, 'RECHAZAR: ' + a.rejectUrl, '', '(Cada enlace abre una página de confirmación; no cambia nada hasta que pulses el botón. Caducan a los 14 días.)'].filter((x) => x !== null).join('\n');
   const btn = (href, label, bg, fg) => '<a href="' + esc(href) + '" style="display:inline-block;background:' + bg + ';color:' + fg + ';text-decoration:none;font-weight:700;border:3px solid #232322;border-radius:999px;padding:10px 22px;margin:4px 8px 4px 0">' + label + '</a>';
-  const html = '<div style="font:15px/1.5 Arial,sans-serif;color:#232322;max-width:560px"><div style="font:700 12px monospace;letter-spacing:.1em;color:#5B5F49">JUGADOR PENDIENTE · MTY VS ART</div><h2 style="margin:6px 0">@' + esc(it.ig) + '</h2>'
+  const html = '<div style="font:15px/1.5 Arial,sans-serif;color:#232322;max-width:560px"><div style="font:700 12px monospace;letter-spacing:.1em;color:#5B5F49">JUGADOR PENDIENTE · RIPPLE</div><h2 style="margin:6px 0">@' + esc(it.ig) + '</h2>'
     + '<div style="border:2px solid #232322;border-radius:12px;padding:10px 12px;margin:10px 0;background:#FFE7CF">Código: <b>' + esc(it.codigo) + '</b><br>Aprueba solo si llegó por DM a @cucoarts desde esa cuenta.</div>'
     + '<div style="color:#5B5F49;font-size:13px">Contacto (no se publica): ' + esc(it.via) + (it.contacto ? ' ' + esc(it.contacto) : '') + '</div><p>' + btn(a.approveUrl, 'Aprobar', '#C7F74E', '#232322') + btn(a.rejectUrl, 'Rechazar', '#FA2713', '#ffffff') + '</p></div>';
-  return { subject: ('MTY VS ART: jugador @' + it.ig).slice(0, 200), text, html };
+  return { subject: ('RIPPLE: jugador @' + it.ig).slice(0, 200), text, html };
 }
 module.exports = Object.assign({}, _O, { claimCode, igOk, validate: validateJ, describe: describeJ, targetOf: targetOfJ, contactHash: contactHashJ, confirmPage: confirmPageJ, emailPending: emailPendingJ });
