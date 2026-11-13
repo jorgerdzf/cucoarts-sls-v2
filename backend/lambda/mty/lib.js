@@ -181,3 +181,49 @@ module.exports = {
   CATS, ZONAS, LINK_TTL_DAYS, clean, oneLine, emailOk, phoneOk, urlOk, handleOk, normSocial, targetOk, validate, targetOf, contactHash,
   sign, verify, modLink, esc, confirmPage, messagePage, PAGE_HEADERS, emailPending, emailSuggestion, describe,
 };
+
+/* ============ MTY VS ART: registro de jugadores (claim de usuario de IG) ============
+ * Una persona reclama su usuario de IG; el servidor le da un código (MTY-XXXXXX). Para demostrar que la cuenta es suya, manda ese código por mensaje directo
+ * a @cucoarts DESDE esa cuenta. Roberto recibe el aviso con botones Aprobar / Rechazar (la misma moderación de siempre) y, al aprobar, el usuario queda
+ * reclamado. El correo o WhatsApp es opcional, nunca se publica y solo sirve para invitaciones y recomendaciones con su permiso. */
+const _O = module.exports;
+const claimCode = (secret, ig) => 'MTY-' + crypto.createHmac('sha256', secret).update('claim|' + ig).digest('base64').replace(/[^A-Za-z0-9]/g, '').toUpperCase().replace(/[01OIL]/g, 'X').slice(0, 6);
+const igOk = (s) => /^[a-z0-9._]{2,30}$/.test(s);
+function validateJ(body) {
+  const v = body || {};
+  if (v.tipo !== 'jugador') return _O.validate(body);
+  const errs = [], item = { tipo: 'jugador', lang: v.lang === 'en' ? 'en' : 'es', ref: 'jugador' };
+  const ig = oneLine(v.ig, 120).replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/[\/?#].*$/, '').toLowerCase();
+  if (!igOk(ig)) errs.push('ig'); else item.ig = ig;
+  item.via = ['correo', 'whatsapp', 'ig'].includes(v.via) ? v.via : 'ig';
+  if (item.via !== 'ig') { const c = oneLine(v.contacto, 200); if (item.via === 'correo' ? !emailOk(c) : !phoneOk(c)) errs.push('contacto'); else item.contacto = c; }
+  item.alias = oneLine(v.alias, 30);
+  const CATS_OK = ['artist', 'art_lover', 'student', 'curator', 'collector', 'civilian', 'institution', 'museum', 'gallery', 'venue', 'media', 'collective'];
+  if (CATS_OK.includes(v.categoria)) item.categoria = v.categoria; else errs.push('categoria');   // la persona elige su categoría en la comunidad
+  if ((v.consent !== 'on' && v.consent !== true) || (v.adulto !== 'on' && v.adulto !== true)) errs.push('consent');   // casilla A: tiene 18 años o más, leyó el aviso y acepta verificar y mostrar su usuario
+  if (item.via !== 'ig' && v.marketing === 'on') item.marketing = 'on';   // casilla B (separada): invitaciones y recomendaciones
+  if (v.alias_pub === 'on') item.alias_pub = 'on';                         // casilla C: mostrarse con alias en la clasificación
+  return { errs, item };
+}
+const describeJ = (item, names) => (item.tipo === 'jugador' ? 'Jugador: @' + item.ig : _O.describe(item, names));
+const targetOfJ = (item) => (item.tipo === 'jugador' ? 'jugador' : _O.targetOf(item));
+const contactHashJ = (secret, item) => (item.tipo === 'jugador' ? crypto.createHmac('sha256', secret).update('j|' + item.ig).digest('hex').slice(0, 32) : _O.contactHash(secret, item));
+function confirmPageJ(a) {
+  if (a.item.tipo !== 'jugador') return _O.confirmPage(a);
+  const ok = a.action === 'ok', hidden = ['k', 's', 'a', 'e', 't'].map((n) => '<input type="hidden" name="' + n + '" value="' + esc(a.params[n]) + '">').join('');
+  return shell(ok ? 'Aprobar' : 'Rechazar', '<div class="k">MTY VS ART · registro de jugador</div><h1>' + (ok ? '¿Verificar a @' + esc(a.item.ig) + '?' : '¿Rechazar este registro?') + '</h1>'
+    + '<div class="box">Código: <b>' + esc(a.item.codigo) + '</b><br>Apruébalo solo si ese código llegó por mensaje directo a @cucoarts DESDE la cuenta @' + esc(a.item.ig) + '.</div>'
+    + (a.item.alias ? '<small>Nombre público: ' + esc(a.item.alias) + '</small><br>' : '') + '<small>Contacto (no se publica): ' + esc(a.item.via) + (a.item.contacto ? ' · ' + esc(a.item.contacto) : '') + '</small>'
+    + '<form method="post">' + hidden + '<button class="' + (ok ? 'ok' : 'no') + '" type="submit">' + (ok ? 'Sí, verificar' : 'Sí, rechazar') + '</button></form>'
+    + '<p><small>Abrir esta página no cambia nada; solo el botón.</small></p>');
+}
+function emailPendingJ(a) {
+  if (a.item.tipo !== 'jugador') return _O.emailPending(a);
+  const it = a.item, text = ['JUGADOR PENDIENTE · @' + it.ig, 'Folio: ' + a.id, '', 'Código de verificación: ' + it.codigo, 'Aprueba SOLO si ese código te llegó por mensaje directo a @cucoarts desde la cuenta @' + it.ig + '.', 'Contacto (no se publica): ' + it.via + (it.contacto ? ' ' + it.contacto : ''), it.alias ? 'Nombre público: ' + it.alias : null, '', 'APROBAR: ' + a.approveUrl, 'RECHAZAR: ' + a.rejectUrl, '', '(Cada enlace abre una página de confirmación; no cambia nada hasta que pulses el botón. Caducan a los 14 días.)'].filter((x) => x !== null).join('\n');
+  const btn = (href, label, bg, fg) => '<a href="' + esc(href) + '" style="display:inline-block;background:' + bg + ';color:' + fg + ';text-decoration:none;font-weight:700;border:3px solid #232322;border-radius:999px;padding:10px 22px;margin:4px 8px 4px 0">' + label + '</a>';
+  const html = '<div style="font:15px/1.5 Arial,sans-serif;color:#232322;max-width:560px"><div style="font:700 12px monospace;letter-spacing:.1em;color:#5B5F49">JUGADOR PENDIENTE · MTY VS ART</div><h2 style="margin:6px 0">@' + esc(it.ig) + '</h2>'
+    + '<div style="border:2px solid #232322;border-radius:12px;padding:10px 12px;margin:10px 0;background:#FFE7CF">Código: <b>' + esc(it.codigo) + '</b><br>Aprueba solo si llegó por DM a @cucoarts desde esa cuenta.</div>'
+    + '<div style="color:#5B5F49;font-size:13px">Contacto (no se publica): ' + esc(it.via) + (it.contacto ? ' ' + esc(it.contacto) : '') + '</div><p>' + btn(a.approveUrl, 'Aprobar', '#C7F74E', '#232322') + btn(a.rejectUrl, 'Rechazar', '#FA2713', '#ffffff') + '</p></div>';
+  return { subject: ('MTY VS ART: jugador @' + it.ig).slice(0, 200), text, html };
+}
+module.exports = Object.assign({}, _O, { claimCode, igOk, validate: validateJ, describe: describeJ, targetOf: targetOfJ, contactHash: contactHashJ, confirmPage: confirmPageJ, emailPending: emailPendingJ });

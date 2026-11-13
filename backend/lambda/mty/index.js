@@ -87,6 +87,25 @@ async function like(event, body, deps = {}) {
   } catch (e) { console.error('like', e && e.name, e && e.message); return reply(500, { ok: false, error: 'storage' }); }
 }
 
+/* ---------- Evento compartido desde cucoarts.com (MTY VS ART): una vez por usuario y evento; sin contacto ni moderación ---------- */
+const MAX_SHARE_PER_IP = parseInt(process.env.MAX_SHARE_PER_IP || '40', 10);
+const MAX_REG_PER_IP = parseInt(process.env.MAX_REG_PER_IP || '8', 10);
+async function compartir(event, body, deps = {}) {
+  const now = deps.now || new Date(), nowSec = Math.floor(now.getTime() / 1000);
+  const ig = typeof body.ig === 'string' ? body.ig.replace(/^@/, '').toLowerCase().slice(0, 31) : '', ref = typeof body.ev === 'string' ? body.ev : '';
+  if (!L.igOk(ig) || !/^evento:[a-z0-9-]{1,60}$/.test(ref)) return reply(400, { ok: false, error: 'validation' });
+  try {
+    const secret = await getSecret();
+    const aprobados = await store.listApproved('jugador', 500);
+    if (!aprobados.some((x) => x.ig === ig)) return reply(200, { ok: true });   // no verificado: no se guarda nada y no se revela si existe
+    if (!(await store.reserveDedupe('cs#' + ref, hmac(secret, 'cs|' + ig + '|' + ref), nowSec))) return reply(409, { ok: false, error: 'duplicate' });
+    const ip = (event.requestContext && event.requestContext.identity && event.requestContext.identity.sourceIp) || '';
+    if (!(await store.bumpIp(hmac(secret, 'ipc|' + ip), MAX_SHARE_PER_IP, nowSec))) return reply(429, { ok: false, error: 'limit' });
+    await store.putSubmission('compartir', newId(now), { tipo: 'compartir', ref, ig }, 'info', now.toISOString(), nowSec);
+    return reply(200, { ok: true });
+  } catch (e) { console.error('compartir', e && e.name, e && e.message); return reply(500, { ok: false, error: 'storage' }); }
+}
+
 /* ---------- POST /mty/submit ---------- */
 async function submit(event, deps = {}) {
   const now = deps.now || new Date();
@@ -96,6 +115,7 @@ async function submit(event, deps = {}) {
   if (body.website) return reply(200, { ok: true, id: 'ok' });                    // trampa para bots: se ignora en silencio
   if (body.tipo === 'hype') return hype(event, body, deps);
   if (body.tipo === 'like') return like(event, body, deps);
+  if (body.tipo === 'compartir') return compartir(event, body, deps);
   const { errs, item } = L.validate(body);
   if (errs.length) return reply(400, { ok: false, error: 'validation', fields: errs });
 
@@ -103,6 +123,11 @@ async function submit(event, deps = {}) {
   const target = L.targetOf(item);
   try {
     const secret = await getSecret();
+    if (item.tipo === 'jugador') {
+      item.codigo = L.claimCode(secret, item.ig);
+      const ip = (event.requestContext && event.requestContext.identity && event.requestContext.identity.sourceIp) || '';
+      if (!(await store.bumpIp(hmac(secret, 'ipj|' + ip), MAX_REG_PER_IP, Math.floor(now.getTime() / 1000)))) return reply(429, { ok: false, error: 'limit' });   // tope de registros por IP (el cupo dura lo que la huella)
+    }
     if (item.tipo !== 'sug' && !(await store.reserveDedupe(target, L.contactHash(secret, item), nowSec))) {
       return reply(409, { ok: false, error: 'duplicate' });
     }
@@ -119,9 +144,13 @@ async function submit(event, deps = {}) {
           : L.emailPending({ id, item, names: {}, approveUrl: L.modLink(modBase(event), secret, key, 'ok', nowSec), rejectUrl: L.modLink(modBase(event), secret, key, 'no', nowSec) });
         await (deps.mailer || mailer)(msg);
         emailed = true;
+      } else if (n === MAX_MAIL_DAY + 1) {
+        // se pasó el tope del día: un solo aviso para que Roberto revise la tabla (los envíos siguen guardándose como pendientes)
+        const t = `Tope de ${MAX_MAIL_DAY} avisos del día alcanzado en /mty`;
+        await (deps.mailer || mailer)({ subject: t, text: `${t}. Los envíos siguientes se guardan como pendientes pero ya no generan correo. Revisa la tabla o sube MAX_MAIL_DAY. Si no esperabas tanta actividad, puede ser abuso.`, html: `<p>${t}.</p><p>Los envíos siguientes se guardan como pendientes pero ya no generan correo. Revisa la tabla o sube MAX_MAIL_DAY. Si no esperabas tanta actividad, puede ser abuso.</p>` });
       }
     } catch (e) { console.error('mail', e && e.name); }
-    return reply(200, { ok: true, id, pending: item.tipo !== 'sug', emailed });
+    return reply(200, { ok: true, id, pending: item.tipo !== 'sug', emailed, ...(item.codigo ? { codigo: item.codigo } : {}) });
   } catch (e) { console.error('submit', e && e.name, e && e.message); return reply(500, { ok: false, error: 'storage' }); }
 }
 
@@ -130,14 +159,18 @@ const pub = (x) => (x.tipo === 'reco'
   ? { tipo: 'reco', nombre: x.nombre, disciplina: x.disciplina, link: x.link || '', zona: x.zona || '', porque: x.porque, alias: x.alias || '', fecha: String(x.sk || '').slice(0, 10) }
   : { tipo: 'checkin', ref: x.ref, estrellas: x.estrellas, comentario: x.comentario, alias: x.alias || '', social: x.social || '', link: x.link || '', fecha: String(x.sk || '').slice(0, 10) });
 
+/* jugadores verificados: solo usuario de IG, nombre público y fecha (nunca el contacto) */
+const pubAny = (x) => (x.tipo === 'jugador' ? { tipo: 'jugador', ig: x.alias_pub === 'on' ? '' : x.ig, categoria: x.categoria || '', alias: x.alias || '', fecha: String(x.sk || '').slice(0, 10) } : pub(x));
+
 async function publicList(event) {
   const ref = event.queryStringParameters && event.queryStringParameters.ref;
   const cache = { 'Cache-Control': 'public, max-age=30' };
   try {
     if (!ref) return reply(200, { ok: true, agg: await store.listAgg() }, cache);
-    if (ref !== 'reco' && !L.targetOk(ref)) return reply(400, { ok: false, error: 'ref' });
+    if (ref === 'compartidos') { const rows = await store.listInfo('compartir'), pl = new Set((await store.listApproved('jugador', 500)).filter((x) => x.alias_pub !== 'on').map((x) => x.ig)); return reply(200, { ok: true, items: rows.filter((x) => pl.has(x.ig)).map((x) => ({ ig: x.ig, ev: x.ref, fecha: String(x.sk || '').slice(0, 10) })) }, cache); }
+    if (ref !== 'reco' && ref !== 'jugador' && !L.targetOk(ref)) return reply(400, { ok: false, error: 'ref' });
     const items = await store.listApproved(ref);
-    return reply(200, { ok: true, items: items.map(pub) }, cache);
+    return reply(200, { ok: true, items: items.map(pubAny) }, cache);
   } catch (e) { console.error('public', e && e.name); return reply(500, { ok: false, error: 'storage' }); }
 }
 
@@ -163,6 +196,7 @@ async function moderate(event, deps = {}) {
     const r = await store.decide(params.k, params.s, approve, now.toISOString(), nowSec);
     if (r.status === 'missing') return page(404, L.messagePage('No encontrado', 'Ese envío ya no existe (pudo vencer).'));
     if (r.status === 'already') return page(200, L.messagePage('Ya decidido', `Este envío ya está: ${r.estado || 'decidido'}. No se cambió nada.`));
+    if (!approve && r.item && r.item.tipo === 'jugador') await store.releaseDedupe(L.targetOf(r.item), L.contactHash(secret, r.item));   // al rechazar, el dueño real de ese usuario puede registrarse
     return page(200, L.messagePage(approve ? 'Aprobado' : 'Rechazado', approve ? 'Listo: ya aparece en /mty.' : 'Listo: no se publicará.'));
   } catch (e) { console.error('moderate', e && e.name); return page(500, L.messagePage('Error', 'No se pudo completar. Intenta de nuevo en un momento.')); }
 }

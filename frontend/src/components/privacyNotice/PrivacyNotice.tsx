@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { applySeo } from '../landing/seo'
 import './privacy.css'
 
-// Aviso de privacidad de CUCO ARTS (persona moral). Actualizado el 9 de noviembre de 2026 (RIPPLE; revisión del abogado pendiente).
+// Aviso de privacidad de CUCO ARTS (persona moral). Actualizado el 13 de noviembre de 2026 (RIPPLE; revisión del abogado pendiente).
 // El texto vive en SECCIONES para que sea fácil de mantener; revisar con un abogado antes de publicar cambios.
 
 type Seccion = { titulo: string; parrafos?: string[]; lista?: string[]; cierre?: string[] }
@@ -136,7 +136,7 @@ const SECCIONES: Seccion[] = [
 ]
 
 const FECHA_ALTA = '31 de marzo de 2023'
-const FECHA_ACT = '9 de noviembre de 2026'
+const FECHA_ACT = '13 de noviembre de 2026'
 
 // El modo día / noche comparte la llave "cucoarts-theme" con la landing y /rob.
 function usePageTheme() {

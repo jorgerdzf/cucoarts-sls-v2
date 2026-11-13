@@ -181,7 +181,8 @@ const qs = (url) => Object.fromEntries(new URL(url).searchParams);
   const st2 = memStore(); m._test.setStore(st2); outbox.length = 0;
   let last;
   for (let i = 0; i < 33; i++) last = await m.submit(ev({ ...good(), ref: 'evento:e' + i, contacto: 'p' + i + '@x.co' }));
-  assert.strictEqual(outbox.length, 30); assert.strictEqual(JSON.parse(last.body).emailed, false); assert.strictEqual(st2.rows.size, 33);
+  assert.strictEqual(outbox.length, 31); assert.strictEqual(JSON.parse(last.body).emailed, false); assert.strictEqual(st2.rows.size, 33);
+  assert(/Tope de 30/.test(outbox[30].subject));   // un solo aviso al pasar el tope, no uno por envío
 
   /* ---- comandos reales a DynamoDB (con SDK simulado) ---- */
   const calls = [];

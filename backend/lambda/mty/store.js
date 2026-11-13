@@ -109,11 +109,11 @@ function makeStore({ ddb, table, C }) {
       if (approve) {
         const tx = [{ Update: {
           TableName: table, Key: key, ConditionExpression: '#e = :p',
-          UpdateExpression: 'SET #e = :a, decidido = :d REMOVE expira', ExpressionAttributeNames: names,
-          ExpressionAttributeValues: { ':p': S('pendiente'), ':a': S('aprobado'), ':d': S(nowIso) },
+          UpdateExpression: cur.tipo === 'jugador' ? ('SET #e = :a, decidido = :d, expira = :x' + (cur.marketing === 'on' ? '' : ' REMOVE contacto')) : 'SET #e = :a, decidido = :d REMOVE expira', ExpressionAttributeNames: names,
+          ExpressionAttributeValues: Object.assign({ ':p': S('pendiente'), ':a': S('aprobado'), ':d': S(nowIso) }, cur.tipo === 'jugador' ? { ':x': N(nowSec + 730 * DAY) } : {}),
         } }];
         const pubItem = { pk: S('p#' + pk.slice(2)), sk: S(sk), tipo: S(cur.tipo) };
-        ['ref', 'comentario', 'alias', 'social', 'link', 'nombre', 'disciplina', 'zona', 'porque'].forEach((f) => { if (cur[f]) pubItem[f] = S(cur[f]); });
+        ['ref', 'comentario', 'alias', 'social', 'link', 'nombre', 'disciplina', 'zona', 'porque', 'ig', 'alias_pub', 'categoria'].forEach((f) => { if (cur[f]) pubItem[f] = S(cur[f]); });
         if (cur.estrellas) pubItem.estrellas = N(cur.estrellas);
         tx.push({ Put: { TableName: table, Item: pubItem } });
         if (cur.tipo === 'checkin') tx.push({ Update: {
@@ -150,7 +150,13 @@ function makeStore({ ddb, table, C }) {
     return out;
   }
 
-  return { reserveDedupe, releaseDedupe, bumpIp, addHype, addLike, bumpMail, putSubmission, getSubmission, decide, listApproved, listAgg };
+  /* eventos compartidos desde cucoarts.com (estado info): sin moderación; el conteo de puntos solo los toma de jugadores ya verificados */
+  async function listInfo(target, limit = 500) {
+    const r = await send(new C.QueryCommand({ TableName: table, KeyConditionExpression: 'pk = :pk', ExpressionAttributeValues: { ':pk': S('s#' + target) }, ScanIndexForward: false, Limit: limit }));
+    return (r.Items || []).map(plain);
+  }
+
+  return { listInfo, reserveDedupe, releaseDedupe, bumpIp, addHype, addLike, bumpMail, putSubmission, getSubmission, decide, listApproved, listAgg };
 }
 
 module.exports = { makeStore, TTL, plain };
