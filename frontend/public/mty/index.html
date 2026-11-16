@@ -8766,7 +8766,7 @@ function lunesCaption(key){
   }else{
     const P=lunesPuntos(S);
     if(key==='lunesm'){
-      lines.push('🎮 RIPPLE · '+P.mes.nombre,'','LV '+(P.nivel+1)+' '+P.lvA[1]+' '+P.lvA[2]+' · '+P.total+' XP','');
+      lines.push('🎮 RIPPLE · '+(en?'all time':'acumulado')+' ('+fmtShort(P.mes.ini)+' → '+fmtShort(P.mes.fin)+')','','LV '+(P.nivel+1)+' '+P.lvA[1]+' '+P.lvA[2]+' · '+P.total+' XP','');
       P.ev.filter(r=>r.pts>0).slice(0,5).forEach((r,i)=>lines.push((i+1)+'. '+eT(r.e)+' · '+r.pts+' pts'));
       lines.push('',(en?'Top '+USER_NAME+': ':'Top '+USER_NAME+': ')+P.users.slice(0,3).map(u=>userShown(u)+' ('+u.rank.a[1]+(userCatTxt(u,en)?' · '+userCatTxt(u,en):'')+')').join(' · '));
     }else{
@@ -9014,8 +9014,8 @@ function ptsEtapa(item,ev){
 const ptsMet=c=>{const m=typeof COM_METRICAS!=='undefined'&&COM_METRICAS.piezas&&COM_METRICAS.piezas[c.id]; return m&&(m.l!=null||m.c!=null||m.r!=null)?{l:m.l||0,c:m.c||0,sh:(m.r||0)+(m.s||0),ok:true,hid:m.l==null}:{l:0,c:0,sh:0,ok:false}};
 const E0=()=>({previa:0,inaug:0,curso:0,cierre:0,activ:0,post:0});
 function lunesPuntos(S){
-  const t0s=iso(S.t0), mIni=(()=>{const d=iso(new Date(S.we.getFullYear(),S.we.getMonth(),1)); return d<MTY_TEMPORADA_INICIO?MTY_TEMPORADA_INICIO:d})();
-  const mes={ini:mIni,fin:t0s,nombre:(LANG==='en'?MESES_L.en:MESES_L.es)[parse(mIni).getMonth()].toUpperCase()+' '+parse(mIni).getFullYear()};
+  const t0s=iso(S.t0), mIni=MTY_TEMPORADA_INICIO;   /* 16-nov-2026 (Roberto): NO hay reinicio mensual; los puntos se acumulan desde el inicio del juego */
+  const mes={ini:mIni,fin:t0s,nombre:LANG==='en'?'ALL TIME':'ACUMULADO'};
   const inMes=f=>!f||(f>=mIni&&f<=t0s), inSem=f=>f&&f>=iso(S.ws)&&f<=iso(S.we);
   const out={mes,total:0,semana:0,posts:0,postsSem:0,hist:0,fuera:0,antes:0,sinFecha:0,medidos:0,ocultos:0,src:{com:0,ins:0,esc:0},srcS:{com:0,ins:0,esc:0},et:E0(),etS:E0(),ev:[],general:0};
   const per=new Map(), RG=new Map(), rget=k=>{if(!RG.has(k))RG.set(k,{ig:k,xp:0,xpS:0,posts:0,hist:0,acc:0,registrado:false}); return RG.get(k)};
@@ -9122,7 +9122,7 @@ async function drawLunesComunidad(){
   const rx=M+TW-28; g.textAlign='right'; g.fillStyle=SH_CREAM; g.font='800 17px '+SH_MONO;
   g.fillText('👥 '+(en?'COMMUNITY ':'COMUNIDAD ')+fmtN(P.srcS.com),rx,y+44); g.fillText('🏛️ '+(en?'INSTITUTIONS ':'INSTITUCIONES ')+fmtN(P.srcS.ins),rx,y+72); g.fillText('🎓 '+(en?'SCHOOLS ':'ESCUELAS ')+fmtN(P.srcS.esc),rx,y+100);
   let ey=y+138; Object.keys(PTS_ETAPAS).filter(k=>P.etS[k]>0).forEach(k=>{g.font='800 17px '+SH_MONO; g.fillStyle=SH_CREAM; g.fillText(PTS_ETAPAS[k][0]+' '+fmtN(P.etS[k]),rx-30,ey); g.font='20px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillText(PTS_ETAPAS[k][1],rx,ey); ey+=28}); g.textAlign='left';
-  g.font='700 16px '+SH_MONO; g.fillStyle=SH_CREAM; g.globalAlpha=.8; g.fillText(shEllipsis(g,(en?'SEASON ':'TEMPORADA ')+P.mes.nombre+' · LV '+(P.nivel+1)+' '+P.lvA[1]+' · '+fmtN(P.total)+' XP',TW-56),M+28,y+PH-18); g.globalAlpha=1;
+  g.font='700 16px '+SH_MONO; g.fillStyle=SH_CREAM; g.globalAlpha=.8; g.fillText(shEllipsis(g,(en?'ALL TIME SINCE ':'ACUMULADO DESDE ')+fmtShort(P.mes.ini).toUpperCase()+' · LV '+(P.nivel+1)+' '+P.lvA[1]+' · '+fmtN(P.total)+' XP',TW-56),M+28,y+PH-18); g.globalAlpha=1;
   y+=PH+14;
   const hw=lunesPill(g,'🏆 '+(en?'WEEK LEADERBOARD':'POSICIONES DE LA SEMANA'),M,y,42,INK,SH_CREAM,'800 25px '+SF); g.font='800 18px '+SH_MONO; g.fillStyle=gr.fg; g.fillText(shEllipsis(g,en?'LAST WEEK’S POINTS · STAGE':'PUNTOS DE LA SEMANA PASADA · ETAPA',TW-hw-14),M+hw+14,y+28); y+=42+12;
   const rows=P.ev.filter(r=>r.sem>0).sort((a,b)=>b.sem-a.sem||b.pts-a.pts), CTAH=150, LIMIT=1660, RH=108, GAP=8, cap=Math.max(1,Math.floor((LIMIT-y-CTAH-40+GAP)/(RH+GAP))), shown=rows.slice(0,cap), thumbs=await Promise.all(shown.map(r=>shThumb(r.e)));
@@ -9144,13 +9144,13 @@ function lunesCTAJugar(g,M,cy0,TW,CTAH){
 async function drawLunesMes(){
   const en=LANG==='en', M=STORY.M, TW=SW-2*M, S=lunesSet(), P=lunesPuntos(S), {c,g,gr}=lunesBase('lunesm',1), INK=SH_INK;
   const logo=await loadImgSafe('/mty/img/logo-cuco-mask.png');
-  lunesTop(g,gr,logo,(en?'SEASON ':'TEMPORADA ')+P.mes.nombre+' · '+fmtShort(P.mes.ini).toUpperCase()+' → '+fmtShort(P.mes.fin).toUpperCase());
+  lunesTop(g,gr,logo,(en?'ALL TIME · ':'ACUMULADO · ')+fmtShort(P.mes.ini).toUpperCase()+' → '+fmtShort(P.mes.fin).toUpperCase());
   let y=LUN_TOP+56; rippleWord(g,M,y,7,gr.fg); y+=7*7+22;
   // nivel de la comunidad
   const PH=196; g.fillStyle=INK; rrect(g,M,y,TW,PH,28); g.fill();
   pxText(g,'LV',M+28,y+22,4,SH_CREAM); pxText(g,String(P.nivel+1),M+28+pxWidth('LV',4)+16,y+14,8,SH_YEL);
   g.font='800 40px '+SF; g.fillStyle=SH_CREAM; g.fillText(P.lvA[1]+' '+P.lvA[2],M+28,y+108);
-  const rx=M+TW-28; pxText(g,en?'XP/MO':'XP/MES',rx,y+22,3,SH_CREAM,'right'); pxText(g,fmtN(P.total),rx,y+52,8,SH_YEL,'right');
+  const rx=M+TW-28; pxText(g,en?'TOTAL XP':'XP TOTAL',rx,y+22,3,SH_CREAM,'right'); pxText(g,fmtN(P.total),rx,y+52,8,SH_YEL,'right');
   const nb=24, bw=(TW-56-(nb-1)*4)/nb, by=y+126, filled=Math.round(nb*P.prog); for(let i=0;i<nb;i++){g.fillStyle=i<filled?SH_YEL:'rgba(255,231,207,.18)'; g.fillRect(M+28+i*(bw+4),by,bw,22)}
   pxText(g,P.lvB?(en?'NEXT: ':'SIGUE: ')+P.lvB[1]+' '+fmtN(P.lvB[0]):'MAX',M+28,by+34,3,SH_CREAM);
   y+=PH+14;
@@ -9161,7 +9161,7 @@ async function drawLunesMes(){
   // fuentes
   const FH=102; g.fillStyle='rgba(255,255,255,.94)'; rrect(g,M,y,TW,FH,24); g.fill(); g.lineWidth=5; g.strokeStyle=INK; g.stroke(); lunesBarraFuentes(g,M+26,y+14,TW-52,P.src,INK); y+=FH+14;
   // top eventos
-  lunesPill(g,'🏆 '+(en?'TOP EVENTS OF THE MONTH':'TOP EVENTOS DEL MES'),M,y,40,INK,SH_CREAM,'800 24px '+SF); y+=40+10;
+  lunesPill(g,'🏆 '+(en?'TOP EVENTS · ALL TIME':'TOP EVENTOS · ACUMULADO'),M,y,40,INK,SH_CREAM,'800 24px '+SF); y+=40+10;
   const evs=P.ev.slice(0,5), thumbs=await Promise.all(evs.map(r=>shThumb(r.e)));
   evs.forEach((r,i)=>{const h=70, x=M; g.save(); rrect(g,x,y,TW,h,18); g.fillStyle='rgba(255,255,255,.94)'; g.fill(); g.restore(); g.lineWidth=4; g.strokeStyle=INK; rrect(g,x,y,TW,h,18); g.stroke();
     lunesThumb(g,r.e,thumbs[i],x+12,y+8,h-16); pxText(g,'#'+(i+1),x+h+8,y+h/2-10,3,INK);
