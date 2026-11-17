@@ -1,0 +1,58 @@
+{
+ "plantilla": "foto-video",
+ "titulo": "Robert Salazar · @xnl.artecalle",
+ "intro": "Con estas respuestas armamos tu perfil en CUCO ARTS como Art Hunter colaborador y como fotógrafo y videógrafo de arte urbano: quién eres, qué servicios ofreces y cómo quieres sumar al explorador de murales. Es un piloto y empezamos sencillo: lo que no sepas todavía, déjalo vacío o escribe “por definir”. Los servicios que ves ya están sugeridos; el precio y la factura los defines tú. Nada es obligatorio y nada se publica sin tu aprobación. Tu avance se guarda solo.",
+ "whatsapp": "528120321492",
+ "whatsapp_msg": "Hola Roberto, terminé el formulario de mi perfil. ",
+ "prellenado": {
+  "basicos": {
+   "nombre": "Robert Salazar (@xnl.artecalle)",
+   "redes": "Instagram: @xnl.artecalle (https://www.instagram.com/xnl.artecalle/)\nYouTube: @robertxnl (https://www.youtube.com/@robertxnl)"
+  },
+  "servicios": {
+   "servicios": [
+    "Fotografía de mural, evento o artística",
+    "Video de cobertura de mural o evento artístico",
+    "Combo: video y fotografía"
+   ],
+   "paquetes": [
+    {
+     "nom": "Fotografía de mural, evento o artística",
+     "incluye": "",
+     "para": "",
+     "precio": "por definir",
+     "factura": "Por definir",
+     "tiempo": ""
+    },
+    {
+     "nom": "Video de cobertura de mural o evento artístico",
+     "incluye": "",
+     "para": "",
+     "precio": "por definir",
+     "factura": "Por definir",
+     "tiempo": ""
+    },
+    {
+     "nom": "Combo: video y fotografía",
+     "incluye": "",
+     "para": "",
+     "precio": "por definir",
+     "factura": "Por definir",
+     "tiempo": ""
+    }
+   ]
+  },
+  "proyectos": {
+   "items": [
+    {
+     "titulo": "Sesión de los primeros 3 murales de San Nicolás para CUCO ARTS",
+     "para": "CUCO ARTS",
+     "anio": "2026",
+     "detalle": "Sesión fotográfica de los murales de Greometría, Belinda Salazar y Ezkor + Snap Santoyo. Además prepara un video para YouTube. Cuéntanos cómo fue.",
+     "permiso": "Sí",
+     "enlace": ""
+    }
+   ]
+  }
+ }
+}
