@@ -22,6 +22,7 @@ var KNOWN = {
   '/privacidad': '/privacidad/index.html',
   '/mty': '/mty/index.html',
   '/mty/arte-urbano': '/mty/arte-urbano/index.html',
+  '/en/mty/arte-urbano': '/en/mty/arte-urbano/index.html',
   '/ripple': '/ripple/index.html',
   '/ripple/mty': '/ripple/mty/index.html'
 };

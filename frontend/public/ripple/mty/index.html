@@ -1458,12 +1458,12 @@ render(); showClaimed();
   };
   /* ruta en inglés de las páginas que la tienen; el resto se queda igual */
   const lp=(en,p)=>en?(p==='/'?'/en':'/en'+({'/murales':'/murals','/arte-por-encargo':'/custom-art'}[p]||p)):p;
-  const path=location.pathname.replace(/\/+$/,'')||'/';
+  const path=(location.pathname.replace(/\/+$/,'')||'/').replace(/^\/en(?=\/)/,'');
   const curId=path.indexOf('/mty/arte-urbano')===0?'discover':path.indexOf('/ripple')===0?'ripple':path==='/mty'||path.indexOf('/mty/')===0?'events':'';
   function items(){
     const en=LANG==='en', t=TXT[LANG];
     return [
-      {id:'discover',label:t.i1,sub:t.s1,href:'/mty/arte-urbano',badge:t.guide,prev:{img:'/mty/img/murales/greometria-puente-sn.jpg',k:t.p1k,t:t.p1t,d:t.p1d,c:t.p1c,href:'/mty/arte-urbano'}},
+      {id:'discover',label:t.i1,sub:t.s1,href:lp(en,'/mty/arte-urbano'),badge:t.guide,prev:{img:'/mty/img/murales/greometria-puente-sn-b1-2.jpg',k:t.p1k,t:t.p1t,d:t.p1d,c:t.p1c,href:lp(en,'/mty/arte-urbano')}},
       {id:'catalog',label:t.i2,sub:t.s2,href:'https://store.cucoarts.com',ext:true},
       {id:'events',label:t.i3,sub:t.s3,href:'/mty',badge:t.live,prev:{img:'/mty/img/husky-expo.jpg',k:t.p3k,t:t.p3t,d:t.p3d,c:t.p3c,href:lp(en,'/husky')}},
       {id:'projects',label:t.i4,sub:t.s4,href:lp(en,'/murales')},

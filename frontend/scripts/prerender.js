@@ -116,12 +116,14 @@ entries.push(`  <url>
     <priority>0.8</priority>
   </url>`);
 /* /mty/arte-urbano: página estática (frontend/public/mty/arte-urbano), generada con MTY_PROTOTIPO/mty_arte_urbano/build_murales.js */
-entries.push(`  <url>
-    <loc>${url('/mty/arte-urbano')}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>`);
+['es', 'en'].forEach((lang) => {
+  const alts = [
+    `<xhtml:link rel="alternate" hreflang="es" href="${url('/mty/arte-urbano')}"/>`,
+    `<xhtml:link rel="alternate" hreflang="en" href="${url('/en/mty/arte-urbano')}"/>`,
+    `<xhtml:link rel="alternate" hreflang="x-default" href="${url('/mty/arte-urbano')}"/>`,
+  ].join('\n    ');
+  entries.push(`  <url>\n    <loc>${url(lang === 'es' ? '/mty/arte-urbano' : '/en/mty/arte-urbano')}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${lang === 'es' ? '0.7' : '0.6'}</priority>\n    ${alts}\n  </url>`);
+});
 fs.writeFileSync(path.join(BUILD, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join('\n')}\n</urlset>\n`);
 console.log('prerender  sitemap.xml (' + entries.length + ' URLs)');

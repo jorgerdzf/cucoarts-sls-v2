@@ -37,7 +37,7 @@ export type MenuFoot = { sellHref: string; onSell?: () => void; quoteHref: strin
 export function buildMenu(lang: Lang, _c: Copy, page: MenuPage): MenuItem[] {
   const t = TXT[lang];
   return [
-    { id: 'discover', label: t.i1, sub: t.s1, href: '/mty/arte-urbano', badge: t.guide, prev: { img: '/mty/img/murales/greometria-puente-sn.jpg', k: t.p1k, t: t.p1t, d: t.p1d, c: t.p1c, href: '/mty/arte-urbano' } },
+    { id: 'discover', label: t.i1, sub: t.s1, href: lp(lang, '/mty/arte-urbano'), badge: t.guide, prev: { img: '/mty/img/murales/greometria-puente-sn-b1-2.jpg', k: t.p1k, t: t.p1t, d: t.p1d, c: t.p1c, href: lp(lang, '/mty/arte-urbano') } },
     { id: 'catalog', label: t.i2, sub: t.s2, href: STORE, external: true },
     { id: 'events', label: t.i3, sub: t.s3, href: '/mty', badge: t.live, current: page === 'husky', prev: { img: '/mty/img/husky-expo.jpg', k: t.p3k, t: t.p3t, d: t.p3d, c: t.p3c, href: lp(lang, '/husky') } },
     { id: 'projects', label: t.i4, sub: t.s4, href: lp(lang, '/murales'), current: page === 'murales' || page === 'arte' },

@@ -37,6 +37,8 @@ const cases = [
   ['/mty', 'cucoarts.com', {}, { uri: '/mty/index.html' }],
   ['/mty/arte-urbano', 'cucoarts.com', {}, { uri: '/mty/arte-urbano/index.html' }],
   ['/mty/arte-urbano/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/mty/arte-urbano' }],
+  ['/en/mty/arte-urbano', 'cucoarts.com', {}, { uri: '/en/mty/arte-urbano/index.html' }],
+  ['/en/mty/arte-urbano/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/en/mty/arte-urbano' }],
   ['/ripple', 'cucoarts.com', {}, { uri: '/ripple/index.html' }],
   ['/ripple/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/ripple' }],
   ['/ripple/mty', 'cucoarts.com', {}, { uri: '/ripple/mty/index.html' }],
