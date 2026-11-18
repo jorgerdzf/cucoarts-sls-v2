@@ -35,6 +35,8 @@ const cases = [
   ['/Faq', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/#faq' }],
   ['/Connect', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/' }],
   ['/mty', 'cucoarts.com', {}, { uri: '/mty/index.html' }],
+  ['/mty/arte-urbano', 'cucoarts.com', {}, { uri: '/mty/arte-urbano/index.html' }],
+  ['/mty/arte-urbano/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/mty/arte-urbano' }],
   ['/ripple', 'cucoarts.com', {}, { uri: '/ripple/index.html' }],
   ['/ripple/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/ripple' }],
   ['/ripple/mty', 'cucoarts.com', {}, { uri: '/ripple/mty/index.html' }],

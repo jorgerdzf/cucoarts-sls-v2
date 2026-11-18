@@ -5,7 +5,7 @@ import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared'
 import MuralWizard from './MuralWizard';
 import ObraWizard from './ObraWizard';
 import { applySeo } from './seo';
-import SiteMenu, { buildMenu } from './SiteMenu';
+import SiteMenu, { buildMenu, buildFoot } from './SiteMenu';
 import { Cycler } from './Cycler';
 import { useLang, lp } from './lang';
 import { FAQ } from './faqData';
@@ -393,7 +393,7 @@ export default function Landing() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
-          <SiteMenu lang={lang} items={buildMenu(lang, c, 'home', { onQuote: () => setQuoteOpen(true), onSell: () => { setSellOpen(true); scrollToSell(); } })} />
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'home')} foot={buildFoot(lang, { onQuote: () => setQuoteOpen(true), onSell: () => { setSellOpen(true); scrollToSell(); } })} />
         </div>
       </header>
 

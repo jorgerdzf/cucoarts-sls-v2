@@ -7,7 +7,7 @@ import { OBRAS } from './obraData';
 import { Icon, STORE, useTheme } from './Landing';
 import { useLang, lp } from './lang';
 import { applySeo } from './seo';
-import SiteMenu, { buildMenu } from './SiteMenu';
+import SiteMenu, { buildMenu, buildFoot } from './SiteMenu';
 import './assets/styles/landing2.css';
 import './assets/styles/murales.css';
 import './assets/styles/obra.css';
@@ -143,7 +143,7 @@ export default function ArtePorEncargo() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
-          <SiteMenu lang={lang} items={buildMenu(lang, c, 'arte')} />
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'arte')} foot={buildFoot(lang)} />
         </div>
       </header>
 

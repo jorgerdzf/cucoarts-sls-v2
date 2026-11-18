@@ -115,6 +115,13 @@ entries.push(`  <url>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`);
+/* /mty/arte-urbano: página estática (frontend/public/mty/arte-urbano), generada con MTY_PROTOTIPO/mty_arte_urbano/build_murales.js */
+entries.push(`  <url>
+    <loc>${url('/mty/arte-urbano')}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`);
 fs.writeFileSync(path.join(BUILD, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join('\n')}\n</urlset>\n`);
 console.log('prerender  sitemap.xml (' + entries.length + ' URLs)');

@@ -3,41 +3,61 @@ import { Copy, Lang } from './copy';
 import { lp } from './lang';
 import './assets/styles/menu.css';
 
-/* Menú del sitio: un solo botón "Menú" en todas las resoluciones que abre una capa a pantalla completa.
-   La capa se expande desde el botón (círculo), los enlaces entran uno por uno y el icono se convierte en ✕.
-   Es el mismo menú en la portada, /murales, /arte-por-encargo y /husky (cambia solo la página marcada como actual). */
+/* Menú del sitio como recorrido curatorial en 5 pilares: Descubre MTY → Catálogo → Eventos y expos → Proyectos → RIPPLE.
+   Un solo botón "Menú" abre una capa a pantalla completa (círculo desde el botón, enlaces uno por uno, icono → ✕).
+   Cabecera: logo · selector de ciudad · cerrar. Escritorio: al pasar sobre un pilar con tarjeta, se muestra a la derecha.
+   Es el mismo menú en la portada, /murales, /arte-por-encargo y /husky, y debe coincidir con MTY_PROTOTIPO/src/sitemenu.js (/mty). */
 
 const STORE = 'https://store.cucoarts.com';
 const TXT = {
-  es: { menu: 'Menú', close: 'Cerrar menú', home: 'Inicio', here: 'estás aquí', soon: 'Próximamente', label: 'Menú principal', connect: 'Escríbenos', top: 'Arriba', topLabel: 'Volver al menú superior', copy: 'Copiar enlace', copied: '¡Enlace copiado!' },
-  en: { menu: 'Menu', close: 'Close menu', home: 'Home', here: 'you are here', soon: 'Coming soon', label: 'Main menu', connect: 'Write to us', top: 'Top', topLabel: 'Back to the top menu', copy: 'Copy link', copied: 'Link copied!' },
+  es: {
+    menu: 'Menú', close: 'Cerrar menú', here: 'estás aquí', label: 'Menú principal', city: 'Ciudad', cityMore: 'Más ciudades pronto', guide: 'Guía', live: 'Activa',
+    sell: '¿Eres artista? Vende tu obra', quote: 'Cotizador rápido', connect: 'Escríbenos', copy: 'Copiar enlace', copied: '¡Enlace copiado!', top: 'Arriba', topLabel: 'Volver al menú superior',
+    i1: 'Descubre MTY', s1: 'Murales y artistas, zona por zona', i2: 'Catálogo', s2: 'Obra original y ediciones', i3: 'Exposiciones', s3: 'Agenda de artes visuales de MTY',
+    i4: 'Proyectos', s4: 'Murales, comisiones y cotizador', i5: 'RIPPLE', s5: 'Gana puntos por descubrir arte local',
+    p1k: 'Arte urbano', p1t: 'Los murales de San Nicolás, zona por zona', p1d: 'Quién los pintó, con qué estilo y dónde encontrar su obra en la tienda.', p1c: 'Recorrer murales',
+    p3k: 'En curso', p3t: 'Expo en Santiago', p3d: 'Arte local en HUSKY Coffee Shop. Pasa, toma un café y mira la obra en persona.', p3c: 'Ver la expo',
+  },
+  en: {
+    menu: 'Menu', close: 'Close menu', here: 'you are here', label: 'Main menu', city: 'City', cityMore: 'More cities soon', guide: 'Guide', live: 'Live',
+    sell: 'Are you an artist? Sell your art', quote: 'Quick quote', connect: 'Write to us', copy: 'Copy link', copied: 'Link copied!', top: 'Top', topLabel: 'Back to the top menu',
+    i1: 'Discover MTY', s1: 'Murals and artists, zone by zone', i2: 'Catalog', s2: 'Original work and editions', i3: 'Exhibitions', s3: 'Visual arts agenda of MTY',
+    i4: 'Projects', s4: 'Murals, commissions and quotes', i5: 'RIPPLE', s5: 'Earn points for discovering local art',
+    p1k: 'Street art', p1t: 'San Nicolás murals, zone by zone', p1d: 'Who painted them, in what style, and where to find their work in the store.', p1c: 'Explore murals',
+    p3k: 'On now', p3t: 'Expo in Santiago', p3d: 'Local art at HUSKY Coffee Shop. Drop by, grab a coffee and see the work in person.', p3c: 'See the expo',
+  },
 };
 
-export type MenuItem = { id: string; label: string; href?: string; onClick?: () => void; badge?: string; disabled?: boolean; current?: boolean; external?: boolean };
+export type MenuPreview = { img: string; k: string; t: string; d: string; c: string; href: string };
+export type MenuItem = { id: string; label: string; sub?: string; href?: string; onClick?: () => void; badge?: string; current?: boolean; external?: boolean; prev?: MenuPreview };
 export type MenuPage = 'home' | 'murales' | 'arte' | 'husky';
+export type MenuFoot = { sellHref: string; onSell?: () => void; quoteHref: string; onQuote?: () => void };
 
-/** Lista de enlaces del menú (la misma en todas las páginas). onQuote / onSell solo existen en la portada. */
-export function buildMenu(lang: Lang, c: Copy, page: MenuPage, h?: { onQuote?: () => void; onSell?: () => void }): MenuItem[] {
+/** Los 5 pilares (los mismos en todas las páginas). */
+export function buildMenu(lang: Lang, _c: Copy, page: MenuPage): MenuItem[] {
   const t = TXT[lang];
-  const items: MenuItem[] = [];
-  if (page !== 'home') items.push({ id: 'home', label: t.home, href: lp(lang, '/') });
-  items.push({ id: 'store', label: c.nav.store, href: STORE, external: true });
-  if (h?.onQuote) items.push({ id: 'quote', label: c.nav.quote, onClick: h.onQuote });
-  items.push({ id: 'murales', label: c.nav.murals, href: lp(lang, '/murales'), badge: c.nav.fresh, current: page === 'murales' });
-  items.push({ id: 'arte', label: c.nav.art, href: lp(lang, '/arte-por-encargo'), badge: c.nav.fresh, current: page === 'arte' });
-  items.push(h?.onSell ? { id: 'sell', label: c.nav.sell, href: '#vende', onClick: h.onSell } : { id: 'sell', label: c.nav.sell, href: lp(lang, '/') + '#vende' });
-  items.push({ id: 'husky', label: c.nav.expo, href: lp(lang, '/husky'), badge: c.nav.live, current: page === 'husky' });
-  items.push({ id: 'events', label: c.nav.events, href: '/mty', badge: c.nav.fresh });
-  items.push({ id: 'mvsa', label: c.nav.mvsa, href: '/ripple/mty', badge: c.nav.fresh });
-  return items;
+  return [
+    { id: 'discover', label: t.i1, sub: t.s1, href: '/mty/arte-urbano', badge: t.guide, prev: { img: '/mty/img/murales/greometria-puente-sn.jpg', k: t.p1k, t: t.p1t, d: t.p1d, c: t.p1c, href: '/mty/arte-urbano' } },
+    { id: 'catalog', label: t.i2, sub: t.s2, href: STORE, external: true },
+    { id: 'events', label: t.i3, sub: t.s3, href: '/mty', badge: t.live, current: page === 'husky', prev: { img: '/mty/img/husky-expo.jpg', k: t.p3k, t: t.p3t, d: t.p3d, c: t.p3c, href: lp(lang, '/husky') } },
+    { id: 'projects', label: t.i4, sub: t.s4, href: lp(lang, '/murales'), current: page === 'murales' || page === 'arte' },
+    { id: 'ripple', label: t.i5, sub: t.s5, href: '/ripple/mty' },
+  ];
 }
 
-export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[] }) {
+/** Enlaces del pie: "¿Eres artista?" y "Cotizador rápido" (en la portada abren sus paneles; en el resto llevan a la portada / a /murales). */
+export function buildFoot(lang: Lang, h?: { onQuote?: () => void; onSell?: () => void }): MenuFoot {
+  return { sellHref: lp(lang, '/') + '#vende', onSell: h?.onSell, quoteHref: lp(lang, '/murales'), onQuote: h?.onQuote };
+}
+
+export default function SiteMenu({ lang, items, foot }: { lang: Lang; items: MenuItem[]; foot: MenuFoot }) {
   const t = TXT[lang];
   const [open, setOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [ready, setReady] = useState(false);   // true cuando terminó la animación de entrada: antes, el cursor no activa las filas que se mueven debajo de él
+  const [cityOpen, setCityOpen] = useState(false);
+  const [active, setActive] = useState('discover');
+  const [copied, setCopied] = useState(false);
   const btn = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -54,19 +74,6 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
   }, []);
   const close = useCallback(() => { setOpen(false); btn.current?.focus(); }, []);
 
-  // Copia la dirección completa de esta página (con https://) para pegarla en WhatsApp y que salga la vista previa
-  const copyLink = async () => {
-    const link = window.location.origin + window.location.pathname;
-    try { await navigator.clipboard.writeText(link); } catch (e) {
-      const ta = document.createElement('textarea'); ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); } catch (e2) { /* sin portapapeles */ }
-      document.body.removeChild(ta);
-    }
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
-  };
-
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -75,7 +82,7 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
     document.addEventListener('keydown', key);
     const f = window.setTimeout(() => panel.current?.focus({ preventScroll: true }), 120);
     const r = window.setTimeout(() => setReady(true), 1000);
-    return () => { document.body.style.overflow = prev; document.removeEventListener('keydown', key); window.clearTimeout(f); window.clearTimeout(r); setReady(false); };
+    return () => { document.body.style.overflow = prev; document.removeEventListener('keydown', key); window.clearTimeout(f); window.clearTimeout(r); setReady(false); setCityOpen(false); };
   }, [open, close]);
 
   // botón flotante para volver al menú superior: aparece al bajar un poco y se queda a la mano mientras se navega
@@ -86,17 +93,24 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // al cambiar el tamaño de la ventana el círculo de apertura ya no importa: se cierra para evitar estados raros
+  // al cambiar la orientación el círculo de apertura ya no importa: se cierra para evitar estados raros
   useEffect(() => {
     const onResize = () => setOpen(false);
     window.addEventListener('orientationchange', onResize);
     return () => window.removeEventListener('orientationchange', onResize);
   }, []);
 
-  const pick = (it: MenuItem) => (e: React.MouseEvent) => {
+  const pick = (it: { onClick?: () => void }) => (e: React.MouseEvent) => {
     if (it.onClick) { e.preventDefault(); it.onClick(); }
     setOpen(false);
   };
+  const copyLink = async () => {
+    const link = window.location.origin + window.location.pathname;
+    try { await navigator.clipboard.writeText(link); } catch { /* sin permiso del portapapeles: no pasa nada */ }
+    setCopied(true); window.setTimeout(() => setCopied(false), 1800);
+  };
+  const tab = open ? 0 : -1;
+  const activeHasCard = items.some(i => i.id === active && i.prev);
 
   return (
     <>
@@ -104,37 +118,58 @@ export default function SiteMenu({ lang, items }: { lang: Lang; items: MenuItem[
         <span className="cl-menuicon" aria-hidden="true"><i /><i /><i /></span>
         <span className="cl-menutxt">{open ? t.close : t.menu}</span>
       </button>
-      <div ref={panel} id="site-menu" className={`cl-menu${open ? ' is-open' : ''}${ready ? ' is-ready' : ''}`} tabIndex={-1} role="dialog" aria-modal="true" aria-label={t.label} aria-hidden={!open}>
+      <div ref={panel} id="site-menu" className={`cl-menu${open ? ' is-open' : ''}${ready ? ' is-ready' : ''}`} tabIndex={-1} role="dialog" aria-modal="true" aria-label={t.label} aria-hidden={!open}
+        onClick={e => { if (!(e.target as HTMLElement).closest('.cl-city-w')) setCityOpen(false); }}>
         <div className="cl-menu-in">
           <div className="cl-menu-top">
             <span className="cl-menu-logo" aria-hidden="true" />
-            <button type="button" className="cl-menu-x" onClick={close} tabIndex={open ? 0 : -1} aria-label={t.close}><span aria-hidden="true">✕</span></button>
+            <span className="cl-city-w">
+              <button type="button" className="cl-city" aria-haspopup="true" aria-expanded={cityOpen} aria-label={`${t.city}: Monterrey`} tabIndex={tab} onClick={e => { e.stopPropagation(); setCityOpen(o => !o); }}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" /><circle cx="12" cy="10" r="2.3" /></svg>
+                <span>MONTERREY</span>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+              <span className="cl-city-pop" role="menu" hidden={!cityOpen}>
+                <span className="cl-city-it is-on" role="menuitem" aria-current="true">Monterrey</span>
+                <span className="cl-city-it is-off" aria-disabled="true">{t.cityMore}</span>
+              </span>
+            </span>
+            <button type="button" className="cl-menu-x" onClick={close} tabIndex={tab} aria-label={t.close}><span aria-hidden="true">✕</span></button>
           </div>
-          <ol className="cl-menu-list">
-            {items.map((it, i) => {
-              const cls = `cl-mi${it.current ? ' is-current' : ''}${it.disabled ? ' is-off' : ''}`;
-              const inner = (
-                <>
-                  <span className="cl-mi-n">{it.current ? '●' : String(i + 1).padStart(2, '0')}</span>
-                  <span className="cl-mi-t">{it.label}</span>
-                  {it.badge && <span className={`cl-live cl-mi-b${it.disabled ? ' is-soon' : ''}`}>{it.badge}</span>}
-                  {!it.disabled && <span className="cl-mi-go" aria-hidden="true">{it.external ? '↗' : '→'}</span>}
-                </>
-              );
-              return (
+          <div className="cl-menu-body">
+            <ol className="cl-menu-list">
+              {items.map((it, i) => (
                 <li key={it.id} style={{ ['--i' as string]: i } as React.CSSProperties}>
-                  {it.disabled
-                    ? <span className={cls} aria-disabled="true">{inner}</span>
-                    : <a className={cls} href={it.href} onClick={pick(it)} tabIndex={open ? 0 : -1} {...(it.external ? { rel: 'noopener' } : {})} {...(it.current ? { 'aria-current': 'page' as const, title: t.here } : {})}>{inner}</a>}
+                  <a className={`cl-mi${it.current ? ' is-current' : ''}`} href={it.href} onClick={pick(it)} tabIndex={tab} onMouseEnter={() => setActive(it.id)} onFocus={() => setActive(it.id)}
+                    {...(it.external ? { rel: 'noopener' } : {})} {...(it.current ? { 'aria-current': 'page' as const, title: t.here } : {})}>
+                    <span className="cl-mi-n">{it.current ? '●' : String(i + 1).padStart(2, '0')}</span>
+                    <span className="cl-mi-tx"><span className="cl-mi-t">{it.label}</span>{it.sub && <span className="cl-mi-s">{it.sub}</span>}</span>
+                    {it.badge && <span className="cl-live cl-mi-b">{it.badge}</span>}
+                    <span className="cl-mi-go" aria-hidden="true">{it.external ? '↗' : '→'}</span>
+                  </a>
                 </li>
-              );
-            })}
-          </ol>
+              ))}
+            </ol>
+            <div className={`cl-menu-side${activeHasCard ? '' : ' is-none'}`} aria-hidden="true">
+              {items.filter(i => i.prev).map(it => (
+                <a key={it.id} className={`cl-card${it.id === active ? ' is-on' : ''}`} href={it.prev!.href} tabIndex={-1}>
+                  <span className="cl-card-img"><img src={it.prev!.img} alt="" loading="lazy" onError={e => { const im = e.currentTarget; im.parentElement?.classList.add('is-empty'); im.remove(); }} /></span>
+                  <span className="cl-card-b"><span className="cl-card-k">{it.prev!.k}</span><span className="cl-card-t">{it.prev!.t}</span><span className="cl-card-d">{it.prev!.d}</span><span className="cl-card-c">{it.prev!.c} →</span></span>
+                </a>
+              ))}
+            </div>
+          </div>
           <div className="cl-menu-foot">
-            <span>{t.connect}</span>
-            <a href="mailto:hello@cucoarts.com" tabIndex={open ? 0 : -1}>hello@cucoarts.com</a>
-            <a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer" tabIndex={open ? 0 : -1}>Instagram ↗</a>
-            <button type="button" className="cl-copy" onClick={copyLink} tabIndex={open ? 0 : -1} aria-live="polite">{copied ? t.copied : t.copy}</button>
+            <div className="cl-foot-main">
+              <a href={foot.sellHref} tabIndex={tab} onClick={pick({ onClick: foot.onSell })}>{t.sell} →</a>
+              <a href={foot.quoteHref} tabIndex={tab} onClick={pick({ onClick: foot.onQuote })}>{t.quote} →</a>
+            </div>
+            <div className="cl-foot-sub">
+              <span>{t.connect}</span>
+              <a href="mailto:hello@cucoarts.com" tabIndex={tab}>hello@cucoarts.com</a>
+              <a href="https://www.instagram.com/cucoarts/" target="_blank" rel="noopener noreferrer" tabIndex={tab}>Instagram ↗</a>
+              <button type="button" className="cl-copy" aria-live="polite" tabIndex={tab} onClick={copyLink}>{copied ? t.copied : t.copy}</button>
+            </div>
           </div>
         </div>
       </div>

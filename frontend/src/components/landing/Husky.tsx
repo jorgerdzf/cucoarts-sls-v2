@@ -6,7 +6,7 @@ import { Cycler } from './Cycler';
 import { Icon, STORE, useTheme } from './Landing';
 import { useLang, lp } from './lang';
 import { applySeo } from './seo';
-import SiteMenu, { buildMenu } from './SiteMenu';
+import SiteMenu, { buildMenu, buildFoot } from './SiteMenu';
 import './assets/styles/landing2.css';
 import './assets/styles/husky.css';
 
@@ -74,7 +74,7 @@ export default function Husky() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
-          <SiteMenu lang={lang} items={buildMenu(lang, c, 'husky')} />
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'husky')} foot={buildFoot(lang)} />
         </div>
       </header>
 

@@ -11,7 +11,7 @@ import { MAIL } from './shared';
 import { useLang, lp } from './lang';
 import type { Lang } from './copy';
 import { applySeo } from './seo';
-import SiteMenu, { buildMenu } from './SiteMenu';
+import SiteMenu, { buildMenu, buildFoot } from './SiteMenu';
 import './assets/styles/landing2.css';
 import './assets/styles/murales.css';
 
@@ -184,7 +184,7 @@ export default function Murales() {
           <button type="button" className="cl-pill" onClick={toggleTheme} aria-pressed={dark} aria-label={dark ? c.theme.toLight : c.theme.toDark}>
             {dark ? Icon.sun : Icon.moon}<span className="cl-hide-s">{dark ? c.theme.toLight : c.theme.toDark}</span>
           </button>
-          <SiteMenu lang={lang} items={buildMenu(lang, c, 'murales')} />
+          <SiteMenu lang={lang} items={buildMenu(lang, c, 'murales')} foot={buildFoot(lang)} />
         </div>
       </header>
 
