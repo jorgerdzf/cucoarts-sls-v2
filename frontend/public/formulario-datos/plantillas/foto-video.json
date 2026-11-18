@@ -1,0 +1,326 @@
+{
+ "plantilla": "foto-video",
+ "descripcion": "Perfil sencillo para fotógrafos y videógrafos de arte urbano y cultura que colaboran con CUCO ARTS como Art Hunter colaborador y ofrecen servicios de foto y video. Piloto.",
+ "secciones": [
+  {
+   "id": "basicos",
+   "titulo": "Tus datos",
+   "intro": "Cómo quieres que te conozcan.",
+   "campos": [
+    {
+     "id": "nombre",
+     "label": "Nombre con el que quieres aparecer",
+     "type": "text"
+    },
+    {
+     "id": "ciudad",
+     "label": "Ciudad o zona donde trabajas",
+     "type": "text"
+    },
+    {
+     "id": "desde",
+     "label": "¿Desde cuándo haces foto y video?",
+     "type": "text",
+     "help": "Un año aproximado basta."
+    },
+    {
+     "id": "redes",
+     "label": "Tus redes",
+     "type": "area",
+     "help": "Instagram y YouTube (los enlaces que quieres que mostremos)."
+    },
+    {
+     "id": "contacto",
+     "label": "Contacto de trabajo",
+     "type": "area",
+     "help": "WhatsApp y/o correo donde quieres recibir clientes."
+    }
+   ]
+  },
+  {
+   "id": "quien",
+   "titulo": "Quién eres",
+   "intro": "Cuéntalo como se lo contarías a alguien en un café.",
+   "campos": [
+    {
+     "id": "frase",
+     "label": "Lo que haces en una frase",
+     "type": "text"
+    },
+    {
+     "id": "historia",
+     "label": "¿Cómo empezaste a cazar arte urbano y a documentarlo?",
+     "type": "area"
+    },
+    {
+     "id": "mirada",
+     "label": "¿Qué buscas cuando fotografías o grabas un mural?",
+     "type": "area"
+    },
+    {
+     "id": "sabes",
+     "label": "Si la gente supiera una sola cosa de ti, ¿cuál sería?",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "servicios",
+   "titulo": "Servicios que ofreces",
+   "intro": "Te dejamos tres servicios sugeridos. Edítalos, quítalos o agrega los que quieras. El precio y la factura los defines tú.",
+   "campos": [
+    {
+     "id": "servicios",
+     "label": "¿Qué servicios ofreces?",
+     "type": "opts",
+     "opts": [
+      "Fotografía de mural, evento o artística",
+      "Video de cobertura de mural o evento artístico",
+      "Combo: video y fotografía",
+      "Otro"
+     ],
+     "help": "Marca todos los que aplican."
+    },
+    {
+     "id": "otros_servicios",
+     "label": "Si marcaste “Otro”, ¿cuál?",
+     "type": "area"
+    },
+    {
+     "id": "no",
+     "label": "¿Hay trabajos que NO tomas?",
+     "type": "area"
+    }
+   ],
+   "repetible": {
+    "id": "paquetes",
+    "etiqueta": "Servicio",
+    "max": 8,
+    "campos": [
+     {
+      "id": "nom",
+      "label": "Nombre del servicio",
+      "type": "text"
+     },
+     {
+      "id": "incluye",
+      "label": "Qué incluye",
+      "type": "area",
+      "help": "Duración de la sesión, número de fotos o minutos de video, formatos de entrega."
+     },
+     {
+      "id": "para",
+      "label": "Ideal para quién",
+      "type": "text",
+      "help": "Ej. artistas, colectivos, galerías, eventos."
+     },
+     {
+      "id": "precio",
+      "label": "Precio “desde” (opcional)",
+      "type": "text",
+      "help": "Si aún no lo defines, escribe “por definir”."
+     },
+     {
+      "id": "factura",
+      "label": "¿Emites factura por este servicio?",
+      "type": "sel",
+      "opts": [
+       "Sí",
+       "No",
+       "Depende",
+       "Por definir"
+      ]
+     },
+     {
+      "id": "tiempo",
+      "label": "Tiempo de entrega aproximado",
+      "type": "text"
+     }
+    ]
+   }
+  },
+  {
+   "id": "proyectos",
+   "titulo": "Trabajos que has hecho",
+   "intro": "Los que mejor te representan: murales, eventos, sesiones. Con enlace si ya están publicados.",
+   "campos": [],
+   "repetible": {
+    "id": "items",
+    "etiqueta": "Trabajo",
+    "max": 10,
+    "campos": [
+     {
+      "id": "titulo",
+      "label": "Título o nombre del trabajo",
+      "type": "text"
+     },
+     {
+      "id": "para",
+      "label": "Para quién o con quién",
+      "type": "text"
+     },
+     {
+      "id": "anio",
+      "label": "Año",
+      "type": "text"
+     },
+     {
+      "id": "detalle",
+      "label": "Cuéntanos qué hiciste",
+      "type": "area"
+     },
+     {
+      "id": "permiso",
+      "label": "¿Podemos mostrarlo en tu perfil?",
+      "type": "sel",
+      "opts": [
+       "Sí",
+       "No",
+       "Pregúntame"
+      ]
+     },
+     {
+      "id": "enlace",
+      "label": "Enlace (Instagram, YouTube, Drive)",
+      "type": "url"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hunter",
+   "titulo": "Tu papel como Art Hunter colaborador",
+   "intro": "Cómo quieres sumar al explorador de murales y a RIPPLE.",
+   "campos": [
+    {
+     "id": "aporte",
+     "label": "¿Qué te gustaría aportar?",
+     "type": "opts",
+     "opts": [
+      "Fotos de murales nuevos",
+      "Ubicaciones y datos de murales",
+      "Videos o recorridos por zona",
+      "Contacto con artistas y colectivos",
+      "Otro"
+     ]
+    },
+    {
+     "id": "zonas",
+     "label": "¿Qué zonas de la ciudad conoces mejor?",
+     "type": "opts",
+     "opts": [
+      "Centro",
+      "Norte",
+      "Oriente",
+      "Sur",
+      "Poniente"
+     ]
+    },
+    {
+     "id": "credito",
+     "label": "¿Cómo quieres que acreditemos tus fotos y videos?",
+     "type": "text",
+     "help": "Ej. “Foto: @xnl.artecalle”."
+    },
+    {
+     "id": "ideas",
+     "label": "Ideas para el explorador o para CUCO ARTS",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "proceso",
+   "titulo": "Cómo trabajas",
+   "intro": "Que tus clientes sepan qué esperar.",
+   "campos": [
+    {
+     "id": "proceso",
+     "label": "Tu proceso paso a paso",
+     "type": "area",
+     "help": "Desde que alguien te escribe hasta que entregas."
+    },
+    {
+     "id": "equipo",
+     "label": "Equipo que usas",
+     "type": "area"
+    },
+    {
+     "id": "anticipo",
+     "label": "Anticipo y formas de pago",
+     "type": "area"
+    },
+    {
+     "id": "zona",
+     "label": "¿Hasta dónde te puedes mover?",
+     "type": "text",
+     "help": "Monterrey y área metropolitana, otros estados…"
+    }
+   ]
+  },
+  {
+   "id": "archivos",
+   "titulo": "Archivos y material",
+   "intro": "Marca lo que tienes. Los archivos los puedes mandar por una carpeta de Drive o por WhatsApp.",
+   "archivos": true,
+   "campos": [
+    {
+     "id": "carpeta",
+     "label": "Enlace a una carpeta con tu material",
+     "type": "url",
+     "help": "Revisa que cualquiera con el enlace pueda verla."
+    },
+    {
+     "id": "creditos",
+     "label": "Créditos obligatorios",
+     "type": "area"
+    }
+   ]
+  },
+  {
+   "id": "autoriza",
+   "titulo": "Autorización",
+   "intro": "Para publicar el perfil.",
+   "autorizacion": true,
+   "campos": [
+    {
+     "id": "c_uso",
+     "label": "Autorizo a CUCO ARTS a usar mis textos, imágenes y videos en mi perfil creativo.",
+     "type": "chk"
+    },
+    {
+     "id": "c_terceros",
+     "label": "Confirmo que tengo permiso o los créditos de los materiales que no son míos.",
+     "type": "chk"
+    },
+    {
+     "id": "c_datos",
+     "label": "Entiendo que mis respuestas se usarán solo para armar y mantener mi perfil.",
+     "type": "chk"
+    }
+   ]
+  }
+ ],
+ "archivos": [
+  {
+   "id": "retrato",
+   "label": "Un retrato tuyo en alta resolución",
+   "help": "Trabajando, de preferencia"
+  },
+  {
+   "id": "portafolio",
+   "label": "Tus mejores 10–15 fotos",
+   "help": "Originales, sin comprimir de WhatsApp"
+  },
+  {
+   "id": "videos",
+   "label": "Videos o reels destacados",
+   "help": "Enlaces o archivos"
+  },
+  {
+   "id": "murales",
+   "label": "Fotos de murales con ubicación",
+   "help": "Mejor si las mandas como documento para conservar la ubicación"
+  }
+ ]
+}
