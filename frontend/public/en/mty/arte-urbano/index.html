@@ -1138,7 +1138,7 @@ function openClaim(btn){const had=document.getElementById('shm2');closeShare();i
  const it=[['🖼️',T('clI1')],['✍️',T('clI2')],['🚫',T('clI3')],['🪪',T('clI4')]];
  const m=document.createElement('div');m.className='sharemenu shm2';m.id='shm2';m.setAttribute('role','menu');m.innerHTML=it.map(x=>'<a href="'+mk(x[1])+'"><span aria-hidden="true">'+x[0]+'</span>'+x[1]+'</a>').join('');
  $('#dlg').appendChild(m);const b=btn.getBoundingClientRect(),mw=m.offsetWidth,mh=m.offsetHeight;m.style.left=Math.max(8,Math.min(b.left,innerWidth-mw-8))+'px';m.style.top=(b.bottom+8+mh<innerHeight-8?b.bottom+8:Math.max(8,b.top-8-mh))+'px'}
-function shareInfo(){const c=CUR;let u='https://cucoarts.com/mty/arte-urbano',t='CUCO ARTS /mty';if(c&&c.k==='m'){const m=M.find(x=>x.id===c.id);u+='#mural='+c.id;t=ti(m)+' · '+t}else if(c&&c.k==='l'){u+='#foto='+encodeURIComponent(LIB[c.i][0]);t=ARTISTS[LIB[c.i][2]].n+' · '+t}return{u,t}}
+function shareInfo(){const c=CUR;let u='https://cucoarts.com'+(lang==='en'?'/en':'')+'/mty/arte-urbano?og='+(1+Math.floor(Math.random()*6)),t='CUCO ARTS /mty';if(c&&c.k==='m'){const m=M.find(x=>x.id===c.id);u+='#mural='+c.id;t=ti(m)+' · '+t}else if(c&&c.k==='l'){u+='#foto='+encodeURIComponent(LIB[c.i][0]);t=ARTISTS[LIB[c.i][2]].n+' · '+t}return{u,t}}
 function closeShare(){const m=document.getElementById('shm2');if(m)m.remove()}
 function openShare(btn){const had=document.getElementById('shm2');closeShare();if(had)return;const s=shareInfo(),q=encodeURIComponent(s.u),tx=encodeURIComponent(s.t),tu=encodeURIComponent(s.t+' '+s.u),dot=c=>'<span class="dot" style="background:'+c+'"></span>';
  const m=document.createElement('div');m.className='sharemenu shm2';m.id='shm2';m.setAttribute('role','menu');

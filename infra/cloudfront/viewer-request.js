@@ -108,6 +108,11 @@ function handler(event) {
     if (uri !== key) {
       return redirect(APEX + key + query);
     }
+    // arte urbano: ?og=1..6 sirve la misma página con otra imagen de vista previa (para que cada enlace compartido varíe)
+    if ((key === '/mty/arte-urbano' || key === '/en/mty/arte-urbano') && request.querystring.og && /^[1-6]$/.test(request.querystring.og.value)) {
+      request.uri = key + '/og-' + request.querystring.og.value + '.html';
+      return request;
+    }
     request.uri = KNOWN[key];
     return request;
   }
