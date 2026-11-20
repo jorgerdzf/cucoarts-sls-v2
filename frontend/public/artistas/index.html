@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>Eliezer Blanco · Artista · CUCO ARTS</title>
-<meta name="description" content="Eliezer Blanco, artista plástico de Monterrey: conoce su historia, compra obra original o encarga una pieza. Perfil preparado por CUCO ARTS.">
+<meta name="description" content="Perfil de artista en CUCO ARTS: conoce su historia, compra obra original o encarga una pieza.">
 <style>
 @font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Regular.otf);font-weight:400;font-display:swap}
 @font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Medium.otf);font-weight:500;font-display:swap}
@@ -377,6 +376,9 @@ async function boot(){
   O=(await (await fetch(`/artistas/datos/${slug}-obras.json`)).json()).obras.filter(o=>o.estado==="active");
  }catch(e){$("#app").innerHTML='<div class="w"><p>No encontramos este perfil.</p></div>';return}
  document.title=`${A.nombre} · Artista · CUCO ARTS`;
+ {const d=(A.intro||"").replace(/\s+/g," ").slice(0,155),md=document.querySelector("meta[name=description]");if(md)md.setAttribute("content",A.nombre+" · "+d);
+  const cl=document.createElement("link");cl.rel="canonical";cl.href="https://cucoarts.com/artistas/"+slug;document.head.appendChild(cl);
+  [["og:title",document.title],["og:description",d],["og:url",cl.href],["og:type","profile"]].forEach(([p,c])=>{const m=document.createElement("meta");m.setAttribute("property",p);m.content=c;document.head.appendChild(m)})}
  render();
 }
 

@@ -124,6 +124,12 @@ entries.push(`  <url>
   ].join('\n    ');
   entries.push(`  <url>\n    <loc>${url(lang === 'es' ? '/mty/arte-urbano' : '/en/mty/arte-urbano')}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${lang === 'es' ? '0.7' : '0.6'}</priority>\n    ${alts}\n  </url>`);
 });
+/* perfiles de artistas: /artistas/<nombre> (frontend/public/artistas, generado con PERFILES_ARTISTAS/herramientas/build_perfiles_publicos.js) */
+fs.readdirSync(path.join(__dirname, '..', 'public', 'artistas', 'datos'))
+  .filter((f) => /\.json$/.test(f) && !/-obras|zonas/.test(f))
+  .forEach((f) => {
+    entries.push(`  <url>\n    <loc>${url('/artistas/' + f.replace('.json', ''))}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+  });
 fs.writeFileSync(path.join(BUILD, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join('\n')}\n</urlset>\n`);
 console.log('prerender  sitemap.xml (' + entries.length + ' URLs)');
