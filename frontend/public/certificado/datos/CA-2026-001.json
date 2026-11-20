@@ -1,0 +1,141 @@
+{
+ "id": "CA-2026-001",
+ "estado": "Registrado",
+ "emitido": "2026-11-19",
+ "emitido_txt": "19 nov 2026",
+ "url_futura": "https://cucoarts.com/certificado/CA-2026-001",
+ "titulo": "Norte",
+ "artista": {
+  "slug": "romualdo-castaneda",
+  "nombre": "Romualdo Castañeda",
+  "nombre_legal": "José Romualdo Castañeda Montero",
+  "perfil": "https://store.cucoarts.com/collections/romualdo-castaneda",
+  "tienda": "https://store.cucoarts.com/products/norte-mx-original-painting"
+ },
+ "propietario_publico": "Colección privada",
+ "imagen_principal": {
+  "src": "/certificado/img/norte-frente.jpg",
+  "alt": "Norte, óleo sobre lienzo de Romualdo Castañeda: un saguaro de varios brazos al centro, una biznaga pequeña al frente, cielo claro y montañas lejanas",
+  "w": 1070,
+  "h": 1296
+ },
+ "ficha": [
+  {
+   "k": "Título",
+   "v": "Norte"
+  },
+  {
+   "k": "Artista",
+   "v": "José Romualdo Castañeda Montero"
+  },
+  {
+   "k": "Técnica",
+   "v": "Óleo sobre lienzo"
+  },
+  {
+   "k": "Medidas",
+   "v": "60 × 50 cm"
+  },
+  {
+   "k": "Marco",
+   "v": "Negro, de madera, original"
+  },
+  {
+   "k": "Hecho en",
+   "v": "Monterrey, N.L., México"
+  },
+  {
+   "k": "Propietario",
+   "v": "Colección privada"
+  },
+  {
+   "k": "Certificado",
+   "v": "CA-2026-001"
+  }
+ ],
+ "evidencia": [
+  {
+   "src": "/certificado/img/norte-enmarcada.jpg",
+   "t": "Enmarcada",
+   "c": "Norte con su marco negro original, de frente."
+  },
+  {
+   "src": "/certificado/img/norte-reverso-texto.jpg",
+   "t": "Reverso escrito a mano",
+   "c": "Título, medidas, técnica y autor, escritos por el artista en el reverso del lienzo."
+  },
+  {
+   "src": "/certificado/img/norte-firma-detalle.jpg",
+   "t": "Firma en el frente",
+   "c": "«Romualdo», en la esquina inferior derecha de la pintura."
+  },
+  {
+   "src": "/certificado/img/norte-reverso-completo.jpg",
+   "t": "Reverso completo",
+   "c": "Lienzo y marco por detrás, con el rotulado del artista."
+  },
+  {
+   "src": "/certificado/img/norte-artista.jpg",
+   "t": "El artista con su obra",
+   "c": "Romualdo Castañeda junto a Norte, en su estudio."
+  },
+  {
+   "src": "/certificado/img/norte-rotulando.jpg",
+   "t": "Rotulando el reverso",
+   "c": "Rotulando el reverso del lienzo durante la documentación del certificado."
+  }
+ ],
+ "historia_titulo": "En palabras del artista",
+ "historia": [
+  {
+   "t": "El centro del cuadro",
+   "e": "🌵",
+   "p": [
+    "Al centro del cuadro hay un saguaro. Aunque no es de nuestra región, lo puse porque a la obra le llamé NORTE y quería que representara algo más que el noreste del estado. En una orilla, al frente, está una biznaga chiquita: ella sí es típica de nuestro noreste semidesértico, y hoy está en peligro de extinción y prohibida de recolectar."
+   ]
+  },
+  {
+   "t": "Cómo nació",
+   "e": "🏔️",
+   "p": [
+    "Pinté este cuadro de memoria, después de un viaje a Real de Catorce. La vegetación de allá se me quedó en la cabeza. Le sumé el Cerro de la Silla y, al fondo, pegada al horizonte, la Sierra de Papagayos. El paisaje es imaginado, porque casi ya no quedan zonas así de libres de construcciones."
+   ]
+  },
+  {
+   "t": "Su viaje",
+   "e": "🧭",
+   "p": [
+    "No lo pinté pensando en ningún concurso. Pero llegó la invitación de la 7.ª Zona Militar, donde yo daba clases de pintura como voluntario del DIF, y NORTE salió de Monterrey a representar al noreste. Recorrió los 32 estados de la República en una exposición itinerante, desde el Campo Militar No. 1, en la Ciudad de México. El marco lo hicieron los soldados en su carpintería, igual para todas las obras, para que ninguna tuviera ventaja sobre otra.",
+    "Tuvo muchos interesados, pero aquella muestra no era para vender. Cuando regresó, decidí quedármelo. Todo lo demás lo hice yo: el bastidor, la tela, el sellado, la pintura."
+   ]
+  },
+  {
+   "t": "Para quien lo cuida",
+   "e": "🤝",
+   "p": [
+    "Creo que el observador es quien termina realmente la obra. Cuídala mucho tiempo. En cada cuadro va parte del artista: su trabajo, su sensibilidad, el amor al arte. Y si algún día te quieres deshacer de él, avísame: yo te lo vuelvo a comprar."
+   ]
+  }
+ ],
+ "fechas": [
+  {
+   "cuando": "Hace casi 15 años",
+   "fuente": "Según el artista",
+   "t": "Exposición itinerante",
+   "d": "Norte representó al noreste en una muestra que recorrió los 32 estados, con salida desde el Campo Militar No. 1, en la Ciudad de México. Fue «hace casi 15 años», según el artista.",
+   "e": "🧭"
+  },
+  {
+   "cuando": "18 nov 2026",
+   "t": "Documentación con el artista",
+   "d": "Fotos del reverso, de la firma y de la obra, y entrevista con CUCO ARTS.",
+   "e": "📸"
+  },
+  {
+   "cuando": "19 nov 2026",
+   "t": "Emisión del certificado",
+   "d": "CUCO ARTS registra la obra con el número CA-2026-001.",
+   "e": "✅"
+  }
+ ]
+}

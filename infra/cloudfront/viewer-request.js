@@ -5,6 +5,7 @@
 //   2. Páginas retiradas (/Cities, /Services, /Faq…) → 301 a la portada (o a /privacidad).
 //   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad, /mty, /mty/arte-urbano) → sirve el HTML prerenderizado de esa ruta
 //      (build/<ruta>/index.html, generado por frontend/scripts/prerender.js). Mayúsculas o barra final → 301 a la forma canónica.
+//   3b. /certificado/CA-AAAA-NNN (certificado de autenticidad) → /certificado/index.html (la página lee el número de la dirección).
 //   4. Todo lo demás pasa tal cual: archivos con extensión (js, css, imágenes…), /rob (archivo sin extensión en el bucket) y la
 //      raíz. Una dirección que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real.
 // Si agregas una ruta nueva a la app: agrégala en KNOWN, en frontend/scripts/prerender.js y en seoShared.js.
@@ -114,6 +115,12 @@ function handler(event) {
       return request;
     }
     request.uri = KNOWN[key];
+    return request;
+  }
+
+  // certificados de autenticidad: /certificado/CA-2026-001 sirve la página única, que lee el número de la dirección
+  if (/^\/certificado\/ca-\d{4}-\d{3}$/.test(key)) {
+    request.uri = '/certificado/index.html';
     return request;
   }
 

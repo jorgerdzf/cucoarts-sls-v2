@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Etiqueta QR · CUCO ARTS</title>
+<style>
+/* Etiqueta 60 × 40 mm. Todas las medidas son múltiplos de --m (1 mm × zoom): en pantalla se amplía con --k, al imprimir --k = 1.
+   Márgenes: ≥ 3.5 mm por lado. El QR va sin borde propio; su zona de silencio (≥ 4 módulos ≈ 3 mm) es el blanco de la etiqueta. */
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Medium.otf);font-weight:500}
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Bold.otf);font-weight:700}
+@font-face{font-family:"Courier Prime";src:url(/mty/fonts/CourierPrime-Bold.ttf);font-weight:700}
+:root{--k:1;--m:calc(1mm*var(--k));--ink:#232322}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#F5F1F1;color:var(--ink);font:16px/1.5 "Neue Montreal",Arial,sans-serif;padding:24px 20px 60px}
+.w{max-width:760px;margin:0 auto}
+h1{font-size:28px;letter-spacing:-.02em;margin:0 0 6px;text-transform:uppercase}
+p{margin:0 0 14px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.btn{font:inherit;cursor:pointer;border:2.5px solid var(--ink);background:#F7D649;color:var(--ink);padding:10px 18px;border-radius:999px;font-weight:700;min-height:44px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;display:inline-flex;align-items:center}
+.btn.l{background:#fff}
+.btn:focus-visible,a:focus-visible{outline:3px solid #067DFF;outline-offset:3px}
+.note{font-size:13px;color:#66625f}
+.pv{--k:3;padding:14px;background:#d9d5d5;display:inline-block;max-width:100%;overflow:auto}
+/* la etiqueta */
+.et{width:calc(var(--m)*60);height:calc(var(--m)*40);background:#fff;color:var(--ink);position:relative;overflow:hidden;flex:none}
+.et .tx{position:absolute;left:calc(var(--m)*3.5);top:calc(var(--m)*3.5);width:calc(var(--m)*26);bottom:calc(var(--m)*3.5);display:flex;flex-direction:column;justify-content:center}
+.et .lg{height:calc(var(--m)*9);width:auto;display:block;margin-bottom:calc(var(--m)*1.8);align-self:flex-start}
+.et .ti{font-weight:700;font-size:calc(var(--m)*6.6);line-height:.95;letter-spacing:-.035em;text-transform:uppercase;margin:0}
+.et .ar{font-size:calc(var(--m)*2.6);line-height:1.15;font-weight:500;margin:calc(var(--m)*1.1) 0 calc(var(--m)*1.6)}
+.et .nn,.et .ur{font-family:"Courier Prime","Courier New",monospace;font-weight:700;font-size:calc(var(--m)*2.3);line-height:1.3;letter-spacing:.02em;white-space:nowrap;display:block}
+.et .qx{position:absolute;right:calc(var(--m)*3.5);top:calc(var(--m)*6);width:calc(var(--m)*24);display:flex;flex-direction:column;align-items:center}
+.et .qx img{width:calc(var(--m)*24);height:calc(var(--m)*24);display:block}
+.et .qx span{font-family:"Courier Prime","Courier New",monospace;font-weight:700;font-size:calc(var(--m)*1.75);text-transform:uppercase;letter-spacing:.03em;margin-top:calc(var(--m)*2);white-space:nowrap}
+.pv .et{box-shadow:0 0 0 1px #aaa}
+.sheet{display:grid;grid-template-columns:repeat(3,calc(var(--m)*60));grid-auto-rows:calc(var(--m)*40);gap:calc(var(--m)*3);justify-content:center}
+.sheet .et{outline:.15mm dashed #bbb;outline-offset:0}
+@media print{
+ body{background:#fff;padding:0}
+ .w>*:not(.pv){display:none!important}
+ .pv{--k:1!important;padding:0;background:#fff;display:block;overflow:visible}
+ .pv .et{box-shadow:none}
+}
+</style>
+<style id="pg">@page{size:60mm 40mm;margin:0}</style>
+</head>
+<body>
+<div class="w">
+ <h1 id="h">Etiqueta para la obra</h1>
+ <p id="intro">Etiqueta adhesiva de 60 × 40 mm para pegar en el reverso del lienzo o del marco, sin tapar lo escrito por el artista. Abajo se ve ampliada 3×; al imprimir sale a tamaño real.</p>
+ <div class="acts"><button class="btn" type="button" id="pr">Imprimir etiqueta</button><a class="btn l" id="alt" href="#">Hoja con 18 etiquetas</a><a class="btn l" href="./">Volver al certificado</a></div>
+ <div class="pv" id="pv"></div>
+ <p class="note" id="nt" style="margin-top:14px">La hoja carta trae 3 × 6 etiquetas con guías de corte y márgenes de 10 mm. Imprímela al 100 % (sin «ajustar a la página»). Prototipo: la dirección cucoarts.com/certificado aún no existe; prueba el escaneo antes de imprimir en serie.</p>
+</div>
+<script>
+(async()=>{
+ const q=new URLSearchParams(location.search),id=(q.get("c")||"CA-2026-001").replace(/[^A-Za-z0-9-]/g,"").toUpperCase(),hoja=q.get("hoja")==="1";
+ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+ const $=s=>document.getElementById(s);
+ let C;try{C=await (await fetch(`/certificado/datos/${id}.json`)).json()}catch(e){$("pv").textContent="No encontramos este certificado.";return}
+ const et=`<div class="et"><div class="tx"><img class="lg" src="/certificado/img/logo-cuco-tinta.png" alt="CUCO ARTS"><p class="ti">${esc(C.titulo)}</p><p class="ar">${esc(C.artista.nombre)}</p><span class="nn">N.º ${esc(C.id)}</span><span class="ur">cucoarts.com</span></div><div class="qx"><img src="/certificado/img/qr-${esc(C.id)}-etiqueta.svg" alt="Código QR del certificado ${esc(C.id)}"><span>Escanea y verifica</span></div></div>`;
+ const pv=$("pv");
+ if(hoja){
+  pv.style.cssText="--k:.55";pv.innerHTML=`<div class="sheet">${Array(18).fill(et).join("")}</div>`;
+  $("pg").textContent="@page{size:215.9mm 279.4mm;margin:10mm}";
+  $("h").textContent="Hoja de etiquetas";
+  $("intro").textContent="18 etiquetas de 60 × 40 mm en una hoja carta, con guías de corte. Abajo se ve reducida; al imprimir sale a tamaño real.";
+  $("alt").textContent="Una etiqueta";$("alt").href="?c="+id;
+  $("nt").textContent="Imprímela al 100 % (sin «ajustar a la página»). Si usas hojas de etiquetas adhesivas, revisa que la plantilla sea de 3 × 6 de 60 × 40 mm.";
+  $("pr").textContent="Imprimir hoja";
+ }else{pv.innerHTML=et;$("alt").href="?c="+id+"&hoja=1"}
+ $("pr").onclick=()=>window.print();
+})();
+</script>
+</body>
+</html>
