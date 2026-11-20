@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Encuesta · CUCO ARTS</title>
+<style>
+/* Fuentes del branding oficial: Neue Montreal (mensaje) + Courier (datos, etiquetas). Mismos archivos que ya sirve /mty. */
+@font-face{font-family:"Neue Montreal";src:url("/mty/fonts/NeueMontreal-Regular.otf") format("opentype"),local("Neue Montreal"),local("NeueMontreal-Regular");font-weight:400;font-display:swap}
+@font-face{font-family:"Neue Montreal";src:url("/mty/fonts/NeueMontreal-Medium.otf") format("opentype"),local("NeueMontreal-Medium");font-weight:500;font-display:swap}
+@font-face{font-family:"Neue Montreal";src:url("/mty/fonts/NeueMontreal-Bold.otf") format("opentype"),local("Neue Montreal Bold"),local("NeueMontreal-Bold");font-weight:700 800;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url("/mty/fonts/CourierPrime-Regular.ttf") format("truetype");font-weight:400;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url("/mty/fonts/CourierPrime-Bold.ttf") format("truetype");font-weight:700;font-display:swap}
+
+/* Paleta oficial: blanco #FFFFFF, azul #067DFF, azul claro #ABCFDD, gris #E2E0E0, negro #232322 (más morado #644DEF y amarillo #F7D649 como acentos) */
+:root{--blue:#067DFF;--sky:#ABCFDD;--ink:#232322;--bg:#EAF3F7;--card:#fff;--line:#c9dde6;--mut:#4d5a60;--sel:#ABCFDD;--pop:#644DEF;
+ --mono:"Courier Prime","Courier New",monospace;--sans:"Neue Montreal","Helvetica Neue",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#232322;--card:#2e2f2c;--ink:#f5f7f8;--line:#464844;--mut:#b9c3c7;--sel:#0b3a6e}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--sans)}
+.band{position:relative;overflow:hidden;background:var(--blue);color:#fff;padding:18px 16px 70px}
+.band .in,main,.prog .in{max-width:640px;margin:0 auto}
+.band .in{position:relative;z-index:1}
+.dot{position:absolute;border-radius:50%;background:var(--sky);opacity:.28;animation:float 9s ease-in-out infinite}
+.dot.a{width:180px;height:180px;right:-50px;top:-40px}
+.dot.b{width:90px;height:90px;left:38%;bottom:-30px;animation-delay:-3s}
+.dot.c{width:46px;height:46px;left:-14px;top:50%;animation-delay:-6s;background:#fff;opacity:.18}
+.top{display:flex;align-items:center;justify-content:space-between}
+.logo{display:block;width:118px;aspect-ratio:480/248;background:#fff;-webkit-mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;animation:logoIn .7s cubic-bezier(.2,1.4,.4,1) both}
+.lang button{font:500 14px var(--sans);background:#fff;color:#232322;border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+.tag{display:inline-block;margin-top:14px;background:#fff;color:#232322;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;animation:up .5s .15s both}
+h1{margin:10px 0 0;font:800 clamp(30px,8vw,42px)/1.05 var(--sans);text-transform:uppercase;letter-spacing:-.01em;animation:up .5s .25s both}
+.hero{position:relative;z-index:2;max-width:608px;margin:-44px auto 0;background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:14px 16px;box-shadow:5px 5px 0 var(--sky);animation:up .5s .35s both}
+.hero p{margin:0}
+.prog{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px 8px;margin-top:6px}
+.prog .in{display:flex;gap:10px;align-items:center}
+.track{flex:1;height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--blue);border-radius:6px;transition:width .5s cubic-bezier(.2,1,.3,1)}
+.pt{font:700 12px var(--mono);white-space:nowrap}
+main{padding:6px 16px 56px}
+fieldset{border:0;margin:0 0 14px;padding:0;min-width:0}
+.f{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;animation:up .55s both;animation-delay:calc(var(--i,0)*70ms + 450ms);transition:border-color .25s,box-shadow .25s}
+.f.done{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
+legend,label.l{display:block;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;padding:0}
+legend{float:left;width:100%}
+legend+*{clear:both}
+.n{display:block;font:700 11px var(--mono);letter-spacing:.1em;color:var(--blue);margin-bottom:4px}
+@media (prefers-color-scheme:dark){.n{color:var(--sky)}}
+.h{display:block;color:var(--mut);font-size:14px;margin:-4px 0 10px}
+input[type=text],textarea{width:100%;font:inherit;color:inherit;background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:12px;transition:border-color .2s,box-shadow .2s}
+textarea{min-height:92px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,.opts input:focus-visible+span{outline:3px solid var(--blue);outline-offset:2px}
+input[type=text]:focus,textarea:focus{border-color:var(--blue)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{position:relative;display:inline-flex}
+.opts input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0;z-index:1}
+.opts label>span{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;cursor:pointer;background:var(--card);transition:transform .15s,border-color .2s,background .2s}
+.opts label:hover>span{border-color:var(--blue);transform:translateY(-1px)}
+.opts input:checked+span{border-color:var(--blue);background:var(--sel);font-weight:700;animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+.opts input:checked+span .e{animation:wiggle .6s .1s both}
+.e{font-size:1.25em;line-height:1;display:inline-block}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale label{display:block}
+.scale label>span{flex-direction:column;gap:2px;width:100%;padding:10px 0;border-radius:16px;justify-content:center}
+.scale .e{font-size:1.9em}
+.scale b{font:700 12px var(--mono);color:var(--mut)}
+.ends{display:flex;justify-content:space-between;color:var(--mut);font-size:13px;margin-top:8px}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,1,.3,1),margin .4s}
+.more>div{overflow:hidden}
+.more.open{grid-template-rows:1fr;margin-top:12px}
+button{font:inherit;cursor:pointer}
+button.pri{width:100%;font:800 19px var(--sans);text-transform:uppercase;letter-spacing:.02em;background:var(--blue);color:#fff;border:2px solid var(--ink);border-radius:14px;padding:15px 18px;box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+button.pri:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+button.pri:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+button:disabled{opacity:.6;cursor:default}
+.warn{color:#b3261e;font-size:15px;margin:0 0 10px;font-weight:500}
+.warn:empty{display:none}
+.priv{color:var(--mut);font-size:13px;margin:16px 0 0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+a{color:inherit}
+.ok{position:relative;overflow:hidden;text-align:center;background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:30px 20px;box-shadow:6px 6px 0 var(--sky);animation:up .5s both}
+.ok .logo{background:var(--blue);margin:0 auto 14px;width:140px}
+.ok h2{margin:0 0 8px;font:800 34px/1.05 var(--sans);text-transform:uppercase}
+.ok .big{font-size:56px;display:block;animation:pop .7s .1s cubic-bezier(.2,1.6,.4,1) both}
+.ok a.pri{display:inline-block;width:auto;text-decoration:none;font-size:17px;padding:12px 22px;margin-top:10px}
+.bit{position:absolute;top:-24px;pointer-events:none;animation:fall var(--d,2.6s) var(--t,0s) cubic-bezier(.3,.6,.5,1) both}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.9)}55%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes wiggle{0%{transform:rotate(0) scale(1)}30%{transform:rotate(-16deg) scale(1.35)}60%{transform:rotate(12deg) scale(1.2)}100%{transform:rotate(0) scale(1)}}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-14px)}}
+@keyframes logoIn{from{opacity:0;transform:translateY(-10px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes fall{0%{opacity:0;transform:translateY(0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translateY(var(--y,420px)) translateX(var(--x,0)) rotate(var(--r,360deg))}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}.bit{display:none}}
+</style>
+</head>
+<body>
+<div class="band">
+ <i class="dot a"></i><i class="dot b"></i><i class="dot c"></i>
+ <div class="in">
+  <div class="top"><span class="logo" role="img" aria-label="CUCO ARTS"></span><div class="lang"><button type="button" id="lang"></button></div></div>
+  <div class="tag" id="hTag"></div>
+  <h1 id="hTitulo"></h1>
+ </div>
+</div>
+<div class="hero"><p id="hIntro"></p></div>
+<div class="prog"><div class="in"><div class="track"><i id="prog"></i></div><span class="pt" id="pt"></span></div></div>
+<main id="app"></main>
+
+<script>
+/* Encuesta de satisfacción de CUCO ARTS (cucoarts.com/encuesta).
+   Enlaces:  /encuesta?p=tienda&o=<pedido>   (compra en store.cucoarts.com)
+             /encuesta?p=encargo&o=<obra>    (obra por encargo o mural)
+   Opcional: &l=en para inglés. Las preguntas viven en el objeto S; para otro proyecto se agrega una entrada con el mismo formato.
+   Cada opción es [valor, texto, emoji]. Envío: POST requests con type "encuesta" (mismo servidor que /rob y /formulario).
+   Nada se publica sin el permiso que marca la persona en la última pregunta. */
+const API="https://7q2ymxv5k8.execute-api.us-east-2.amazonaws.com/dev/", API_KEY="Sm9ykkuXnO6rUB9sX9cZn2wEDcqPGuCM4XiVdG49";
+const WA="528120321492";
+const Q=new URLSearchParams(location.search);
+const proj=["tienda","encargo"].includes(Q.get("p"))?Q.get("p"):"tienda";
+const orden=(Q.get("o")||"").replace(/[^\w #.-]/g,"").slice(0,60);
+let lang=(Q.get("l")||localStorage.getItem("cucoarts-lang")||navigator.language||"es").slice(0,2)==="en"?"en":"es";
+try{if(Q.get("l"))localStorage.setItem("cucoarts-lang",lang)}catch(e){}
+
+const FUENTE={id:"fuente",t:"opts",l:{es:"¿Cómo nos encontraste?",en:"How did you find us?"},o:[["google","Google","🔎"],["instagram","Instagram","📸"],["facebook","Facebook","💬"],["recom",{es:"Alguien me recomendó",en:"Someone recommended us"},"🤝"],["evento",{es:"Un evento o un local",en:"An event or a venue"},"🎨"],["otro",{es:"Otro",en:"Other"},"✨"]],
+ extra:{cuando:"google",id:"busque",l:{es:"¿Qué escribiste en Google?",en:"What did you type into Google?"}}};
+const RECOMIENDA={id:"recomienda",t:"opts",l:{es:"¿Recomendarías CUCO ARTS?",en:"Would you recommend CUCO ARTS?"},o:[["si",{es:"Sí",en:"Yes"},"💙"],["quiza",{es:"Tal vez",en:"Maybe"},"🤔"],["no","No","🙅"]]};
+const COMENTARIO={id:"comentario",t:"area",e:"✍️",l:{es:"Cuéntanos tu experiencia en una frase (opcional)",en:"Tell us about your experience in a sentence (optional)"}};
+const CARAS=["😕","😐","🙂","😊","🤩"];
+/* tipos: scale (1 a 5 con caras), opts (una opción), area (texto). extra: campo que se despliega solo si se eligió ese valor. */
+const S={
+ tienda:{
+  tag:{es:"Tienda · CUCO ARTS",en:"Store · CUCO ARTS"},
+  titulo:{es:"¿Cómo te fue con tu compra?",en:"How was your purchase?"},
+  intro:{es:"💙 Son 6 preguntas rápidas, menos de un minuto. Tu opinión nos ayuda a mejorar y a que más gente conozca a los artistas de Monterrey.",en:"💙 Six quick questions, under a minute. Your feedback helps us improve and helps more people discover Monterrey artists."},
+  preguntas:[FUENTE,
+   {id:"facil",t:"scale",l:{es:"¿Qué tan fácil fue encontrar y comprar tu obra?",en:"How easy was it to find and buy your artwork?"},a:{es:"Muy difícil",en:"Very hard"},b:{es:"Muy fácil",en:"Very easy"}},
+   {id:"recibida",t:"opts",l:{es:"¿Recibiste tu obra como esperabas?",en:"Did you receive your artwork as expected?"},o:[["mejor",{es:"Mejor de lo esperado",en:"Better than expected"},"🎁"],["igual",{es:"Como esperaba",en:"As expected"},"📦"],["problema",{es:"Hubo algún problema",en:"There was a problem"},"🛠️"]],
+    extra:{cuando:"problema",id:"problema",l:{es:"¿Qué pasó? Así lo resolvemos.",en:"What happened? We want to fix it."}}},
+   RECOMIENDA,COMENTARIO]},
+ encargo:{
+  tag:{es:"Obra por encargo · CUCO ARTS",en:"Commissioned art · CUCO ARTS"},
+  titulo:{es:"¿Cómo fue tu experiencia con tu obra?",en:"How was your experience with your artwork?"},
+  intro:{es:"💙 Son 6 preguntas rápidas, menos de un minuto. Tu opinión nos ayuda a mejorar y a cuidar mejor a los artistas y a quienes les encargan obra.",en:"💙 Six quick questions, under a minute. Your feedback helps us improve how we work with artists and the people who commission them."},
+  preguntas:[FUENTE,
+   {id:"comunicacion",t:"scale",l:{es:"¿Qué tan clara fue la comunicación durante el proceso?",en:"How clear was the communication during the process?"},a:{es:"Poco clara",en:"Unclear"},b:{es:"Muy clara",en:"Very clear"}},
+   {id:"resultado",t:"scale",l:{es:"¿Qué tanto se parece el resultado a lo que imaginabas?",en:"How close is the result to what you imagined?"},a:{es:"Nada",en:"Not at all"},b:{es:"Totalmente",en:"Completely"}},
+   {id:"tiempos",t:"opts",l:{es:"¿Cómo fueron los tiempos de entrega?",en:"How was the delivery time?"},o:[["a_tiempo",{es:"A tiempo",en:"On time"},"⏱️"],["algo_tarde",{es:"Un poco tarde",en:"A little late"},"🐢"],["tarde",{es:"Muy tarde",en:"Very late"},"🐌"]]},
+   RECOMIENDA,COMENTARIO]}
+};
+const T={
+ publicar:{es:"¿Podemos compartir tu comentario?",en:"May we share your comment?"},
+ publicarH:{es:"Solo si escribiste uno. Nunca publicamos tu compra, precio ni datos de contacto.",en:"Only if you wrote one. We never publish your purchase, price or contact details."},
+ pub:[["no",{es:"No, es privado",en:"No, keep it private"},"🔒"],["anonimo",{es:"Sí, sin mi nombre",en:"Yes, without my name"},"🕶️"],["nombre",{es:"Sí, con mi nombre",en:"Yes, with my name"},"🙋"]],
+ nombre:{es:"Tu nombre (opcional)",en:"Your name (optional)"},
+ contacto:{es:"WhatsApp o correo (opcional)",en:"WhatsApp or email (optional)"},
+ contactoH:{es:"Solo si quieres que te respondamos.",en:"Only if you'd like a reply."},
+ enviar:{es:"Enviar",en:"Send"},enviando:{es:"Enviando…",en:"Sending…"},
+ falta:{es:"Elige una opción de permiso para publicar (puede ser “No”).",en:"Please choose a sharing option (it can be “No”)."},
+ contactoMal:{es:"Ese contacto no parece un correo ni un número de 10 dígitos. Corrígelo o déjalo vacío.",en:"That doesn't look like an email or a 10-digit number. Fix it or leave it empty."},
+ gracias:{es:"¡Gracias!",en:"Thank you!"},
+ graciasP:{es:"Recibimos tu opinión. Nos ayuda mucho a mejorar y a apoyar a los artistas locales.",en:"We got your feedback. It really helps us improve and support local artists."},
+ volver:{es:"Ir a cucoarts.com",en:"Go to cucoarts.com"},
+ error:{es:"No pudimos enviar tu encuesta. Puedes mandárnosla por WhatsApp:",en:"We couldn't send your survey. You can send it to us on WhatsApp:"},
+ wa:{es:"Enviar por WhatsApp",en:"Send via WhatsApp"},
+ priv:{es:"Tus respuestas llegan a CUCO ARTS y se guardan en servidores de AWS. Solo se publica lo que autorices arriba. Más en nuestro",en:"Your answers go to CUCO ARTS and are stored on AWS servers. Only what you authorize above is published. More in our"},
+ privL:{es:"aviso de privacidad",en:"privacy notice"},
+ de:{es:"de",en:"of"}
+};
+const tx=o=>typeof o==="string"?o:(o[lang]||o.es);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const app=document.getElementById("app");
+const cfg=S[proj];
+const A={};   // respuestas
+const total=()=>cfg.preguntas.length+1;                       // preguntas + permiso
+const answered=()=>cfg.preguntas.filter(q=>A[q.id]&&String(A[q.id]).trim()).length+(A.publicar?1:0);
+
+function progress(){
+ const n=answered(),t=total();
+ document.getElementById("prog").style.width=Math.round(n/t*100)+"%";
+ document.getElementById("pt").textContent=n+" "+tx(T.de)+" "+t;
+ cfg.preguntas.forEach(q=>{const f=document.getElementById("q_"+q.id);if(f)f.classList.toggle("done",!!(A[q.id]&&String(A[q.id]).trim()))});
+ const p=document.getElementById("q_publicar");if(p)p.classList.toggle("done",!!A.publicar);
+}
+function draw(){
+ document.documentElement.lang=lang;
+ document.getElementById("hTag").textContent=tx(cfg.tag);
+ document.getElementById("hTitulo").textContent=tx(cfg.titulo);
+ document.getElementById("hIntro").textContent=tx(cfg.intro);
+ document.title=tx(cfg.titulo)+" · CUCO ARTS";
+ const lb=document.getElementById("lang");lb.textContent=lang==="es"?"EN":"ES";lb.setAttribute("aria-label",lang==="es"?"Switch to English":"Cambiar a español");
+ const pad=n=>String(n).padStart(2,"0");
+ let h="",i=0;
+ cfg.preguntas.forEach((q,k)=>{
+  h+=`<fieldset class="f" id="q_${q.id}" style="--i:${i++}"><span class="n" aria-hidden="true">${pad(k+1)} / ${pad(total())}</span>`;
+  if(q.t==="area"){
+   h+=`<label class="l" for="i_${q.id}">${q.e?`<span class="e">${q.e}</span> `:""}${esc(tx(q.l))}</label><textarea id="i_${q.id}" data-a="${q.id}">${esc(A[q.id])}</textarea>`;
+  }else{
+   h+=`<legend>${esc(tx(q.l))}</legend><div class="opts${q.t==="scale"?" scale":""}">`;
+   if(q.t==="scale")[1,2,3,4,5].forEach(n=>{h+=`<label><input type="radio" name="${q.id}" value="${n}" data-a="${q.id}" aria-label="${n}"${A[q.id]===String(n)?" checked":""}><span><span class="e" aria-hidden="true">${CARAS[n-1]}</span><b>${n}</b></span></label>`});
+   else q.o.forEach(([v,lab,em])=>{h+=`<label><input type="radio" name="${q.id}" value="${v}" data-a="${q.id}"${A[q.id]===v?" checked":""}><span><span class="e" aria-hidden="true">${em}</span>${esc(tx(lab))}</span></label>`});
+   h+=`</div>`;
+   if(q.t==="scale")h+=`<div class="ends" aria-hidden="true"><span>1 · ${esc(tx(q.a))}</span><span>5 · ${esc(tx(q.b))}</span></div>`;
+   if(q.extra)h+=`<div class="more${A[q.id]===q.extra.cuando?" open":""}" id="m_${q.id}"><div><label class="l" for="i_${q.extra.id}" style="font-size:16px">${esc(tx(q.extra.l))}</label><input type="text" id="i_${q.extra.id}" data-a="${q.extra.id}" value="${esc(A[q.extra.id])}"></div></div>`;
+  }
+  h+=`</fieldset>`;
+ });
+ h+=`<fieldset class="f" id="q_publicar" style="--i:${i++}"><span class="n" aria-hidden="true">${pad(total())} / ${pad(total())}</span><legend>${esc(tx(T.publicar))}</legend><span class="h">${esc(tx(T.publicarH))}</span><div class="opts">`;
+ T.pub.forEach(([v,lab,em])=>{h+=`<label><input type="radio" name="publicar" value="${v}" data-a="publicar"${A.publicar===v?" checked":""}><span><span class="e" aria-hidden="true">${em}</span>${esc(tx(lab))}</span></label>`});
+ h+=`</div></fieldset>
+ <div class="f" style="--i:${i++}"><label class="l" for="i_nombre">👋 ${esc(tx(T.nombre))}</label><input type="text" id="i_nombre" data-a="nombre" autocomplete="name" value="${esc(A.nombre)}">
+ <label class="l" for="i_contacto" style="margin-top:14px">💌 ${esc(tx(T.contacto))}</label><span class="h">${esc(tx(T.contactoH))}</span><input type="text" id="i_contacto" data-a="contacto" autocomplete="email" value="${esc(A.contacto)}"></div>
+ <div class="hp" aria-hidden="true"><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
+ <p class="warn" id="warn" role="alert"></p>
+ <button class="pri" id="send" type="button">${esc(tx(T.enviar))} 💙</button>
+ <p class="priv">${esc(tx(T.priv))} <a href="/privacidad" target="_blank" rel="noopener">${esc(tx(T.privL))}</a>.</p>`;
+ app.innerHTML=h;
+ progress();
+}
+app.addEventListener("input",e=>{
+ const k=e.target.dataset&&e.target.dataset.a;if(!k)return;A[k]=e.target.value;
+ cfg.preguntas.forEach(q=>{if(q.extra&&q.id===k){const m=document.getElementById("m_"+q.id);if(m)m.classList.toggle("open",A[k]===q.extra.cuando)}});
+ progress();
+});
+document.getElementById("lang").addEventListener("click",()=>{lang=lang==="es"?"en":"es";try{localStorage.setItem("cucoarts-lang",lang)}catch(e){}draw()});
+
+const label=(q,v)=>{if(q.t==="scale")return CARAS[v-1]+" "+v+"/5";const f=(q.o||[]).find(x=>x[0]===v);return f?tx(f[1]):v};
+function resumen(){   // texto para el correo: siempre en español, sin emojis salvo las caras de la escala
+ const keep=lang;lang="es";
+ let t=`${tx(cfg.titulo)}\nProyecto: ${proj}${orden?`\nPedido / obra: ${orden}`:""}\n\n`;
+ cfg.preguntas.forEach(q=>{
+  if(A[q.id])t+=`${tx(q.l)}\n  → ${q.t==="area"?A[q.id]:label(q,A[q.id])}\n`;
+  if(q.extra&&A[q.id]===q.extra.cuando&&A[q.extra.id])t+=`  ${tx(q.extra.l)}\n  → ${A[q.extra.id]}\n`;
+ });
+ t+=`\nPermiso para publicar: ${tx((T.pub.find(x=>x[0]===A.publicar)||[0,A.publicar])[1])}\n`;
+ lang=keep;return t;
+}
+function confetti(box){
+ const bits=["💙","✨","🎨","🖼️","💙","🌀"],cols=["#067DFF","#ABCFDD","#644DEF","#F7D649"];
+ for(let i=0;i<34;i++){
+  const s=document.createElement("span");s.className="bit";s.setAttribute("aria-hidden","true");
+  const emoji=i%3===0;
+  if(emoji){s.textContent=bits[i%bits.length];s.style.fontSize=(16+Math.random()*14)+"px"}
+  else{const w=6+Math.random()*8;s.style.cssText+=`width:${w}px;height:${w*1.6}px;background:${cols[i%cols.length]};border-radius:2px`}
+  s.style.left=(Math.random()*100)+"%";
+  s.style.setProperty("--d",(2.2+Math.random()*1.6)+"s");s.style.setProperty("--t",(Math.random()*.5)+"s");
+  s.style.setProperty("--y",(300+Math.random()*260)+"px");s.style.setProperty("--x",((Math.random()-.5)*120)+"px");s.style.setProperty("--r",((Math.random()-.5)*720)+"deg");
+  box.appendChild(s);
+ }
+}
+async function enviar(){
+ const warn=document.getElementById("warn"),btn=document.getElementById("send");warn.textContent="";
+ if(!A.publicar){warn.textContent=tx(T.falta);document.getElementById("q_publicar").scrollIntoView({behavior:"smooth",block:"center"});return}
+ const c=(A.contacto||"").trim();let correo="",tel="";
+ if(c){if(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c))correo=c;else if(c.replace(/\D/g,"").length>=10)tel=c;else{warn.textContent=tx(T.contactoMal);return}}
+ const datos={};cfg.preguntas.forEach(q=>{if(A[q.id])datos[q.id]=A[q.id];if(q.extra&&A[q.extra.id]&&A[q.id]===q.extra.cuando)datos[q.extra.id]=A[q.extra.id]});
+ const body={type:"encuesta",lang,website:document.getElementById("website").value,summary:resumen(),
+  values:{proyecto:proj,publicar:A.publicar,pedido:orden,nombre:(A.nombre||"").trim(),correo,tel,datos:JSON.stringify(datos)}};
+ btn.disabled=true;btn.textContent=tx(T.enviando)+" ✨";
+ try{
+  const r=await fetch(API+"requests",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":API_KEY},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||!j.ok)throw new Error(j.error||("http "+r.status));
+  document.querySelector(".prog").style.display="none";
+  document.querySelector(".hero").style.display="none";document.getElementById("hTitulo").textContent=tx(T.gracias);document.querySelector(".band").style.paddingBottom="34px";app.style.marginTop="-14px";
+  app.innerHTML=`<div class="ok" role="status"><span class="big" aria-hidden="true">💙</span><p>${esc(tx(T.graciasP))}</p><a class="pri" href="https://cucoarts.com" style="background:var(--blue);color:#fff;border:2px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);font-weight:800;text-transform:uppercase">${esc(tx(T.volver))}</a></div>`;
+  confetti(app.firstChild);window.scrollTo({top:0,behavior:"smooth"});
+ }catch(e){
+  btn.disabled=false;btn.textContent=tx(T.enviar)+" 💙";
+  const wa="https://wa.me/"+WA+"?text="+encodeURIComponent(resumen());
+  warn.innerHTML=`${esc(tx(T.error))} <a href="${wa}" target="_blank" rel="noopener">${esc(tx(T.wa))}</a>`;
+ }
+}
+app.addEventListener("click",e=>{if(e.target.closest("#send"))enviar()});
+draw();
+</script>
+</body>
+</html>

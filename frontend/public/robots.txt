@@ -1,6 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /formulario
+Disallow: /encuesta
 
 Sitemap: https://cucoarts.com/sitemap.xml
 Sitemap: https://cucoarts.com/mty/sitemap.xml

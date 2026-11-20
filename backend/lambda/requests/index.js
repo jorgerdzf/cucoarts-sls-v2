@@ -123,6 +123,13 @@ function validate(type, v) {
     if (out.tel && out.tel.replace(/\D/g, '').length < 10) errs.push('tel');
     if (!out.correo && !out.tel) errs.push('contacto');
     opt('datos', 120000, true);                      // respuestas completas en JSON, para armar el perfil después
+  } else if (type === 'encuesta') {
+    // encuesta de satisfacción (cucoarts.com/encuesta?p=tienda|encargo&o=<pedido>): nombre y contacto son opcionales; el permiso de publicar es lo único obligatorio
+    if (!['tienda', 'encargo'].includes(v.proyecto)) errs.push('proyecto'); else out.proyecto = v.proyecto;
+    if (!['no', 'nombre', 'anonimo'].includes(v.publicar)) errs.push('publicar'); else out.publicar = v.publicar;
+    opt('nombre', 120); opt('pedido', 60); opt('correo', 200); opt('tel', 40);
+    if (out.correo && !emailOk(out.correo)) errs.push('correo');
+    opt('datos', 20000, true);                       // respuestas completas en JSON
   } else {
     [need('nombre', 120), need('tel', 40, 'tel', (s) => s.replace(/\D/g, '').length >= 10)].forEach((e) => e && errs.push(e));
     opt('correo', 200); if (out.correo && !emailOk(out.correo)) errs.push('correo');
@@ -164,6 +171,7 @@ const LABELS = {
   sell: { nombre: 'Nombre', correo: 'Correo', ig: 'Instagram', portafolio: 'Portafolio con precios', opcion: 'Opción', colab: 'Puede ofrecer', extras: 'Extras' },
   rob: { servicio: 'Servicio', nombre: 'Nombre', tel: 'WhatsApp', correo: 'Correo', fecha: 'Fecha', presupuesto: 'Presupuesto', factura: 'Factura', idea: 'Descripción' },
   perfil: { proyecto: 'Perfil', artista: 'Clave del formulario', nombre: 'Contacto', tel: 'WhatsApp', correo: 'Correo' },
+  encuesta: { proyecto: 'Encuesta', pedido: 'Pedido / obra', nombre: 'Nombre', correo: 'Correo', tel: 'WhatsApp', publicar: 'Permiso para publicar' },
   quote: { tipo: 'Tipo', lugar: 'Dónde va', ancho: 'Ancho', alto: 'Alto', unidad: 'Unidad', presupuesto: 'Presupuesto (opción)', ciudad: 'Ciudad', fecha: 'Fecha límite', factura: 'Factura', nombre: 'Nombre', tel: 'WhatsApp', correo: 'Correo', idea: 'Idea' },
 };
 const OPCIONES = { paquete: 'Paquete de registro ($1,500 IVA incluido)', condonacion: 'Solicita condonación o colaboración equivalente', propio: 'Ya tiene fotos y entrevista (solo comisión y acuerdo)' };
@@ -172,6 +180,7 @@ function emailText({ id, type, lang, values, summary, files, notAttached }) {
   const L = [];
   const titulo = type === 'sell' ? 'NUEVA SOLICITUD: artista que quiere vender en la tienda'
     : type === 'rob' ? `NUEVA SOLICITUD (cucoarts.com/rob): ${ROB_SERVICIOS[values.servicio] || 'cotización'}`
+    : type === 'encuesta' ? `NUEVA ENCUESTA DE SATISFACCIÓN (cucoarts.com/encuesta): ${values.proyecto}`
     : type === 'perfil' ? `NUEVAS RESPUESTAS (cucoarts.com/formulario): ${values.proyecto || values.artista}`
     : 'NUEVA SOLICITUD: cotización artística';
   L.push(titulo, `Folio: ${id}`, `Idioma de la persona: ${lang}`, '');
@@ -181,7 +190,7 @@ function emailText({ id, type, lang, values, summary, files, notAttached }) {
     if (k === 'servicio') val = ROB_SERVICIOS[val] || val;
     L.push(`${label}: ${val}`);
   });
-  if (type !== 'perfil') L.push(`Quiere recibir noticias: ${values.novedades ? 'Sí' : 'No'}`);
+  if (type !== 'perfil' && type !== 'encuesta') L.push(`Quiere recibir noticias: ${values.novedades ? 'Sí' : 'No'}`);
   if (files.length) { L.push('', 'Archivos recibidos:'); files.forEach((f) => L.push(`- ${f.name} (${Math.round(f.size / 1024)} KB)${notAttached.includes(f.key) ? ' — no se adjuntó al correo; está guardado en S3: ' + f.key : ''}`)); }
   L.push('', '--- Mensaje tal como lo vio la persona ---', summary);
   return L.join('\n');
@@ -192,7 +201,7 @@ async function submit(event) {
   const body = parse(event);
   if (!body) return reply(400, { ok: false, error: 'json' });
   if (body.website) return reply(200, { ok: true, id: 'ok' });                  // trampa para bots: se ignora en silencio
-  const type = ['sell', 'quote', 'rob', 'perfil'].includes(body.type) ? body.type : null;
+  const type = ['sell', 'quote', 'rob', 'perfil', 'encuesta'].includes(body.type) ? body.type : null;
   if (!type) return reply(400, { ok: false, error: 'type' });
   const { errs, out } = validate(type, body.values || {});
   if (errs.length) return reply(400, { ok: false, error: 'validation', fields: errs });
@@ -214,7 +223,7 @@ async function submit(event) {
 
   const id = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14) + '-' + crypto.randomBytes(3).toString('hex');
   const lang = body.lang === 'en' ? 'en' : 'es';
-  const summary = clean(body.summary, type === 'perfil' ? 40000 : 4000);
+  const summary = clean(body.summary, type === 'perfil' ? 40000 : type === 'encuesta' ? 8000 : 4000);
   const item = {
     id: { S: id }, type: { S: type }, status: { S: 'nuevo' }, createdAt: { S: new Date().toISOString() },
     lang: { S: lang }, policyVersion: { S: POLICY_VERSION }, values: { S: JSON.stringify(out) },
@@ -236,6 +245,7 @@ async function submit(event) {
     }
     const subject = type === 'sell' ? `Tienda: quiere vender su obra — ${out.nombre}`
       : type === 'rob' ? `Rob: ${ROB_SERVICIOS[out.servicio]} — ${out.nombre}`
+      : type === 'encuesta' ? `Encuesta de satisfacción (${out.proyecto})${out.nombre ? ' — ' + out.nombre : ''}`
       : type === 'perfil' ? `Perfil creativo: ${out.proyecto || out.artista} — ${out.nombre}`
       : `Cotización artística — ${out.nombre}`;
     const raw = buildRaw({ subject, text: emailText({ id, type, lang, values: out, summary, files, notAttached }), replyTo: out.correo || null, attachments });

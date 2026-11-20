@@ -112,5 +112,14 @@ const ev = (b) => ({ body: JSON.stringify(b) });
   r = await m.draftLoad(ev({ k: K, artista: 'otro-artista' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.found, false); assert(!b.datos);   // la clave no abre el borrador de otro formulario
   r = await m.draftLoad(ev({ k: 'zzzzzzzzzzzzzzzzzzzzzzzzzz', artista: 'bluewave' })); b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200); assert.strictEqual(b.ok, true); assert.strictEqual(b.found, false);   // sin borrador: 200, no error
   r = await m.draftLoad(ev({ k: '../../etc' })); assert.strictEqual(r.statusCode, 400);
+
+  // encuesta de satisfacción: proyecto y permiso son obligatorios; nombre y contacto, no
+  r = await m.submit(ev({ type: 'encuesta', values: { proyecto: 'otro', publicar: 'tal vez' } }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 400); assert.deepStrictEqual(b.fields.sort(), ['proyecto', 'publicar']);
+  const antesE = sent.ses.length;
+  r = await m.submit(ev({ type: 'encuesta', lang: 'es', summary: 'Facilidad: 5 | Nos encontró: Google', values: { proyecto: 'tienda', publicar: 'anonimo', pedido: '1002', datos: '{"facilidad":5}' } }));
+  b = JSON.parse(r.body); assert.strictEqual(r.statusCode, 200, r.body); assert.strictEqual(b.emailed, true); assert.strictEqual(sent.ses.length, antesE + 1);
+  const eItem = sent.ddb[sent.ddb.length - 1].Item; assert.strictEqual(eItem.type.S, 'encuesta'); assert.strictEqual(JSON.parse(eItem.values.S).publicar, 'anonimo');
+  r = await m.submit(ev({ type: 'encuesta', values: { proyecto: 'encargo', publicar: 'no', correo: 'mal' } })); assert.deepStrictEqual(JSON.parse(r.body).fields, ['correo']);
   console.log('OK: todas las pruebas pasaron');
 })().catch((e) => { console.error('FALLÓ:', e.message); process.exit(1); });
