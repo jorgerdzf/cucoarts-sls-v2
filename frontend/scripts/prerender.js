@@ -126,7 +126,7 @@ entries.push(`  <url>
 });
 /* perfiles de artistas: /artistas/<nombre> (frontend/public/artistas, generado con PERFILES_ARTISTAS/herramientas/build_perfiles_publicos.js) */
 fs.readdirSync(path.join(__dirname, '..', 'public', 'artistas', 'datos'))
-  .filter((f) => /\.json$/.test(f) && !/-obras|zonas/.test(f))
+  .filter((f) => /\.json$/.test(f) && !/-obras|zonas|^resis77e/.test(f))
   .forEach((f) => {
     entries.push(`  <url>\n    <loc>${url('/artistas/' + f.replace('.json', ''))}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
   });
