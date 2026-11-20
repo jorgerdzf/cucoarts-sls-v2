@@ -1,0 +1,23 @@
+/* Color temático por artista. El amarillo de los perfiles (--yel) pasa a ser el acento del artista (--acento) y el texto que va
+   SOBRE el acento usa --acento-tinta (tinta #232322 o blanco, elegido para contraste AA ≥ 4.5:1). Los valores salen de datos/<artista>.json ("acento").
+   Sin acento definido todo queda en amarillo #F7D649 como antes. Lo que NO cambia: botones principales y «Artista» (azul), el aviso de prototipo,
+   la etiqueta /artistas del encabezado, el sello lima de verificación del certificado. */
+:root{--acento:#F7D649;--acento-tinta:#232322}
+:root{--yel:var(--acento)}
+.ribbon{background:#F7D649;color:#232322}
+/* texto sobre el acento */
+.btn.yel,button.yel,.chip.v,.tag-line,.pasos li::before,.opts label:has(input:checked),.zoom .lupa,.lupa,.feat .pl,.vc .vb .pl,.sn-back{color:var(--acento-tinta)}
+.sn-scroll a.sn-back{background:var(--acento);color:var(--acento-tinta);border-color:#232322}
+.sn-scroll a.sn-back:hover{background:#EA663D;color:#232322}
+.done{color:var(--acento-tinta)}
+.done pre{color:#232322}
+.mama,.mama h2,.mama .sub,.mama .src,.mama p,.mama .chip,.mama .btn{color:var(--acento-tinta)}
+.mama .sub,.mama .src{opacity:.92}
+.mama .obra-m,.mama .obra-m figcaption{color:#232322}
+.mama .chip,.mama .btn{border-color:var(--acento-tinta)}
+/* certificado */
+.priv{color:var(--acento-tinta)}
+.priv h2,.priv .sub{color:var(--acento-tinta)}
+.lock{color:var(--yel)}
+.tl li .em,.acc-b .em,.pilar .pe{color:#232322}
+.mama .pend,.mama small,.mama blockquote small,.mama .note{color:var(--acento-tinta)}

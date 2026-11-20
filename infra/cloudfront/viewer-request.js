@@ -6,6 +6,7 @@
 //   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad, /mty, /mty/arte-urbano) → sirve el HTML prerenderizado de esa ruta
 //      (build/<ruta>/index.html, generado por frontend/scripts/prerender.js). Mayúsculas o barra final → 301 a la forma canónica.
 //   3b. /certificado/CA-AAAA-NNN (certificado de autenticidad) → /certificado/index.html (la página lee el número de la dirección).
+//   3c. /artistas/<nombre> (perfil de artista) → /artistas/index.html (la página lee el nombre de la dirección).
 //   4. Todo lo demás pasa tal cual: archivos con extensión (js, css, imágenes…), /rob (archivo sin extensión en el bucket) y la
 //      raíz. Una dirección que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real.
 // Si agregas una ruta nueva a la app: agrégala en KNOWN, en frontend/scripts/prerender.js y en seoShared.js.
@@ -121,6 +122,12 @@ function handler(event) {
   // certificados de autenticidad: /certificado/CA-2026-001 sirve la página única, que lee el número de la dirección
   if (/^\/certificado\/ca-\d{4}-\d{3}$/.test(key)) {
     request.uri = '/certificado/index.html';
+    return request;
+  }
+
+  // perfiles de artistas: /artistas/<nombre> sirve la página única, que lee el nombre de la dirección (solo los publicados; otro nombre da 404)
+  if (/^\/artistas\/(ana-ahedo|chema-chapa|correoppola|dario-diario|eliezer-blanco|frida-balderas|greometria|jhoseph-mata|lindara|mina-martins|mizael-valero|porras-visual|romualdo-castaneda|salvador-lopez|tankez77)$/.test(key)) {
+    request.uri = '/artistas/index.html';
     return request;
   }
 

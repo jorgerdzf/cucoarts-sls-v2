@@ -1,0 +1,20 @@
+/* Sección «Obra certificada» del perfil. Usa las variables del perfil (--ink, --card, --bg, --yel, --blue, --shadow, --mut).
+   Lima #C8F34A = verificado/certificado (mismo criterio que el certificado). */
+.certs{background:var(--bg);border-top:2.5px solid var(--ink)}
+.cc2-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),520px));gap:24px}
+.cc2{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);border:2.5px solid var(--ink);background:var(--card);box-shadow:8px 8px 0 #C8F34A,8px 8px 0 2.5px var(--ink)}
+.cc2-i{display:block;background:#ebe6e6;border-right:2.5px solid var(--ink);overflow:hidden;min-height:220px}
+.cc2-i img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:5/6}
+.cc2-b{padding:18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;justify-content:center;min-width:0}
+.cc2-b h3{margin:0;font-size:clamp(34px,4.4vw,48px);line-height:.95;letter-spacing:-.035em;text-transform:uppercase}
+.cc2-s{display:inline-flex;align-items:center;gap:8px;background:#C8F34A;color:#232322;border:2px solid #232322;padding:3px 12px 3px 4px;font-weight:700;font-size:14px;line-height:1.2}
+.cc2-s i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#232322;color:#C8F34A;display:grid;place-items:center;font-size:13px}
+.cc2-m{margin:0;color:var(--mut);font-size:15px}
+.cc2-b .btn{margin-top:6px;min-height:44px}
+@media (max-width:520px){
+ .cc2{grid-template-columns:1fr;box-shadow:6px 6px 0 #C8F34A,6px 6px 0 2.5px var(--ink)}
+ .cc2-i{border-right:0;border-bottom:2.5px solid var(--ink);min-height:0}
+ .cc2-i img{aspect-ratio:4/3;object-position:50% 35%}
+ .cc2-b{padding:16px}
+ .cc2-b .btn{align-self:stretch;justify-content:center}
+}

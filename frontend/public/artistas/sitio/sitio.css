@@ -1,0 +1,93 @@
+/* Encabezado, barra interna y pie homologados con cucoarts.com para las páginas de artistas (prototipo).
+   El encabezado copia los valores de /mty (extra.css «Encabezado homologado»); el pie es footer.css de la landing (Footer.tsx). */
+html.sh-on .sh-old{display:none!important}
+html{scroll-padding-top:calc(var(--sn-h,58px) + 6px)}
+
+/* ----- encabezado ----- */
+.sh-top{position:relative;background:var(--bg);color:var(--ink);font-family:"Neue Montreal","Helvetica Neue",Arial,sans-serif}
+.sh-wrap{max-width:1180px;margin:0 auto;padding:18px 20px;display:flex;align-items:center;gap:16px 28px}
+.sh-top .cl-logo{display:block;flex:0 0 auto;width:76px;aspect-ratio:480/248;background:var(--ink);-webkit-mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;box-sizing:content-box;margin:-8px -6px;padding:8px 6px;background-clip:content-box;-webkit-mask-clip:content-box;mask-clip:content-box;-webkit-mask-origin:content-box;mask-origin:content-box;text-decoration:none}
+.sh-top .cl-logo:hover{background:#EA663D;background-clip:content-box}
+.sh-top .cl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.sh-top .mtytag{margin-right:auto;margin-left:-6px;font:700 12px/1 "Courier Prime","Courier New",monospace;letter-spacing:.08em;text-transform:uppercase;background:#F7D649;color:#232322;padding:6px 9px;border-radius:3px;transform:rotate(-3deg);text-decoration:none;box-shadow:2px 2px 0 var(--ink);white-space:nowrap}
+.sh-top .mtytag:hover{background:#EA663D}
+.sh-top .mtytag:focus-visible,.sh-top .cl-logo:focus-visible{outline:3px solid #067DFF;outline-offset:3px}
+.sh-top .sh-nav{display:flex;gap:8px;align-items:center}
+.sh-top .pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;height:42px;min-height:0;min-width:42px;padding:7px 13px;border:2px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font:700 12px/1 "Courier Prime","Courier New",monospace;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:none}
+.sh-top .pill:hover{background:var(--ink);color:var(--bg)}
+.sh-top .pill:focus-visible,.sh-top .cl-menubtn:focus-visible{outline:3px solid #067DFF;outline-offset:3px}
+.sh-top .pill svg{width:16px;height:16px}
+.sh-top .cl-menubtn{box-sizing:border-box;height:42px;min-height:0;min-width:42px;justify-content:center;line-height:1;font-weight:700}
+@media(max-width:760px){
+ .sh-top .cl-logo{width:60px}
+ .sh-top .pill{padding:0 12px}
+ .sh-top .cl-hide-s{display:none}
+}
+@media(max-width:420px){
+ .sh-wrap{padding-inline:16px;gap:8px}
+ .sh-top .cl-logo{width:52px}
+ .sh-top .mtytag{font-size:11px;padding:5px 7px;margin-left:-8px}
+ .sh-top .sh-nav{gap:6px}
+ .sh-top .pill{height:40px;min-width:40px;padding:0 10px}
+ .sh-top .cl-menubtn{height:40px;min-width:40px;padding:0 10px}
+}
+@media(max-width:350px){
+ .sh-top .cl-logo{width:44px}
+ .sh-top .mtytag{font-size:10px;padding:4px 6px;margin-left:0}
+ .sh-wrap{gap:6px}.sh-top .sh-nav{gap:4px}
+ .sh-top .pill,.sh-top .cl-menubtn{height:36px;min-width:36px;padding:0 8px}
+}
+
+/* menú del sitio: el panel vive en <body>; que los botones no hereden el estilo de botón de la página */
+.cl-menu button{min-height:0;box-shadow:none}
+
+/* ----- barra interna de secciones (pegajosa) ----- */
+.sn{position:sticky;top:0;z-index:30;background:var(--bg);border-block:2.5px solid var(--ink);font-family:"Neue Montreal","Helvetica Neue",Arial,sans-serif}
+.sn-in{max-width:1180px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));display:flex;align-items:center;gap:12px;min-height:54px}
+.sn-wrap{position:relative;flex:1;min-width:0}
+.sn-scroll{display:flex;gap:6px;align-items:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;padding:8px 2px}
+/* indicadores de «hay más»: degradado + flecha que se toca para avanzar (sin máscaras, que en iOS Safari recortan el scroll) */
+.sn-ar{position:absolute;top:0;bottom:0;width:34px;display:none;align-items:center;border:0;border-radius:0;padding:0 4px;min-height:0;box-shadow:none;color:var(--ink);font:700 22px/1 "Courier Prime","Courier New",monospace;cursor:pointer;z-index:2}
+.sn-ar.on{display:flex}
+.sn-l{left:0;justify-content:flex-start;background:linear-gradient(90deg,var(--bg) 55%,transparent)}
+.sn-r{right:0;justify-content:flex-end;background:linear-gradient(270deg,var(--bg) 55%,transparent)}
+.sn-scroll::-webkit-scrollbar{display:none}
+.sn-scroll a{flex:none;display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border:2px solid transparent;border-radius:999px;color:var(--ink);text-decoration:none;font-size:15px;font-weight:500;white-space:nowrap}
+.sn-scroll a:hover{border-color:var(--ink)}
+.sn-scroll a[aria-current=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sn-scroll a.sn-back{background:#F7D649;color:#232322;border-color:#232322;font-family:"Courier Prime","Courier New",monospace;font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;box-shadow:2px 2px 0 var(--ink);margin-right:6px}
+.sn-scroll a.sn-back:hover{background:#EA663D}
+.sn-scroll a:focus-visible{outline:3px solid #067DFF;outline-offset:2px}
+.sn-end{flex:none;display:flex;gap:8px;align-items:center}
+.sn-end .btn{min-height:38px;padding:6px 16px;font-size:14px}
+@media(max-width:760px){.sn-end{display:none}.sn-in{padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}}
+/* teléfono de lado: dos barras fijas se comen un tercio de la pantalla; se compacta la de secciones y se oculta la inferior */
+@media(max-height:480px) and (orientation:landscape){.mbar{display:none!important}.sn-in{min-height:46px}.sn-scroll a{min-height:34px}.sn-scroll{padding:5px 2px}}
+
+/* ----- pie global (footer.css de la landing) ----- */
+footer.cf{background:#232322;color:#F5F1F1;text-align:left;font:400 16px/1.5 "Neue Montreal","Helvetica Neue",Arial,sans-serif;padding:clamp(40px,6vw,72px) 0 28px;margin-top:0;border:0}
+.cf *{box-sizing:border-box}
+.cf-in{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,48px)}
+.cf-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);padding-bottom:clamp(28px,4vw,44px);border-bottom:2px solid rgb(245 241 241 / .85)}
+.cf-brand{display:grid;gap:14px;align-content:start}
+.cf-logo{display:block;width:92px;aspect-ratio:480/248;background:#F5F1F1;-webkit-mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat;mask:url(/mty/img/logo-cuco-mask.png) center/contain no-repeat}
+.cf-logo:hover{background:#EA663D}
+.cf-tag{margin:0;font:700 clamp(22px,3vw,32px)/1 "Neue Montreal","Helvetica Neue",Arial,sans-serif;letter-spacing:-.035em;text-transform:uppercase}
+.cf-about{margin:0;max-width:34ch;font-size:15px;color:#E2E0E0}
+.cf-col{display:grid;gap:10px;align-content:start;min-width:0}
+.cf-h{margin:0 0 4px;font:700 12px/1.2 "Courier New",Courier,monospace;letter-spacing:.14em;text-transform:uppercase;color:#F7D649}
+.cf-col a,.cf-col span{font:500 16px/1.35 "Neue Montreal","Helvetica Neue",Arial,sans-serif;color:#F5F1F1;text-decoration:none;overflow-wrap:anywhere}
+.cf-col a:hover{color:#EA663D;text-decoration:underline;text-underline-offset:4px}
+.cf a:focus-visible{outline:3px solid #067DFF;outline-offset:3px}
+.cf-legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;padding-top:20px;font:12px/1.4 "Courier New",Courier,monospace;letter-spacing:.06em;text-transform:uppercase;color:#C1C68F}
+@media (max-width:760px){.cf-grid{grid-template-columns:1fr 1fr}.cf-brand{grid-column:1/-1}}
+@media (max-width:480px){.cf-grid{grid-template-columns:1fr}}
+/* la barra fija de abajo (móvil) no tapa el pie */
+@media (max-width:760px){body:has(.mbar) footer.cf{padding-bottom:96px}}
+@media print{.sh-top,.sn{display:none!important}}
+
+/* barra de herramientas bajo el encabezado (directorio y blog) */
+.sh-bar{border-bottom:2.5px solid var(--ink);background:var(--bg)}
+.sh-bar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.sh-link{color:var(--mut);text-decoration:none;font-size:14px}
+.sh-link:hover{text-decoration:underline}
