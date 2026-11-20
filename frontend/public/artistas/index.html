@@ -320,6 +320,7 @@ footer p{margin:0 0 6px}
 .clases p{margin:0 0 8px}
 .clases .acts{display:grid;gap:10px}
 </style>
+<script>(function(){var h=location.hostname;if(h!=='cucoarts.com'&&h!=='www.cucoarts.com')return;if(navigator.doNotTrack==='1'||window.doNotTrack==='1'||navigator.globalPrivacyControl===true)return;var s=document.createElement('script');s.async=1;s.src='https://www.googletagmanager.com/gtag/js?id=G-D2Z3H4FNSQ';document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','G-D2Z3H4FNSQ')})();</script>
 </head>
 <body class="noval">
 <header class="top"><div class="w">
@@ -376,9 +377,6 @@ async function boot(){
   O=(await (await fetch(`/artistas/datos/${slug}-obras.json`)).json()).obras.filter(o=>o.estado==="active");
  }catch(e){$("#app").innerHTML='<div class="w"><p>No encontramos este perfil.</p></div>';return}
  document.title=`${A.nombre} · Artista · CUCO ARTS`;
- {const d=(A.intro||"").replace(/\s+/g," ").slice(0,155),md=document.querySelector("meta[name=description]");if(md)md.setAttribute("content",A.nombre+" · "+d);
-  const cl=document.createElement("link");cl.rel="canonical";cl.href="https://cucoarts.com/artistas/"+slug;document.head.appendChild(cl);
-  [["og:title",document.title],["og:description",d],["og:url",cl.href],["og:type","profile"]].forEach(([p,c])=>{const m=document.createElement("meta");m.setAttribute("property",p);m.content=c;document.head.appendChild(m)})}
  render();
 }
 

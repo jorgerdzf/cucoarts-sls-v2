@@ -125,9 +125,11 @@ function handler(event) {
     return request;
   }
 
-  // perfiles de artistas: /artistas/<nombre> sirve la página única, que lee el nombre de la dirección (solo los publicados; otro nombre da 404)
-  if (/^\/artistas\/(ana-ahedo|chema-chapa|correoppola|dario-diario|eliezer-blanco|frida-balderas|greometria|jhoseph-mata|lindara|mina-martins|mizael-valero|porras-visual|romualdo-castaneda|salvador-lopez|tankez77)$/.test(key)) {
-    request.uri = '/artistas/index.html';
+  // perfiles de artistas: /artistas/<nombre> sirve la página estática de ese artista (/artistas/<nombre>/index.html);
+  // un nombre que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real
+  var am = key.match(/^\/artistas\/([a-z0-9-]+)$/);
+  if (am && am[1] !== 'datos' && am[1] !== 'img' && am[1] !== 'sitio' && am[1] !== 'og') {
+    request.uri = '/artistas/' + am[1] + '/index.html';
     return request;
   }
 

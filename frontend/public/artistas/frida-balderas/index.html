@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frida Balderas · Artista en Monterrey · CUCO ARTS</title>
+<meta name="description" content="Artista plástica egresada del CEDART Alfonso Reyes. Parte del autorretrato surrealista para explorar emociones y recuerdos, con insectos y fauna urbana…">
+<link rel="canonical" href="https://cucoarts.com/artistas/frida-balderas">
+<meta property="og:site_name" content="CUCO ARTS">
+<meta property="og:locale" content="es_MX">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Frida Balderas · Artista en Monterrey · CUCO ARTS">
+<meta property="og:description" content="Artista plástica egresada del CEDART Alfonso Reyes. Parte del autorretrato surrealista para explorar emociones y recuerdos, con insectos y fauna urbana…">
+<meta property="og:url" content="https://cucoarts.com/artistas/frida-balderas">
+<meta property="og:image" content="https://cucoarts.com/artistas/og/frida-balderas.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Retrato de Frida Balderas, artista de Monterrey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Frida Balderas · Artista en Monterrey · CUCO ARTS">
+<meta name="twitter:description" content="Artista plástica egresada del CEDART Alfonso Reyes. Parte del autorretrato surrealista para explorar emociones y recuerdos, con insectos y fauna urbana…">
+<meta name="twitter:image" content="https://cucoarts.com/artistas/og/frida-balderas.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Frida Balderas","url":"https://cucoarts.com/artistas/frida-balderas","image":"https://cucoarts.com/artistas/og/frida-balderas.jpg","description":"Artista plástica egresada del CEDART Alfonso Reyes. Parte del autorretrato surrealista para explorar emociones y recuerdos, con insectos y fauna urbana…","jobTitle":"Artista","homeLocation":{"@type":"Place","name":"Monterrey, Nuevo León, México"},"sameAs":["https://www.instagram.com/frida_balale/"]}</script>
+<style>
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Regular.otf);font-weight:400;font-display:swap}
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Medium.otf);font-weight:500;font-display:swap}
+@font-face{font-family:"Neue Montreal";src:url(/mty/fonts/NeueMontreal-Bold.otf);font-weight:700;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url(/mty/fonts/CourierPrime-Bold.ttf);font-weight:700;font-display:swap}
+:root{--bg:#F5F1F1;--ink:#232322;--card:#fff;--mut:#66625f;--blue:#067DFF;--yel:#F7D649;--on-blue:#fff;--shadow:#232322}
+:root[data-theme=dark]{--bg:#161616;--ink:#F5F1F1;--card:#202020;--mut:#aaa5a1;--shadow:#F5F1F1}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161616;--ink:#F5F1F1;--card:#202020;--mut:#aaa5a1;--shadow:#F5F1F1}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Neue Montreal","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.w{max-width:1180px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Courier Prime","Courier New",monospace;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.ribbon{background:var(--yel);color:#232322;padding:7px 14px;text-align:center;font-size:13px}
+.ribbon button{margin-left:10px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2.5px solid var(--ink)}
+.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px}
+.brand{text-decoration:none;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.brand .mono{color:var(--blue)}
+.nav{display:flex;gap:18px;align-items:center}
+.nav a.l{text-decoration:none;font-size:15px}
+.nav a.l:hover{text-decoration:underline;text-underline-offset:4px}
+@media (max-width:760px){.nav a.l{display:none}}
+@media (max-width:420px){.nav{gap:8px}.top .w{gap:8px}.top .brand{font-size:15px}.top .brand .mono{font-size:11px}.nav .sm{padding:5px 10px}}
+button,.btn{font:inherit;cursor:pointer;border:2.5px solid var(--ink);background:var(--card);color:var(--ink);padding:10px 18px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-weight:500;line-height:1.1}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.btn.pri,button.pri{background:var(--blue);border-color:var(--ink);color:#fff;box-shadow:3px 3px 0 var(--shadow)}
+.btn.pri:hover,button.pri:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--shadow)}
+.btn.yel{background:var(--yel);color:#232322;box-shadow:3px 3px 0 var(--shadow)}
+.sm{padding:5px 12px;font-size:13px}
+.chip{border:1.5px solid var(--ink);border-radius:999px;padding:1px 9px;font-size:11px;font-family:"Courier Prime","Courier New",monospace;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:var(--card);color:var(--ink);display:inline-block}
+.chip.v{background:var(--yel);color:#232322}
+body.noval .chip.v,body.noval .chip.sa{display:none}
+
+/* hero */
+.hero{padding:44px 0 36px}
+.hero .w{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}
+@media (max-width:900px){.hero .w{grid-template-columns:1fr;gap:28px}.hero{padding-top:26px}}
+.eyebrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.cur{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.cur button{border:0;border-radius:0;padding:4px 10px;font-size:12px;font-family:"Courier Prime","Courier New",monospace;font-weight:700;background:var(--card)}
+.cur button[aria-pressed=true]{background:var(--ink);color:var(--bg)}.cur button:disabled{opacity:.4}
+.zchip{color:#232322;border:1.5px solid var(--ink);border-radius:999px;padding:1px 10px;font-size:12px;text-decoration:none}
+.zchip:hover{transform:translate(-1px,-1px);box-shadow:2px 2px 0 var(--shadow)}
+h1{font-size:clamp(52px,9.4vw,124px);line-height:.9;letter-spacing:-.035em;text-transform:uppercase;margin:0 0 18px;font-weight:700}
+.tag-line{display:inline-block;background:var(--yel);color:#232322;padding:3px 12px;transform:rotate(-1.5deg);margin-bottom:18px}
+.lead{font-size:clamp(18px,2.2vw,22px);max-width:34em;margin:0 0 24px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);border:2.5px solid var(--ink);background:var(--card)}
+.facts div{padding:12px 14px;border-right:2.5px solid var(--ink)}
+.facts div:last-child{border:0}
+.facts b{display:block;font-size:clamp(17px,2vw,22px);line-height:1.15;margin-top:2px}
+.facts b.t{font-size:16px;line-height:1.25;font-weight:500;margin-top:5px}
+@media (max-width:560px){.facts{grid-template-columns:1fr}.facts div{border-right:0;border-bottom:2.5px solid var(--ink)}.facts div:last-child{border:0}}
+.portrait{position:relative}
+.portrait .fr{border:2.5px solid var(--ink);box-shadow:10px 10px 0 var(--yel),10px 10px 0 2.5px var(--ink);aspect-ratio:1;overflow:hidden;background:var(--card)}
+.portrait img{width:100%;height:100%;object-fit:cover}
+@media (max-width:900px){.hero{padding-top:14px}.hero .w .portrait{order:-1}.portrait .fr{aspect-ratio:4/3;max-height:44vh;width:100%;box-shadow:6px 6px 0 var(--yel),6px 6px 0 2.5px var(--ink)}.portrait img{object-position:50% 20%}.stamp{left:6px!important;bottom:46px!important}.portrait .credit{margin-top:14px}}
+.stamp{position:absolute;left:-14px;bottom:66px;transform:rotate(-6deg);background:var(--blue);color:#fff;border:2.5px solid var(--ink);padding:8px 12px;text-align:center;line-height:1.15;box-shadow:3px 3px 0 var(--shadow)}
+.stamp b{display:block;font-size:22px;font-family:"Neue Montreal",sans-serif;letter-spacing:-.01em}
+.credit{margin:22px 0 0;font-size:12px;color:var(--mut)}
+
+/* tira de obras */
+.strip{border-block:2.5px solid var(--ink);overflow:hidden;background:var(--card)}
+.strip .tr{display:flex;gap:0;width:max-content;animation:run 60s linear infinite}
+.strip:hover .tr{animation-play-state:paused}
+.strip img{height:150px;width:auto;border-right:2.5px solid var(--ink)}
+@keyframes run{to{transform:translateX(-50%)}}
+
+section{padding:70px 0}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+h2{font-size:clamp(34px,5.4vw,64px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;margin:6px 0 0;font-weight:700}
+.sub{color:var(--mut);max-width:34em;margin:10px 0 0}
+
+/* historia */
+.story .w{display:grid;grid-template-columns:.8fr 1.4fr;gap:50px;align-items:start}
+@media (max-width:900px){.story .w{grid-template-columns:1fr;gap:30px}}
+.story aside{position:sticky;top:84px}
+@media (max-width:900px){.story aside{position:static}}
+.pilares{margin-top:26px;display:grid;gap:10px}
+.pilar{border:2.5px solid var(--ink);background:var(--card);padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.pilar b{display:block;text-transform:uppercase;letter-spacing:-.01em}
+.pilar div span{color:var(--mut);font-size:15px}
+.pilar .pe{font-size:34px;line-height:1;width:56px;height:56px;display:grid;place-items:center;border:2.5px solid var(--ink);border-radius:50%;background:var(--yel);transition:transform .2s}
+.pilar:hover .pe{transform:rotate(-10deg) scale(1.08)}
+.tl{list-style:none;margin:0;padding:0;border-left:2.5px solid var(--ink)}
+.tl li{position:relative;padding:0 0 38px 34px}
+.tl li .em{position:absolute;left:-23px;top:-2px;width:42px;height:42px;border-radius:50%;background:var(--yel);border:2.5px solid var(--ink);display:grid;place-items:center;font-size:21px;line-height:1;box-shadow:2px 2px 0 var(--shadow)}
+.tl .yr{display:block;color:var(--blue)}
+.tl h3{font-size:clamp(24px,3vw,34px);line-height:1.05;margin:4px 0 10px;letter-spacing:-.02em}
+.tl p{margin:0 0 10px;max-width:36em}
+blockquote{margin:12px 0;padding:0 0 0 16px;border-left:5px solid var(--yel);font-size:clamp(19px,2.3vw,25px);line-height:1.25;font-weight:500}
+blockquote small{display:block;margin-top:6px;font-size:12px;font-weight:400;color:var(--mut)}
+.src{font-size:12px;color:var(--mut)}
+.src a{text-underline-offset:3px}
+
+/* obra */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filters button{padding:7px 14px;font-size:14px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.filters select{font:inherit;border:2.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.card{border:2.5px solid var(--ink);background:var(--card);display:flex;flex-direction:column;cursor:pointer;transition:transform .15s,box-shadow .15s;text-align:left;padding:0;border-radius:0;font-weight:400}
+.card:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--shadow)}
+.card .im{aspect-ratio:4/5;background:#ebe6e6;overflow:hidden;border-bottom:2.5px solid var(--ink);position:relative}
+.card .im img{width:100%;height:100%;object-fit:cover}
+.card .st{position:absolute;top:10px;left:10px;z-index:2}
+.card{align-items:stretch}
+.card .bd{padding:12px 14px 14px;display:grid;gap:3px;width:100%;text-align:left}
+.card h3{margin:0;font-size:20px;line-height:1.1;letter-spacing:-.01em}
+.card .mt{font-size:13px;color:var(--mut)}
+.card .pr{font-size:22px;font-weight:700;margin-top:4px}
+.card.sold .im img{filter:grayscale(.5) opacity(.85)}
+.empty{padding:30px;border:2.5px dashed var(--ink)}
+.more{text-align:center;margin-top:28px}
+@media (max-width:640px){
+ .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+ .card h3{font-size:16px}.card .pr{font-size:18px}.card .mt{font-size:12px}.card .bd{padding:9px 10px 11px}
+ .card .st{top:6px;left:6px}section{padding:52px 0}
+}
+
+/* encargo */
+.encargo{background:var(--blue);color:#fff;border-block:2.5px solid var(--ink)}
+.encargo h2,.encargo .sub{color:#fff}
+.encargo .sub{opacity:.95}
+.enc{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+@media (max-width:900px){.enc{grid-template-columns:1fr}}
+.pasos{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:12px;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:rgba(255,255,255,.12);border:2.5px solid #fff;padding:12px 14px}
+.pasos li::before{content:counter(p);font:700 28px/1 "Courier Prime",monospace;background:var(--yel);color:#232322;width:44px;height:44px;display:grid;place-items:center;border:2.5px solid #232322}
+.pasos b{display:block}
+.enc blockquote{border-color:var(--yel);color:#fff}
+.enc blockquote small{color:#dbe9ff}
+.form{background:var(--card);color:var(--ink);border:2.5px solid #232322;padding:22px;box-shadow:8px 8px 0 #232322}
+.form h3{margin:0 0 4px;font-size:26px;letter-spacing:-.02em}
+.form .n{color:var(--mut);font-size:14px;margin:0 0 14px}
+.f{margin-bottom:12px}
+.f label{display:block;font-weight:500;margin-bottom:4px;font-size:15px}
+.f input,.f select,.f textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--ink);padding:10px 12px;border-radius:0}
+.f textarea{min-height:92px;resize:vertical}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts label{display:inline-flex;gap:6px;align-items:center;border:2px solid var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer;margin:0;font-weight:400;background:var(--bg)}
+.opts label:has(input:checked){background:var(--yel);color:#232322}
+.opts input{width:auto;accent-color:#232322}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+.err{color:#b3261e;font-size:14px;margin:6px 0}
+.done{border:2.5px solid #232322;background:var(--yel);color:#232322;padding:16px;margin-top:14px}
+.done pre{white-space:pre-wrap;font:13px/1.45 "Courier Prime","Courier New",monospace;margin:10px 0;background:#fff;padding:10px;border:2px solid #232322;max-height:200px;overflow:auto}
+.hp{position:absolute;left:-9999px}
+
+/* ciudad */
+.cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media (max-width:760px){.cgrid{grid-template-columns:1fr}}
+.cc{border:2.5px solid var(--ink);background:var(--card);padding:18px}
+.cc h3{margin:6px 0 8px;font-size:24px;line-height:1.05;letter-spacing:-.02em}
+.cc p{margin:0 0 10px}
+.note{font-size:13px;color:var(--mut);margin-top:6px}
+
+/* taller */
+.pano{position:relative}
+.pano figure{margin:0;border:2.5px solid var(--ink);background:var(--card)}
+.pano figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:2.5px solid var(--ink)}
+.pano figcaption{padding:10px 14px;font-size:13px;color:var(--mut)}
+.pano .pola{position:absolute;right:26px;bottom:-150px;width:min(190px,34%);transform:rotate(3deg);box-shadow:6px 6px 0 var(--shadow)}
+.pano .pola img{aspect-ratio:3/4;border-bottom:2.5px solid var(--ink)}
+.pano .pola figcaption{font-size:11.5px;line-height:1.3;padding:8px 10px}
+@media (max-width:760px){.pano .pola{position:static;width:min(260px,78%);margin:22px 0 0 auto;transform:rotate(2deg)}}
+.tecs{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:176px}
+@media (max-width:900px){.tecs{grid-template-columns:1fr;margin-top:40px}}
+.tb{border:2.5px solid var(--ink);background:var(--card);padding:16px}
+.tb h3{margin:0 0 4px;font-size:26px;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.tb p{margin:0 0 14px;color:var(--mut);font-size:15px}
+.zz{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* reconocimiento */
+.reco{background:var(--ink);color:var(--bg);border-bottom:2.5px solid var(--ink)}
+.reco .w{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;padding-top:44px;padding-bottom:44px}
+@media (max-width:820px){.reco .w{grid-template-columns:1fr;gap:24px}}
+.reco .rimgs{position:relative;min-height:300px}
+.reco .rimgs img{border:2.5px solid var(--bg);box-shadow:6px 6px 0 var(--yel)}
+.reco .rimgs .m{width:62%;transform:rotate(-3deg)}
+.reco .rimgs .p{position:absolute;right:0;bottom:-6px;width:68%;transform:rotate(2.5deg)}
+.reco h2{font-size:clamp(28px,4vw,48px);margin:8px 0 12px;color:var(--bg)}
+.reco p{max-width:34em;margin:0 0 10px;font-size:18px}
+.reco .src{color:#d8d3d3}
+.reco .chip{border-color:var(--bg)}
+/* archivo */
+.agrid{columns:4 220px;column-gap:16px}
+@media (max-width:900px){.agrid{columns:2 150px;column-gap:12px}}
+.acard{display:flex;flex-direction:column;align-items:stretch;width:100%;margin:0 0 16px;break-inside:avoid;padding:0;border:2.5px solid var(--ink);border-radius:0;background:var(--card);text-align:left;font-weight:400;transition:transform .15s,box-shadow .15s}
+.acard:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--shadow)}
+.acard .aim{background:#000;display:block;border-bottom:2.5px solid var(--ink)}
+.acard .aim img{width:100%;height:auto;display:block}
+.acard .abd{padding:9px 11px 11px;display:grid;gap:2px}
+.acard b{font-size:17px;line-height:1.1}
+.acard small{color:var(--mut);font-size:12.5px;line-height:1.3}
+/* ciudad con imagen, fotos del taller */
+.cc .ci{width:calc(100% + 36px);margin:-18px -18px 14px;max-width:none;aspect-ratio:16/10;object-fit:cover;border-bottom:2.5px solid var(--ink)}
+.tfotos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:176px}
+@media (max-width:760px){.tfotos{grid-template-columns:1fr;margin-top:40px}}
+.tfotos figure{margin:0;border:2.5px solid var(--ink);background:var(--card)}
+.tfotos img{width:100%;aspect-ratio:1;object-fit:cover;border-bottom:2.5px solid var(--ink)}
+.tfotos figcaption{padding:8px 11px;font-size:13px;line-height:1.35;color:var(--mut)}
+.tfotos+.tecs{margin-top:34px}
+.tb.wide{grid-column:1/-1}
+.tb.wide .zz{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.tb.wide{grid-column:auto}}
+@media (max-width:520px){.tb.wide .zz{grid-template-columns:1fr 1fr}.tb.wide .zz .zoom:nth-child(3){grid-column:1/-1;aspect-ratio:16/9}}
+.zoom{position:relative;display:block;padding:0;border:2.5px solid var(--ink);border-radius:0;background:var(--bg);overflow:hidden;text-align:left;font-weight:400;aspect-ratio:1}
+.zoom img.d{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.zoom:hover img.d,.zoom:focus-visible img.d{transform:scale(1.12)}
+.zoom .lupa{position:absolute;top:8px;right:8px;background:var(--yel);color:#232322;border:2px solid #232322;border-radius:999px;padding:1px 8px;font:700 11px "Courier Prime","Courier New",monospace;text-transform:uppercase}
+.zoom .ins{position:absolute;left:8px;top:8px;width:58px;height:58px;border:2.5px solid #232322;background:#ebe6e6;box-shadow:2px 2px 0 #232322}
+.zoom .ins img{width:100%;height:100%;object-fit:cover}
+.zoom .cap{position:absolute;left:0;right:0;bottom:0;background:var(--card);color:var(--ink);border-top:2.5px solid var(--ink);padding:6px 9px;font-size:12px;line-height:1.25}
+@media (max-width:520px){.zz{gap:8px}.zoom .ins{width:42px;height:42px}.zoom .cap{font-size:11px;padding:5px 7px}}
+
+/* trayectoria */
+.tray{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media (max-width:900px){.tray{grid-template-columns:1fr}}
+.tray ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.tray li{border-left:5px solid var(--yel);padding:2px 0 2px 12px}
+.tray li b{display:block}
+.tray li span{color:var(--mut);font-size:15px}
+.pend{border:2.5px dashed var(--ink);padding:16px;margin-top:12px;color:var(--mut)}
+
+/* faq */
+details{border:2.5px solid var(--ink);background:var(--card);margin-bottom:10px}
+summary{cursor:pointer;padding:14px 16px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::after{content:"+";font:700 22px/1 "Courier Prime",monospace}
+details[open] summary::after{content:"–"}
+details p{margin:0;padding:0 16px 16px;color:var(--mut)}
+
+footer{border-top:2.5px solid var(--ink);padding:34px 0 110px;background:var(--card)}
+footer .w{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer p{margin:0 0 6px}
+
+/* barra móvil */
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:25;display:none;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:2.5px solid var(--ink)}
+.mbar .btn{flex:1;justify-content:center}
+@media (max-width:760px){.mbar{display:flex}}
+
+/* modal de obra */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.mod{background:var(--bg);border:2.5px solid var(--ink);max-width:980px;width:100%;max-height:94vh;overflow:auto;display:grid;grid-template-columns:1.1fr .9fr;box-shadow:10px 10px 0 var(--yel)}
+@media (max-width:820px){.mod{grid-template-columns:1fr}}
+.mod .g{padding:14px;background:var(--card);border-right:2.5px solid var(--ink)}
+@media (max-width:820px){.mod .g{border-right:0;border-bottom:2.5px solid var(--ink)}}
+.mod .main{aspect-ratio:1;background:#ebe6e6;border:2.5px solid var(--ink)}
+.mod .main img{width:100%;height:100%;object-fit:contain}
+.thumbs{display:flex;gap:8px;margin-top:10px;overflow:auto}
+.thumbs button{padding:0;border:2.5px solid var(--ink);border-radius:0;width:64px;height:64px;flex:none;background:#ebe6e6;overflow:hidden}
+.thumbs button[aria-current=true]{outline:3px solid var(--blue);outline-offset:2px}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.mod .i{padding:22px;display:flex;flex-direction:column;gap:10px}
+.mod h3{margin:0;font-size:34px;line-height:1;letter-spacing:-.02em}
+.mod .pr{font-size:30px;font-weight:700}
+.mod .x{position:absolute;right:12px;top:10px}
+.mod .acts{display:grid;gap:10px;margin-top:6px}
+.tl .hlogo{display:block;width:min(200px,60%);height:auto;margin:12px 0;border:2px solid #232322;border-radius:10px}
+.tfotos.nopola{margin-top:30px}
+/* video protagónico (entrevista del Summer Update) */
+.feat{background:var(--ink);color:var(--bg);border-bottom:2.5px solid var(--ink);padding:54px 0}
+.feat .w{display:grid;grid-template-columns:1.35fr .65fr;gap:36px;align-items:center}
+@media (max-width:900px){.feat .w{grid-template-columns:1fr;gap:22px}.feat{padding:40px 0}}
+.feat .vb{position:relative;aspect-ratio:16/9;background:#000;border:2.5px solid var(--bg);border-radius:0;padding:0;width:100%;display:block;overflow:hidden;box-shadow:8px 8px 0 var(--yel)}
+.feat .vb img,.feat iframe.vb{width:100%;height:100%;object-fit:cover;border:0;display:block}
+.feat .pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50%;background:var(--yel);border:2.5px solid #232322;display:grid;place-items:center;font-size:32px;color:#232322;box-shadow:4px 4px 0 #232322}
+.feat h2{font-size:clamp(28px,3.6vw,46px);color:var(--bg);margin:8px 0 12px}
+.feat p{margin:0 0 10px;font-size:18px;max-width:30em}
+.feat .src{color:#d8d3d3}
+.feat .chip{border-color:var(--bg)}
+/* encargos hechos (galería) */
+.eg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.ec{border:2.5px solid var(--ink);background:var(--card);display:flex;flex-direction:column}
+.ec .ei{aspect-ratio:4/5;background:#ebe6e6;border-bottom:2.5px solid var(--ink);overflow:hidden}
+.ec .ei img{width:100%;height:100%;object-fit:cover}
+.ec .eb{padding:12px 14px 14px;display:grid;gap:4px}
+.ec h3{margin:0;font-size:21px;line-height:1.1;letter-spacing:-.01em}
+.ec .em2{font-size:13px;color:var(--mut)}
+.ec p{margin:4px 0 0;font-size:15px}
+.ec .priv{margin-top:6px}
+.priv-note{margin-top:22px;border:2.5px dashed var(--ink);padding:12px 16px;color:var(--mut);font-size:15px}
+/* Dolores (su mamá) */
+.mama{background:var(--yel);color:#232322;border-block:2.5px solid var(--ink)}
+.mama .w{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
+@media (max-width:900px){.mama .w{grid-template-columns:1fr}}
+.mama h2{color:#232322}
+.mama .sub{color:#3a3732}
+.mama .obra-m{border:2.5px solid #232322;background:#fff;box-shadow:8px 8px 0 #232322;max-width:340px}
+.mama .obra-m img{width:100%;aspect-ratio:3/4;object-fit:cover;border-bottom:2.5px solid #232322}
+.mama .obra-m figcaption{padding:10px 12px;font-size:13px;color:#3a3732}
+.mama .chip,.mama .btn{border-color:#232322}
+.mama .src{color:#3a3732}
+.mama p{max-width:36em}
+/* videos */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.vc{border:2.5px solid var(--ink);background:var(--card);display:flex;flex-direction:column;color:var(--ink)}
+.vc .vb{position:relative;aspect-ratio:16/9;background:#000;border:0;border-bottom:2.5px solid var(--ink);border-radius:0;padding:0;width:100%;display:block;overflow:hidden}
+.vc .vb img,.vc .vb iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
+.vc .vb .pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:var(--yel);border:2.5px solid #232322;display:grid;place-items:center;font-size:24px;color:#232322;box-shadow:3px 3px 0 #232322}
+.vc .vt{padding:11px 14px 14px;display:grid;gap:3px}
+.vc b{font-size:17px;line-height:1.15}
+.vc small{color:var(--mut);font-size:13px}
+/* taller: clases y cómo llegar */
+.clases{margin-top:34px;border:2.5px solid var(--ink);background:var(--card);padding:20px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;box-shadow:8px 8px 0 var(--yel),8px 8px 0 2.5px var(--ink)}
+@media (max-width:760px){.clases{grid-template-columns:1fr}}
+.clases h3{margin:6px 0 8px;font-size:30px;line-height:1.05;letter-spacing:-.02em;text-transform:uppercase}
+.clases p{margin:0 0 8px}
+.clases .acts{display:grid;gap:10px}
+</style>
+<script>(function(){var h=location.hostname;if(h!=='cucoarts.com'&&h!=='www.cucoarts.com')return;if(navigator.doNotTrack==='1'||window.doNotTrack==='1'||navigator.globalPrivacyControl===true)return;var s=document.createElement('script');s.async=1;s.src='https://www.googletagmanager.com/gtag/js?id=G-D2Z3H4FNSQ';document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','G-D2Z3H4FNSQ')})();</script>
+</head>
+<body class="noval">
+<header class="top"><div class="w">
+ <a class="brand" href="/">CUCO ARTS <span class="mono">/ artistas</span></a>
+ <nav class="nav" aria-label="Secciones">
+  <a class="l" href="#historia">Historia</a><a class="l" href="#obra">Obra</a><a class="l" href="#encargo">Encargos</a><a class="l" href="#trayectoria">Trayectoria</a>
+  <span class="cur" id="cur" role="group" aria-label="Moneda"></span>
+  <button class="sm" id="theme" type="button" aria-label="Cambiar entre modo claro y modo noche">Modo noche</button>
+  <a class="btn pri sm" href="#encargo">Contratar</a>
+ </nav>
+</div></header>
+<main id="app"><noscript><div class="w"><h1>Frida Balderas</h1><p>Artista plástica egresada del CEDART Alfonso Reyes. Parte del autorretrato surrealista para explorar emociones y recuerdos, con insectos y fauna urbana como metáfora de lo que pasa desapercibido. Pinta al óleo, graba en linóleo, modela en barro y pinta murales.</p><p><a href="https://store.cucoarts.com/collections/frida-balderas">Ver su colección en la tienda</a></p></div></noscript></main>
+<div class="mbar"><a class="btn" href="#obra">Comprar obra</a><a class="btn pri" href="#encargo">Encargar</a></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"></div>
+
+<script src="/artistas/moneda.js"></script>
+<script>
+/* Perfil de artista CUCO ARTS (prototipo). Datos: datos/<artista>.json + datos/<artista>-obras.json (generado desde Shopify con herramientas/construir_obras.js).
+   Marcas de validación: "Por validar" = falta confirmar con el artista o la institución; "Según el artista" = dicho por él en entrevista. */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>window.CUCO_MONEDA?CUCO_MONEDA.fmtCorto(n):"$"+Number(n).toLocaleString("es-MX");
+const slug=((location.pathname.match(/^\/artistas\/([a-z0-9-]+)/i)||[])[1]||new URLSearchParams(location.search).get("a")||"eliezer-blanco").replace(/[^a-z0-9-]/gi,"").toLowerCase();
+const CAT={pintura:"Pintura",acuarela:"Acuarela",serigrafia:"Serigrafía",escultura:"Escultura",grabado:"Grabado",urbano:"Arte urbano",mixta:"Técnica mixta",dibujo:"Dibujo",prenda:"Ropa de artista",papel:"Obra en papel",objeto:"Arte-objeto"};
+const cdn=(u,w)=>u+"?width="+w;
+let A,O,filtro="todo",orden="precio-desc",visibles=9,PIEZAS=[];
+const chip=e=>e==="por_validar"?'<span class="chip v">Por validar</span>':e==="segun_artista"?'<span class="chip sa">Según el artista</span>':"";
+
+/* tema: misma clave que el resto de cucoarts.com */
+(function(){
+ const r=document.documentElement,b=$("#theme");
+ const get=()=>{try{return localStorage.getItem("cucoarts-theme")}catch(e){return null}};
+ const eff=()=>r.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+ const lab=()=>b.textContent=eff()==="dark"?"Modo día":"Modo noche";
+ if(get())r.dataset.theme=get(); lab();
+ b.onclick=()=>{const n=eff()==="dark"?"light":"dark";r.dataset.theme=n;try{localStorage.setItem("cucoarts-theme",n)}catch(e){}lab()};
+})();
+if(window.CUCO_MONEDA){CUCO_MONEDA.mount($("#cur"));CUCO_MONEDA.onChange(()=>{if(A&&O)render()})}
+
+/* Blog: botones a los artículos que mencionan a este artista (blog/articulos.json, campo "artistas") */
+async function blogRel(){
+ try{
+  const L=(()=>{try{return localStorage.getItem("cuco_lang")||"es"}catch(e){return "es"}})();
+  const arts=(await (await fetch("blog/articulos.json")).json()).filter(a=>(a.artistas||[]).includes(slug)&&(a[L]||a.es));
+  if(!arts.length)return;
+  const html=`<section class="lect" id="lecturas"><div class="w"><div class="sec-h"><div><span class="mono">Blog</span><h2>Lee más sobre ${esc(A.nombre.split(" ")[0])}</h2></div></div><div style="display:flex;gap:10px;flex-wrap:wrap">${arts.map(a=>{const v=a[L]||a.es;return `<a class="btn pri" href="blog/articulo.html?a=${esc(a.slug)}&lang=${L}">📖 ${esc(v.titulo)} →</a>`}).join("")}<a class="btn" href="blog/">Ver el blog</a></div></div></section>`;
+  const f=document.getElementById("faq");if(f)f.insertAdjacentHTML("beforebegin",html);
+ }catch(e){}
+}
+async function boot(){
+ try{
+  A=await (await fetch(`/artistas/datos/${slug}.json`)).json();
+  try{const Z=await (await fetch("/artistas/datos/zonas.json")).json();A.zonas=((Z.artistas||{})[slug]||[]).map(x=>({...x,...Z.zonas[x.z]}))}catch(e){A.zonas=[]}
+  O=(await (await fetch(`/artistas/datos/${slug}-obras.json`)).json()).obras.filter(o=>o.estado==="active");
+ }catch(e){$("#app").innerHTML='<div class="w"><p>No encontramos este perfil.</p></div>';return}
+ document.title=`${A.nombre} · Artista · CUCO ARTS`;
+ render();
+}
+
+function render(){
+ PIEZAS=[];
+ const min=Math.min(...O.map(o=>o.precio)), disp=O.filter(o=>o.existencia>0).length;
+ const cats=["todo",...Object.keys(CAT).filter(c=>O.some(o=>o.categoria===c))];
+ const strip=[...O,...O].map(o=>`<img src="${cdn(o.imgs[0],360)}" alt="" loading="lazy">`).join("");
+ $("#app").innerHTML=`
+ <section class="hero" id="inicio"><div class="w">
+  <div>
+   <div class="eyebrow"><span class="chip">Artista</span><span class="mono">${esc(A.ubicacion)}</span>${(A.zonas||[]).filter(z=>z.estado!=="inferido").map(z=>`<span class="zchip mono" style="background:${esc(z.color)}" title="${esc(z.abarca)}">Zona ${esc(z.n)}</span>`).join("")}</div>
+   <h1>${esc(A.nombre)}</h1>
+   <div class="tag-line mono">${esc(A.tagline)}</div>
+   <p class="lead">${esc(A.intro)}</p>
+   <div class="cta"><a class="btn pri" href="#obra">Ver obra en venta</a><a class="btn" href="https://store.cucoarts.com/collections/${esc(A.coleccion)}" target="_blank" rel="noopener">Ver toda su colección ↗</a><a class="btn yel" href="#encargo">Hablemos de tu proyecto</a></div>
+   <div class="facts">
+    ${A.desde?`<div><span class="mono">Taller y galería</span><b>Desde ${A.desde}</b></div>`:(A.dato?`<div><span class="mono">${esc(A.dato.k)}</span><b>${esc(A.dato.v)}</b></div>`:"")}
+    <div><span class="mono">${esc(A.tecnicas_label||"Técnicas")}</span><b class="t">${esc(A.tecnicas.map(t=>t.t).join(", ").replace(/, ([^,]*)$/," y $1"))}</b></div>
+    <div><span class="mono">Obra en tienda</span><b>Desde ${money(min)}</b></div>
+   </div>
+  </div>
+  <div class="portrait">
+   <div class="fr"><img src="${esc(A.retrato)}" alt="${esc(A.retrato_alt||("Retrato de "+A.nombre+" frente a una de sus pinturas"))}"></div>
+   ${A.desde?`<div class="stamp mono">Taller y galería<b>${new Date().getFullYear()-A.desde} años</b>de obra constante</div>`:(A.sello?`<div class="stamp mono">${esc(A.sello.k)}<b>${esc(A.sello.v)}</b>${esc(A.sello.s||"")}</div>`:"")}
+   <p class="credit">Foto: CUCO ARTS${A.ig?` · <a href="https://www.instagram.com/${esc(A.ig)}/" target="_blank" rel="noopener">@${esc(A.ig)}</a>`:""}</p>
+  </div>
+ </div></section>
+ <div class="strip" aria-hidden="true"><div class="tr">${strip}</div></div>
+
+ ${A.video_principal?`<section class="feat" id="conoce"><div class="w">
+  <button type="button" class="vb" data-yt="${esc(A.video_principal.yt)}" data-t="${esc(A.video_principal.t)}" aria-label="Reproducir: ${esc(A.video_principal.t)}"><img src="https://i.ytimg.com/vi/${esc(A.video_principal.yt)}/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${esc(A.video_principal.yt)}/hqdefault.jpg'" alt=""><span class="pl" aria-hidden="true">▶</span></button>
+  <div><span class="mono">${esc(A.video_principal.kicker||"Conócelo")} · ${esc(A.video_principal.dur)}</span><h2>${esc(A.video_principal.titulo)}</h2><p>${esc(A.video_principal.texto)}</p><div class="src">${esc(A.video_principal.fuente)} ${chip("por_validar")}</div></div>
+ </div></section>`:""}
+
+ ${A.reconocimiento?`<section class="reco" id="reconocimiento"><div class="w">
+  <div class="rimgs"><img class="m" src="${esc(A.reconocimiento.img)}" alt="Medalla de la Presea al Mérito Ciudadano, edición 2019" loading="lazy"><img class="p" src="${esc(A.reconocimiento.img2)}" alt="Eliezer Blanco con la medalla y la placa de reconocimiento" loading="lazy"></div>
+  <div class="rtx"><span class="mono">🏅 Reconocimiento · ${esc(A.reconocimiento.anio)}</span><h2>${esc(A.reconocimiento.titulo)}</h2><p>${esc(A.reconocimiento.otorga)}. ${esc(A.reconocimiento.texto)}</p><div class="src">${esc(A.reconocimiento.fuente)} ${chip(A.reconocimiento.estado)}</div></div>
+ </div></section>`:""}
+
+ <section class="story" id="historia"><div class="w">
+  <aside>
+   <span class="mono">Su historia</span>
+   <h2>${esc(A.historia_titulo||"Del cajón de gises a dieciocho años de taller")}</h2>
+   <div class="pilares">${A.pilares.map(p=>`<div class="pilar"><span class="pe" aria-hidden="true">${p.e||""}</span><div><b>${esc(p.t)}</b><span>${esc(p.d)}</span></div></div>`).join("")}</div>
+  </aside>
+  <ol class="tl">${A.historia.map(h=>`<li>
+    <span class="em" aria-hidden="true">${h.e||""}</span>
+    <span class="yr mono">${esc(h.anio)}</span><h3>${esc(h.titulo)}</h3>
+    <p>${esc(h.texto)}</p>
+    ${h.img?`<img class="hlogo" src="${esc(h.img)}" alt="${esc(h.img_alt||"")}" loading="lazy">`:""}
+    ${h.cita?`<blockquote>“${esc(h.cita)}”<small>${esc(h.fuente)}</small></blockquote>`:""}
+    <div class="src">${h.url?`Fuente: <a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.fuente)}</a>`:(!h.cita?esc(h.fuente):"")} ${chip(h.estado)}</div>
+  </li>`).join("")}</ol>
+ </div></section>
+
+ <section id="obra"><div class="w">
+  <div class="sec-h"><div><span class="mono">Obra original · ${disp} disponibles</span><h2>Llévate una pieza</h2>
+   <p class="sub">Cada obra es única y se compra en la tienda de CUCO ARTS. Toca una pieza para verla de cerca. <a href="https://store.cucoarts.com/collections/${esc(A.coleccion)}" target="_blank" rel="noopener">Ver toda la colección en la tienda ↗</a></p></div>
+   <div class="filters" role="group" aria-label="Filtrar obra">
+    ${cats.map(c=>`<button type="button" data-cat="${c}" aria-pressed="${c===filtro}">${c==="todo"?"Todo":CAT[c]}</button>`).join("")}
+    <select id="orden" aria-label="Ordenar"><option value="precio-desc">Mayor precio</option><option value="precio-asc">Menor precio</option><option value="disp">Disponibles primero</option></select>
+   </div></div>
+  <div class="grid" id="grid"></div>
+  <div class="more" id="more"></div>
+ </div></section>
+
+ ${A.encargos_hechos?`<section id="encargos-hechos"><div class="w">
+  <div class="sec-h"><div><span class="mono">${esc(A.encargos_hechos.kicker||"Encargos entregados")}</span><h2>${esc(A.encargos_hechos.titulo)}</h2><p class="sub">${esc(A.encargos_hechos.intro)}</p></div></div>
+  <div class="eg">${A.encargos_hechos.items.map(o=>`<article class="ec"><div class="ei"><img src="${esc(o.img)}" alt="${esc(o.t)}, ${esc(o.tec)}" loading="lazy"></div><div class="eb"><span class="mono">${esc(o.anio)}</span><h3>${esc(o.t)}</h3><span class="em2">${esc(o.tec)}${o.med?" · "+esc(o.med):""}</span><p>${esc(o.texto)}</p><div class="priv"><span class="chip">Colección privada</span> ${chip(o.estado)}</div></div></article>`).join("")}</div>
+  <p class="priv-note">${esc(A.encargos_hechos.nota)} ${chip("por_validar")}</p>
+  <p class="src">${esc(A.encargos_hechos.fuente)}</p>
+ </div></section>`:""}
+
+ ${A.mama?`<section class="mama" id="dolores"><div class="w">
+  <div>
+   <span class="mono">${esc(A.mama.kicker)}</span><h2>${esc(A.mama.titulo)}</h2>
+   ${A.mama.parrafos.map(p=>`<p>${esc(p)}</p>`).join("")}
+   ${A.mama.cita?`<blockquote>“${esc(A.mama.cita)}”<small>${esc(A.mama.cita_fuente)} ${chip("segun_artista")}</small></blockquote>`:""}
+   <p class="src">${esc(A.mama.fuente)} ${chip("por_validar")}</p>
+   ${A.mama.nota?`<div class="pend">${esc(A.mama.nota)}</div>`:""}
+  </div>
+  <div>
+   ${A.mama.obra?`<figure class="obra-m"><img src="${cdn(O.find(x=>x.id===A.mama.obra)?.imgs[0]||"",700)}" alt="Obra de Dolores Villareal"><figcaption><b>Obra de Dolores Villareal</b> en la tienda · ${esc(O.find(x=>x.id===A.mama.obra)?.medidas||"")} <button class="sm" type="button" data-obra="${esc(A.mama.obra)}" id="verMama">Ver la obra</button></figcaption></figure>`:""}
+   <div class="vgrid" style="margin-top:26px">${A.mama.videos.map(vidCard).join("")}</div>
+  </div>
+ </div></section>`:""}
+
+ ${A.videos?`<section id="videos"><div class="w">
+  <div class="sec-h"><div><span class="mono">En video</span><h2>${esc(A.videos.titulo)}</h2><p class="sub">${esc(A.videos.intro)}</p></div></div>
+  <div class="vgrid">${A.videos.items.map(vidCard).join("")}</div>
+ </div></section>`:""}
+
+ ${A.archivo?`<section class="archivo" id="archivo"><div class="w">
+  <div class="sec-h"><div><span class="mono">Archivo · 2015–2018</span><h2>Antes de la tienda</h2><p class="sub">${esc(A.archivo.intro)}</p></div></div>
+  <div class="agrid">${A.archivo.obras.map((o,i)=>`<button type="button" class="acard" data-arch="${i}" aria-label="Ver ${esc(o.t)}"><span class="aim"><img src="${esc(o.img)}" alt="${esc(o.t)}, ${esc(o.tec)}" loading="lazy"></span><span class="abd"><b>${esc(o.t)}</b><small>${esc(o.tec)} · ${esc(o.med)} · ${esc(o.anio)}</small></span></button>`).join("")}</div>
+  <p class="src">${esc(A.archivo.fuente)} ${chip(A.archivo.estado)}</p>
+ </div></section>`:""}
+
+ <section class="encargo" id="encargo"><div class="w enc">
+  <div>
+   <span class="mono">Obra por encargo</span>
+   <h2>Hecho a tu medida</h2>
+   <p class="sub">${esc(A.encargo.intro)}</p>
+   ${A.encargo.cita?`<blockquote>“${esc(A.encargo.cita)}”<small>${esc(A.encargo.cita_fuente)} ${chip("segun_artista")}</small></blockquote>`:""}
+   <ol class="pasos">${A.encargo.pasos.map(p=>`<li><div><b>${esc(p.t)}</b>${esc(p.d)}</div></li>`).join("")}</ol>
+  </div>
+  <form class="form" id="form" novalidate>
+   <h3>Cuéntanos tu idea</h3>
+   <p class="n">CUCO ARTS recibe tu solicitud, te responde y te conecta con ${esc(A.nombre.split(" ")[0])}. ${esc(A.encargo.nota_precio)}</p>
+   <div class="f"><label>¿Qué te imaginas?</label><div class="opts">${A.encargo.tipos.map((t,i)=>`<label><input type="radio" name="tipo" value="${esc(t)}" ${i===0?"checked":""}>${esc(t)}</label>`).join("")}</div></div>
+   <div class="f"><label for="q_desc">Tu idea</label><textarea id="q_desc" placeholder="Para quién es, dónde va, qué quieres que cuente…"></textarea></div>
+   <div class="two"><div class="f"><label for="q_med">Medida aproximada</label><input id="q_med" placeholder="Ej. 80 × 100 cm"></div>
+    <div class="f"><label for="q_fecha">¿Para cuándo?</label><input id="q_fecha" placeholder="Ej. diciembre"></div></div>
+   <div class="f"><label for="q_pres">Presupuesto aproximado</label><select id="q_pres"><option value="">Prefiero que me recomienden</option><option>Menos de $10,000</option><option>$10,000 – $25,000</option><option>$25,000 – $50,000</option><option>Más de $50,000</option></select></div>
+   <div class="two"><div class="f"><label for="q_nom">Tu nombre *</label><input id="q_nom" autocomplete="name"></div>
+    <div class="f"><label for="q_tel">WhatsApp *</label><input id="q_tel" type="tel" autocomplete="tel" inputmode="tel"></div></div>
+   <div class="hp" aria-hidden="true"><input id="q_web" tabindex="-1" autocomplete="off"></div>
+   <p class="err" id="q_err" hidden></p>
+   <button class="pri" type="submit">Enviar solicitud</button>
+   <div class="done" id="q_done" hidden></div>
+  </form>
+ </div></section>
+
+ <section id="ciudad"${(A.ciudad&&A.ciudad.length)?"":" hidden"}><div class="w">
+  <div class="sec-h"><div><span class="mono">En la ciudad</span><h2>Su obra, en Monterrey</h2><p class="sub">Proyectos públicos, colaboraciones y exposiciones.</p></div></div>
+  <div class="cgrid">${(A.ciudad||[]).map(c=>`<article class="cc">${c.img?`<img class="ci" src="${esc(c.img)}" alt="${esc(c.titulo)}" loading="lazy">`:""}<span class="mono">${esc(c.anio)}</span><h3>${esc(c.titulo)}</h3><p>${esc(c.texto)}</p>
+    <div class="src">${c.url?`Fuente: <a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.fuente)}</a>`:esc(c.fuente)} ${chip(c.estado)}</div>${c.nota?`<p class="note">${esc(c.nota)}</p>`:""}</article>`).join("")}</div>
+ </div></section>
+
+ <section class="taller" id="taller"><div class="w">
+  <div class="sec-h"><div><span class="mono">${esc(A.taller_kicker||"Taller y exposiciones")}</span><h2>${esc(A.taller_titulo||"Cinco lenguajes, un mismo color")}</h2></div></div>
+  <div class="pano">
+   <figure><img src="${esc(A.taller)}" alt="${esc(A.taller_alt||A.taller_pie)}" loading="lazy"><figcaption>${esc(A.taller_pie)} · Foto: CUCO ARTS ${chip("por_validar")}</figcaption></figure>
+   ${A.taller_extra?`<figure class="pola"><img src="${esc(A.taller_extra.img)}" alt="Roberto y ${esc(A.nombre.split(" ")[0])} en el taller, frente a una pintura y la cámara de la entrevista" loading="lazy"><figcaption>${esc(A.taller_extra.pie)} ${chip("por_validar")}</figcaption></figure>`:""}
+  </div>
+  ${A.taller_fotos?`<div class="tfotos${A.taller_extra?"":" nopola"}">${A.taller_fotos.map(f=>`<figure><img src="${esc(f.img)}" alt="${esc(f.pie)}" loading="lazy"><figcaption>${esc(f.pie)} ${chip(f.estado)}</figcaption></figure>`).join("")}</div>`:""}
+  ${A.taller_info?`<div class="clases" id="clases"><div><span class="mono">${esc(A.taller_info.kicker)}</span><h3>${esc(A.taller_info.nombre)}</h3><p>${esc(A.taller_info.texto)}</p><p class="src">${esc(A.taller_info.dir)}${A.taller_info.tel?" · Tel. "+esc(A.taller_info.tel):""}${A.taller_info.rating?"<br>"+esc(A.taller_info.rating):""}<br>${esc(A.taller_info.fuente)} ${chip("por_validar")}</p></div>
+   <div class="acts"><a class="btn pri" href="${esc(A.taller_info.maps)}" target="_blank" rel="noopener">${esc(A.taller_info.maps_label||"Cómo llegar ↗")}</a><a class="btn" href="https://wa.me/${A.whatsapp}?text=${encodeURIComponent(A.taller_info.wa_texto||("Hola, quiero informes de las clases en Arte AHEDO con "+A.nombre+"."))}" target="_blank" rel="noopener">${esc(A.taller_info.cta||"Pedir informes de clases")}</a></div></div>`:""}
+  <div class="tecs">${A.tecnicas.map((t,ti)=>`<article class="tb${A.tecnicas.length%2&&ti===A.tecnicas.length-1?" wide":""}"><h3>${esc(t.t)}</h3><p>${esc(t.d)}</p>
+    <div class="zz">${(t.ejemplos||[]).map(e=>{const o=O.find(x=>x.id===e.obra);
+     if(o)return `<button type="button" class="zoom" data-obra="${esc(o.id)}" aria-label="Ver la obra completa: ${esc(o.titulo)}"><img class="d" src="${esc(e.img)}" alt="${esc(e.pie)}" loading="lazy"><span class="lupa" aria-hidden="true">🔍 zoom</span><span class="ins"><img src="${cdn(o.imgs[0],200)}" alt="" loading="lazy"></span><span class="cap">${esc(e.pie)}</span></button>`;
+     if(e.completa){PIEZAS.push(e);return `<button type="button" class="zoom" data-pieza="${PIEZAS.length-1}" aria-label="Ver la pieza completa: ${esc(e.titulo||e.pie)}"><img class="d" src="${esc(e.img)}" alt="${esc(e.pie)}" loading="lazy"><span class="lupa" aria-hidden="true">🔍 zoom</span><span class="ins"><img src="${esc(e.completa)}" alt="" loading="lazy"></span><span class="cap">${esc(e.pie)} ${chip(e.estado)}</span></button>`}
+     return ""}).join("")}</div></article>`).join("")}</div>
+ </div></section>
+
+ <section id="trayectoria"><div class="w">
+  <div class="sec-h"><div><span class="mono">Trayectoria</span><h2>Formación y recorrido</h2></div></div>
+  <div class="tray">
+   ${(A.formacion||[]).length?`<div><h3 class="mono">Formación</h3><ul>${(A.formacion||[]).map(f=>`<li><b>${esc(f.t)}</b><span>${esc(f.d)}</span></li>`).join("")}</ul><p class="src">Según el artista ${chip("segun_artista")}</p></div>`:""}
+   <div>${["exposiciones","premios","proyectos","colecciones","prensa"].map(k=>{const L=A.trayectoria[k]||[];const V=L.filter(x=>!x.oculto);return V.length?`<h3 class="mono">${{exposiciones:"Exposiciones",premios:"Premios y reconocimientos",proyectos:"Proyectos y comisiones",colecciones:"Colecciones",prensa:"Prensa y publicaciones"}[k]}</h3><ul>${V.map(x=>`<li><b>${esc(x.titulo)}${x.anio?" · "+esc(x.anio):""}</b><span>${esc([x.lugar||x.para||x.otorga||x.medio,x.detalle].filter(Boolean).join(" — "))}${x.enlace?` <a href="${esc(x.enlace)}" target="_blank" rel="noopener">Ver</a>`:""} ${chip(x.estado)}</span></li>`).join("")}</ul>`:""}).join("")}${A.trayectoria.nota?`<div class="pend">${esc(A.trayectoria.nota)} ${chip("por_validar")}</div>`:""}</div>
+  </div>
+ </div></section>
+
+ <section id="faq"><div class="w">
+  <div class="sec-h"><div><span class="mono">Preguntas frecuentes</span><h2>Antes de decidir</h2></div></div>
+  ${A.faq.map(f=>`<details><summary><span>${esc(f.p)}${f.proximamente?' <span class="chip v">Próximamente</span>':""}</span></summary><p>${esc(f.r)}</p></details>`).join("")}
+ </div></section>
+
+ <footer><div class="w">
+  <div><p><b>CUCO ARTS</b> · Cultural Collective ARTS</p><p class="src">Plataforma de arte y cultura de Monterrey. Perfil preparado por CUCO ARTS.</p></div>
+  <div><p><a href="https://store.cucoarts.com/collections/${esc(A.coleccion)}" target="_blank" rel="noopener">Su colección en la tienda</a> · <a href="https://store.cucoarts.com" target="_blank" rel="noopener">Tienda</a>${A.ig?` · <a href="https://www.instagram.com/${esc(A.ig)}/" target="_blank" rel="noopener">Instagram del artista</a>`:""} · <a href="/privacidad">Aviso de privacidad</a></p></div>
+ </div></footer>`;
+ pintaGrid();
+ $$(".filters [data-cat]").forEach(b=>b.onclick=()=>{filtro=b.dataset.cat;visibles=9;$$(".filters [data-cat]").forEach(x=>x.setAttribute("aria-pressed",x===b));pintaGrid()});
+ $("#orden").onchange=e=>{orden=e.target.value;visibles=9;pintaGrid()};
+ $("#form").onsubmit=enviar;
+ /* perfil mínimo (p. ej. artistas con una sola pieza y una aparición): solo portada, video, historia y obra */
+ if(A.mini){["encargo","ciudad","taller","trayectoria","faq"].forEach(id=>{const e=$("#"+id);if(e)e.remove()});$$('a[href="#encargo"],a[href="#trayectoria"]').forEach(a=>a.remove());$$(".cta .btn.yel").forEach(a=>a.remove())}
+ $$(".acard").forEach(a=>a.onclick=()=>abreArchivo(A.archivo.obras[+a.dataset.arch],a));
+ $$(".vb[data-yt]").forEach(b=>b.onclick=()=>{b.outerHTML=`<iframe class="vb" src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="${esc(b.dataset.t)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="aspect-ratio:16/9;width:100%;border:0;display:block"></iframe>`});
+ const vm=$("#verMama"); if(vm)vm.onclick=()=>abre(vm.dataset.obra,vm);
+ $$(".zoom").forEach(z=>z.onclick=()=>z.dataset.pieza!==undefined?abrePieza(PIEZAS[+z.dataset.pieza],z):abre(z.dataset.obra,z));
+}
+
+/* tarjeta de video: YouTube (clic para cargar el reproductor) o enlace a Drive */
+function vidCard(v){
+ const cuerpo=`<div class="vt"><span class="mono">${esc(v.anio||"")}</span><b>${esc(v.t)}</b><small>${esc(v.fuente)} ${chip(v.estado||"por_validar")}</small></div>`;
+ if(v.yt)return `<article class="vc"><button type="button" class="vb" data-yt="${esc(v.yt)}" data-t="${esc(v.t)}" aria-label="Reproducir: ${esc(v.t)}"><img src="https://i.ytimg.com/vi/${esc(v.yt)}/hqdefault.jpg" alt="" loading="lazy"><span class="pl" aria-hidden="true">▶</span></button>${cuerpo}</article>`;
+ return `<article class="vc"><a class="vb" href="${esc(v.url)}" target="_blank" rel="noopener" aria-label="Abrir: ${esc(v.t)}" style="display:grid;place-items:center;background:#232322;color:#fff;text-decoration:none"><span class="pl" aria-hidden="true" style="position:static;transform:none">▶</span></a>${cuerpo}</article>`;
+}
+
+function pintaGrid(){
+ let L=O.filter(o=>filtro==="todo"||o.categoria===filtro);
+ L.sort((a,b)=>orden==="precio-asc"?a.precio-b.precio:orden==="disp"?(b.existencia>0)-(a.existencia>0)||b.precio-a.precio:b.precio-a.precio);
+ const total=L.length; L=L.slice(0,visibles);
+ $("#more").innerHTML=total>visibles?`<button type="button" id="moreBtn">Ver más obras (${total-visibles})</button>`:"";
+ if($("#moreBtn"))$("#moreBtn").onclick=()=>{visibles+=9;pintaGrid()};
+ $("#grid").innerHTML=L.length?L.map(o=>`<button class="card ${o.existencia>0?"":"sold"}" type="button" data-id="${esc(o.id)}" aria-label="Ver ${esc(o.titulo)}">
+   <div class="im"><span class="st chip ${o.existencia>0?"":"v"}">${o.existencia>0?"Disponible":"Vendida"}</span><img src="${cdn(o.imgs[0],640)}" alt="${esc(o.titulo)}, ${esc(o.tecnica||"")}" loading="lazy"></div>
+   <div class="bd"><h3>${esc(o.titulo)}</h3><span class="mt">${esc(o.tecnica||"")}${o.medidas?" · "+esc(o.medidas):""}</span><span class="pr">${money(o.precio)}</span></div></button>`).join(""):'<div class="empty">No hay obras en esta técnica por ahora.</div>';
+ $$("#grid .card").forEach(c=>c.onclick=()=>abre(c.dataset.id,c));
+}
+
+let lastFocus=null;
+function abre(id,from){
+ const o=O.find(x=>x.id===id); if(!o)return; lastFocus=from||document.activeElement;
+ const wa=`https://wa.me/${A.whatsapp}?text=${encodeURIComponent(`Hola, me interesa la obra «${o.titulo}» de ${A.nombre} (${money(o.precio)}). ¿Me ayudan?`)}`;
+ $("#modal").innerHTML=`<div class="mod" style="position:relative">
+  <div class="g"><div class="main"><img id="mImg" src="${cdn(o.imgs[0],1200)}" alt="${esc(o.titulo)}"></div>
+   <div class="thumbs">${o.imgs.map((u,i)=>`<button type="button" data-i="${i}" aria-current="${i===0}" aria-label="Foto ${i+1}"><img src="${cdn(u,160)}" alt=""></button>`).join("")}</div></div>
+  <div class="i"><button class="sm x" id="mClose" type="button" aria-label="Cerrar">✕</button>
+   <span class="mono">${esc(A.nombre)}</span><h3 id="mTitle">${esc(o.titulo)}</h3>
+   <div>${esc(o.tecnica||"")}${o.medidas?"<br>"+esc(o.medidas):""}</div>
+   <div class="pr">${money(o.precio)}</div>
+   <div><span class="chip ${o.existencia>0?"":"v"}">${o.existencia>0?"Disponible":"Vendida"}</span></div>
+   <div class="acts">${o.existencia>0?`<a class="btn pri" href="${esc(o.url)}" target="_blank" rel="noopener">Comprar en la tienda ↗</a>`:`<a class="btn" href="#encargo" id="mSim">Pedir algo parecido</a>`}
+    <a class="btn" href="${wa}" target="_blank" rel="noopener">Preguntar por esta obra</a></div>
+   <p class="src">Obra original hecha por ${esc(A.nombre)}. Se puede enmarcar bajo pedido.</p></div></div>`;
+ $("#modal").classList.add("on"); document.body.style.overflow="hidden";
+ $$(".thumbs button").forEach(b=>b.onclick=()=>{$("#mImg").src=cdn(o.imgs[b.dataset.i],1200);$$(".thumbs button").forEach(x=>x.setAttribute("aria-current",x===b))});
+ $("#mClose").onclick=cierra; const s=$("#mSim"); if(s)s.onclick=cierra; $("#mClose").focus();
+}
+/* obra de archivo (ya no está en la tienda): imagen grande, datos de la ficha y contacto */
+function abreArchivo(o,from){
+ lastFocus=from||document.activeElement;
+ const wa=`https://wa.me/${A.whatsapp}?text=${encodeURIComponent(`Hola, me interesa algo parecido a «${o.t}» (${o.anio}) de ${A.nombre}. ¿Me ayudan?`)}`;
+ $("#modal").innerHTML=`<div class="mod" style="position:relative">
+  <div class="g"><div class="main" style="background:#000"><img src="${esc(o.img)}" alt="${esc(o.t)}"></div></div>
+  <div class="i"><button class="sm x" id="mClose" type="button" aria-label="Cerrar">✕</button>
+   <span class="mono">${esc(A.nombre)} · Archivo</span><h3 id="mTitle">${esc(o.t)}</h3>
+   <div>${esc(o.tec)}<br>${esc(o.med)} · ${esc(o.anio)}</div>
+   <div><span class="chip">Obra de archivo</span> <span class="chip v">Por validar</span></div>
+   <div class="acts"><a class="btn pri" href="#encargo" id="mSim">Pedir algo parecido</a><a class="btn" href="${wa}" target="_blank" rel="noopener">Preguntar por WhatsApp</a></div>
+   <p class="src">Esta obra es de archivo y no está en la tienda. Si sigue disponible o quién la tiene hoy, se confirma con el artista.</p></div></div>`;
+ $("#modal").classList.add("on"); document.body.style.overflow="hidden";
+ $("#mClose").onclick=cierra; $("#mSim").onclick=cierra; $("#mClose").focus();
+}
+/* piezas sin ficha en la tienda (p. ej. cerámica): foto completa y contacto, sin precio ni compra en línea */
+function abrePieza(e,from){
+ lastFocus=from||document.activeElement;
+ const wa=`https://wa.me/${A.whatsapp}?text=${encodeURIComponent(`Hola, me interesa la pieza en barro «${e.titulo||"sin título"}» de ${A.nombre}. ¿Está disponible?`)}`;
+ $("#modal").innerHTML=`<div class="mod" style="position:relative">
+  <div class="g"><div class="main"><img src="${esc(e.completa)}" alt="${esc(e.titulo||e.pie)}"></div></div>
+  <div class="i"><button class="sm x" id="mClose" type="button" aria-label="Cerrar">✕</button>
+   <span class="mono">${esc(A.nombre)}</span><h3 id="mTitle">${esc(e.titulo||"Pieza en barro")}</h3>
+   <div>Cerámica · barro de alta temperatura</div>
+   <div><span class="chip v">Por validar</span></div>
+   <div class="acts"><a class="btn pri" href="${wa}" target="_blank" rel="noopener">Preguntar por esta pieza</a><a class="btn" href="#encargo" id="mSim">Pedir algo parecido</a></div>
+   <p class="src">Esta pieza no está en la tienda: el título, las medidas, el precio y la disponibilidad se confirman con el artista.</p></div></div>`;
+ $("#modal").classList.add("on"); document.body.style.overflow="hidden";
+ $("#mClose").onclick=cierra; $("#mSim").onclick=cierra; $("#mClose").focus();
+}
+function cierra(){$("#modal").classList.remove("on");document.body.style.overflow="";if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$("#modal").addEventListener("mousedown",e=>{if(e.target.id==="modal")cierra()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#modal").classList.contains("on"))cierra()});
+
+function enviar(e){
+ e.preventDefault();
+ const v=id=>$("#"+id).value.trim(), err=$("#q_err");
+ const tipo=($('input[name="tipo"]:checked')||{}).value||"";
+ if($("#q_web").value)return;
+ if(!v("q_nom")||v("q_tel").replace(/\D/g,"").length<10){err.textContent="Escribe tu nombre y un WhatsApp de 10 dígitos.";err.hidden=false;return}
+ err.hidden=true;
+ const txt=[`Hola, quiero hacer un encargo con ${A.nombre}.`,`Qué: ${tipo}`,v("q_desc")&&`Idea: ${v("q_desc")}`,v("q_med")&&`Medida: ${v("q_med")}`,v("q_fecha")&&`Para cuándo: ${v("q_fecha")}`,v("q_pres")&&`Presupuesto: ${v("q_pres")}`,`Nombre: ${v("q_nom")}`,`WhatsApp: ${v("q_tel")}`].filter(Boolean).join("\n");
+ const d=$("#q_done"); d.hidden=false;
+ d.innerHTML=`<b>Casi listo.</b><br>Revisa tu solicitud y envíala por WhatsApp a CUCO ARTS; nosotros te conectamos con el artista:<pre>${esc(txt)}</pre>
+  <a class="btn pri" href="https://wa.me/${A.whatsapp}?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Enviar por WhatsApp</a>`;
+ d.scrollIntoView({behavior:"smooth",block:"center"});
+}
+boot();
+</script>
+<script src="/artistas/certificados-perfil.js" defer></script>
+<!-- header-homologado:inicio (revertir = borrar estas 4 líneas) -->
+<script src="/artistas/sitio/sitio.js" data-tag="/artistas" data-tag-href="#inicio" defer></script>
+<script src="/artistas/sitio/subnav.js" defer></script>
+<script src="/artistas/sitio/acento.js" defer></script>
+<script src="/artistas/sitio/perfil.js" defer></script>
+<!-- header-homologado:fin -->
+</body>
+</html>

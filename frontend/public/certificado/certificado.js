@@ -108,7 +108,7 @@ function render(){
  <section id="obras"><div class="w">
   <div class="sec-h"><div><span class="mono">Más de ${esc(first)}</span><h2>Más obra de ${esc(first)}</h2></div><span class="cur" id="cur" role="group" aria-label="Moneda"></span></div>
   <div class="grid" id="obrasG"></div>
-  <div class="more"><a class="btn pri" href="${esc(A.perfil)}">Ver obra de ${esc(first)}</a><a class="btn" href="${esc(A.tienda)}" target="_blank" rel="noopener">Ver «${esc(C.titulo)}» en la tienda</a></div>
+  <div class="more"><a class="btn pri" href="${esc(A.perfil)}">Ver perfil de ${esc(first)}</a><a class="btn" href="${esc(A.tienda)}" target="_blank" rel="noopener">Ver «${esc(C.titulo)}» en la tienda</a></div>
  </div></section>`;
  $("body").insertAdjacentHTML("beforeend",`<footer><div class="w"><div class="fl"><img class="lg lg-t" src="/certificado/img/logo-cuco-tinta.png" alt="CUCO ARTS"><img class="lg lg-w" src="/certificado/img/logo-cuco-blanco.png" alt="CUCO ARTS"></div><div><p class="mono">Documentación de procedencia</p><p>Este certificado registra la obra, su autor y su historia con la información disponible a la fecha de emisión (${esc(C.emitido_txt)}). No es un avalúo y no promete valor, inversión ni plusvalía.</p><p class="src">${esc(C.id)} · CUCO ARTS</p></div></div></footer>`);
  if(window.CUCO_MONEDA)CUCO_MONEDA.mount($("#cur"));
@@ -122,7 +122,7 @@ function render(){
 
 /* barra interna: secciones del certificado y regreso al perfil */
 function initSubnav(){
- const go=()=>{if(!window.SITIO_SUBNAV||go.done)return;go.done=1;SITIO_SUBNAV.init({label:"Secciones del certificado",back:{label:"← Obra de "+C.artista.nombre.split(" ")[0],href:C.artista.perfil},items:()=>[{id:"obra",label:"Obra"},{id:"historia",label:"Historia"},{id:"fechas",label:"Fechas"},{id:"propietario",label:"Propietario"},{id:"verificar",label:"Verificar"}].filter(x=>$("#"+x.id)),watch:$("#app")})};
+ const go=()=>{if(!window.SITIO_SUBNAV||go.done)return;go.done=1;SITIO_SUBNAV.init({label:"Secciones del certificado",back:{label:"← Perfil de "+C.artista.nombre.split(" ")[0],href:C.artista.perfil},items:()=>[{id:"obra",label:"Obra"},{id:"historia",label:"Historia"},{id:"fechas",label:"Fechas"},{id:"propietario",label:"Propietario"},{id:"verificar",label:"Verificar"}].filter(x=>$("#"+x.id)),watch:$("#app")})};
  go();if(!go.done)addEventListener("load",go);
 }
 function renderObras(){

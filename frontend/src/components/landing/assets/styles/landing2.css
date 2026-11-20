@@ -422,3 +422,7 @@ a.cl-ref:hover,a.cl-ref:focus-visible{transform:translate(-2px,-2px);box-shadow:
 /* Áreas táctiles de al menos 44 px (auditoría del 3-nov-2026): se agrandan sin cambiar cómo se ven ni el espacio que ocupan. */
 .cl-logo{box-sizing:content-box;padding:8px 6px;margin:-8px -6px;background-clip:content-box;-webkit-mask-origin:content-box;-webkit-mask-clip:content-box;mask-origin:content-box;mask-clip:content-box}
 .cl-textlink{display:inline-block;padding:15px 0;margin:-15px 0}
+
+/* el crédito de la obra enlaza al perfil del artista (20-nov-2026) */
+.cl-pol figcaption a.cl-pol-perfil{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
+.cl-pol figcaption a.cl-pol-perfil:hover{text-decoration-thickness:2.5px}

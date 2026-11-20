@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COPY, Copy, Lang, REFS } from './copy';
 import { POOL, PoolItem } from './pool';
+import { PERFIL_POR_NOMBRE } from './perfiles';
 import { FilePicker, Honeypot, Fallback, Sent, useSender, Vals } from './shared';
 import MuralWizard from './MuralWizard';
 import ObraWizard from './ObraWizard';
@@ -77,6 +78,7 @@ function pickFour(): PoolItem[] {
 }
 const pickEvent = (exclude: PoolItem[]): PoolItem => shuffle(POOL.filter(p => p.kind === 'foto' && !exclude.some(x => x.id === p.id)))[0];
 
+const perfilDe = (p: PoolItem) => (p.kind === 'obra' ? PERFIL_POR_NOMBRE[p.who] : undefined);
 const creditLine = (c: Copy, p: PoolItem) =>
   p.kind === 'obra' ? `${c.credit.art} ${p.who}` : p.who ? `${c.credit.photo}: ${p.who} · ${p.zone}` : `${c.credit.zone} · ${p.zone}`;
 
@@ -420,7 +422,7 @@ export default function Landing() {
                           <>
                             <img src={`/landing-pool/${q.id}.jpg`} width={q.w} height={q.h} alt={alt(q)} loading={ci === 0 && i === 0 && q === hero[k] ? 'eager' : 'lazy'} decoding="async"
                               style={{ aspectRatio: `${hero[k].w} / ${hero[k].h}`, objectFit: 'cover' }} />
-                            <figcaption>{creditLine(c, q)}</figcaption>
+                            <figcaption>{perfilDe(q) ? <a className="cl-pol-perfil" href={`/artistas/${perfilDe(q)}?ref=portada`}>{creditLine(c, q)} →</a> : creditLine(c, q)}</figcaption>
                           </>
                         )} />
                     </figure>
