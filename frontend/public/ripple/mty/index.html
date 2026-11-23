@@ -1048,7 +1048,7 @@ const VT={es:{
   tab_ev:'🏆 Eventos',tab_us:'⚔️ ART HUNTERS',s_ev:'Buscar evento…',s_us:'Buscar art hunter…',o_pts:'Más puntos',o_pts_a:'Menos puntos',o_az:'A–Z',
   f_all:'Todos',f_com:'👥 Con comunidad',f_ins:'🏛️ Con instituciones',f_esc:'🎓 Con escuelas',f_reg:'✅ Registrados',f_per:'🙋 Personas',f_org:'🏢 Organizaciones',
   cnt:'{n} de {m}',none:'Nada coincide con tu búsqueda.',ph:'PTS',aps:'aportaciones',ap1:'aportación',stage:'Por etapa del evento',src:'Quién sumó',apl:'Aportaciones',more:'Mostrar {n} más',
-  to_ev:'Ver el evento en /mty ↗',view:'Ver publicación ↗',prof:'Ver perfil en Instagram ↗',tot:'Total',noev:'Sin evento',
+  to_ev:'Ver el evento en /mty ↗',view:'Ver publicación ↗',prof:'Ver perfil en Instagram ↗',prof_art:'Ver su perfil de artista →',tot:'Total',noev:'Sin evento',
   ty_post:'Post',ty_reel:'Reel',ty_historia:'Historia',ty_registro:'Registro',ty_artista:'Recomendó a un artista',ty_compartir:'Compartió desde cucoarts.com',
   hid:'me gusta ocultos por Instagram',nomed_s:'sin lectura',hid_s:'me gusta ocultos',n_c1:'comentario',n_s1:'compartido',lb_f:'Filtro',lb_o:'Orden',tap:'toca una fila para ver el desglose',crumb:'Ruta',crumb_root:'Puntaje',back:'← Volver',step_2:'Paso 2 de 3 · Desglose',step_3:'Paso 3 de 3 · Por categoría',step_1:'Paso 1 de 3',cat_btn:'🧩 Paso 3: ver por categoría →',cat_h:'Por categoría',cat_note:'Con menos de 3 cuentas se agrupan en «Otras».',cat_p:'Otras personas',cat_o:'Otras organizaciones',cat_n:'Sin categoría',accts:'cuentas',acct1:'cuenta',members:'Art hunters de esta categoría',ev_where:'Dónde sumaron',pct:'del total',n_l:'me gusta',n_c:'comentarios',n_s:'compartidos',nomed:'aún sin lectura: solo los +10 de la publicación',
   g_org:'🏢 Organización',g_persona:'🙋 Persona',reg:'Registrado',
@@ -1080,7 +1080,7 @@ const VT={es:{
   tab_ev:'🏆 Events',tab_us:'⚔️ ART HUNTERS',s_ev:'Search event…',s_us:'Search art hunter…',o_pts:'Most points',o_pts_a:'Fewest points',o_az:'A–Z',
   f_all:'All',f_com:'👥 With community',f_ins:'🏛️ With institutions',f_esc:'🎓 With schools',f_reg:'✅ Registered',f_per:'🙋 People',f_org:'🏢 Organizations',
   cnt:'{n} of {m}',none:'Nothing matches your search.',ph:'PTS',aps:'contributions',ap1:'contribution',stage:'By event stage',src:'Who scored',apl:'Contributions',more:'Show {n} more',
-  to_ev:'See the event on /mty ↗',view:'View post ↗',prof:'View profile on Instagram ↗',tot:'Total',noev:'No event',
+  to_ev:'See the event on /mty ↗',view:'View post ↗',prof:'View profile on Instagram ↗',prof_art:'See their artist profile →',tot:'Total',noev:'No event',
   ty_post:'Post',ty_reel:'Reel',ty_historia:'Story',ty_registro:'Sign-up',ty_artista:'Recommended an artist',ty_compartir:'Shared from cucoarts.com',
   hid:'likes hidden by Instagram',nomed_s:'no reading',hid_s:'likes hidden',n_c1:'comment',n_s1:'share',lb_f:'Filter',lb_o:'Sort',tap:'tap a row to see the breakdown',crumb:'Path',crumb_root:'Scores',back:'← Back',step_2:'Step 2 of 3 · Breakdown',step_3:'Step 3 of 3 · By category',step_1:'Step 1 of 3',cat_btn:'🧩 Step 3: see by category →',cat_h:'By category',cat_note:'With fewer than 3 accounts they are grouped as “Others”.',cat_p:'Other people',cat_o:'Other organizations',cat_n:'No category',accts:'accounts',acct1:'account',members:'Art hunters in this category',ev_where:'Where they scored',pct:'of total',n_l:'likes',n_c:'comments',n_s:'shares',nomed:'not read yet: only the +10 for posting',
   g_org:'🏢 Organization',g_persona:'🙋 Person',reg:'Registered',
@@ -1114,6 +1114,7 @@ const VTS={tab:'ev',ev:{q:'',sort:'pts',f:'all',open:new Set()},us:{q:'',sort:'p
 const vtD=()=>(window.MVSA||MVSA||{}).desglose||null;
 const vtMes=d=>{if(String(d).length===7)return MESES[LANG][+String(d).slice(5)-1]; const a=pd(d);return a.getDate()+' '+MES3[LANG][a.getMonth()]};
 const evTitle=id=>{const d=vtD(),e=d&&d.eventos.find(x=>x.id===id);return e?(LANG==='en'?e.en:e.es):id};
+const PERFIL_RP={"arte.ahedo":"ana-ahedo","correoppola":"correoppola","dario.diario":"dario-diario","eliezer_blanco1":"eliezer-blanco","frida_balale":"frida-balderas","greometria":"greometria","jhosephmataart":"jhoseph-mata","soylindara":"lindara","minaisart":"mina-martins","mizavart":"mizael-valero","porrasvisual":"porras-visual","aldocasta2":"romualdo-castaneda","salvadorlg.art":"salvador-lopez","smuter_zrro.studio":"smuter","tankez77":"tankez77"};  /* IG de artistas con perfil en cucoarts.com/artistas */
 const vtNm=(id,pub)=>pub?'<span class="who-reg">@'+esc(id)+'</span>':'<span class="who-anon">🔒 '+esc(id)+'</span>';
 const vtRng=r=>r[1]==null?r[0]+'+':(r[0]===r[1]?String(r[0]):r[0]+'–'+r[1]);
 const SELF_ID=id=>'vt-'+String(id).replace(/[^a-z0-9_-]/gi,'_');
@@ -1172,7 +1173,7 @@ function vtBodyEv(e,M){
 function vtBodyUs(u,M){
   const by={}; u.aport.forEach(a=>{const k=a.ev||'';(by[k]=by[k]||[]).push(a)});
   const groups=Object.keys(by).map(k=>({k,l:by[k],s:by[k].reduce((p,a)=>p+a.pts,0)})).sort((a,b)=>b.s-a.s), cg=vtCatOf(u);
-  return '<div class="vt-big"><b>'+fmtN(u.xp)+'</b> XP</div>'+(u.pub?'<a class="btn alt vt-ig" href="https://www.instagram.com/'+esc(u.id)+'/" target="_blank" rel="noopener nofollow">📷 '+esc(vt('prof'))+'</a>':'')+'<div class="vt-leg"><span>'+u.emoji+' '+esc(u.rango)+'</span>'+(cg?'<button type="button" class="vt-chip" data-go="cat:'+esc(cg.k)+'">'+esc(cg.label)+' ›</button>':'')+'<span>'+u.aport.length+' '+esc(vt(u.aport.length===1?'ap1':'aps'))+'</span></div>'
+  return '<div class="vt-big"><b>'+fmtN(u.xp)+'</b> XP</div>'+(u.pub?'<a class="btn alt vt-ig" href="https://www.instagram.com/'+esc(u.id)+'/" target="_blank" rel="noopener nofollow">📷 '+esc(vt('prof'))+'</a>':'')+(u.pub&&PERFIL_RP[String(u.id).toLowerCase()]?'<a class="btn vt-ig" href="/artistas/'+PERFIL_RP[String(u.id).toLowerCase()]+'?ref=ripple">🎨 '+esc(vt('prof_art'))+'</a>':'')+'<div class="vt-leg"><span>'+u.emoji+' '+esc(u.rango)+'</span>'+(cg?'<button type="button" class="vt-chip" data-go="cat:'+esc(cg.k)+'">'+esc(cg.label)+' ›</button>':'')+'<span>'+u.aport.length+' '+esc(vt(u.aport.length===1?'ap1':'aps'))+'</span></div>'
    +groups.map(g=>'<div class="vt-evh">'+(g.k?'<button type="button" class="vt-lnk" data-go="ev:'+esc(g.k)+'">'+esc(evTitle(g.k))+' ›</button>':'<span>'+esc(vt('noev'))+'</span>')+'<span>'+(u.pub?'+':'≈ ')+fmtN(g.s)+'</span></div>'+vtList(g.l,a=>vtAp(a,M,false),6)).join('')
    ;
 }
