@@ -6,6 +6,7 @@
 //   3. Rutas del sitio (/en, /husky, /en/husky, /murales, /en/murals, /arte-por-encargo, /en/custom-art, /privacidad, /mty, /mty/arte-urbano) → sirve el HTML prerenderizado de esa ruta
 //      (build/<ruta>/index.html, generado por frontend/scripts/prerender.js). Mayúsculas o barra final → 301 a la forma canónica.
 //   3b. /certificado/CA-AAAA-NNN (certificado de autenticidad) → /certificado/index.html (la página lee el número de la dirección).
+//   3b2. /artistas (directorio de artistas) → /artistas/directorio/index.html (regla KNOWN).
 //   3c. /artistas/<nombre> (perfil de artista) → /artistas/index.html (la página lee el nombre de la dirección).
 //   4. Todo lo demás pasa tal cual: archivos con extensión (js, css, imágenes…), /rob (archivo sin extensión en el bucket) y la
 //      raíz. Una dirección que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real.
@@ -23,6 +24,7 @@ var KNOWN = {
   '/en/custom-art': '/en/custom-art/index.html',
   '/privacidad': '/privacidad/index.html',
   '/mty': '/mty/index.html',
+  '/artistas': '/artistas/directorio/index.html',
   '/mty/arte-urbano': '/mty/arte-urbano/index.html',
   '/en/mty/arte-urbano': '/en/mty/arte-urbano/index.html',
   '/ripple': '/ripple/index.html',
@@ -128,7 +130,7 @@ function handler(event) {
   // perfiles de artistas: /artistas/<nombre> sirve la página estática de ese artista (/artistas/<nombre>/index.html);
   // un nombre que no existe llega a S3 sin archivo y CloudFront responde con /404.html y estado 404 real
   var am = key.match(/^\/artistas\/([a-z0-9-]+)$/);
-  if (am && am[1] !== 'datos' && am[1] !== 'img' && am[1] !== 'sitio' && am[1] !== 'og') {
+  if (am && am[1] !== 'datos' && am[1] !== 'img' && am[1] !== 'sitio' && am[1] !== 'og' && am[1] !== 'directorio') {
     request.uri = '/artistas/' + am[1] + '/index.html';
     return request;
   }

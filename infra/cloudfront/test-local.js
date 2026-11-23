@@ -36,6 +36,8 @@ const cases = [
   ['/Connect', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/' }],
   ['/mty', 'cucoarts.com', {}, { uri: '/mty/index.html' }],
   ['/certificado/CA-2026-001', 'cucoarts.com', {}, { uri: '/certificado/index.html' }],
+  ['/artistas', 'cucoarts.com', {}, { uri: '/artistas/directorio/index.html' }],
+  ['/artistas/', 'cucoarts.com', {}, { redirect: 'https://cucoarts.com/artistas' }],
   ['/artistas/eliezer-blanco', 'cucoarts.com', {}, { uri: '/artistas/eliezer-blanco/index.html' }],
   ['/artistas/Eliezer-Blanco/', 'cucoarts.com', {}, { uri: '/artistas/eliezer-blanco/index.html' }],
   ['/artistas/jhoseph-mata', 'cucoarts.com', {}, { uri: '/artistas/jhoseph-mata/index.html' }],

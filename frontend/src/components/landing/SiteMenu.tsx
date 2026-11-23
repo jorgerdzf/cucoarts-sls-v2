@@ -3,7 +3,7 @@ import { Copy, Lang } from './copy';
 import { lp } from './lang';
 import './assets/styles/menu.css';
 
-/* Menú del sitio como recorrido curatorial en 5 pilares: Descubre MTY → Catálogo → Eventos y expos → Proyectos → RIPPLE.
+/* Menú del sitio como recorrido curatorial en 6 pilares: Descubre MTY → Artistas → Catálogo → Eventos y expos → Proyectos → RIPPLE.
    Un solo botón "Menú" abre una capa a pantalla completa (círculo desde el botón, enlaces uno por uno, icono → ✕).
    Cabecera: logo · selector de ciudad · cerrar. Escritorio: al pasar sobre un pilar con tarjeta, se muestra a la derecha.
    Es el mismo menú en la portada, /murales, /arte-por-encargo y /husky, y debe coincidir con MTY_PROTOTIPO/src/sitemenu.js (/mty). */
@@ -13,7 +13,7 @@ const TXT = {
   es: {
     menu: 'Menú', close: 'Cerrar menú', here: 'estás aquí', label: 'Menú principal', city: 'Ciudad', cityMore: 'Más ciudades pronto', guide: 'Guía', live: 'Activa',
     sell: '¿Eres artista? Vende tu obra', quote: 'Cotizador rápido', connect: 'Escríbenos', copy: 'Copiar enlace', copied: '¡Enlace copiado!', top: 'Arriba', topLabel: 'Volver al menú superior',
-    i1: 'Descubre MTY', s1: 'Murales y artistas, zona por zona', i2: 'Catálogo', s2: 'Obra original y ediciones', i3: 'Exposiciones', s3: 'Agenda de artes visuales de MTY',
+    i1: 'Descubre MTY', s1: 'Murales y artistas, zona por zona', iA: 'Artistas', sA: 'Quiénes son y cómo trabajan', i2: 'Catálogo', s2: 'Obra original y ediciones', i3: 'Exposiciones', s3: 'Agenda de artes visuales de MTY',
     i4: 'Proyectos', s4: 'Murales, comisiones y cotizador', i5: 'RIPPLE', s5: 'Gana puntos por descubrir arte local',
     p1k: 'Arte urbano', p1t: 'Los murales de San Nicolás, zona por zona', p1d: 'Quién los pintó, con qué estilo y dónde encontrar su obra en la tienda.', p1c: 'Recorrer murales',
     p3k: 'En curso', p3t: 'Expo en Santiago', p3d: 'Arte local en HUSKY Coffee Shop. Pasa, toma un café y mira la obra en persona.', p3c: 'Ver la expo',
@@ -21,7 +21,7 @@ const TXT = {
   en: {
     menu: 'Menu', close: 'Close menu', here: 'you are here', label: 'Main menu', city: 'City', cityMore: 'More cities soon', guide: 'Guide', live: 'Live',
     sell: 'Are you an artist? Sell your art', quote: 'Quick quote', connect: 'Write to us', copy: 'Copy link', copied: 'Link copied!', top: 'Top', topLabel: 'Back to the top menu',
-    i1: 'Discover MTY', s1: 'Murals and artists, zone by zone', i2: 'Catalog', s2: 'Original work and editions', i3: 'Exhibitions', s3: 'Visual arts agenda of MTY',
+    i1: 'Discover MTY', s1: 'Murals and artists, zone by zone', iA: 'Artists', sA: 'Who they are and how they work', i2: 'Catalog', s2: 'Original work and editions', i3: 'Exhibitions', s3: 'Visual arts agenda of MTY',
     i4: 'Projects', s4: 'Murals, commissions and quotes', i5: 'RIPPLE', s5: 'Earn points for discovering local art',
     p1k: 'Street art', p1t: 'San Nicolás murals, zone by zone', p1d: 'Who painted them, in what style, and where to find their work in the store.', p1c: 'Explore murals',
     p3k: 'On now', p3t: 'Expo in Santiago', p3d: 'Local art at HUSKY Coffee Shop. Drop by, grab a coffee and see the work in person.', p3c: 'See the expo',
@@ -33,11 +33,12 @@ export type MenuItem = { id: string; label: string; sub?: string; href?: string;
 export type MenuPage = 'home' | 'murales' | 'arte' | 'husky';
 export type MenuFoot = { sellHref: string; onSell?: () => void; quoteHref: string; onQuote?: () => void };
 
-/** Los 5 pilares (los mismos en todas las páginas). */
+/** Los 6 pilares (los mismos en todas las páginas). */
 export function buildMenu(lang: Lang, _c: Copy, page: MenuPage): MenuItem[] {
   const t = TXT[lang];
   return [
     { id: 'discover', label: t.i1, sub: t.s1, href: lp(lang, '/mty/arte-urbano'), badge: t.guide, prev: { img: '/mty/img/murales/greometria-puente-sn-b1-2.jpg', k: t.p1k, t: t.p1t, d: t.p1d, c: t.p1c, href: lp(lang, '/mty/arte-urbano') } },
+    { id: 'artists', label: t.iA, sub: t.sA, href: '/artistas' },
     { id: 'catalog', label: t.i2, sub: t.s2, href: STORE, external: true },
     { id: 'events', label: t.i3, sub: t.s3, href: '/mty', badge: t.live, current: page === 'husky', prev: { img: '/mty/img/husky-expo.jpg', k: t.p3k, t: t.p3t, d: t.p3d, c: t.p3c, href: lp(lang, '/husky') } },
     { id: 'projects', label: t.i4, sub: t.s4, href: lp(lang, '/murales'), current: page === 'murales' || page === 'arte' },
