@@ -1,0 +1,80 @@
+{
+ "id": "CA-2026-003",
+ "estado": "Registrado",
+ "emitido": "2026-11-24",
+ "emitido_txt": "24 nov 2026",
+ "url_futura": "https://cucoarts.com/certificado/CA-2026-003",
+ "titulo": "Chill",
+ "artista": {
+  "slug": "correoppola",
+  "nombre": "Correoppola",
+  "nombre_legal": "",
+  "perfil": "/artistas/correoppola?ref=certificado",
+  "tienda": "https://store.cucoarts.com/products/chill"
+ },
+ "propietario_publico": "Colección privada",
+ "sello_txt": "Serie de 13 ejemplares",
+ "lead": "Risografía original de Correoppola, hecha en Monterrey en una serie de 13 ejemplares numerados. Aquí están sus características y el registro de los ejemplares que pasaron por CUCO ARTS.",
+ "imagen_principal": {
+  "src": "https://cdn.shopify.com/s/files/1/0732/7186/9626/files/Correoppola-07.jpg?v=1764626913&width=1100",
+  "alt": "«Chill», risografía de Correoppola con el texto del título sobre fondo amarillo y negro",
+  "w": 1100,
+  "h": 1465
+ },
+ "ficha": [
+  {
+   "k": "Título",
+   "v": "Chill"
+  },
+  {
+   "k": "Artista",
+   "v": "Correoppola"
+  },
+  {
+   "k": "Técnica",
+   "v": "Risografía sobre cartulina Bristol blanca de 240 g"
+  },
+  {
+   "k": "Medidas",
+   "v": "28.5 × 44 cm (papel completo)"
+  },
+  {
+   "k": "Año",
+   "v": "2024"
+  },
+  {
+   "k": "Edición",
+   "v": "Serie de 13 ejemplares numerados"
+  },
+  {
+   "k": "Ejemplar registrado",
+   "v": "11/13"
+  },
+  {
+   "k": "Hecho en",
+   "v": "Monterrey, N.L., México"
+  },
+  {
+   "k": "Propietario",
+   "v": "Colección privada"
+  },
+  {
+   "k": "Certificado",
+   "v": "CA-2026-003"
+  }
+ ],
+ "edicion": {
+  "titulo": "Serie de 13 ejemplares",
+  "texto": "Este certificado documenta la serie. CUCO ARTS registra aquí solo los ejemplares que pasaron por sus manos; los demás ejemplares de la tirada no están incluidos en este registro.",
+  "ejemplares": [
+   {
+    "n": "11/13",
+    "propietario": "Colección privada"
+   }
+  ]
+ },
+ "evidencia": [],
+ "historia_titulo": "",
+ "historia": [],
+ "fechas": []
+}
