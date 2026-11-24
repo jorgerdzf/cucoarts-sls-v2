@@ -22,6 +22,8 @@ var KNOWN = {
   '/en/murals': '/en/murals/index.html',
   '/arte-por-encargo': '/arte-por-encargo/index.html',
   '/en/custom-art': '/en/custom-art/index.html',
+  '/descubre-monterrey': '/descubre-monterrey/index.html',
+  '/en/discover-monterrey': '/en/discover-monterrey/index.html',
   '/privacidad': '/privacidad/index.html',
   '/mty': '/mty/index.html',
   '/artistas': '/artistas/directorio/index.html',

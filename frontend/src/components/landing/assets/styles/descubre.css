@@ -1,0 +1,86 @@
+/* /descubre-monterrey — "Descubre MTY": cuatro tarjetas compactas (tienda, artistas, arte urbano, exposiciones) + franja de RIPPLE. Prefijo dm-. */
+.dm-intro{padding-block:clamp(20px,3vw,36px) 0}
+.dm-intro h1{margin:6px 0 10px;font:700 clamp(32px,5vw,56px)/.95 var(--display);letter-spacing:-.045em;text-transform:uppercase;text-wrap:balance}
+.dm-intro .cl-lede{max-width:64ch;font-size:clamp(15px,1.6vw,17px);line-height:1.45}
+.dm-hero{display:grid;gap:14px 40px;align-items:center}
+.dm-who{min-width:0}
+.dm-intro{overflow-x:clip}
+.dm-faces{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px 4px;max-width:440px;margin:0;padding:4px 0 6px;list-style:none}   /* móvil y tableta: 8 columnas x 2 hileras, dentro de los márgenes */
+.dm-faces li{min-width:0;animation:dm-pop .45s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i,0)*45ms)}
+.dm-faces li:nth-child(5n+1) .dm-face{background:#F7D649}.dm-faces li:nth-child(5n+2) .dm-face{background:#EA663D}.dm-faces li:nth-child(5n+3) .dm-face{background:#ABCFDD}.dm-faces li:nth-child(5n+4) .dm-face{background:#C7F74E}.dm-faces li:nth-child(5n) .dm-face{background:#644DEF}
+.dm-face{position:relative;display:block;width:100%;aspect-ratio:1/1;border:2px solid var(--line);border-radius:50%;overflow:visible;transition:transform .18s ease}
+.dm-face::after{content:"";position:absolute;inset:-3px}   /* área táctil >=40 px aunque el retrato mida ~38 */
+.dm-face:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.dm-face img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+@media (hover:hover){
+  .dm-faces li:nth-child(odd) .dm-face:hover{transform:translateY(-3px) rotate(-6deg)}
+  .dm-faces li:nth-child(even) .dm-face:hover{transform:translateY(-3px) rotate(6deg)}
+}
+.dm-name{display:block;min-height:24px;margin-top:2px}
+.dm-name b{display:inline-block;padding:2px 8px;background:#F7D649;color:#232322;border:2px solid #232322;font:700 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.dm-cred{display:block;margin-top:2px;color:var(--ink-2);font:400 11px/1.3 var(--mono);letter-spacing:.02em}
+.dm-zones{padding-block:clamp(12px,2vw,22px) 0}
+.dm-zh{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;margin:0 0 8px}
+.dm-zh b{font:700 clamp(15px,1.6vw,18px)/1 var(--display);letter-spacing:-.02em;text-transform:uppercase}
+.dm-zh span{color:var(--ink-2);font:400 12px/1.3 var(--mono)}
+.dm-zgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,1.2vw,14px);margin:0;padding:0;list-style:none}
+.dm-zgrid li{min-width:0;animation:dm-fade .5s ease both;animation-delay:calc(var(--i,0)*80ms)}
+.dm-zt{position:relative;display:block;border:2px solid var(--line);background:var(--c);color:#F5F1F1;text-decoration:none;overflow:hidden;transition:transform .18s ease}
+.dm-zt:hover{transform:translateY(-3px)}
+.dm-zt:focus-visible,.dm-card:focus-visible,.dm-rbadge:focus-visible,.dm-go:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+/* Caja de proporción fija: el rotador y las fotos van en posición absoluta, así ninguna foto (de cualquier proporción) mueve el diseño al cargar ni al rotar */
+.dm-img{position:relative}
+.dm-img .cy,.dm-zt .cy{position:absolute;inset:0;width:auto;height:auto;--cy-bg:#232322}
+.dm-img .cy-base,.dm-img .cy-top,.dm-zt .cy-base,.dm-zt .cy-top{position:absolute;inset:0;width:auto;height:auto}
+.dm-img img,.dm-zpic img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.dm-credits{padding-block:clamp(10px,1.6vw,18px) clamp(20px,3vw,32px)}
+.dm-credits p{margin:0 0 2px;color:var(--ink-2);font:400 11px/1.45 var(--mono);letter-spacing:.02em}
+.dm-credits b{color:var(--ink);text-transform:uppercase;letter-spacing:.1em}
+.dm-zt{aspect-ratio:1/1.1}
+.dm-zpic{display:block;position:absolute;inset:0;background:var(--c)}
+.dm-zchip{position:absolute;left:8px;top:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:3px 9px 3px 6px;background:var(--c);color:#232322;border:2px solid #232322;font:700 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.1em}
+.dm-zchip i{font-style:normal;font-size:14px;line-height:1}
+@keyframes dm-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes dm-fade{from{opacity:0}to{opacity:1}}
+.dm-pillars{padding-block:clamp(14px,2vw,22px)}
+.dm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(10px,1.6vw,16px)}
+.dm-card{display:flex;flex-direction:row;min-height:140px;border:2px solid var(--line);background:var(--soft);color:var(--ink);text-decoration:none;overflow:hidden;transition:transform .18s ease}
+.dm-card:hover{transform:translateY(-3px)}
+.dm-img{display:block;flex:0 0 36%;overflow:hidden;border-right:2px solid var(--line);background:var(--c)}
+.dm-body{display:flex;flex-direction:column;gap:5px;padding:clamp(12px,1.6vw,18px);flex:1;min-width:0}
+.dm-k{align-self:flex-start;padding:2px 8px;background:var(--c,var(--yellow));color:#232322;font:700 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.14em}
+.dm-card h2{margin:2px 0 0;font:700 clamp(18px,2vw,23px)/1 var(--display);letter-spacing:-.03em;text-transform:uppercase;text-wrap:balance}
+.dm-d{color:var(--ink-2);font-size:14px;line-height:1.38}
+.dm-go{margin-top:auto;padding-top:4px;font:700 12px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.dm-go i{font-style:normal;display:inline-block;transition:transform .18s ease}
+.dm-card:hover .dm-go i,.dm-ripple .dm-go:hover i{transform:translateX(5px)}
+.dm-ripple{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;margin-top:clamp(10px,1.6vw,16px);padding:10px clamp(12px,1.6vw,18px);border:2px solid var(--line);background:#ABCFDD;color:#232322;overflow:hidden}
+.dm-rbadge{display:block;flex:0 0 auto;line-height:0;-webkit-tap-highlight-color:transparent}
+.dm-rbadge canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated;filter:drop-shadow(3px 3px 0 #EA663D);cursor:pointer}
+.dm-rtxt{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;flex:1 1 260px;min-width:0}
+.dm-rtxt b{font:700 clamp(16px,1.8vw,20px)/1 var(--display);letter-spacing:-.02em;text-transform:uppercase}
+.dm-rtxt>span{flex:1 1 220px;font-size:14px;line-height:1.35}
+.dm-ripple .dm-go{margin:0;padding:6px 0;color:#232322;text-decoration:none}
+.dm-ripple:hover .dm-go i{transform:translateX(5px)}
+.dm-more{padding-block:clamp(12px,2vw,24px) clamp(28px,4vw,48px)}
+.dm-more .cl-in{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
+.dm-more h2{margin:0;font:700 clamp(18px,2.2vw,24px)/1 var(--display);letter-spacing:-.03em;text-transform:uppercase}
+.dm-more .mp-lead{margin:0;flex:1 1 280px;max-width:none;font-size:14px}
+.dm-more .cl-actions{margin:0}
+@media (min-width:880px){
+  .dm-hero{grid-template-columns:minmax(0,1fr) auto}
+  .dm-faces{grid-template-columns:repeat(8,52px);gap:8px;max-width:none}
+  .dm-cred{max-width:470px}
+}
+@media (max-width:720px){
+  .dm-zgrid{grid-template-columns:repeat(6,1fr)}   /* 3 arriba + 2 abajo, siempre dentro de los márgenes */
+  .dm-zgrid li{grid-column:span 2}
+  .dm-zgrid li:nth-child(n+4){grid-column:span 3}
+  .dm-d{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .dm-zchip{left:5px;top:5px;padding:2px 6px 2px 4px;font-size:10px;letter-spacing:.06em}
+  .dm-zt{aspect-ratio:1/1.05}
+  .dm-grid{grid-template-columns:1fr}
+  .dm-card{min-height:120px}
+  .dm-img{flex-basis:32%}
+}
+@media (prefers-reduced-motion:reduce){.dm-card,.dm-go i,.dm-zt,.dm-face,.dm-tip{transition:none}.dm-card:hover,.dm-zt:hover,.dm-face:hover{transform:none!important}.dm-faces li,.dm-zgrid li{animation:none}}

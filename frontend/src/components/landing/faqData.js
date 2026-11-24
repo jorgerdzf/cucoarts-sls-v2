@@ -13,6 +13,14 @@ const FAQ = {
         a: 'CUCO ARTS es una plataforma para descubrir el arte y la cultura de Monterrey a través de sus artistas, espacios e historias. Contamos con una tienda en línea de obra original de artistas locales, desarrollamos un proyecto editorial de fotografía por zonas culturales de la ciudad y organizamos exposiciones y colaboraciones culturales, como CUCO ARTS × HUSKY en Santiago, N.L.',
       },
       {
+        q: '¿CUCO ARTS es una galería de arte en Monterrey?',
+        a: 'Somos una galería de arte en línea: no tenemos un local propio, pero reunimos obra original de artistas de Monterrey en nuestra tienda y la llevamos a exposiciones en espacios aliados, como HUSKY Coffee Shop en Santiago, N.L. Nuestro enfoque es el lado humano de la creación artística, por eso también compartimos eventos y talleres de la ciudad.',
+      },
+      {
+        q: '¿Dónde puedo comprar arte en venta en México?',
+        a: 'En store.cucoarts.com encontrarás arte original en venta de artistas de Monterrey —pintura, grabado, ilustración y escultura— con envíos a todo México y al extranjero. Cada obra viene con la historia de quien la creó.',
+      },
+      {
         q: '¿Cómo compro obra original de artistas de Monterrey?',
         a: 'Entra a store.cucoarts.com, explora nuestra colección y elige tu obra favorita. Encontrarás piezas originales de artistas locales, con envíos nacionales e internacionales.',
       },
@@ -48,6 +56,14 @@ const FAQ = {
       {
         q: 'What is CUCO ARTS?',
         a: 'CUCO ARTS is a platform for discovering the art and culture of Monterrey through its artists, spaces, and stories. We run an online store with original work by local artists, develop an editorial photography project built around the city’s cultural zones, and organize exhibitions and cultural collaborations, such as CUCO ARTS × HUSKY in Santiago, N.L.',
+      },
+      {
+        q: 'Is CUCO ARTS an art gallery in Monterrey?',
+        a: 'We are an online art gallery: we do not have a venue of our own, but we bring together original work by Monterrey artists in our store and take it to exhibitions in partner spaces, such as HUSKY Coffee Shop in Santiago, N.L. Our focus is the human side of artistic creation, which is why we also share the city’s events and workshops.',
+      },
+      {
+        q: 'Where can I buy art for sale in Mexico?',
+        a: 'At store.cucoarts.com you will find original art for sale by Monterrey artists —painting, printmaking, illustration, and sculpture— with shipping across Mexico and abroad. Every piece comes with the story of the person who made it.',
       },
       {
         q: 'How do I buy original art by Monterrey artists?',

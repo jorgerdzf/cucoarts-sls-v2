@@ -24,20 +24,20 @@ const PAGES = {
     paths: { es: '/', en: '/en' },
     image: '/og-cucoarts.png',
     es: {
-      title: 'CUCO ARTS · Arte y cultura de Monterrey',
-      description: 'Tienda de obra original de artistas locales, cotizador de murales, registro para artistas y expo en Santiago, N.L. Envíos internacionales.',
-      ogDescription: 'Compra obra original de artistas locales, cotiza un mural a tu medida y descubre la expo en Santiago, N.L.',
+      title: 'CUCO ARTS · Galería de arte en línea en Monterrey, México',
+      description: 'Galería de arte en línea de Monterrey: obra original en venta de artistas locales, eventos y talleres. Envíos a todo México y al mundo.',
+      ogDescription: 'Galería de arte en línea de Monterrey: compra obra original de artistas locales y conoce a quienes la crean.',
       imageAlt: 'CUCO ARTS: descubre el Monterrey que existe más allá de los mapas',
     },
     en: {
-      title: 'CUCO ARTS · Art and culture from Monterrey',
-      description: 'Online store for original work by local artists, mural quotes, artist registration, and an exhibition in Santiago, N.L. International shipping.',
-      ogDescription: 'Buy original work by local artists, get a custom mural quote, and discover the expo in Santiago, N.L.',
+      title: 'CUCO ARTS · Online art gallery in Monterrey, Mexico',
+      description: 'Online art gallery from Monterrey: original art for sale by local artists, events and workshops. Shipping across Mexico and worldwide.',
+      ogDescription: 'Online art gallery from Monterrey: buy original work by local artists and meet the people who create it.',
       imageAlt: 'CUCO ARTS: discover the Monterrey that exists beyond the maps',
     },
     noscript: {
-      es: '<h1>CUCO ARTS · Arte y cultura de Monterrey</h1><p>Obra original de artistas de Monterrey, cotizador de murales y artes plásticas, expo de arte local en Santiago, N.L. y registro de artistas para nuestra tienda en línea. Para ver este sitio activa JavaScript.</p><ul><li><a href="' + STORE + '">Tienda en línea</a></li><li><a href="' + SITE + '/husky">Expo CUCO ARTS × HUSKY en Santiago, N.L.</a></li><li><a href="' + SITE + '/mty">Agenda de artes visuales de Monterrey por zona cultural</a></li><li><a href="' + SITE + '/en">English version</a></li></ul>',
-      en: '<h1>CUCO ARTS · Art and culture from Monterrey</h1><p>Original art by Monterrey artists, mural and fine art quotes, a local art exhibition in Santiago, N.L., and artist registration for our online store. Please enable JavaScript to view this site.</p><ul><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/en/husky">CUCO ARTS × HUSKY exhibition in Santiago, N.L.</a></li><li><a href="' + SITE + '/mty">Monterrey visual arts agenda by cultural zone</a></li><li><a href="' + SITE + '/">Versión en español</a></li></ul>',
+      es: '<h1>CUCO ARTS · Galería de arte en línea en Monterrey, México</h1><p>Arte en venta en México: obra original de artistas de Monterrey en nuestra galería en línea, con eventos, talleres, murales, expo de arte local en Santiago, N.L. y registro de artistas. Para ver este sitio activa JavaScript.</p><ul><li><a href="' + STORE + '">Tienda en línea</a></li><li><a href="' + SITE + '/husky">Expo CUCO ARTS × HUSKY en Santiago, N.L.</a></li><li><a href="' + SITE + '/mty">Agenda de artes visuales de Monterrey por zona cultural</a></li><li><a href="' + SITE + '/en">English version</a></li></ul>',
+      en: '<h1>CUCO ARTS · Online art gallery in Monterrey, Mexico</h1><p>Art for sale in Mexico: original work by Monterrey artists in our online gallery, with events, workshops, murals, a local art exhibition in Santiago, N.L., and artist registration. Please enable JavaScript to view this site.</p><ul><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/en/husky">CUCO ARTS × HUSKY exhibition in Santiago, N.L.</a></li><li><a href="' + SITE + '/mty">Monterrey visual arts agenda by cultural zone</a></li><li><a href="' + SITE + '/">Versión en español</a></li></ul>',
     },
   },
   husky: {
@@ -98,6 +98,26 @@ const PAGES = {
     noscript: {
       es: '<h1>Arte por encargo · CUCO ARTS</h1><p>Encarga una pintura, dibujo o ilustración a artistas de Monterrey: cuéntanos tu idea y te conectamos con el artista ideal; nosotros administramos el proyecto hasta la entrega. Para usar el asistente activa JavaScript o escríbenos a hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/">CUCO ARTS</a></li><li><a href="' + STORE + '">Tienda en línea</a></li><li><a href="' + SITE + '/en/custom-art">English version</a></li></ul>',
       en: '<h1>Custom artwork · CUCO ARTS</h1><p>Commission a painting, drawing or illustration from artists in Monterrey: tell us your idea and we connect you with the right artist; we manage the project through delivery. To use the assistant please enable JavaScript or write to hello@cucoarts.com.</p><ul><li><a href="' + SITE + '/en">CUCO ARTS</a></li><li><a href="' + STORE + '">Online store</a></li><li><a href="' + SITE + '/arte-por-encargo">Versión en español</a></li></ul>',
+    },
+  },
+  descubre: {
+    paths: { es: '/descubre-monterrey', en: '/en/discover-monterrey' },
+    image: '/og-cucoarts.png',
+    es: {
+      title: 'Arte en Monterrey: tienda, artistas, murales y expos · CUCO ARTS',
+      description: 'Descubre el arte de Monterrey: compra arte original en venta, conoce a los artistas, recorre los murales de la ciudad y visita las exposiciones.',
+      ogDescription: 'Tienda de arte, artistas, murales y exposiciones de Monterrey en un solo lugar.',
+      imageAlt: 'CUCO ARTS: descubre el arte de Monterrey',
+    },
+    en: {
+      title: 'Art in Monterrey: store, artists, murals and exhibitions · CUCO ARTS',
+      description: 'Discover the art of Monterrey: buy original art for sale, meet the artists, explore the city’s murals, and visit the exhibitions.',
+      ogDescription: 'Art store, artists, murals, and exhibitions from Monterrey in one place.',
+      imageAlt: 'CUCO ARTS: discover the art of Monterrey',
+    },
+    noscript: {
+      es: '<h1>Descubre el arte de Monterrey · CUCO ARTS</h1><p>Galería de arte en línea de Monterrey: tienda de arte original, perfiles de artistas, murales de la ciudad y agenda de exposiciones. Para ver esta página activa JavaScript.</p><ul><li><a href="' + STORE + '">Tienda de arte</a></li><li><a href="' + SITE + '/artistas">Artistas</a></li><li><a href="' + SITE + '/mty/arte-urbano">Arte urbano: murales</a></li><li><a href="' + SITE + '/mty">Exposiciones y eventos</a></li><li><a href="' + SITE + '/en/discover-monterrey">English version</a></li></ul>',
+      en: '<h1>Discover the art of Monterrey · CUCO ARTS</h1><p>Online art gallery from Monterrey: original art store, artist profiles, the city’s murals, and an exhibitions agenda. Please enable JavaScript to view this page.</p><ul><li><a href="' + STORE + '">Art store</a></li><li><a href="' + SITE + '/artistas">Artists</a></li><li><a href="' + SITE + '/en/mty/arte-urbano">Street art: murals</a></li><li><a href="' + SITE + '/mty">Exhibitions and events</a></li><li><a href="' + SITE + '/descubre-monterrey">Versión en español</a></li></ul>',
     },
   },
   privacy: {
@@ -195,6 +215,22 @@ function ld(page, lang) {
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'CUCO ARTS', item: url(PAGES.home.paths[lang]) },
             { '@type': 'ListItem', position: 2, name: lang === 'en' ? 'Create your mural' : 'Crea tu mural', item: here },
+          ],
+        },
+      ],
+    };
+  }
+  if (page === 'descubre') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        ORG,
+        { '@type': 'CollectionPage', '@id': here + '#page', url: here, name: P[lang].title, description: P[lang].description, inLanguage, isPartOf: { '@id': SITE + '/#site' } },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'CUCO ARTS', item: url(PAGES.home.paths[lang]) },
+            { '@type': 'ListItem', position: 2, name: lang === 'en' ? 'Discover Monterrey' : 'Descubre Monterrey', item: here },
           ],
         },
       ],

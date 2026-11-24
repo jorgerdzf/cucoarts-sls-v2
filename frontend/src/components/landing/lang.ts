@@ -11,8 +11,8 @@ const LANG_KEY = 'cucoarts-lang';
 export const langOf = (pathname: string): Lang => (pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'es');
 
 /* Páginas cuyo nombre cambia de idioma: /murales (español) ↔ /en/murals (inglés). */
-const EN_SLUG: Record<string, string> = { '/murales': '/murals', '/arte-por-encargo': '/custom-art' };
-const ES_SLUG: Record<string, string> = { '/murals': '/murales', '/custom-art': '/arte-por-encargo' };
+const EN_SLUG: Record<string, string> = { '/murales': '/murals', '/arte-por-encargo': '/custom-art', '/descubre-monterrey': '/discover-monterrey' };
+const ES_SLUG: Record<string, string> = { '/murals': '/murales', '/custom-art': '/arte-por-encargo', '/discover-monterrey': '/descubre-monterrey' };
 
 /** Dirección de una ruta en un idioma: lp('en', '/husky') → '/en/husky'; lp('es', '/husky') → '/husky'.
  *  Siempre se parte de la ruta en español: lp('en', '/murales') → '/en/murals'. */

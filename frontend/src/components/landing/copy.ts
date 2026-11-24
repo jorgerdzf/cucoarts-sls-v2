@@ -2,7 +2,7 @@
 export type Lang = 'es' | 'en';
 
 const es = {
-  htmlTitle: 'CUCO ARTS · Arte y cultura de Monterrey',
+  htmlTitle: 'CUCO ARTS · Galería de arte en línea en Monterrey, México',
   nav: { store: 'Tienda', quote: 'Cotizador', murals: 'Murales', art: 'Arte por encargo', mvsa: 'RIPPLE', fresh: 'Nuevo', sell: 'Vende tu obra', expo: 'Expo en Santiago', live: 'Activa', events: 'Eventos', label: 'Secciones' },
   theme: { toDark: 'Modo noche', toLight: 'Modo día' },
   langBtn: { label: 'Switch to English', short: 'EN' },
@@ -10,7 +10,7 @@ const es = {
     cornerL: 'CUCOARTS',
     cornerR: 'ARTE LOCAL',
     title: 'Descubre el Monterrey que existe más allá de los mapas.',
-    lede: 'Compra obra original de artistas locales, encarga una pieza a tu medida o vende tu obra con nosotros.',
+    lede: 'Galería de arte en línea de Monterrey: compra arte original en venta de artistas locales, encarga una pieza a tu medida o vende tu obra con nosotros.',
     cta: 'Visitar la tienda',
     cta2: 'Qué puedes hacer aquí',
     expo: 'Expo activa en Santiago',
@@ -41,7 +41,7 @@ const es = {
     label: 'Sobre CUCO ARTS',
     title: 'Descubre Monterrey a través de su arte y su cultura',
     text: [
-      'CUCO ARTS es una plataforma para descubrir el arte, los artistas y los espacios creativos de Monterrey. En nuestra tienda en línea encontrarás obra original de artistas locales —pintura, grabado, ilustración y escultura— con envíos internacionales. También impulsamos exposiciones y colaboraciones culturales, y conectamos ideas con artistas para crear murales y obras a medida.',
+      'CUCO ARTS es una galería de arte en línea y una plataforma para descubrir el arte, los artistas y los espacios creativos de Monterrey, con el lado humano de la creación artística al centro: por eso también compartimos eventos y talleres. En nuestra tienda en línea encontrarás arte en venta en México: obra original de artistas locales —pintura, grabado, ilustración y escultura— con envíos internacionales. También impulsamos exposiciones y colaboraciones culturales, y conectamos ideas con artistas para crear murales y obras a medida.',
       'A través de nuestro proyecto de zonas culturales, buscamos acercarte a quienes crean en la ciudad y explorar cómo el arte se vive en sus distintos territorios: 🧭 Norte, 🌵 Sur, ⛰️ Oriente, 🏛️ Centro y 🌄 Poniente.',
     ],
     zonesLabel: 'Zonas culturales',
@@ -182,7 +182,7 @@ const es = {
 type Copy = typeof es;
 
 const en: Copy = {
-  htmlTitle: 'CUCO ARTS · Art and culture from Monterrey',
+  htmlTitle: 'CUCO ARTS · Online art gallery in Monterrey, Mexico',
   nav: { store: 'Store', quote: 'Quote', murals: 'Murals', art: 'Custom art', mvsa: 'RIPPLE', fresh: 'New', sell: 'Sell your art', expo: 'Expo in Santiago', live: 'Live', events: 'Events', label: 'Sections' },
   theme: { toDark: 'Night mode', toLight: 'Day mode' },
   langBtn: { label: 'Cambiar a español', short: 'ES' },
@@ -190,7 +190,7 @@ const en: Copy = {
     cornerL: 'CUCOARTS',
     cornerR: 'LOCAL ART',
     title: 'Discover the Monterrey that exists beyond the maps.',
-    lede: 'Buy original art by local artists, commission a piece made to your measure, or sell your art with us.',
+    lede: 'Online art gallery from Monterrey: buy original art for sale by local artists, commission a piece made to your measure, or sell your art with us.',
     cta: 'Visit the store',
     cta2: 'What you can do here',
     expo: 'Live expo in Santiago',
@@ -221,7 +221,7 @@ const en: Copy = {
     label: 'About CUCO ARTS',
     title: 'Discover Monterrey through its art and culture',
     text: [
-      'CUCO ARTS is a platform for discovering the art, the artists, and the creative spaces of Monterrey. In our online store you will find original work by local artists —painting, printmaking, illustration, and sculpture— with international shipping. We also promote exhibitions and cultural collaborations, and we connect ideas with artists to create murals and custom artworks.',
+      'CUCO ARTS is an online art gallery and a platform for discovering the art, the artists, and the creative spaces of Monterrey, with the human side of artistic creation at its center: that is why we also share events and workshops. In our online store you will find art for sale in Mexico: original work by local artists —painting, printmaking, illustration, and sculpture— with international shipping. We also promote exhibitions and cultural collaborations, and we connect ideas with artists to create murals and custom artworks.',
       'Through our cultural zones project, we aim to bring you closer to the people who create in the city and to explore how art is lived across its different territories: 🧭 North, 🌵 South, ⛰️ East, 🏛️ Downtown, and 🌄 West.',
     ],
     zonesLabel: 'Cultural zones',
